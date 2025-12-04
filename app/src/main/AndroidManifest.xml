@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Motovista">
+
+        <!-- Splash Screen -->
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Role Selection -->
+        <activity android:name=".RoleSelectionActivity" />
+
+        <!-- Customer & Admin Login Screens (if used) -->
+        <activity android:name=".AdminLoginActivity" />
+
+        <!-- Customer Auth Screens -->
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".SignupActivity" />
+
+        <!-- Dashboard -->
+        <activity android:name=".DashboardActivity" />
+
+    </application>
+
+</manifest>

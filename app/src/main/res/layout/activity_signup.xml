@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="18dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_back"
+            android:background="?android:attr/selectableItemBackgroundBorderless"/>
+
+        <TextView
+            android:layout_marginTop="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Account"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#222"/>
+
+        <!-- Full Name -->
+        <TextView
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Full Name"
+            android:textSize="13sp"
+            android:textColor="#333"/>
+        <androidx.cardview.widget.CardView
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Enter your full name"
+                android:padding="12dp"
+                android:background="@android:color/transparent"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Email -->
+        <TextView
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email Address"
+            android:textSize="13sp"
+            android:textColor="#333"/>
+        <androidx.cardview.widget.CardView
+
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Enter your email address"
+                android:inputType="textEmailAddress"
+                android:padding="12dp"
+                android:background="@android:color/transparent"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Phone -->
+        <TextView
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Phone Number"
+            android:textSize="13sp"
+            android:textColor="#333"/>
+        <androidx.cardview.widget.CardView
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+
+            <EditText
+                android:id="@+id/etPhone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Enter your phone number"
+                android:inputType="phone"
+                android:padding="12dp"
+                android:background="@android:color/transparent"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Password -->
+        <TextView
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Password"
+            android:textSize="13sp"
+            android:textColor="#333"/>
+        <androidx.cardview.widget.CardView
+
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+
+            <EditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Enter your password"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:background="@android:color/transparent"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Confirm Password -->
+        <TextView
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirm Password"
+            android:textSize="13sp" android:textColor="#333"/>
+        <androidx.cardview.widget.CardView
+
+            android:layout_marginTop="8dp"
+            app:cardCornerRadius="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="52dp">
+
+            <EditText
+                android:id="@+id/etConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Confirm your password"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:background="@android:color/transparent"/>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Terms -->
+        <LinearLayout
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/chkTerms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginStart="6dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="I agree to the Terms &amp; Conditions and Privacy Policy."
+                android:textSize="13sp" android:textColor="#6E6E6E"/>
+
+        </LinearLayout>
+<!--        <Button-->
+<!--            android:id="@+id/btnContinue"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="70dp"-->
+<!--            android:text="Sign Up"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="20sp"-->
+<!--            android:textColor="#000000"-->
+<!--            android:background="@drawable/btn_blue"-->
+<!--            android:visibility="gone"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_marginLeft="25dp"-->
+<!--            android:layout_marginRight="25dp"-->
+<!--            android:layout_marginBottom="30dp" />-->
+
+        <Button
+            android:id="@+id/btnSignUp"
+            android:layout_marginTop="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="Sign Up"
+            android:textColor="@android:color/white"
+            android:background="@drawable/rounded_button"/>
+
+        <LinearLayout
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Already have an account?"/>
+
+            <TextView
+                android:id="@+id/tvLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="Log in"
+                android:textColor="#00796B"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
