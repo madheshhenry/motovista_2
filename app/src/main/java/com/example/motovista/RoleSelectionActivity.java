@@ -51,14 +51,8 @@ public class RoleSelectionActivity extends AppCompatActivity {
             btnContinue.setVisibility(Button.VISIBLE);
         });
 
-        // CONTINUE BUTTON ACTION
+        // CONTINUE BUTTON *CORRECTED & SINGLE LISTENER*
         btnContinue.setOnClickListener(v -> {
-            if (selectedRole.equals("customer")) {
-                startActivity(new Intent(RoleSelectionActivity.this, CustomerLoginActivity.class));
-            } else if (selectedRole.equals("admin")) {
-                startActivity(new Intent(RoleSelectionActivity.this, AdminLoginActivity.class));
-            }
-        });btnContinue.setOnClickListener(v -> {
 
             if (selectedRole.equals("customer")) {
                 Intent i = new Intent(RoleSelectionActivity.this, LoginActivity.class);
@@ -72,6 +66,5 @@ public class RoleSelectionActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please select a role", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 }

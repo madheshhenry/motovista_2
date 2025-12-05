@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
+import android.content.SharedPreferences;
+
 
 import com.example.motovista.api.ApiClient;
 import com.example.motovista.api.ApiService;
@@ -21,6 +23,7 @@ public class SignupActivity extends AppCompatActivity {
     Button btnSignUp;
     TextView tvLogin;
     ApiService apiService;
+    SharedPreferences prefs;   // ✅ ADDED
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class SignupActivity extends AppCompatActivity {
         tvLogin = findViewById(R.id.tvLogin);
 
         apiService = ApiClient.getClient().create(ApiService.class);
+        prefs = getSharedPreferences("APP_PREFS", MODE_PRIVATE);  // ✅ ADDED
 
         tvLogin.setOnClickListener(v -> {
             startActivity(new Intent(SignupActivity.this, LoginActivity.class));
@@ -61,25 +65,44 @@ public class SignupActivity extends AppCompatActivity {
         if (!chkTerms.isChecked()) { Toast.makeText(this, "Accept terms", Toast.LENGTH_SHORT).show(); return; }
 
         btnSignUp.setEnabled(false);
+
         SignupRequest req = new SignupRequest(name, email, phone, pass);
+
         apiService.signup(req).enqueue(new Callback<ApiResponse>() {
-            @Override public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+
                 btnSignUp.setEnabled(true);
+
                 if (response.isSuccessful() && response.body() != null) {
+
                     ApiResponse r = response.body();
                     Toast.makeText(SignupActivity.this, r.message, Toast.LENGTH_LONG).show();
+
                     if (r.success) {
-                        startActivity(new Intent(SignupActivity.this, LoginActivity.class));
+
+                        // SAVE USER ID
+                        if (r.user != null) {
+                            prefs.edit().putInt("user_id", r.user.id).apply();
+                        }
+
+                        // GO TO PROFILE SETUP PAGE
+                        Intent intent = new Intent(SignupActivity.this, ProfileSetupActivity.class);
+                        startActivity(intent);
                         finish();
                     }
+
                 } else {
                     Toast.makeText(SignupActivity.this, "Server error", Toast.LENGTH_LONG).show();
                 }
             }
-            @Override public void onFailure(Call<ApiResponse> call, Throwable t) {
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
                 btnSignUp.setEnabled(true);
                 Toast.makeText(SignupActivity.this, "Request failed: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
+
 }
