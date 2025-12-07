@@ -2,198 +2,302 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="18dp"
-    android:background="@color/white">
+    android:background="#F3F4F6">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="16dp"
         android:orientation="vertical">
 
-        <!-- Title -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Complete Your Profile"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="#000000"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Help us personalize your experience."
-            android:textSize="12sp"
-            android:textColor="#777777"
-            android:layout_marginTop="3dp"/>
-
-        <!-- Profile Image -->
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginTop="20dp"
-            android:gravity="center">
-
-            <ImageView
-                android:id="@+id/imgProfile"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/ic_profile"
-                android:scaleType="centerCrop"
-                android:background="@drawable/circle_bg_white"
-                android:padding="10dp" />
-
-            <ImageButton
-                android:id="@+id/btnAddPhoto"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="end|bottom"
-                android:background="@drawable/circle_green"
-                android:src="@drawable/ic_add"
-                android:padding="6dp"/>
-        </FrameLayout>
-
-        <!-- DOB -->
-        <EditText
-            android:id="@+id/etDob"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:hint="DD/MM/YYYY"
-            android:background="@drawable/rounded_edittext"
-            android:padding="15dp"
-            android:focusable="false"
-            android:drawableEnd="@drawable/ic_calendar"
-            android:layout_marginTop="15dp"/>
-
-        <!-- House No -->
-        <EditText
-            android:id="@+id/etHouse"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:hint="House No."
-            android:background="@drawable/rounded_edittext"
-            android:padding="15dp"
-            android:layout_marginTop="12dp"/>
-
-        <!-- Street -->
-        <EditText
-            android:id="@+id/etStreet"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:hint="Street / Locality"
-            android:background="@drawable/rounded_edittext"
-            android:padding="15dp"
-            android:layout_marginTop="12dp"/>
-
-        <!-- City + State -->
+        <!-- CARD -->
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:layout_marginTop="12dp">
+            android:padding="20dp"
+            android:orientation="vertical"
+            android:background="@drawable/rounded_card"
+            android:elevation="4dp">
 
-            <EditText
-                android:id="@+id/etCity"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="52dp"
-                android:hint="City"
-                android:background="@drawable/rounded_edittext"
-                android:padding="15dp"/>
+            <!-- TITLE -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Complete Your Profile"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="#1A1A1A" />
 
-            <Space android:layout_width="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Help us personalize your experience."
+                android:textSize="13sp"
+                android:textColor="#555555"
+                android:layout_marginTop="3dp" />
 
-            <EditText
-                android:id="@+id/etState"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="52dp"
-                android:hint="State"
-                android:background="@drawable/rounded_edittext"
-                android:padding="15dp"/>
-        </LinearLayout>
-
-        <!-- Pincode -->
-        <EditText
-            android:id="@+id/etPincode"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:hint="Pincode"
-            android:background="@drawable/rounded_edittext"
-            android:padding="15dp"
-            android:inputType="number"
-            android:layout_marginTop="12dp"/>
-
-        <!-- Aadhar Upload -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Upload Aadhar Card"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:layout_marginTop="15dp"/>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:layout_marginTop="8dp">
-
-            <FrameLayout
-                android:id="@+id/layoutFront"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
-                android:background="@drawable/dashed_box"
-                android:gravity="center">
+            <!-- PROFILE IMAGE -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dp">
 
                 <ImageView
-                    android:id="@+id/imgAadharFront"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/ic_upload"/>
-            </FrameLayout>
+                    android:id="@+id/imgProfile"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:src="@drawable/ic_camera"
+                    android:background="@drawable/circle_light"
+                    android:scaleType="centerInside"
+                    android:padding="26dp" />
 
-            <Space android:layout_width="10dp"/>
+                <ImageButton
+                    android:id="@+id/btnAddPhoto"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_alignBottom="@id/imgProfile"
+                    android:layout_alignRight="@id/imgProfile"
+                    android:background="@drawable/circle_green"
+                    android:src="@drawable/ic_add"
+                    android:padding="8dp" />
+            </RelativeLayout>
 
-            <FrameLayout
-                android:id="@+id/layoutBack"
-                android:layout_width="0dp"
-                android:layout_height="100dp"
-                android:layout_weight="1"
-                android:background="@drawable/dashed_box"
-                android:gravity="center">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Photo"
+                android:gravity="center"
+                android:textColor="#1EA97C"
+                android:textSize="14sp"
+                android:layout_marginTop="8dp" />
+
+            <!-- DOB -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date of Birth"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="#2E2E2E"
+                android:layout_marginTop="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="10dp"
+                android:background="@drawable/input_bg">
+
+                <EditText
+                    android:id="@+id/etDob"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textColorHint="#6A6A6A"
+                    android:textColor="#1A1A1A"
+                    android:hint="DD/MM/YYYY"
+                    android:background="@android:color/transparent"
+                    android:focusable="false"
+                    android:textSize="14sp" />
 
                 <ImageView
-                    android:id="@+id/imgAadharBack"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@drawable/ic_upload"/>
-            </FrameLayout>
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_calendar" />
+
+            </LinearLayout>
+
+            <!-- ADDRESS -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address"
+                android:textStyle="bold"
+                android:textColor="#555555"
+                android:textSize="14sp"
+                android:layout_marginTop="22dp" />
+
+            <EditText
+                android:id="@+id/etHouse"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="House No."
+                android:background="@drawable/input_bg"
+                android:padding="14dp"
+                android:layout_marginTop="10dp" />
+
+            <EditText
+                android:id="@+id/etStreet"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textColorHint="#6A6A6A"
+                android:textColor="#1A1A1A"
+                android:hint="Street / Locality"
+                android:background="@drawable/input_bg"
+                android:padding="14dp"
+                android:layout_marginTop="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="10dp">
+
+                <EditText
+                    android:id="@+id/etCity"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:textColorHint="#6A6A6A"
+                    android:textColor="#1A1A1A"
+                    android:hint="City"
+                    android:background="@drawable/input_bg"
+                    android:padding="14dp" />
+
+                <Space
+                    android:layout_width="12dp"
+                    android:layout_height="match_parent" />
+
+                <EditText
+                    android:id="@+id/etState"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:textColorHint="#6A6A6A"
+                    android:textColor="#1A1A1A"
+                    android:hint="State"
+                    android:background="@drawable/input_bg"
+                    android:padding="14dp" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/etPincode"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textColorHint="#6A6A6A"
+                android:textColor="#1A1A1A"
+                android:hint="Pincode"
+                android:inputType="number"
+                android:background="@drawable/input_bg"
+                android:padding="14dp"
+                android:layout_marginTop="10dp" />
+
+            <!-- AADHAR UPLOAD -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aadhar Card Upload"
+                android:textColor="#2E2E2E"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:layout_marginTop="22dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginTop="10dp">
+
+                <!-- FRONT -->
+                <LinearLayout
+                    android:id="@+id/layoutFront"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:background="@drawable/dotted_box">
+
+                    <ImageView
+                        android:id="@+id/imgAadharFront"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_upload" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Front Photo"
+
+                        android:textColor="#2E2E2E"
+                        android:layout_marginTop="5dp" />
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="12dp"
+                    android:layout_height="match_parent" />
+
+                <!-- BACK -->
+                <LinearLayout
+                    android:id="@+id/layoutBack"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:background="@drawable/dotted_box">
+
+                    <ImageView
+                        android:id="@+id/imgAadharBack"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_upload" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Back Photo"
+                        android:textColor="#2E2E2E"
+                        android:layout_marginTop="5dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- PAN INPUT -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PAN Card Number"
+                android:textStyle="bold"
+                android:textColor="#2E2E2E"
+                android:layout_marginTop="20dp" />
+
+            <EditText
+                android:id="@+id/etPan"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Enter your PAN number"
+                android:background="@drawable/input_bg"
+                android:padding="14dp"
+                android:layout_marginTop="10dp" />
+
+            <!-- BUTTON -->
+            <Button
+                android:id="@+id/btnComplete"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="20dp"
+                android:text="Complete Setup"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:background="@drawable/rounded_button_green" />
+
         </LinearLayout>
 
-        <!-- PAN Number -->
-        <EditText
-            android:id="@+id/etPan"
+        <!-- SKIP -->
+        <TextView
+            android:id="@+id/btnSkip"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:hint="Enter your PAN Number"
-            android:background="@drawable/rounded_edittext"
-            android:padding="15dp"
-            android:layout_marginTop="14dp"/>
+            android:layout_height="wrap_content"
+            android:text="Skip for Now"
+            android:gravity="center"
+            android:textColor="#777"
+            android:layout_marginTop="16dp"
+            android:textSize="14sp" />
 
-        <!-- Submit Button -->
-        <Button
-            android:id="@+id/btnComplete"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="Complete Setup"
-            android:background="@drawable/rounded_button_green"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"/>
     </LinearLayout>
 
 </ScrollView>

@@ -34,10 +34,11 @@ public interface ApiService {
             @Field("password") String password
     );
 
-    // ⭐⭐⭐ PROFILE SETUP MULTIPART API (THIS WAS MISSING!)
+    // COMPLETE PROFILE
     @Multipart
     @POST("complete_profile.php")
     Call<ApiResponse> completeProfile(
+
             @Part("user_id") RequestBody userId,
             @Part("dob") RequestBody dob,
             @Part("house_no") RequestBody houseNo,
@@ -50,5 +51,30 @@ public interface ApiService {
             @Part MultipartBody.Part profile_photo,
             @Part MultipartBody.Part aadhar_front,
             @Part MultipartBody.Part aadhar_back
+    );
+
+    // ⭐⭐⭐ GET CUSTOMERS API (SEARCH + EXCLUDE BALANCE CUSTOMERS)
+    @FormUrlEncoded
+    @POST("get_customers.php")
+    Call<ResponseBody> getCustomers(
+            @Field("q") String query  // name or phone number
+    );
+
+    @Multipart
+    @POST("add_bike.php")
+    Call<ApiResponse> uploadBike(
+            @Part("brand") RequestBody brand,
+            @Part("model") RequestBody model,
+            @Part("ex_showroom") RequestBody exShowroom,
+            @Part("rto") RequestBody rto,
+            @Part("insurance") RequestBody insurance,
+            @Part("engine") RequestBody engine,
+            @Part("mileage") RequestBody mileage,
+            @Part("top_speed") RequestBody topSpeed,
+            @Part("braking") RequestBody braking,
+            @Part("type") RequestBody type,
+            @Part("colors") RequestBody colors, // comma separated
+            @Part("features") RequestBody features,
+            @Part MultipartBody.Part image
     );
 }

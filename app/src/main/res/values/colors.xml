@@ -2,4 +2,39 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+        <color name="text_primary">#0E1111</color>
+        <color name="card_shadow">#E9ECEF</color>
+        <color name="accent_blue">#04B7F9</color>
+        <color name="accent_blue_trans">#14C8F9</color>
+
+        <!-- pastel icon bg colors -->
+        <color name="pink_light">#FFECEC</color>
+        <color name="yellow_light">#FFF3D6</color>
+        <color name="blue_light">#E8F0FF</color>
+        <color name="green_light">#E8FFF0</color>
+        <color name="purple_light">#F4E9FF</color>
+        <color name="violet_light">#EDEEFF</color>
+
+        <!-- bottom nav states -->
+        <color name="nav_selected">#04B7F9</color>
+        <color name="nav_unselected">#8A8F95</color>
+        <color name="transparent">#00FFFFFF</color>
+
+
+
+
+        <color name="bg_light">#F6F8F8</color>
+        <color name="text_secondary">#6B7280</color>
+        <color name="border_color">#D3D5DA</color>
+
+        <!-- Inputs -->
+        <color name="input_bg">#FFFFFF</color>
+
+        <!-- Buttons -->
+        <color name="button_primary">#4DB7FF</color>
+        <color name="button_cancel_bg">#E5E7EB</color>
+        <color name="button_cancel_text">#374151</color>
+
 </resources>

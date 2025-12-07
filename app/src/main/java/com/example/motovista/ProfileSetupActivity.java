@@ -5,9 +5,7 @@ import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.content.Intent;
 import android.widget.*;
-import android.app.Activity;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +27,9 @@ import retrofit2.*;
 public class ProfileSetupActivity extends AppCompatActivity {
 
     ImageView imgProfile, imgAadharFront, imgAadharBack;
+    LinearLayout layoutFront, layoutBack;
+    ImageButton btnAddPhoto;
+
     EditText etDob, etHouse, etStreet, etCity, etState, etPincode, etPan;
     Button btnComplete;
 
@@ -49,14 +50,18 @@ public class ProfileSetupActivity extends AppCompatActivity {
         prefs = getSharedPreferences("APP_PREFS", MODE_PRIVATE);
 
         init();
-        listeners();
         initPicker();
+        listeners();
     }
 
     private void init() {
         imgProfile = findViewById(R.id.imgProfile);
         imgAadharFront = findViewById(R.id.imgAadharFront);
         imgAadharBack = findViewById(R.id.imgAadharBack);
+
+        btnAddPhoto = findViewById(R.id.btnAddPhoto);
+        layoutFront = findViewById(R.id.layoutFront);
+        layoutBack = findViewById(R.id.layoutBack);
 
         etDob = findViewById(R.id.etDob);
         etHouse = findViewById(R.id.etHouse);
@@ -81,9 +86,20 @@ public class ProfileSetupActivity extends AppCompatActivity {
 
     private void listeners() {
 
-        imgProfile.setOnClickListener(v -> { PICK = 1; picker.launch("image/*"); });
-        imgAadharFront.setOnClickListener(v -> { PICK = 2; picker.launch("image/*"); });
-        imgAadharBack.setOnClickListener(v -> { PICK = 3; picker.launch("image/*"); });
+        btnAddPhoto.setOnClickListener(v -> {
+            PICK = 1;
+            picker.launch("image/*");
+        });
+
+        layoutFront.setOnClickListener(v -> {
+            PICK = 2;
+            picker.launch("image/*");
+        });
+
+        layoutBack.setOnClickListener(v -> {
+            PICK = 3;
+            picker.launch("image/*");
+        });
 
         etDob.setOnClickListener(v -> showDate());
 
@@ -120,28 +136,32 @@ public class ProfileSetupActivity extends AppCompatActivity {
     }
 
     private void upload() {
-
         ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Uploading...");
+        pd.setCancelable(false);
         pd.show();
 
-        int userId = prefs.getInt("user_id", 0);
+        int userId = prefs.getInt("user_id", 0); // make sure login saved this
+        if (userId == 0) {
+            pd.dismiss();
+            toast("User not logged in");
+            return;
+        }
 
         try {
-
             MultipartBody.Part profile = createPart(profileUri, "profile_photo");
             MultipartBody.Part front = createPart(frontUri, "aadhar_front");
             MultipartBody.Part back = createPart(backUri, "aadhar_back");
 
             Call<ApiResponse> call = apiService.completeProfile(
-                    create("user_id", String.valueOf(userId)),
-                    create("dob", etDob.getText().toString()),
-                    create("house_no", etHouse.getText().toString()),
-                    create("street_locality", etStreet.getText().toString()),
-                    create("city", etCity.getText().toString()),
-                    create("state", etState.getText().toString()),
-                    create("pincode", etPincode.getText().toString()),
-                    create("pan_number", etPan.getText().toString()),
+                    createTextPart(String.valueOf(userId)),
+                    createTextPart(etDob.getText().toString()),
+                    createTextPart(etHouse.getText().toString()),
+                    createTextPart(etStreet.getText().toString()),
+                    createTextPart(etCity.getText().toString()),
+                    createTextPart(etState.getText().toString()),
+                    createTextPart(etPincode.getText().toString()),
+                    createTextPart(etPan.getText().toString()),
                     profile, front, back
             );
 
@@ -149,21 +169,34 @@ public class ProfileSetupActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<ApiResponse> call, Response<ApiResponse> res) {
                     pd.dismiss();
-                    if (res.body() != null) toast(res.body().message);
+                    if (res.isSuccessful() && res.body() != null) {
+                        toast(res.body().message);
+                    } else {
+                        // show server raw error if available
+                        try {
+                            String err = res.errorBody() != null ? res.errorBody().string() : "Unknown server error";
+                            toast("Server error: " + err);
+                        } catch (Exception e) {
+                            toast("Server error");
+                        }
+                    }
                 }
+
                 @Override
                 public void onFailure(Call<ApiResponse> call, Throwable t) {
-                    pd.dismiss(); toast(t.getMessage());
+                    pd.dismiss();
+                    toast("Network error: " + t.getMessage());
                 }
             });
 
         } catch (Exception e) {
             pd.dismiss();
+            toast("Internal error: " + e.getMessage());
         }
     }
 
-    private RequestBody create(String key, String val) {
-        return RequestBody.create(val, MultipartBody.FORM);
+    private RequestBody createTextPart(String value) {
+        return RequestBody.create(MediaType.parse("text/plain"), value);
     }
 
     private MultipartBody.Part createPart(Uri uri, String name) throws Exception {
@@ -178,9 +211,11 @@ public class ProfileSetupActivity extends AppCompatActivity {
         is.close();
         fos.close();
 
-        RequestBody req = RequestBody.create(file, MediaType.parse("image/*"));
+        RequestBody req = RequestBody.create(MediaType.parse("image/*"), file);
         return MultipartBody.Part.createFormData(name, file.getName(), req);
     }
 
-    private void toast(String msg) { Toast.makeText(this, msg, Toast.LENGTH_SHORT).show(); }
+    private void toast(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
 }

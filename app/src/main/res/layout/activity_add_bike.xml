@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_light"
+    android:fitsSystemWindows="true">
+
+    <!-- 🔥 FIXED HEADER (STAYS ON TOP) -->
+    <LinearLayout
+        android:id="@+id/headerBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:background="@color/bg_light"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="6dp"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="Back"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add New Bike"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:gravity="center"/>
+    </LinearLayout>
+
+
+    <!-- 🔽 SCROLLABLE CONTENT BELOW THE FIXED HEADER -->
+    <ScrollView
+        android:id="@+id/scrollArea"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/headerBar"
+        android:padding="20dp"
+        android:paddingTop="30dp"
+        android:paddingBottom="120dp"
+        android:scrollbars="none"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        <!-- Brand + Model -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="@dimen/space_16">
+
+            <!-- Brand -->
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Brand"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="@dimen/space_4"/>
+
+                <EditText
+                    android:id="@+id/etBrand"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_height"
+                    android:background="@drawable/rounded_input"
+                    android:padding="@dimen/space_12"
+                    android:hint="e.g., Yamaha"
+                    android:textColor="@color/text_primary"/>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="@dimen/space_12"
+                android:layout_height="wrap_content"/>
+
+            <!-- Model -->
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Model Name"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="@dimen/space_4"/>
+
+                <EditText
+                    android:id="@+id/etModel"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_height"
+                    android:background="@drawable/rounded_input"
+                    android:padding="@dimen/space_12"
+                    android:hint="e.g., R15"
+                    android:textColor="@color/text_primary"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Price Breakdown -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_bg"
+            android:padding="@dimen/space_16"
+            android:layout_marginTop="@dimen/space_20"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price Breakdown"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp"
+                android:layout_marginBottom="@dimen/space_12"/>
+
+            <!-- Ex Showroom -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ex-Showroom Price"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:layout_marginBottom="@dimen/space_4"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_height"
+                android:background="@drawable/rounded_input">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="₹"
+                    android:textColor="@color/text_secondary"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/space_12"/>
+
+                <EditText
+                    android:id="@+id/etExShowroom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="24dp"
+                    android:padding="@dimen/space_12"
+                    android:hint="1,80,000"
+                    android:inputType="number"
+                    android:textColor="@color/text_primary"/>
+            </RelativeLayout>
+
+            <!-- RTO -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RTO Charges"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:layout_marginTop="@dimen/space_16"
+                android:layout_marginBottom="@dimen/space_4"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_height"
+                android:background="@drawable/rounded_input">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="₹"
+                    android:textColor="@color/text_secondary"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/space_12"/>
+
+                <EditText
+                    android:id="@+id/etRto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="24dp"
+                    android:padding="@dimen/space_12"
+                    android:hint="12,000"
+                    android:inputType="number"
+                    android:textColor="@color/text_primary"/>
+            </RelativeLayout>
+
+            <!-- Insurance -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Insurance (1 Year)"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:layout_marginTop="@dimen/space_16"
+                android:layout_marginBottom="@dimen/space_4"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/input_height"
+                android:background="@drawable/rounded_input">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="₹"
+                    android:textColor="@color/text_secondary"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/space_12"/>
+
+                <EditText
+                    android:id="@+id/etInsurance"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="24dp"
+                    android:padding="@dimen/space_12"
+                    android:hint="10,500"
+                    android:inputType="number"
+                    android:textColor="@color/text_primary"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <!-- SPECIFICATION ROW 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="@dimen/space_20">
+
+            <!-- Engine CC -->
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Engine CC"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="@dimen/space_4"/>
+
+                <EditText
+                    android:id="@+id/etEngine"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_height"
+                    android:background="@drawable/rounded_input"
+                    android:padding="@dimen/space_12"
+                    android:hint="155"
+                    android:inputType="number"
+                    android:textColor="@color/text_primary"/>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="@dimen/space_12"
+                android:layout_height="wrap_content"/>
+
+            <!-- Mileage -->
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mileage (km/l)"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="@dimen/space_4"/>
+
+                <EditText
+                    android:id="@+id/etMileage"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_height"
+                    android:background="@drawable/rounded_input"
+                    android:padding="@dimen/space_12"
+                    android:hint="45"
+                    android:inputType="numberDecimal"
+                    android:textColor="@color/text_primary"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- SPECIFICATION ROW 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:layout_marginTop="@dimen/space_16">
+
+            <!-- Top Speed -->
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Top Speed (km/h)"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="@dimen/space_4"/>
+
+                <EditText
+                    android:id="@+id/etTopSpeed"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_height"
+                    android:background="@drawable/rounded_input"
+                    android:padding="@dimen/space_12"
+                    android:hint="140"
+                    android:inputType="number"
+                    android:textColor="@color/text_primary"/>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="@dimen/space_12"
+                android:layout_height="wrap_content"/>
+
+            <!-- Braking -->
+            <LinearLayout
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Braking Type"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="@dimen/space_4"/>
+
+                <EditText
+                    android:id="@+id/etBraking"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/input_height"
+                    android:background="@drawable/rounded_input"
+                    android:padding="@dimen/space_12"
+                    android:hint="Dual Disc"
+                    android:textColor="@color/text_primary"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Dropdown -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:layout_marginTop="@dimen/space_20"
+            android:layout_marginBottom="@dimen/space_4"/>
+
+        <Spinner
+            android:id="@+id/spinnerType"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/input_height"
+            android:background="@drawable/rounded_input"
+            android:paddingLeft="@dimen/space_12"
+            android:spinnerMode="dropdown"/>
+
+        <!-- Colors -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Available Colors"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:layout_marginTop="@dimen/space_20"
+            android:layout_marginBottom="@dimen/space_8"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <View
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/color_red"/>
+
+            <Space
+                android:layout_width="@dimen/space_8"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/color_blue"/>
+
+            <Space
+                android:layout_width="@dimen/space_8"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/color_black"/>
+
+            <Space
+                android:layout_width="@dimen/space_12"
+                android:layout_height="wrap_content"/>
+
+            <ImageButton
+                android:id="@+id/btnAddColor"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/rounded_input"
+                android:src="@drawable/ic_add"
+                android:tint="@color/text_secondary"/>
+        </LinearLayout>
+
+        <!-- Image Upload -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Image"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:layout_marginTop="@dimen/space_20"
+            android:layout_marginBottom="@dimen/space_4"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/upload_box"
+            android:padding="@dimen/space_16">
+
+            <ImageView
+                android:id="@+id/ivPreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_upload_placeholder"/>
+        </FrameLayout>
+
+        <!-- Features -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Key Features / Specs"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:layout_marginTop="@dimen/space_20"
+            android:layout_marginBottom="@dimen/space_4"/>
+
+        <EditText
+            android:id="@+id/etFeatures"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/rounded_input"
+            android:gravity="top"
+            android:padding="@dimen/space_12"
+            android:hint="e.g. Dual ABS, VVA, Slipper Clutch"
+            android:textColor="@color/text_primary"/>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_24">
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:text="Save Bike"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:background="@drawable/button_primary"/>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/space_12"/>
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:text="Cancel"
+                android:textColor="@color/button_cancel_text"
+                android:background="@drawable/button_cancel"/>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/space_28"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

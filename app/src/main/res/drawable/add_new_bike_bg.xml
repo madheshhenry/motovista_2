@@ -1,0 +1,18 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Blue pill background -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#04B7F9"/>
+            <corners android:radius="40dp"/>
+        </shape>
+    </item>
+
+    <!-- Round left capsule -->
+    <item android:width="80dp" android:height="55dp">
+        <shape android:shape="oval">
+            <solid android:color="#036FDB"/>
+        </shape>
+    </item>
+
+</layer-list>

@@ -1,0 +1,28 @@
+<resources>
+    <dimen name="statusbar_height">24dp</dimen>
+    <dimen name="navigation_bar_padding">24dp</dimen>
+
+<!-- Global Spacing -->
+    <dimen name="space_4">4dp</dimen>
+    <dimen name="space_8">8dp</dimen>
+    <dimen name="space_12">12dp</dimen>
+    <dimen name="space_16">16dp</dimen>
+    <dimen name="space_20">20dp</dimen>
+    <dimen name="space_24">24dp</dimen>
+    <dimen name="space_28">28dp</dimen>
+
+<!-- Corners -->
+    <dimen name="corner_sm">6dp</dimen>
+    <dimen name="corner_md">8dp</dimen>
+    <dimen name="corner_lg">12dp</dimen>
+    <dimen name="corner_xl">16dp</dimen>
+
+<!-- EditText Height -->
+    <dimen name="input_height">48dp</dimen>
+
+    <!-- Buttons -->
+    <dimen name="button_height">54dp</dimen>
+    <dimen name="button_radius">12dp</dimen>
+<!-- notch -->
+    <dimen name="status_bar_padding">24dp</dimen>
+</resources>

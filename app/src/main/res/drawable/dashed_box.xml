@@ -14,4 +14,10 @@
 
     </shape>
 
+    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+        <solid android:color="@android:color/transparent"/>
+        <stroke android:width="2dp" android:color="#D6DCE0" android:dashWidth="6dp" android:dashGap="6dp"/>
+        <corners android:radius="8dp"/>
+    </shape>
+
 </selector>
