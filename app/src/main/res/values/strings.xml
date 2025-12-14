@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">motovista_deep</string>
+    <string-array name="bike_types">
+        <item>Sports</item>
+        <item>Commuter</item>
+        <item>Cruiser</item>
+        <item>Scooter</item>
+    </string-array>
+    <string-array name="bike_conditions">
+        <item>Excellent</item>
+        <item>Good</item>
+        <item>Fair</item>
+    </string-array>
+
+
+</resources>

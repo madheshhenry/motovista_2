@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:fitsSystemWindows="true">
+
+    <!-- Top Header -->
+    <LinearLayout
+        android:id="@+id/topHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/background_light"
+        android:paddingTop="@dimen/padding_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Back Button and Title -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="@dimen/padding_medium">
+
+            <!-- Back Button -->
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@color/gray_800"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back"
+                android:padding="12dp" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Bike Details"
+                android:textColor="@color/text_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:fontFamily="sans-serif-medium" />
+
+            <!-- Empty space for symmetry -->
+            <View
+                android:layout_width="48dp"
+                android:layout_height="0dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Main Scroll View -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottomButtonsLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topHeader">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Image Container -->
+            <LinearLayout
+                android:id="@+id/cardImage"
+                android:layout_width="match_parent"
+                android:layout_height="256dp"
+                android:layout_marginHorizontal="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/padding_medium"
+                android:background="@color/gray_200"
+                android:orientation="vertical"
+                android:elevation="2dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <!-- Bike Image - THIS IS THE FIXED LINE -->
+                    <ImageView
+                        android:id="@+id/ivBikeImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="Bike Image" />
+
+                    <!-- Image Dots Indicator -->
+                    <LinearLayout
+                        android:id="@+id/dotsIndicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center"
+                        android:paddingVertical="4dp"
+                        android:paddingHorizontal="8dp"
+                        android:background="@drawable/bg_dots_indicator">
+
+                        <View
+                            android:id="@+id/dot1"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_marginHorizontal="2dp"
+                            android:background="@drawable/shape_dot_active" />
+
+                        <View
+                            android:id="@+id/dot2"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_marginHorizontal="2dp"
+                            android:background="@drawable/shape_dot_inactive" />
+
+                        <View
+                            android:id="@+id/dot3"
+                            android:layout_width="8dp"
+                            android:layout_height="8dp"
+                            android:layout_marginHorizontal="2dp"
+                            android:background="@drawable/shape_dot_inactive" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <!-- Details Container -->
+            <LinearLayout
+                android:id="@+id/detailsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_medium"
+                android:layout_marginTop="@dimen/padding_small">
+
+                <!-- This container will be populated dynamically based on bike type -->
+                <!-- It will contain either layout_new_bike_details.xml or layout_sh_bike_details.xml -->
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Buttons -->
+    <LinearLayout
+        android:id="@+id/bottomButtonsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:paddingHorizontal="@dimen/padding_medium"
+        android:paddingVertical="@dimen/padding_medium"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btnEdit"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_button_edit"
+            android:text="Edit Details"
+            android:textColor="@color/primary_color"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:drawableStart="@drawable/ic_edit"
+            android:drawablePadding="8dp"
+            android:gravity="center" />
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_button_delete"
+            android:text="Remove Bike"
+            android:textColor="@color/icon_red"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:drawableStart="@drawable/ic_delete"
+            android:drawablePadding="8dp"
+            android:gravity="center" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

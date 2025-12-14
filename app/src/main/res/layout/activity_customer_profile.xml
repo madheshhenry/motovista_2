@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    android:paddingTop="24dp"
+    android:paddingBottom="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header with Back Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="8dp">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@color/text_primary_light"
+                android:contentDescription="Back" />
+
+        </LinearLayout>
+
+        <!-- Title Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Complete Your Profile"
+            android:textColor="@color/text_primary_light"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Help us personalize your experience."
+            android:textColor="@color/text_secondary_light"
+            android:textSize="16sp"
+            android:paddingBottom="24dp" />
+
+        <!-- Profile Photo Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingBottom="16dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <!-- Profile Image Container -->
+                <LinearLayout
+                    android:id="@+id/profileImageContainer"
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:background="@drawable/bg_circle_gray"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/profileImagePlaceholder"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_camera"
+                        android:tint="@color/gray_400" />
+
+                </LinearLayout>
+
+                <!-- Add Photo Button -->
+                <ImageView
+                    android:id="@+id/btnAddPhoto"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignBottom="@id/profileImageContainer"
+                    android:layout_alignEnd="@id/profileImageContainer"
+                    android:src="@drawable/ic_add_circle"
+                    android:background="@drawable/bg_circle_primary"
+                    android:padding="8dp"
+                    android:contentDescription="Add photo" />
+
+            </RelativeLayout>
+
+            <!-- Add Photo Text Button -->
+            <TextView
+                android:id="@+id/btnAddPhotoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Add Photo"
+                android:textColor="@color/primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:padding="12dp"
+                android:paddingHorizontal="16dp" />
+
+        </LinearLayout>
+
+        <!-- Date of Birth -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Date of Birth"
+            android:textColor="@color/text_primary_light"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingBottom="4dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_input"
+            android:paddingEnd="16dp">
+
+            <EditText
+                android:id="@+id/etDOB"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="DD/MM/YYYY"
+                android:inputType="date"
+                android:paddingStart="16dp"
+                android:paddingEnd="48dp"
+                android:textColor="@color/text_primary_light"
+                android:textColorHint="@color/text_secondary_light" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_calendar"
+                android:tint="@color/text_secondary_light" />
+
+        </RelativeLayout>
+
+        <!-- Address Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            android:textColor="@color/text_primary_light"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingBottom="4dp" />
+
+        <EditText
+            android:id="@+id/etHouseNo"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="8dp"
+            android:hint="House No."
+            android:background="@drawable/bg_input"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/text_primary_light"
+            android:textColorHint="@color/text_secondary_light" />
+
+        <EditText
+            android:id="@+id/etStreet"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="8dp"
+            android:hint="Street / Locality"
+            android:background="@drawable/bg_input"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/text_primary_light"
+            android:textColorHint="@color/text_secondary_light" />
+
+        <!-- City and State Row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <EditText
+                android:id="@+id/etCity"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:hint="City"
+                android:background="@drawable/bg_input"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/text_primary_light"
+                android:textColorHint="@color/text_secondary_light" />
+
+            <EditText
+                android:id="@+id/etState"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="State"
+                android:background="@drawable/bg_input"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/text_primary_light"
+                android:textColorHint="@color/text_secondary_light" />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/etPincode"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="24dp"
+            android:hint="Pincode"
+            android:inputType="number"
+            android:background="@drawable/bg_input"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/text_primary_light"
+            android:textColorHint="@color/text_secondary_light" />
+
+        <!-- Aadhar Card Upload -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aadhar Card Upload"
+            android:textColor="@color/text_primary_light"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingBottom="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="24dp">
+
+            <!-- Front Photo -->
+            <LinearLayout
+                android:id="@+id/btnAadharFront"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_upload_container"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_upload"
+                    android:tint="@color/text_secondary_light" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Front Photo"
+                    android:textColor="@color/text_secondary_light"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <!-- Back Photo -->
+            <LinearLayout
+                android:id="@+id/btnAadharBack"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_upload_container"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_upload"
+                    android:tint="@color/text_secondary_light" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Back Photo"
+                    android:textColor="@color/text_secondary_light"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- PAN Card Number -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PAN Card Number"
+            android:textColor="@color/text_primary_light"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:paddingBottom="4dp" />
+
+        <EditText
+            android:id="@+id/etPAN"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="32dp"
+            android:hint="Enter your PAN number"
+            android:background="@drawable/bg_input"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/text_primary_light"
+            android:textColorHint="@color/text_secondary_light" />
+
+        <!-- Buttons -->
+        <Button
+            android:id="@+id/btnCompleteSetup"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_button_primary"
+            android:text="Complete Setup"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btnSkip"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center"
+            android:text="Skip for Now"
+            android:textColor="@color/text_secondary_light"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</ScrollView>

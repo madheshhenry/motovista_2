@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background Circle (Full 360 degrees) -->
+    <item>
+        <shape
+            android:shape="ring"
+            android:innerRadius="64dp"
+            android:thickness="16dp"
+            android:useLevel="false">
+            <solid android:color="#4D13C8EC" /> <!-- #13c8ec4d - 30% opacity primary -->
+        </shape>
+    </item>
+
+    <!-- Principal Amount Arc (87.4%) -->
+    <!-- Note: We can't do percentages in XML, so we'll approximate 315 degrees for 87.4% -->
+    <item>
+        <rotate
+            android:fromDegrees="-90"
+            android:toDegrees="225"> <!-- -90 + 315 = 225 -->
+            <shape
+                android:shape="ring"
+                android:innerRadius="64dp"
+                android:thickness="16dp"
+                android:useLevel="false">
+                <solid android:color="#13C8EC" /> <!-- Primary color -->
+            </shape>
+        </rotate>
+    </item>
+
+    <!-- Center Circle (White) - Exactly 80% of size -->
+    <item>
+        <shape
+            android:shape="oval">
+            <size
+                android:width="128dp"
+                android:height="128dp" />
+            <solid android:color="@android:color/white" />
+        </shape>
+    </item>
+
+</layer-list>

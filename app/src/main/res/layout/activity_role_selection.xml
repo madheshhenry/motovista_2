@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:fitsSystemWindows="true">
+
+    <!-- Main Content Container -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="24dp"
+            android:fitsSystemWindows="true">
+
+            <!-- Top Icon Section -->
+            <LinearLayout
+                android:id="@+id/top_section"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <!-- Bike Icon Container -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    app:cardCornerRadius="70dp"
+                    app:cardBackgroundColor="@color/primary_light"
+                    app:cardElevation="12dp"
+                    android:layout_marginBottom="32dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:src="@drawable/ic_bike"
+                            android:tint="@color/primary_color" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Welcome Text -->
+                <TextView
+                    android:id="@+id/tv_welcome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome to Santhosh Bikes"
+                    android:textColor="@color/text_dark"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:lineSpacingExtra="4sp" />
+
+                <!-- Select Role Text -->
+                <TextView
+                    android:id="@+id/tv_select_role"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Select your role to get started."
+                    android:textColor="@color/text_dark"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:maxLines="2" />
+
+            </LinearLayout>
+
+            <!-- Role Cards Container -->
+            <LinearLayout
+                android:id="@+id/cards_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/top_section">
+
+                <!-- Customer Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_customer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="8dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="20dp"
+                    android:background="@android:color/white"
+                    android:minHeight="140dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="24dp">
+
+                        <!-- Icon -->
+                        <ImageView
+                            android:id="@+id/icon_customer"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:src="@drawable/ic_person"
+                            android:tint="@color/primary_color"
+                            android:layout_marginEnd="20dp" />
+
+                        <!-- Text Content -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/tv_customer_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Customer"
+                                android:textColor="@color/text_dark"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif" />
+
+                            <TextView
+                                android:id="@+id/tv_customer_desc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Explore our collection, book services, and manage your profile."
+                                android:textColor="@color/text_admin"
+                                android:textSize="15sp"
+                                android:fontFamily="sans-serif"
+                                android:layout_marginTop="8dp"
+                                android:lineSpacingExtra="2sp"
+                                android:maxLines="3" />
+
+                        </LinearLayout>
+
+                        <!-- Selection Indicator -->
+                        <ImageView
+                            android:id="@+id/iv_customer_selected"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_check_circle"
+                            android:tint="@color/primary_color"
+                            android:visibility="gone"
+                            android:layout_marginStart="12dp" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Admin Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_admin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="8dp"
+                    app:cardUseCompatPadding="true"
+                    android:background="@android:color/white"
+                    android:minHeight="140dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="24dp">
+
+                        <!-- Icon -->
+                        <ImageView
+                            android:id="@+id/icon_admin"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
+                            android:src="@drawable/ic_admin"
+                            android:tint="@color/primary_color"
+                            android:layout_marginEnd="20dp" />
+
+                        <!-- Text Content -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/tv_admin_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Admin"
+                                android:textColor="@color/text_dark"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif" />
+
+                            <TextView
+                                android:id="@+id/tv_admin_desc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Access the dashboard to manage inventory, sales, and staff."
+                                android:textColor="@color/text_admin"
+                                android:textSize="15sp"
+                                android:fontFamily="sans-serif"
+                                android:layout_marginTop="8dp"
+                                android:lineSpacingExtra="2sp"
+                                android:maxLines="3" />
+
+                        </LinearLayout>
+
+                        <!-- Selection Indicator -->
+                        <ImageView
+                            android:id="@+id/iv_admin_selected"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_check_circle"
+                            android:tint="@color/primary_color"
+                            android:visibility="gone"
+                            android:layout_marginStart="12dp" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <!-- Continue Button -->
+            <Button
+                android:id="@+id/btn_continue"
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                android:text="Continue"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif"
+                android:background="@drawable/button_background"
+                android:layout_marginTop="40dp"
+                android:layout_marginBottom="30dp"
+                android:enabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cards_container" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
