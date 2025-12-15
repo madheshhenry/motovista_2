@@ -8,6 +8,11 @@ import com.example.motovista_deep.models.RegisterResponse;
 import com.example.motovista_deep.models.GetProfileResponse;
 import com.example.motovista_deep.models.GetCustomersResponse;
 import com.example.motovista_deep.models.GetCustomerDetailResponse;
+import com.example.motovista_deep.models.AddBikeRequest;
+import com.example.motovista_deep.models.UploadBikeImageResponse;
+import com.example.motovista_deep.models.SecondHandBikeRequest;
+
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -64,5 +69,29 @@ public interface ApiService {
             @Header("Authorization") String token,
             @Query("customer_id") int customerId
     );
+
+    @POST("add_bike.php")
+    Call<GenericResponse> addBike(
+            @Header("Authorization") String token,
+            @Body AddBikeRequest request
+    );
+
+
+    @POST("add_second_hand_bike.php")
+    Call<GenericResponse> addSecondHandBike(
+            @Header("Authorization") String token,
+            @Body SecondHandBikeRequest request
+    );
+    @Multipart
+    @POST("upload_bike_image.php")
+    Call<UploadBikeImageResponse> uploadBikeImages(
+            @Header("Authorization") String token,
+            @Part("bike_type") RequestBody bikeType,
+            @Part List<MultipartBody.Part> bike_images
+    );
+
+
+
+
 
 }

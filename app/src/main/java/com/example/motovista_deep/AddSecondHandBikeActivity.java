@@ -1,19 +1,45 @@
 package com.example.motovista_deep;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
-import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
+
+import com.example.motovista_deep.api.ApiService;
+import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.helpers.SharedPrefManager;
+import com.example.motovista_deep.models.SecondHandBikeRequest;
+import com.example.motovista_deep.models.GenericResponse;
+import com.example.motovista_deep.models.UploadBikeImageResponse;
+
+import java.io.File;
+import java.io.InputStream;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import android.database.Cursor;
 
 public class AddSecondHandBikeActivity extends AppCompatActivity {
 
@@ -21,25 +47,23 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
     private Spinner spinnerCondition;
     private Button btnSaveBike, btnCancel;
     private ImageView btnBack;
-    private View uploadContainer;
+    private LinearLayout uploadContainer, imagePreviewContainer;
+    private TextView tvSelectedCount;
+
+    private ArrayList<Uri> imageUris = new ArrayList<>();
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_second_hand_bike);
 
-        // Initialize views
         initializeViews();
-
-        // Setup condition spinner
         setupConditionSpinner();
-
-        // Setup click listeners
         setupClickListeners();
     }
 
     private void initializeViews() {
-        // Text inputs
         etBrand = findViewById(R.id.etBrand);
         etModel = findViewById(R.id.etModel);
         etYear = findViewById(R.id.etYear);
@@ -47,146 +71,350 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
         etPrice = findViewById(R.id.etPrice);
         etOwnerDetails = findViewById(R.id.etOwnerDetails);
         etFeatures = findViewById(R.id.etFeatures);
-
-        // Spinner
         spinnerCondition = findViewById(R.id.spinnerCondition);
-
-        // Buttons
         btnSaveBike = findViewById(R.id.btnSaveBike);
         btnCancel = findViewById(R.id.btnCancel);
         btnBack = findViewById(R.id.btnBack);
-
-        // Upload container
         uploadContainer = findViewById(R.id.uploadContainer);
+
+        // Initialize image preview container
+        imagePreviewContainer = findViewById(R.id.imagePreviewContainer);
+        if (imagePreviewContainer == null) {
+            // Create a new container if not in XML
+            imagePreviewContainer = new LinearLayout(this);
+            imagePreviewContainer.setOrientation(LinearLayout.HORIZONTAL);
+        }
+
+        // Initialize selected count text view
+        tvSelectedCount = new TextView(this);
+        tvSelectedCount.setTextSize(12);
+        tvSelectedCount.setTextColor(getResources().getColor(R.color.gray_600));
+        tvSelectedCount.setVisibility(View.GONE);
     }
 
     private void setupConditionSpinner() {
-        // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.bike_conditions, android.R.layout.simple_spinner_item);
-
-        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // Apply the adapter to the spinner
         spinnerCondition.setAdapter(adapter);
     }
 
     private void setupClickListeners() {
-        // Back button
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        btnBack.setOnClickListener(v -> onBackPressed());
+        btnCancel.setOnClickListener(v -> onBackPressed());
+        btnSaveBike.setOnClickListener(v -> saveBike());
+        uploadContainer.setOnClickListener(v -> openImageChooser());
+    }
 
-        // Cancel button
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCancelConfirmation();
-            }
-        });
+    private void openImageChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(Intent.createChooser(intent, "Select Pictures"), PICK_IMAGE_REQUEST);
+    }
 
-        // Save Bike button
-        btnSaveBike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveBike();
-            }
-        });
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        // Upload container click
-        uploadContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openImagePicker();
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
+            if (data != null) {
+                imageUris.clear();
+
+                if (data.getClipData() != null) {
+                    // Multiple images selected
+                    int count = data.getClipData().getItemCount();
+
+                    for (int i = 0; i < count; i++) {
+                        Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                        imageUris.add(imageUri);
+                    }
+
+                    Toast.makeText(this, count + " image(s) selected", Toast.LENGTH_SHORT).show();
+                } else if (data.getData() != null) {
+                    // Single image selected
+                    imageUris.add(data.getData());
+                    Toast.makeText(this, "1 image selected", Toast.LENGTH_SHORT).show();
+                }
+
+                showImagePreviews();
             }
-        });
+        }
+    }
+
+    private void showImagePreviews() {
+        if (imagePreviewContainer != null) {
+            imagePreviewContainer.removeAllViews();
+
+            if (!imageUris.isEmpty()) {
+                // Add selected count text
+                if (tvSelectedCount != null) {
+                    tvSelectedCount.setText(imageUris.size() + " image(s) selected");
+                    tvSelectedCount.setVisibility(View.VISIBLE);
+                }
+
+                // Show small previews of all selected images
+                for (Uri uri : imageUris) {
+                    ImageView imageView = new ImageView(this);
+
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                            80, 80
+                    );
+                    params.setMargins(0, 0, 8, 0);
+                    imageView.setLayoutParams(params);
+
+                    imageView.setImageURI(uri);
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    imageView.setBackgroundResource(R.drawable.image_preview_border);
+
+                    imagePreviewContainer.addView(imageView);
+                }
+            } else {
+                if (tvSelectedCount != null) {
+                    tvSelectedCount.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 
     private void saveBike() {
-        // Get all input values
-        String brand = etBrand.getText().toString().trim();
-        String model = etModel.getText().toString().trim();
-        String year = etYear.getText().toString().trim();
-        String odometer = etOdometer.getText().toString().trim();
-        String price = etPrice.getText().toString().trim();
-        String condition = spinnerCondition.getSelectedItem().toString();
-        String ownerDetails = etOwnerDetails.getText().toString().trim();
-        String features = etFeatures.getText().toString().trim();
+        if (!validateInputs()) {
+            return;
+        }
 
-        // Validate required fields
-        if (TextUtils.isEmpty(brand)) {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Saving bike...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        if (!imageUris.isEmpty()) {
+            uploadImagesThenSaveBike(progressDialog);
+        } else {
+            saveBikeData("", progressDialog);
+        }
+    }
+
+    private boolean validateInputs() {
+        if (TextUtils.isEmpty(etBrand.getText().toString().trim())) {
             etBrand.setError("Brand is required");
             etBrand.requestFocus();
-            return;
+            return false;
         }
-
-        if (TextUtils.isEmpty(model)) {
+        if (TextUtils.isEmpty(etModel.getText().toString().trim())) {
             etModel.setError("Model is required");
             etModel.requestFocus();
-            return;
+            return false;
         }
-
-        if (TextUtils.isEmpty(year)) {
+        if (TextUtils.isEmpty(etYear.getText().toString().trim())) {
             etYear.setError("Year is required");
             etYear.requestFocus();
-            return;
+            return false;
         }
-
-        if (TextUtils.isEmpty(odometer)) {
+        if (TextUtils.isEmpty(etOdometer.getText().toString().trim())) {
             etOdometer.setError("Odometer is required");
             etOdometer.requestFocus();
-            return;
+            return false;
         }
-
-        if (TextUtils.isEmpty(price)) {
+        if (TextUtils.isEmpty(etPrice.getText().toString().trim())) {
             etPrice.setError("Price is required");
             etPrice.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private void uploadImagesThenSaveBike(ProgressDialog progressDialog) {
+        try {
+            List<MultipartBody.Part> imageParts = new ArrayList<>();
+
+            // ✅ IMPORTANT: Create bike_type parameter
+            RequestBody bikeType = RequestBody.create(MediaType.parse("text/plain"), "second_hand");
+
+            for (int i = 0; i < imageUris.size(); i++) {
+                File imageFile = getFileFromUri(imageUris.get(i));
+                if (imageFile != null && imageFile.exists()) {
+                    RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), imageFile);
+                    MultipartBody.Part imagePart = MultipartBody.Part.createFormData(
+                            "bike_images[]",
+                            "bike_image_" + i + ".jpg",
+                            requestFile
+                    );
+                    imageParts.add(imagePart);
+                }
+            }
+
+            if (imageParts.isEmpty()) {
+                progressDialog.dismiss();
+                Toast.makeText(this, "No valid image files", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String token = SharedPrefManager.getInstance(this).getToken();
+            if (token == null || token.isEmpty()) {
+                progressDialog.dismiss();
+                Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            ApiService apiService = RetrofitClient.getApiService();
+
+            // ✅ Call correct method with bike_type
+            apiService.uploadBikeImages("Bearer " + token, bikeType, imageParts)
+                    .enqueue(new Callback<UploadBikeImageResponse>() {
+                        @Override
+                        public void onResponse(Call<UploadBikeImageResponse> call, Response<UploadBikeImageResponse> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                String status = response.body().getStatus();
+                                if ("success".equals(status)) {
+                                    String imagePaths = "";
+                                    if (response.body().getData() != null) {
+                                        imagePaths = response.body().getAllPathsAsJson();
+                                    }
+                                    saveBikeData(imagePaths, progressDialog);
+                                } else {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(AddSecondHandBikeActivity.this,
+                                            "Upload failed: " + response.body().getMessage(),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                progressDialog.dismiss();
+                                // Log error
+                                try {
+                                    if (response.errorBody() != null) {
+                                        String error = response.errorBody().string();
+                                        Log.e("UPLOAD_ERROR", "Error: " + error);
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                Toast.makeText(AddSecondHandBikeActivity.this,
+                                        "Server error: " + response.code(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<UploadBikeImageResponse> call, Throwable t) {
+                            progressDialog.dismiss();
+                            Toast.makeText(AddSecondHandBikeActivity.this,
+                                    "Network error: " + t.getMessage(),
+                                    Toast.LENGTH_SHORT).show();
+                            t.printStackTrace(); // Add this to see full error
+                        }
+                    });
+        } catch (Exception e) {
+            progressDialog.dismiss();
+            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+    private File getFileFromUri(Uri uri) {
+        try {
+            // Try to get real path first
+            String realPath = getRealPathFromUri(uri);
+            if (realPath != null) {
+                File file = new File(realPath);
+                if (file.exists()) return file;
+            }
+
+            // If not, create temp file from stream
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            if (inputStream == null) return null;
+
+            File tempFile = File.createTempFile("bike_img_", ".jpg", getCacheDir());
+            FileOutputStream outputStream = new FileOutputStream(tempFile);
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            inputStream.close();
+            outputStream.close();
+            return tempFile;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private String getRealPathFromUri(Uri uri) {
+        Cursor cursor = null;
+        try {
+            String[] projection = { MediaStore.Images.Media.DATA };
+            cursor = getContentResolver().query(uri, projection, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                return cursor.getString(columnIndex);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return null;
+    }
+
+    private void saveBikeData(String imagePaths, ProgressDialog progressDialog) {
+        SecondHandBikeRequest request = new SecondHandBikeRequest(
+                etBrand.getText().toString().trim(),
+                etModel.getText().toString().trim(),
+                etYear.getText().toString().trim(),
+                etOdometer.getText().toString().trim(),
+                etPrice.getText().toString().trim(),
+                spinnerCondition.getSelectedItem().toString(),
+                etOwnerDetails.getText().toString().trim(),
+                etFeatures.getText().toString().trim(),
+                imagePaths
+        );
+
+        String token = SharedPrefManager.getInstance(this).getToken();
+        if (token == null || token.isEmpty()) {
+            progressDialog.dismiss();
+            Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Create bike data object
-        BikeData bikeData = new BikeData();
-        bikeData.setBrand(brand);
-        bikeData.setModel(model);
-        bikeData.setYear(year);
-        bikeData.setOdometer(odometer);
-        bikeData.setPrice(price);
-        bikeData.setCondition(condition);
-        bikeData.setOwnerDetails(ownerDetails);
-        bikeData.setFeatures(features);
-        bikeData.setType("second_hand"); // Mark as second-hand bike
+        ApiService apiService = RetrofitClient.getApiService();
+        apiService.addSecondHandBike("Bearer " + token, request)
+                .enqueue(new Callback<GenericResponse>() {
+                    @Override
+                    public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                        progressDialog.dismiss();
 
-        // Show success message
-        Toast.makeText(this, "Second-hand bike saved successfully!", Toast.LENGTH_SHORT).show();
+                        if (response.isSuccessful() && response.body() != null) {
+                            String status = response.body().getStatus();
+                            if ("success".equals(status)) {
+                                Toast.makeText(AddSecondHandBikeActivity.this,
+                                        "Second-hand bike saved successfully!",
+                                        Toast.LENGTH_SHORT).show();
+                                new Handler().postDelayed(() -> {
+                                    finish();
+                                }, 1500);
+                            } else {
+                                Toast.makeText(AddSecondHandBikeActivity.this,
+                                        response.body().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(AddSecondHandBikeActivity.this,
+                                    "Server error: " + response.code(),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
-        // Navigate back to admin dashboard
-        Intent intent = new Intent(AddSecondHandBikeActivity.this, AdminDashboardActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
-    }
-
-    private void openImagePicker() {
-        // TODO: Implement image picker
-        Toast.makeText(this, "Image upload functionality coming soon!", Toast.LENGTH_SHORT).show();
-    }
-
-    private void showCancelConfirmation() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Cancel")
-                .setMessage("Are you sure you want to cancel? All unsaved data will be lost.")
-                .setPositiveButton("Yes", (dialog, which) -> {
-                    // Navigate back to admin dashboard
-                    onBackPressed();
-                })
-                .setNegativeButton("No", (dialog, which) -> {
-                    dialog.dismiss();
-                })
-                .show();
+                    @Override
+                    public void onFailure(Call<GenericResponse> call, Throwable t) {
+                        progressDialog.dismiss();
+                        Toast.makeText(AddSecondHandBikeActivity.this,
+                                "Network error: " + t.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override
@@ -195,45 +423,5 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();
-    }
-
-    // Model class for bike data
-    private static class BikeData {
-        private String brand;
-        private String model;
-        private String year;
-        private String odometer;
-        private String price;
-        private String condition;
-        private String ownerDetails;
-        private String features;
-        private String type;
-
-        public String getBrand() { return brand; }
-        public void setBrand(String brand) { this.brand = brand; }
-
-        public String getModel() { return model; }
-        public void setModel(String model) { this.model = model; }
-
-        public String getYear() { return year; }
-        public void setYear(String year) { this.year = year; }
-
-        public String getOdometer() { return odometer; }
-        public void setOdometer(String odometer) { this.odometer = odometer; }
-
-        public String getPrice() { return price; }
-        public void setPrice(String price) { this.price = price; }
-
-        public String getCondition() { return condition; }
-        public void setCondition(String condition) { this.condition = condition; }
-
-        public String getOwnerDetails() { return ownerDetails; }
-        public void setOwnerDetails(String ownerDetails) { this.ownerDetails = ownerDetails; }
-
-        public String getFeatures() { return features; }
-        public void setFeatures(String features) { this.features = features; }
-
-        public String getType() { return type; }
-        public void setType(String type) { this.type = type; }
     }
 }

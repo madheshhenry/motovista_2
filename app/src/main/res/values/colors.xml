@@ -76,4 +76,5 @@
     <!-- Add these to your existing colors.xml -->
     <color name="gray_700">#374151</color>
     <color name="border_gray">#D1D5DB</color>
+    <color name="gray_900">#111827</color>
 </resources>

@@ -4,9 +4,7 @@ public class Bike {
     private String id;
     private String brand;
     private String model;
-    private String exShowroomPrice;
-    private String rtoCharges;
-    private String insurance;
+    private String onRoadPrice;  // Changed from separate fields
     private String engineCC;
     private String mileage;
     private String topSpeed;
@@ -14,22 +12,19 @@ public class Bike {
     private String type;
     private String features;
     private String imageUri;
-    private String createdAt;
+    private String timestamp;
 
-    // Default constructor
+    // Constructors
     public Bike() {
-        // Empty constructor for Firebase or other serialization
+        // Default constructor
     }
 
-    // Parameterized constructor
-    public Bike(String brand, String model, String exShowroomPrice, String rtoCharges,
-                String insurance, String engineCC, String mileage, String topSpeed,
-                String brakingType, String type, String features, String imageUri) {
+    public Bike(String brand, String model, String onRoadPrice, String engineCC,
+                String mileage, String topSpeed, String brakingType,
+                String type, String features, String imageUri) {
         this.brand = brand;
         this.model = model;
-        this.exShowroomPrice = exShowroomPrice;
-        this.rtoCharges = rtoCharges;
-        this.insurance = insurance;
+        this.onRoadPrice = onRoadPrice;
         this.engineCC = engineCC;
         this.mileage = mileage;
         this.topSpeed = topSpeed;
@@ -64,28 +59,12 @@ public class Bike {
         this.model = model;
     }
 
-    public String getExShowroomPrice() {
-        return exShowroomPrice;
+    public String getOnRoadPrice() {
+        return onRoadPrice;
     }
 
-    public void setExShowroomPrice(String exShowroomPrice) {
-        this.exShowroomPrice = exShowroomPrice;
-    }
-
-    public String getRtoCharges() {
-        return rtoCharges;
-    }
-
-    public void setRtoCharges(String rtoCharges) {
-        this.rtoCharges = rtoCharges;
-    }
-
-    public String getInsurance() {
-        return insurance;
-    }
-
-    public void setInsurance(String insurance) {
-        this.insurance = insurance;
+    public void setOnRoadPrice(String onRoadPrice) {
+        this.onRoadPrice = onRoadPrice;
     }
 
     public String getEngineCC() {
@@ -144,21 +123,11 @@ public class Bike {
         this.imageUri = imageUri;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
+    public String getTimestamp() {
+        return timestamp;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    @Override
-    public String toString() {
-        return "Bike{" +
-                "brand='" + brand + '\'' +
-                ", model='" + model + '\'' +
-                ", type='" + type + '\'' +
-                ", engineCC='" + engineCC + '\'' +
-                '}';
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }
