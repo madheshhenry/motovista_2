@@ -20,6 +20,13 @@ import android.widget.Toast;
 
 import com.example.motovista_deep.adapter.BikeAdapter;
 import com.example.motovista_deep.models.BikeModel;
+import com.example.motovista_deep.models.GetBikesResponse;
+import com.example.motovista_deep.helpers.SharedPrefManager;
+import com.example.motovista_deep.api.RetrofitClient;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +40,6 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
     private RecyclerView rvBikes;
     private LinearLayout tabDashboard, tabInventory, tabBikes, tabCustomers, tabSettings;
 
-    // Add these ImageViews for bottom navigation icons
     private ImageView ivDashboard, ivInventory, ivBikes, ivCustomers, ivSettings;
     private TextView tvDashboard, tvInventory, tvBikes, tvCustomers, tvSettings;
 
@@ -46,20 +52,18 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bike_inventory);
 
-        // Initialize views
         initializeViews();
-
-        // Setup bottom navigation
         setupBottomNavigation();
-
-        // Setup search functionality
         setupSearch();
-
-        // Load sample data (you'll replace this with API call)
-        loadSampleData();
-
-        // Setup RecyclerView
         setupRecyclerView();
+        loadBikesFromAPI();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Refresh bikes when returning to this screen
+        loadBikesFromAPI();
     }
 
     private void initializeViews() {
@@ -67,18 +71,14 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
         btnBack = findViewById(R.id.btnBack);
         etSearch = findViewById(R.id.etSearch);
         icClear = findViewById(R.id.icClear);
-
-        // Initialize RecyclerView - IMPORTANT: Make sure you have this ID in your XML
         rvBikes = findViewById(R.id.rvBikes);
 
-        // Initialize bottom navigation tabs
         tabDashboard = findViewById(R.id.tabDashboard);
         tabInventory = findViewById(R.id.tabInventory);
         tabBikes = findViewById(R.id.tabBikes);
         tabCustomers = findViewById(R.id.tabCustomers);
         tabSettings = findViewById(R.id.tabSettings);
 
-        // Initialize bottom navigation ImageViews and TextViews
         ivDashboard = (ImageView) tabDashboard.getChildAt(0);
         ivInventory = (ImageView) tabInventory.getChildAt(0);
         ivBikes = (ImageView) tabBikes.getChildAt(0);
@@ -91,122 +91,181 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
         tvCustomers = (TextView) tabCustomers.getChildAt(1);
         tvSettings = (TextView) tabSettings.getChildAt(1);
 
-        // Set initial active tab
         setActiveTab(tabBikes);
     }
 
     private void setupBottomNavigation() {
-        // Back button click
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
+        btnBack.setOnClickListener(v -> onBackPressed());
+
+        tabDashboard.setOnClickListener(v -> {
+            Intent intent = new Intent(BikeInventoryActivity.this, AdminDashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         });
 
-        // Bottom navigation tabs
-        tabDashboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(BikeInventoryActivity.this, AdminDashboardActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-            }
+        tabInventory.setOnClickListener(v ->
+                Toast.makeText(this, "Inventory screen coming soon", Toast.LENGTH_SHORT).show());
+
+        tabBikes.setOnClickListener(v -> {
+            setActiveTab(tabBikes);
+            loadBikesFromAPI(); // Refresh when clicking bikes tab
         });
 
-        tabInventory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(BikeInventoryActivity.this, "Inventory screen coming soon", Toast.LENGTH_SHORT).show();
-            }
-        });
+        tabCustomers.setOnClickListener(v ->
+                Toast.makeText(this, "Customers screen coming soon", Toast.LENGTH_SHORT).show());
 
-        tabBikes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Already on bikes screen
-                setActiveTab(tabBikes);
-            }
-        });
-
-        tabCustomers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(BikeInventoryActivity.this, "Customers screen coming soon", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        tabSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(BikeInventoryActivity.this, "Settings screen coming soon", Toast.LENGTH_SHORT).show();
-            }
-        });
+        tabSettings.setOnClickListener(v ->
+                Toast.makeText(this, "Settings screen coming soon", Toast.LENGTH_SHORT).show());
     }
 
     private void setupSearch() {
-        // Search text change listener
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Show/hide clear button
                 icClear.setVisibility(s.length() > 0 ? View.VISIBLE : View.GONE);
-
-                // Filter list
                 filterBikes(s.toString());
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
-        // Clear button click
-        icClear.setOnClickListener(new View.OnClickListener() {
+        icClear.setOnClickListener(v -> etSearch.setText(""));
+    }
+
+    private void loadBikesFromAPI() {
+        String token = SharedPrefManager.getInstance(this).getToken();
+
+        if (token == null || token.isEmpty()) {
+            Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        String authToken = "Bearer " + token;
+
+        Call<GetBikesResponse> call = RetrofitClient.getApiService().getAllBikes(authToken);
+
+        call.enqueue(new Callback<GetBikesResponse>() {
             @Override
-            public void onClick(View v) {
-                etSearch.setText("");
+            public void onResponse(Call<GetBikesResponse> call, Response<GetBikesResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    GetBikesResponse apiResponse = response.body();
+
+                    if ("success".equals(apiResponse.getStatus())) {
+                        updateBikeList(apiResponse.getData());
+
+                        int bikeCount = bikeList.size();
+                        if (bikeCount > 0) {
+                            Toast.makeText(BikeInventoryActivity.this,
+                                    bikeCount + " bikes loaded from database",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(BikeInventoryActivity.this,
+                                    "No bikes found in database",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(BikeInventoryActivity.this,
+                                apiResponse.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                        showEmptyState();
+                    }
+                } else {
+                    Toast.makeText(BikeInventoryActivity.this,
+                            "Failed to load bikes. Please check your connection.",
+                            Toast.LENGTH_SHORT).show();
+                    showEmptyState();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetBikesResponse> call, Throwable t) {
+                Toast.makeText(BikeInventoryActivity.this,
+                        "Network error: " + t.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+                showEmptyState();
             }
         });
     }
 
-    private void loadSampleData() {
-        // Clear any existing data
+    private void updateBikeList(List<BikeModel> apiBikes) {
         bikeList.clear();
 
-        // Add sample bikes (same as in your HTML)
-        bikeList.add(new BikeModel(1, "Royal Enfield", "Classic 350", "2,10,000",
-                "Excellent", "https://lh3.googleusercontent.com/aida-public/AB6AXuCL-fxH0U0ZsXcpL2B4Re94_JC4GXZVmn7nTucmNIusCpWa-eUfJmPxpZoMXMiDNMg4D7X4bqoKKF9EhiHOym_7_-G-INLRP7U1X21XELIKMVNFX_x7L1tfS88iObaDJ6CoArtzdG5pyM1CAPJTBpMpn106gODuryrbXIa0P5aumti6UI-AT49gyDD2xQnEDlMXT6MDcujkEhn0N_C2Kg6imTq9MpPr2RQMQbJKJZ96xfvfJW6VimvjKO7EwnScxS8x1lOt7G0CRtRO",
-                "NEW", true));
+        if (apiBikes != null && !apiBikes.isEmpty()) {
+            for (BikeModel apiBike : apiBikes) {
+                // Get image URL from API
+                String imageUrl = apiBike.getImageUrl();
 
-        bikeList.add(new BikeModel(2, "Bajaj", "Pulsar NS200", "1,50,000",
-                "Excellent", "https://lh3.googleusercontent.com/aida-public/AB6AXuA2oqixRnQHefgquCk_pKUZ2hEB31VM0IJFGiAvWZ5Xi0GO-nhTrZYGybDSqVGlVtX_DoVCxOizMaPrsGeGiS8l7aOwZR-6hrEQ_TBGppj2IWs1G_7LNe8w2p5T_idaCR-zrKyqYnW5ASwPHuAn1CKCH4iDBG4S9k_-A8iepnVik0R9Vm426dLnshRPNbYAaam2H31fa-yANEt7VDkhjHBAvNEfZEdhMD6j2nARY-DYazOqGSn4guBsHvdE4d867qJoHH8Rt41mf2Mw",
-                "SECOND_HAND", true));
+                // If image path exists, prepend base URL
+                if (imageUrl != null && !imageUrl.isEmpty()) {
+                    // Check if it's already a full URL
+                    if (!imageUrl.startsWith("http")) {
+                        // Prepend base URL for relative paths
+                        imageUrl = RetrofitClient.BASE_URL + imageUrl;
+                    }
+                }
 
-        bikeList.add(new BikeModel(3, "KTM", "Duke 250", "2,39,000",
-                "Excellent", "https://lh3.googleusercontent.com/aida-public/AB6AXuBVkM0PXzzoEo-U4ChLILE4qsvtc3f1JzOsPMX_5aDccWw6UpSSPd9UBHVECkcOjr7bgV953kmy3VRCOpXp96kkoTDkwBgHj8L3yNlBg3DlS9l-8pGa6jwoqMO_KfCm0hMeTSBBayRO6Yb0cCvc56xiVOFwvLLgZFnPZQ_ovUku-yLw7xPiOwRUEGEakBHX757qudwF1aNqNFwCF3ygiXblTUUmm86dNsAcmbNTtOaviJ6YCfbcGjquqtNDfFp3X5gF6gsYMIndj08l",
-                "NEW", true));
+                // Create new bike object from API data
+                BikeModel bike = new BikeModel(
+                        apiBike.getId(),
+                        apiBike.getBrand() != null ? apiBike.getBrand() : "",
+                        apiBike.getModel() != null ? apiBike.getModel() : "",
+                        apiBike.getPrice() != null ? apiBike.getPrice() : "0",
+                        apiBike.getCondition() != null ? apiBike.getCondition() : "Good",
+                        imageUrl,  // Use processed image URL
+                        apiBike.getType() != null ? apiBike.getType() : "NEW",
+                        apiBike.getIsFeatured()  // Use getIsFeatured() not isFeatured()
+                );
 
-        bikeList.add(new BikeModel(4, "Yamaha", "YZF R15 V3", "1,35,000",
-                "Good", "https://lh3.googleusercontent.com/aida-public/AB6AXuD7OLJtLteGJPYDgiL8rfTJ6LdTX95qpku40ISwXByT6U7I_A_FMHL-zYHCeuw6mUQ0k2xiERh6__er9o2Z0F4wsJmlcZsY9nAVkeo31ec6zPBzb34RLRnhF3m41QjgS68kACqvdBMnjFkHoMxBy8vspYcNauQcDBoQah2pVbXEMraz2NZvkIMd7f64T12mw-BR_cqITxcmwct7pfuMSdYbtiWmXDNsinB1iAONVey6p1q73_TUVWhTR134-wTQ4ul4YpCUlS0ylMbh",
-                "SECOND_HAND", true));
+                // Set additional properties based on bike type
+                if ("NEW".equals(apiBike.getType())) {
+                    bike.setOnRoadPrice(apiBike.getOnRoadPrice());
+                    bike.setEngineCC(apiBike.getEngineCC());
+                    bike.setMileage(apiBike.getMileage());
+                    bike.setTopSpeed(apiBike.getTopSpeed());
+                    bike.setBrakingType(apiBike.getBrakingType());
+                    bike.setFeatures(apiBike.getFeatures());
+                } else if ("SECOND_HAND".equals(apiBike.getType())) {
+                    bike.setYear(apiBike.getYear());
+                    bike.setOdometer(apiBike.getOdometer());
+                    bike.setOwnerDetails(apiBike.getOwnerDetails());
+                    bike.setFeatures(apiBike.getFeatures());
+                }
 
-        bikeList.add(new BikeModel(5, "TVS", "Apache RR 310", "2,72,000",
-                "Excellent", "https://lh3.googleusercontent.com/aida-public/AB6AXuAODLWQzH_B03tEOyEwRRpH-EaXOb6aejmnLls7TLnKMdsK9bjA0D1YX0fJyXfjMVJzWzpG7vsuNWsq_6wWZ9Z1EszTIn5EHpaNUBBOiMNu--Fyl9IE8vxQj5amim8unlOHDcA3VQaMLER_4vvTW6DbTjfCK9jjyDoWu8TAH8hFCNPt5xyoVRYDci4cn-_jHjTJ7bFXEjznZOZXOJurRgGv1mUjFmEuLtLl0TyDRJCe-XiiJ1mNCSdW1sqT6hJyq7Gj_SF3ChS3t6kG",
-                "NEW", true));
+                bikeList.add(bike);
+            }
+        }
 
-        // Add filtered list
         filteredList.clear();
         filteredList.addAll(bikeList);
+
+        if (bikeAdapter != null) {
+            bikeAdapter.updateList(filteredList);
+        }
+
+        // Show/hide empty state
+        if (bikeList.isEmpty()) {
+            showEmptyState();
+        } else {
+            hideEmptyState();
+        }
+    }
+
+    private void showEmptyState() {
+        // You can show a "No bikes found" message here
+        Toast.makeText(this, "No bikes available in inventory", Toast.LENGTH_LONG).show();
+    }
+
+    private void hideEmptyState() {
+        // Hide empty state if you have one
     }
 
     private void setupRecyclerView() {
-        // Setup RecyclerView
         rvBikes.setLayoutManager(new LinearLayoutManager(this));
         bikeAdapter = new BikeAdapter(this, filteredList, this);
         rvBikes.setAdapter(bikeAdapter);
@@ -221,88 +280,86 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
         } else {
             String lowerCaseQuery = query.toLowerCase();
             for (BikeModel bike : bikeList) {
-                if (bike.getBrand().toLowerCase().contains(lowerCaseQuery) ||
-                        bike.getModel().toLowerCase().contains(lowerCaseQuery) ||
-                        bike.getType().toLowerCase().contains(lowerCaseQuery)) {
+                String brand = bike.getBrand() != null ? bike.getBrand().toLowerCase() : "";
+                String model = bike.getModel() != null ? bike.getModel().toLowerCase() : "";
+                String type = bike.getType() != null ? bike.getType().toLowerCase() : "";
+
+                if (brand.contains(lowerCaseQuery) ||
+                        model.contains(lowerCaseQuery) ||
+                        type.contains(lowerCaseQuery)) {
                     filteredList.add(bike);
                 }
             }
         }
 
-        bikeAdapter.updateList(filteredList);
+        if (bikeAdapter != null) {
+            bikeAdapter.updateList(filteredList);
+        }
     }
 
     private void setActiveTab(LinearLayout activeTab) {
-        // Reset all tabs to inactive state
         resetAllTabs();
 
-        // Set the active tab
+        int primaryColor = ContextCompat.getColor(this, R.color.primary_color);
+        int grayColor = ContextCompat.getColor(this, R.color.gray_400);
+
         if (activeTab == tabDashboard) {
-            ivDashboard.setColorFilter(ContextCompat.getColor(this, R.color.primary_color));
-            tvDashboard.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
+            ivDashboard.setColorFilter(primaryColor);
+            tvDashboard.setTextColor(primaryColor);
             tvDashboard.setTypeface(tvDashboard.getTypeface(), android.graphics.Typeface.BOLD);
-        }
-        else if (activeTab == tabInventory) {
-            ivInventory.setColorFilter(ContextCompat.getColor(this, R.color.primary_color));
-            tvInventory.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
+        } else if (activeTab == tabInventory) {
+            ivInventory.setColorFilter(primaryColor);
+            tvInventory.setTextColor(primaryColor);
             tvInventory.setTypeface(tvInventory.getTypeface(), android.graphics.Typeface.BOLD);
-        }
-        else if (activeTab == tabBikes) {
-            ivBikes.setColorFilter(ContextCompat.getColor(this, R.color.primary_color));
-            tvBikes.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
+        } else if (activeTab == tabBikes) {
+            ivBikes.setColorFilter(primaryColor);
+            tvBikes.setTextColor(primaryColor);
             tvBikes.setTypeface(tvBikes.getTypeface(), android.graphics.Typeface.BOLD);
-        }
-        else if (activeTab == tabCustomers) {
-            ivCustomers.setColorFilter(ContextCompat.getColor(this, R.color.primary_color));
-            tvCustomers.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
+        } else if (activeTab == tabCustomers) {
+            ivCustomers.setColorFilter(primaryColor);
+            tvCustomers.setTextColor(primaryColor);
             tvCustomers.setTypeface(tvCustomers.getTypeface(), android.graphics.Typeface.BOLD);
-        }
-        else if (activeTab == tabSettings) {
-            ivSettings.setColorFilter(ContextCompat.getColor(this, R.color.primary_color));
-            tvSettings.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
+        } else if (activeTab == tabSettings) {
+            ivSettings.setColorFilter(primaryColor);
+            tvSettings.setTextColor(primaryColor);
             tvSettings.setTypeface(tvSettings.getTypeface(), android.graphics.Typeface.BOLD);
         }
     }
 
     private void resetAllTabs() {
-        // Reset Dashboard tab
-        ivDashboard.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        tvDashboard.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
+        int grayColor = ContextCompat.getColor(this, R.color.gray_400);
+
+        ivDashboard.setColorFilter(grayColor);
+        tvDashboard.setTextColor(grayColor);
         tvDashboard.setTypeface(null, android.graphics.Typeface.NORMAL);
 
-        // Reset Inventory tab
-        ivInventory.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        tvInventory.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
+        ivInventory.setColorFilter(grayColor);
+        tvInventory.setTextColor(grayColor);
         tvInventory.setTypeface(null, android.graphics.Typeface.NORMAL);
 
-        // Reset Bikes tab
-        ivBikes.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        tvBikes.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
+        ivBikes.setColorFilter(grayColor);
+        tvBikes.setTextColor(grayColor);
         tvBikes.setTypeface(null, android.graphics.Typeface.NORMAL);
 
-        // Reset Customers tab
-        ivCustomers.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        tvCustomers.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
+        ivCustomers.setColorFilter(grayColor);
+        tvCustomers.setTextColor(grayColor);
         tvCustomers.setTypeface(null, android.graphics.Typeface.NORMAL);
 
-        // Reset Settings tab
-        ivSettings.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        tvSettings.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
+        ivSettings.setColorFilter(grayColor);
+        tvSettings.setTextColor(grayColor);
         tvSettings.setTypeface(null, android.graphics.Typeface.NORMAL);
     }
 
     @Override
     public void onBikeClick(BikeModel bike) {
-        // Navigate to bike details screen
         Intent intent = new Intent(this, BikeDetailsActivity.class);
         intent.putExtra("BIKE_MODEL", bike);
-        intent.putExtra("BIKE_TYPE", bike.getType()); // "NEW" or "SECOND_HAND"
+        intent.putExtra("BIKE_TYPE", bike.getType());
         startActivity(intent);
     }
 
     @Override
     public void onBackPressed() {
-        // Navigate back to Admin Dashboard
         Intent intent = new Intent(this, AdminDashboardActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

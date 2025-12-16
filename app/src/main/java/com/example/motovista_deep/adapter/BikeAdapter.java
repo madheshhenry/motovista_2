@@ -6,14 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.motovista_deep.R;
 import com.example.motovista_deep.models.BikeModel;
+
 import java.util.List;
 
 public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder> {
@@ -43,67 +46,80 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
     public void onBindViewHolder(@NonNull BikeViewHolder holder, int position) {
         BikeModel bike = bikeList.get(position);
 
-        // Set brand and model
+        // Brand & model
         holder.tvBrand.setText(bike.getBrand());
         holder.tvModel.setText(bike.getModel());
 
-        // Set tag based on type
-        if (bike.getType().equals("NEW")) {
+        // Tag & info
+        if ("NEW".equalsIgnoreCase(bike.getType())) {
             holder.tvTag.setText("NEW BIKE");
-            holder.tvTag.setBackground(ContextCompat.getDrawable(context, R.drawable.tag_new_bike));
+            holder.tvTag.setBackground(
+                    ContextCompat.getDrawable(context, R.drawable.tag_new_bike)
+            );
 
-            // Set price for new bikes
             holder.tvInfo.setText("₹" + bike.getPrice());
-            holder.tvInfo.setTextColor(ContextCompat.getColor(context, R.color.primary_color));
+            holder.tvInfo.setTextColor(
+                    ContextCompat.getColor(context, R.color.primary_color)
+            );
         } else {
             holder.tvTag.setText("SH BIKES");
-            holder.tvTag.setBackground(ContextCompat.getDrawable(context, R.drawable.tag_sh_bike));
+            holder.tvTag.setBackground(
+                    ContextCompat.getDrawable(context, R.drawable.tag_sh_bike)
+            );
 
-            // Set condition for second-hand bikes
             String condition = bike.getCondition();
             holder.tvInfo.setText("Condition: " + condition);
 
-            // Set color based on condition
-            if (condition.equalsIgnoreCase("Excellent")) {
-                holder.tvInfo.setTextColor(ContextCompat.getColor(context, R.color.icon_green));
-            } else if (condition.equalsIgnoreCase("Good")) {
-                holder.tvInfo.setTextColor(ContextCompat.getColor(context, R.color.icon_yellow));
+            if ("Excellent".equalsIgnoreCase(condition)) {
+                holder.tvInfo.setTextColor(
+                        ContextCompat.getColor(context, R.color.icon_green)
+                );
+            } else if ("Good".equalsIgnoreCase(condition)) {
+                holder.tvInfo.setTextColor(
+                        ContextCompat.getColor(context, R.color.icon_yellow)
+                );
             } else {
-                holder.tvInfo.setTextColor(ContextCompat.getColor(context, R.color.icon_red));
+                holder.tvInfo.setTextColor(
+                        ContextCompat.getColor(context, R.color.icon_red)
+                );
             }
         }
 
-        // Load image using Glide
-        if (bike.getImageUrl() != null && !bike.getImageUrl().isEmpty()) {
-            Glide.with(context)
-                    .load(bike.getImageUrl())
+        // ✅ IMAGE LOAD — FIXED (NO UI CHANGE)
+        String imageUrl = bike.getImageUrl();
+
+        if (imageUrl != null) {
+            imageUrl = imageUrl.trim();
+        }
+
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(imageUrl)
                     .placeholder(R.drawable.placeholder_bike)
                     .error(R.drawable.placeholder_bike)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE) // important
+                    .skipMemoryCache(true)                    // important
                     .centerCrop()
                     .into(holder.ivBike);
         } else {
             holder.ivBike.setImageResource(R.drawable.placeholder_bike);
         }
 
-        // Set click listener
-        holder.cardBike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.onBikeClick(bike);
-                }
+        // Click
+        holder.cardBike.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onBikeClick(bike);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return bikeList.size();
+        return bikeList != null ? bikeList.size() : 0;
     }
 
     public void updateList(List<BikeModel> newList) {
-        bikeList = newList;
+        this.bikeList = newList;
         notifyDataSetChanged();
     }
 

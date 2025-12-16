@@ -11,6 +11,7 @@ import com.example.motovista_deep.models.GetCustomerDetailResponse;
 import com.example.motovista_deep.models.AddBikeRequest;
 import com.example.motovista_deep.models.UploadBikeImageResponse;
 import com.example.motovista_deep.models.SecondHandBikeRequest;
+import com.example.motovista_deep.models.GetBikesResponse;
 
 import java.util.List;
 
@@ -91,7 +92,21 @@ public interface ApiService {
     );
 
 
+    // Add these methods to your existing ApiService interface
+    @GET("get_all_bikes.php")
+    Call<GetBikesResponse> getAllBikes(
+            @Header("Authorization") String token
+    );
 
+    @GET("get_new_bikes.php")
+    Call<GetBikesResponse> getNewBikes(
+            @Header("Authorization") String token
+    );
+
+    @GET("get_second_hand_bikes.php")
+    Call<GetBikesResponse> getSecondHandBikes(
+            @Header("Authorization") String token
+    );
 
 
 }
