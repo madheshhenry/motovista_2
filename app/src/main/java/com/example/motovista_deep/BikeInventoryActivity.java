@@ -194,35 +194,28 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
     }
 
     private void updateBikeList(List<BikeModel> apiBikes) {
+
         bikeList.clear();
 
-        if (apiBikes != null && !apiBikes.isEmpty()) {
+        if (apiBikes != null) {
             for (BikeModel apiBike : apiBikes) {
-                // Get image URL from API
-                String imageUrl = apiBike.getImageUrl();
 
-                // If image path exists, prepend base URL
-                if (imageUrl != null && !imageUrl.isEmpty()) {
-                    // Check if it's already a full URL
-                    if (!imageUrl.startsWith("http")) {
-                        // Prepend base URL for relative paths
-                        imageUrl = RetrofitClient.BASE_URL + imageUrl;
-                    }
-                }
+                BikeModel bike = new BikeModel();
 
-                // Create new bike object from API data
-                BikeModel bike = new BikeModel(
-                        apiBike.getId(),
-                        apiBike.getBrand() != null ? apiBike.getBrand() : "",
-                        apiBike.getModel() != null ? apiBike.getModel() : "",
-                        apiBike.getPrice() != null ? apiBike.getPrice() : "0",
-                        apiBike.getCondition() != null ? apiBike.getCondition() : "Good",
-                        imageUrl,  // Use processed image URL
-                        apiBike.getType() != null ? apiBike.getType() : "NEW",
-                        apiBike.getIsFeatured()  // Use getIsFeatured() not isFeatured()
+                bike.setId(apiBike.getId());
+                bike.setBrand(apiBike.getBrand());
+                bike.setModel(apiBike.getModel());
+                bike.setPrice(apiBike.getPrice());
+                bike.setCondition(apiBike.getCondition());
+                bike.setType(apiBike.getType());
+                bike.setIsFeatured(apiBike.getIsFeatured());
+
+                // 🔥 IMPORTANT FIX
+                bike.setImageUrlsFromString(
+                        apiBike.getImageUrlRaw(),
+                        RetrofitClient.BASE_URL
                 );
 
-                // Set additional properties based on bike type
                 if ("NEW".equals(apiBike.getType())) {
                     bike.setOnRoadPrice(apiBike.getOnRoadPrice());
                     bike.setEngineCC(apiBike.getEngineCC());
@@ -230,7 +223,7 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
                     bike.setTopSpeed(apiBike.getTopSpeed());
                     bike.setBrakingType(apiBike.getBrakingType());
                     bike.setFeatures(apiBike.getFeatures());
-                } else if ("SECOND_HAND".equals(apiBike.getType())) {
+                } else {
                     bike.setYear(apiBike.getYear());
                     bike.setOdometer(apiBike.getOdometer());
                     bike.setOwnerDetails(apiBike.getOwnerDetails());
@@ -244,17 +237,9 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
         filteredList.clear();
         filteredList.addAll(bikeList);
 
-        if (bikeAdapter != null) {
-            bikeAdapter.updateList(filteredList);
-        }
-
-        // Show/hide empty state
-        if (bikeList.isEmpty()) {
-            showEmptyState();
-        } else {
-            hideEmptyState();
-        }
+        bikeAdapter.updateList(filteredList);
     }
+
 
     private void showEmptyState() {
         // You can show a "No bikes found" message here

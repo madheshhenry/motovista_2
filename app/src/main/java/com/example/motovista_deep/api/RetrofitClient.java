@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
 
 public class RetrofitClient {
 
-    public static final String BASE_URL = "http://192.168.0.104/motovista_api/";
+    public static final String BASE_URL = "http://192.168.124.188/motovista_api/";
     private static ApiService apiService;
 
     public static ApiService getApiService() {
