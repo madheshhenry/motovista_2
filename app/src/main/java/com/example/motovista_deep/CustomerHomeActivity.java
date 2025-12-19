@@ -124,6 +124,11 @@ public class CustomerHomeActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
+        // === ADDED: Request Bike Card click listener ===
+        cardRequestBike.setOnClickListener(v -> {
+            startActivity(new Intent(CustomerHomeActivity.this, RequestBikeActivity.class));
+        });
+        // ================================================
 
         btnNotifications.setOnClickListener(v ->
                 Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show());
@@ -240,8 +245,6 @@ public class CustomerHomeActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     @Override
     public void onBackPressed() {

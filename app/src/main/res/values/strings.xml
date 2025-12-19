@@ -12,5 +12,37 @@
         <item>Fair</item>
     </string-array>
 
+    <!-- Ownership Types -->
+    <string-array name="ownership_types">
+        <item>1st Owner</item>
+        <item>2nd Owner</item>
+        <item>3rd Owner</item>
+        <item>4th Owner+</item>
+    </string-array>
+
+
+        <!-- For New Bikes -->
+        <string-array name="braking_types">
+            <item>Drum</item>
+            <item>Disc</item>
+            <item>Dual Disc</item>
+            <item>ABS (Single Channel)</item>
+            <item>ABS (Dual Channel)</item>
+            <item>CBS</item>
+        </string-array>
+
+        <string-array name="bike_types_new">
+            <item>Sports</item>
+            <item>Commuter</item>
+            <item>Cruiser</item>
+            <item>Scooter</item>
+        </string-array>
+
+        <string-array name="braking_types_sh">
+            <item>Drum</item>
+            <item>Disc</item>
+            <item>ABS</item>
+            <item>Combi-Brake</item>
+        </string-array>
 
 </resources>

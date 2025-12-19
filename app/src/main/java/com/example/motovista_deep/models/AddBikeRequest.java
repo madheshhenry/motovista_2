@@ -12,6 +12,7 @@ public class AddBikeRequest {
     private String features;
     private String image_path;
 
+    // Constructor for NEW BIKES (10 parameters)
     public AddBikeRequest(String brand, String model, String on_road_price,
                           String engine_cc, String mileage, String top_speed,
                           String braking_type, String type, String features,
@@ -39,16 +40,4 @@ public class AddBikeRequest {
     public String getType() { return type; }
     public String getFeatures() { return features; }
     public String getImage_path() { return image_path; }
-
-    // Optional: Setters if needed
-    public void setBrand(String brand) { this.brand = brand; }
-    public void setModel(String model) { this.model = model; }
-    public void setOn_road_price(String on_road_price) { this.on_road_price = on_road_price; }
-    public void setEngine_cc(String engine_cc) { this.engine_cc = engine_cc; }
-    public void setMileage(String mileage) { this.mileage = mileage; }
-    public void setTop_speed(String top_speed) { this.top_speed = top_speed; }
-    public void setBraking_type(String braking_type) { this.braking_type = braking_type; }
-    public void setType(String type) { this.type = type; }
-    public void setFeatures(String features) { this.features = features; }
-    public void setImage_path(String image_path) { this.image_path = image_path; }
 }
