@@ -2,7 +2,6 @@ package com.example.motovista_deep.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,67 +13,171 @@ public class BikeModel implements Parcelable {
     private String model;
     private String price;
     private String condition;
-
-    // 🔴 backend raw string
-    private String image_url;
-
-    // 🔵 processed list
-    private ArrayList<String> imageUrls = new ArrayList<>();
-
+    private String image_url;  // First image URL
+    private ArrayList<String> imageUrls = new ArrayList<>(); // All images
     private String type;
     private int is_featured;
 
+    // New bike fields
     private String on_road_price;
     private String engine_cc;
     private String mileage;
     private String top_speed;
     private String braking_type;
     private String features;
+
+    // Second-hand bike fields
     private String year;
     private String odometer;
     private String owner_details;
 
+    // All images array from API
+    private ArrayList<String> all_images = new ArrayList<>();
+
+    // Add base URL field (will be set from RetrofitClient)
+    private String baseUrl = "";
+
     public BikeModel() {}
 
-    /* ---------------- IMAGE HELPERS ---------------- */
+    /* ========== IMAGE METHODS ========== */
 
-    public void setImageUrlRaw(String image_url) {
-        this.image_url = image_url;
+    // Set base URL once
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+        if (this.baseUrl != null && !this.baseUrl.endsWith("/")) {
+            this.baseUrl += "/";
+        }
     }
 
+    // Set all images from array (from API)
+    public void setAllImages(ArrayList<String> images) {
+        if (images != null) {
+            this.all_images = new ArrayList<>();
+            this.imageUrls = new ArrayList<>();
+
+            for (String img : images) {
+                String fullUrl = buildFullUrl(img);
+                this.all_images.add(fullUrl);
+                this.imageUrls.add(fullUrl);
+            }
+
+            // Set first image as image_url
+            if (!all_images.isEmpty() && (image_url == null || image_url.isEmpty())) {
+                this.image_url = all_images.get(0);
+            }
+        }
+    }
+
+    // Get all images
+    public ArrayList<String> getAllImages() {
+        if (all_images != null && !all_images.isEmpty()) {
+            return all_images;
+        }
+        return imageUrls;
+    }
+
+    // Convert string to full URLs
+    public void setImageUrlsFromString(String imagePath) {
+        imageUrls.clear();
+        all_images.clear();
+
+        if (imagePath == null || imagePath.trim().isEmpty()) return;
+
+        String cleaned = imagePath.trim();
+
+        // Remove JSON brackets if present
+        if (cleaned.startsWith("[") && cleaned.endsWith("]")) {
+            cleaned = cleaned.substring(1, cleaned.length() - 1);
+        }
+
+        // Remove quotes
+        cleaned = cleaned.replace("\"", "");
+
+        // Split by comma
+        String[] paths = cleaned.split(",");
+
+        for (String path : paths) {
+            path = path.trim();
+            if (!path.isEmpty()) {
+                String fullUrl = buildFullUrl(path);
+                imageUrls.add(fullUrl);
+                all_images.add(fullUrl);
+            }
+        }
+
+        // Set first image
+        if (!imageUrls.isEmpty() && (image_url == null || image_url.isEmpty())) {
+            image_url = imageUrls.get(0);
+        }
+    }
+
+    // Build full URL from relative path
+    private String buildFullUrl(String path) {
+        if (path == null || path.isEmpty()) {
+            return "";
+        }
+
+        // If already a full URL, return as is
+        if (path.startsWith("http://") || path.startsWith("https://")) {
+            return path;
+        }
+
+        // Remove leading slash if present
+        if (path.startsWith("/")) {
+            path = path.substring(1);
+        }
+
+        // Add base URL
+        if (baseUrl != null && !baseUrl.isEmpty()) {
+            return baseUrl + path;
+        }
+
+        // If no base URL, return relative path (will cause error but at least it's consistent)
+        return path;
+    }
+
+    // Get first image for list view
+    public String getImageUrl() {
+        if (image_url != null && !image_url.isEmpty()) {
+            return image_url;
+        }
+        if (!imageUrls.isEmpty()) {
+            return imageUrls.get(0);
+        }
+        if (!all_images.isEmpty()) {
+            return all_images.get(0);
+        }
+        return "";
+    }
+
+    // Set raw image URL (convert to full URL)
+    public void setImageUrlRaw(String image_url) {
+        this.image_url = buildFullUrl(image_url);
+
+        // Also add to imageUrls if not already there
+        if (this.image_url != null && !this.image_url.isEmpty() && !imageUrls.contains(this.image_url)) {
+            imageUrls.add(this.image_url);
+            all_images.add(this.image_url);
+        }
+    }
+
+    // Get raw image URL
     public String getImageUrlRaw() {
         return image_url;
     }
 
-    // 🔥 MAIN CONVERTER (STRING → LIST)
-    public void setImageUrlsFromString(String imagePath, String baseUrl) {
-        imageUrls.clear();
-
-        if (imagePath == null || imagePath.trim().isEmpty()) return;
-
-        String cleaned = imagePath.replace("[", "").replace("]", "");
-        List<String> paths = Arrays.asList(cleaned.split(","));
-
-        for (String p : paths) {
-            p = p.trim();
-            if (!p.startsWith("http")) {
-                p = baseUrl + p;
-            }
-            imageUrls.add(p);
-        }
-    }
-
+    // Get all image URLs for slider
     public ArrayList<String> getImageUrls() {
-        return imageUrls;
+        if (!all_images.isEmpty()) {
+            return all_images;
+        }
+        if (!imageUrls.isEmpty()) {
+            return imageUrls;
+        }
+        return new ArrayList<>();
     }
 
-    // 🔹 inventory image (first image)
-    public String getImageUrl() {
-        return imageUrls != null && !imageUrls.isEmpty() ? imageUrls.get(0) : "";
-    }
-
-    /* ---------------- GETTERS / SETTERS ---------------- */
-
+    // Other getters and setters remain the same...
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -123,7 +226,7 @@ public class BikeModel implements Parcelable {
     public String getOwnerDetails() { return owner_details != null ? owner_details : ""; }
     public void setOwnerDetails(String owner_details) { this.owner_details = owner_details; }
 
-    /* ---------------- PARCELABLE ---------------- */
+    /* ========== PARCELABLE ========== */
 
     protected BikeModel(Parcel in) {
         id = in.readInt();
@@ -144,6 +247,8 @@ public class BikeModel implements Parcelable {
         year = in.readString();
         odometer = in.readString();
         owner_details = in.readString();
+        all_images = in.createStringArrayList();
+        baseUrl = in.readString();
     }
 
     @Override
@@ -166,13 +271,24 @@ public class BikeModel implements Parcelable {
         dest.writeString(year);
         dest.writeString(odometer);
         dest.writeString(owner_details);
+        dest.writeStringList(all_images);
+        dest.writeString(baseUrl);
     }
 
     @Override
-    public int describeContents() { return 0; }
+    public int describeContents() {
+        return 0;
+    }
 
     public static final Creator<BikeModel> CREATOR = new Creator<BikeModel>() {
-        @Override public BikeModel createFromParcel(Parcel in) { return new BikeModel(in); }
-        @Override public BikeModel[] newArray(int size) { return new BikeModel[size]; }
+        @Override
+        public BikeModel createFromParcel(Parcel in) {
+            return new BikeModel(in);
+        }
+
+        @Override
+        public BikeModel[] newArray(int size) {
+            return new BikeModel[size];
+        }
     };
 }

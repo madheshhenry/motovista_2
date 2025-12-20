@@ -154,6 +154,10 @@ public class CustomerHomeActivity extends AppCompatActivity {
             setActiveTab(tabProfile);
             startActivity(new Intent(this, CustomerProfileScreenActivity.class));
         });
+        // AI Chatbot button
+        btnChatBot.setOnClickListener(v -> {
+            startActivity(new Intent(CustomerHomeActivity.this, AIChatbotActivity.class));
+        });
     }
 
     private void setActiveTab(LinearLayout activeTab) {

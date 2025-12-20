@@ -127,11 +127,14 @@ public class AdminDashboardActivity extends AppCompatActivity {
         });
 
         // Notifications button click
+        // Notifications button click
         btnNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AdminDashboardActivity.this, "Notifications clicked", Toast.LENGTH_SHORT).show();
                 // Navigate to notifications screen
+                Intent intent = new Intent(AdminDashboardActivity.this, NotificationsActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -177,11 +180,14 @@ public class AdminDashboardActivity extends AppCompatActivity {
             }
         });
 
+        // In the cardRequestedCustomer onClick listener
         cardRequestedCustomer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AdminDashboardActivity.this, "Requested Customer clicked", Toast.LENGTH_SHORT).show();
                 // Navigate to Requested Customer screen
+                Intent intent = new Intent(AdminDashboardActivity.this, RequestedCustomersActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 

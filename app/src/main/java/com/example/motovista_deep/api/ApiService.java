@@ -12,7 +12,8 @@ import com.example.motovista_deep.models.AddBikeRequest;
 import com.example.motovista_deep.models.UploadBikeImageResponse;
 import com.example.motovista_deep.models.SecondHandBikeRequest;
 import com.example.motovista_deep.models.GetBikesResponse;
-
+import com.example.motovista_deep.ai.AiChatRequest;
+import com.example.motovista_deep.ai.AiChatResponse;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -108,5 +109,7 @@ public interface ApiService {
             @Header("Authorization") String token
     );
 
+    @POST("ai_chat.php")
+    Call<AiChatResponse> chatWithAi(@Body AiChatRequest request);
 
 }

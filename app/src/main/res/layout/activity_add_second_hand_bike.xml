@@ -202,6 +202,80 @@
 
             </LinearLayout>
 
+            <!-- Engine CC and Braking Type Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <!-- Engine CC -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:id="@+id/tvEngineCCLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Engine CC"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="4dp" />
+
+                    <EditText
+                        android:id="@+id/etEngineCC"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:hint="e.g., 150"
+                        android:inputType="number"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="12dp"
+                        android:background="@drawable/edittext_background"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif" />
+
+                </LinearLayout>
+
+                <!-- Braking Type -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:id="@+id/tvBrakingTypeLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Braking Type"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="4dp" />
+
+                    <Spinner
+                        android:id="@+id/spinnerBrakingType"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="@drawable/edittext_background"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
             <!-- Price and Condition Row -->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -277,6 +351,52 @@
 
             </LinearLayout>
 
+            <!-- Ownership and Additional Info Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <!-- Ownership Spinner -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:id="@+id/tvOwnershipLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Ownership"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="4dp" />
+
+                    <Spinner
+                        android:id="@+id/spinnerOwnership"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="@drawable/edittext_background"
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif" />
+
+                </LinearLayout>
+
+                <!-- Empty space for alignment -->
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
             <!-- Upload Images Section -->
             <TextView
                 android:id="@+id/tvUploadLabel"
@@ -297,7 +417,7 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:background="@drawable/upload_background"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="4dp"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -328,6 +448,29 @@
 
             </LinearLayout>
 
+            <!-- Selected Count Text (ADDED THIS) -->
+            <TextView
+                android:id="@+id/tvSelectedCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0 images selected"
+                android:textColor="@color/gray_600"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone" />
+
+            <!-- Image Preview Container -->
+            <LinearLayout
+                android:id="@+id/imagePreviewContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone" />
+
             <!-- Previous Owner Details -->
             <TextView
                 android:id="@+id/tvOwnerLabel"
@@ -345,6 +488,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:hint="e.g., Name, Contact Info"
+                android:inputType="textMultiLine"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp"
+                android:background="@drawable/edittext_background"
+                android:textColor="@color/text_primary_light"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:gravity="top"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Condition Details -->
+            <TextView
+                android:id="@+id/tvConditionDetailsLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Condition Details (Descriptive)"
+                android:textColor="@color/text_primary_light"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/etConditionDetails"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:hint="Describe scratches, dents, or maintenance history..."
                 android:inputType="textMultiLine"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="12dp"
@@ -393,7 +563,6 @@
                 android:textStyle="bold"
                 android:fontFamily="sans-serif"
                 android:background="@drawable/primary_button"
-
                 android:gravity="center"
                 android:layout_marginBottom="12dp" />
 

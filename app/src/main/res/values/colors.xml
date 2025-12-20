@@ -77,4 +77,8 @@
     <color name="gray_700">#374151</color>
     <color name="border_gray">#D1D5DB</color>
     <color name="gray_900">#111827</color>
+
+    <color name="icon_bg_red_light">#FFEF9A9A</color>
+    <color name="icon_bg_green_light">#FFA5D6A7</color>
+
 </resources>

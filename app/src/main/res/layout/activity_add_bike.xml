@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
@@ -64,569 +65,412 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topHeader">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="80dp"
-            android:paddingHorizontal="16dp">
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:paddingBottom="80dp">
 
-            <!-- Brand and Model Card -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardBrandModel"
-                android:layout_width="0dp"
+            <!-- Brand and Model Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="1dp"
-                app:cardUseCompatPadding="true"
-                android:layout_marginBottom="16dp"
-                android:background="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
 
+                <!-- Brand Input -->
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_marginEnd="8dp">
 
-                    <!-- Brand Input -->
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Brand"
-                        android:textColor="@color/gray_700"
+                        android:textColor="@color/text_primary_light"
                         android:textSize="14sp"
-                        android:textStyle="normal"
-                        android:fontFamily="sans-serif"
-                        android:layout_marginBottom="8dp" />
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="4dp" />
 
                     <EditText
                         android:id="@+id/etBrand"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="56dp"
                         android:hint="e.g., Yamaha"
-                        android:textColor="@color/gray_900"
-                        android:textSize="16sp"
-                        android:background="@drawable/edittext_background"
-                        android:paddingHorizontal="12dp"
+                        android:inputType="text"
+                        android:paddingHorizontal="16dp"
                         android:paddingVertical="12dp"
+                        android:background="@drawable/edittext_background"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="16sp"
                         android:fontFamily="sans-serif" />
 
-                    <!-- Divider -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:background="@color/gray_200" />
+                </LinearLayout>
 
-                    <!-- Model Input -->
+                <!-- Model Name Input -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Model Name"
-                        android:textColor="@color/gray_700"
+                        android:textColor="@color/text_primary_light"
                         android:textSize="14sp"
-                        android:textStyle="normal"
-                        android:fontFamily="sans-serif"
-                        android:layout_marginBottom="8dp" />
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="4dp" />
 
                     <EditText
                         android:id="@+id/etModel"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="56dp"
                         android:hint="e.g., R15"
-                        android:textColor="@color/gray_900"
-                        android:textSize="16sp"
-                        android:background="@drawable/edittext_background"
-                        android:paddingHorizontal="12dp"
+                        android:inputType="text"
+                        android:paddingHorizontal="16dp"
                         android:paddingVertical="12dp"
+                        android:background="@drawable/edittext_background"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="16sp"
                         android:fontFamily="sans-serif" />
 
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
-            <!-- On-Road Price Card -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardOnRoadPrice"
-                android:layout_width="0dp"
+            <!-- On-Road Price -->
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="1dp"
-                app:cardUseCompatPadding="true"
-                android:layout_marginBottom="16dp"
-                android:background="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardBrandModel">
+                android:text="On-Road Price"
+                android:textColor="@color/text_primary_light"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="4dp" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:background="@drawable/edittext_background"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="₹"
+                    android:textColor="@color/gray_500"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif" />
+
+                <EditText
+                    android:id="@+id/etOnRoadPrice"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:hint="2,00,000"
+                    android:inputType="number"
+                    android:textColor="@color/text_primary_light"
+                    android:textSize="16sp"
+                    android:background="@android:color/transparent"
+                    android:paddingStart="8dp"
+                    android:fontFamily="sans-serif" />
+
+            </LinearLayout>
+
+            <!-- Engine CC and Mileage Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <!-- Engine CC -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_marginEnd="8dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="On-Road Price"
-                        android:textColor="@color/gray_700"
-                        android:textSize="14sp"
-                        android:textStyle="normal"
-                        android:fontFamily="sans-serif"
-                        android:layout_marginBottom="8dp" />
-
-                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:orientation="horizontal"
+                        android:layout_height="wrap_content"
+                        android:text="Engine CC"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="4dp" />
+
+                    <EditText
+                        android:id="@+id/etEngineCC"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:hint="155"
+                        android:inputType="number"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="12dp"
                         android:background="@drawable/edittext_background"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="₹"
-                            android:textColor="@color/gray_500"
-                            android:textSize="16sp"
-                            android:fontFamily="sans-serif" />
-
-                        <EditText
-                            android:id="@+id/etOnRoadPrice"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:hint="2,00,000"
-                            android:textColor="@color/gray_900"
-                            android:textSize="16sp"
-                            android:background="@android:color/transparent"
-                            android:paddingStart="8dp"
-                            android:fontFamily="sans-serif"
-                            android:inputType="numberDecimal" />
-
-                    </LinearLayout>
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif" />
 
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
-
-            <!-- Engine and Mileage Row -->
-            <LinearLayout
-                android:id="@+id/rowEngineMileage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardOnRoadPrice">
-
-                <!-- Engine CC Card -->
-                <androidx.cardview.widget.CardView
+                <!-- Mileage -->
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="1dp"
-                    app:cardUseCompatPadding="true"
-                    android:layout_marginEnd="8dp"
-                    android:background="@color/white">
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
 
-                    <LinearLayout
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+                        android:text="Mileage (km/l)"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="4dp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Engine CC"
-                            android:textColor="@color/gray_700"
-                            android:textSize="14sp"
-                            android:textStyle="normal"
-                            android:fontFamily="sans-serif"
-                            android:layout_marginBottom="8dp" />
-
-                        <EditText
-                            android:id="@+id/etEngineCC"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="155"
-                            android:textColor="@color/gray_900"
-                            android:textSize="16sp"
-                            android:background="@drawable/edittext_background"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="12dp"
-                            android:fontFamily="sans-serif"
-                            android:inputType="number" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- Mileage Card -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="1dp"
-                    app:cardUseCompatPadding="true"
-                    android:layout_marginStart="8dp"
-                    android:background="@color/white">
-
-                    <LinearLayout
+                    <EditText
+                        android:id="@+id/etMileage"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
+                        android:layout_height="56dp"
+                        android:hint="45"
+                        android:inputType="numberDecimal"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="12dp"
+                        android:background="@drawable/edittext_background"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Mileage (km/l)"
-                            android:textColor="@color/gray_700"
-                            android:textSize="14sp"
-                            android:textStyle="normal"
-                            android:fontFamily="sans-serif"
-                            android:layout_marginBottom="8dp" />
-
-                        <EditText
-                            android:id="@+id/etMileage"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="45"
-                            android:textColor="@color/gray_900"
-                            android:textSize="16sp"
-                            android:background="@drawable/edittext_background"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="12dp"
-                            android:fontFamily="sans-serif"
-                            android:inputType="numberDecimal" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
+                </LinearLayout>
 
             </LinearLayout>
 
             <!-- Top Speed and Braking Type Row -->
             <LinearLayout
-                android:id="@+id/rowSpeedBraking"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rowEngineMileage">
+                android:layout_marginBottom="16dp">
 
-                <!-- Top Speed Card -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="1dp"
-                    app:cardUseCompatPadding="true"
-                    android:layout_marginEnd="8dp"
-                    android:background="@color/white">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Top Speed (km/h)"
-                            android:textColor="@color/gray_700"
-                            android:textSize="14sp"
-                            android:textStyle="normal"
-                            android:fontFamily="sans-serif"
-                            android:layout_marginBottom="8dp" />
-
-                        <EditText
-                            android:id="@+id/etTopSpeed"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="140"
-                            android:textColor="@color/gray_900"
-                            android:textSize="16sp"
-                            android:background="@drawable/edittext_background"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="12dp"
-                            android:fontFamily="sans-serif"
-                            android:inputType="number" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- Braking Type Card -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="1dp"
-                    app:cardUseCompatPadding="true"
-                    android:layout_marginStart="8dp"
-                    android:background="@color/white">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Braking Type"
-                            android:textColor="@color/gray_700"
-                            android:textSize="14sp"
-                            android:textStyle="normal"
-                            android:fontFamily="sans-serif"
-                            android:layout_marginBottom="8dp" />
-
-                        <EditText
-                            android:id="@+id/etBrakingType"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="Dual Disc"
-                            android:textColor="@color/gray_900"
-                            android:textSize="16sp"
-                            android:background="@drawable/edittext_background"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="12dp"
-                            android:fontFamily="sans-serif" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
-
-            <!-- Type Selection Card -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardType"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="1dp"
-                app:cardUseCompatPadding="true"
-                android:layout_marginBottom="16dp"
-                android:background="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rowSpeedBraking">
-
+                <!-- Top Speed -->
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_marginEnd="8dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Type"
-                        android:textColor="@color/gray_700"
-                        android:textSize="14sp"
-                        android:textStyle="normal"
-                        android:fontFamily="sans-serif"
-                        android:layout_marginBottom="8dp" />
-
-                    <Spinner
-                        android:id="@+id/spinnerType"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="wrap_content"
+                        android:text="Top Speed (km/h)"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="4dp" />
+
+                    <EditText
+                        android:id="@+id/etTopSpeed"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:hint="140"
+                        android:inputType="number"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="12dp"
                         android:background="@drawable/edittext_background"
-                        android:paddingHorizontal="12dp"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="16sp"
                         android:fontFamily="sans-serif" />
 
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
-
-            <!-- Upload Image Card -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardUploadImage"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="1dp"
-                app:cardUseCompatPadding="true"
-                android:layout_marginBottom="16dp"
-                android:background="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardType">
-
+                <!-- Braking Type -->
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_marginStart="8dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Upload Image"
-                        android:textColor="@color/gray_700"
+                        android:text="Braking Type"
+                        android:textColor="@color/text_primary_light"
                         android:textSize="14sp"
-                        android:textStyle="normal"
-                        android:fontFamily="sans-serif"
-                        android:layout_marginBottom="16dp" />
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="4dp" />
 
-                    <!-- Upload Container -->
-                    <LinearLayout
+                    <Spinner
+                        android:id="@+id/spinnerBrakingType"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:orientation="vertical"
-                        android:background="@drawable/upload_background"
-                        android:gravity="center"
-                        android:padding="24dp">
-
-                        <!-- Upload Icon -->
-                        <ImageView
-                            android:id="@+id/ivUploadIcon"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:src="@drawable/ic_upload"
-                            android:tint="@color/gray_400"
-                            android:contentDescription="Upload"
-                            android:layout_marginBottom="8dp" />
-
-                        <!-- Upload Text -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Upload a file or drag and drop"
-                            android:textColor="@color/gray_600"
-                            android:textSize="14sp"
-                            android:fontFamily="sans-serif"
-                            android:layout_marginBottom="4dp" />
-
-                        <!-- File Format Text -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="PNG, JPG, GIF up to 10MB"
-                            android:textColor="@color/gray_500"
-                            android:textSize="12sp"
-                            android:fontFamily="sans-serif" />
-
-                    </LinearLayout>
-
-                    <!-- ✅ ADD THE IMAGE PREVIEW CONTAINER HERE -->
-                    <LinearLayout
-                        android:id="@+id/imagePreviewContainer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:visibility="gone"
-                        android:layout_marginTop="12dp"
-                        android:padding="8dp" />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <!-- Key Features Card -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardFeatures"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="1dp"
-                app:cardUseCompatPadding="true"
-                android:layout_marginBottom="24dp"
-                android:background="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardUploadImage">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Key Features/Specs"
-                        android:textColor="@color/gray_700"
-                        android:textSize="14sp"
-                        android:textStyle="normal"
-                        android:fontFamily="sans-serif"
-                        android:layout_marginBottom="8dp" />
-
-                    <EditText
-                        android:id="@+id/etFeatures"
-                        android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:hint="e.g., Dual channel ABS, VVA, Slipper clutch..."
-                        android:textColor="@color/gray_900"
-                        android:textSize="16sp"
+                        android:layout_height="56dp"
                         android:background="@drawable/edittext_background"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="12dp"
-                        android:fontFamily="sans-serif"
-                        android:gravity="top"
-                        android:inputType="textMultiLine" />
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_primary_light"
+                        android:textSize="16sp"
+                        android:fontFamily="sans-serif" />
 
                 </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <!-- Action Buttons -->
-            <LinearLayout
-                android:id="@+id/buttonsContainer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cardFeatures">
-
-                <!-- Save Button -->
-                <Button
-                    android:id="@+id/btnSaveBike"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:text="Save Bike"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif"
-                    android:background="@drawable/primary_button"
-                    android:layout_marginBottom="12dp" />
-
-                <!-- Cancel Button -->
-                <Button
-                    android:id="@+id/btnCancel"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:text="Cancel"
-                    android:textColor="@color/gray_800"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif"
-                    android:background="@drawable/secondary_button" />
 
             </LinearLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- Type Selection -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Type"
+                android:textColor="@color/text_primary_light"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="4dp" />
+
+            <Spinner
+                android:id="@+id/spinnerType"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/edittext_background"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/text_primary_light"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Upload Image Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Upload Image"
+                android:textColor="@color/text_primary_light"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Upload Container -->
+            <LinearLayout
+                android:id="@+id/uploadContainer"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/upload_background"
+                android:layout_marginBottom="16dp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/ivUploadIcon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_upload"
+                    android:tint="@color/gray_500"
+                    android:layout_marginBottom="8dp"
+                    android:contentDescription="Upload" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upload a file or drag and drop"
+                    android:textColor="@color/gray_500"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PNG, JPG, GIF up to 10MB"
+                    android:textColor="@color/gray_400"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif" />
+
+            </LinearLayout>
+
+            <!-- Image Preview Container -->
+            <LinearLayout
+                android:id="@+id/imagePreviewContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Key Features/Specs -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Key Features/Specs (Optional)"
+                android:textColor="@color/text_primary_light"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="4dp" />
+
+            <EditText
+                android:id="@+id/etFeatures"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:hint="e.g., Dual channel ABS, VVA, Slipper clutch..."
+                android:inputType="textMultiLine"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="12dp"
+                android:background="@drawable/edittext_background"
+                android:textColor="@color/text_primary_light"
+                android:textSize="16sp"
+                android:fontFamily="sans-serif"
+                android:gravity="top"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Save Bike Button -->
+            <Button
+                android:id="@+id/btnSaveBike"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Save Bike"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif"
+                android:background="@drawable/primary_button"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Cancel Button -->
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Cancel"
+                android:textColor="@color/gray_600"
+                android:textSize="16sp"
+                android:textStyle="normal"
+                android:fontFamily="sans-serif"
+                android:background="@drawable/outline_button" />
+
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 

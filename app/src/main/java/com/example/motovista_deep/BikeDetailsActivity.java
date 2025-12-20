@@ -2,7 +2,7 @@ package com.example.motovista_deep;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
-
+import androidx.annotation.NonNull;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -47,8 +47,15 @@ public class BikeDetailsActivity extends AppCompatActivity {
         if (intent != null && intent.hasExtra("BIKE_MODEL")) {
             bike = intent.getParcelableExtra("BIKE_MODEL");
             bikeType = intent.getStringExtra("BIKE_TYPE");
+
+            // Debug log
+            Toast.makeText(this,
+                    "Bike loaded: " + bike.getBrand() + " " + bike.getModel() +
+                            "\nImages: " + (bike.getImageUrls() != null ? bike.getImageUrls().size() : 0),
+                    Toast.LENGTH_SHORT).show();
+
         } else {
-            // 🔹 SAFE FALLBACK (NO CONSTRUCTOR ISSUE)
+            // 🔹 SAFE FALLBACK
             bike = new BikeModel();
             bike.setId(1);
             bike.setBrand("Royal Enfield");
@@ -63,8 +70,7 @@ public class BikeDetailsActivity extends AppCompatActivity {
             demoImages.add("https://via.placeholder.com/600x400?text=Bike+2");
             demoImages.add("https://via.placeholder.com/600x400?text=Bike+3");
 
-            // 🔥 SAFE WAY (NO setImageUrls ERROR)
-            bike.getImageUrls().addAll(demoImages);
+            bike.setAllImages(demoImages);
 
             bikeType = "NEW";
         }
@@ -84,7 +90,12 @@ public class BikeDetailsActivity extends AppCompatActivity {
         btnEdit = findViewById(R.id.btnEdit);
         btnDelete = findViewById(R.id.btnDelete);
 
-        tvTitle.setText("Bike Details");
+        // Set title with bike info
+        if (bike != null && bike.getBrand() != null && bike.getModel() != null) {
+            tvTitle.setText(bike.getBrand() + " " + bike.getModel());
+        } else {
+            tvTitle.setText("Bike Details");
+        }
     }
 
     private void setupListeners() {
@@ -98,22 +109,59 @@ public class BikeDetailsActivity extends AppCompatActivity {
     }
 
     // ---------- IMAGE SLIDER ----------
+    // ---------- IMAGE SLIDER ----------
     private void setupImageSlider() {
         imageUrls.clear();
 
-        if (bike.getImageUrls() != null && !bike.getImageUrls().isEmpty()) {
-            imageUrls.addAll(bike.getImageUrls());
+        if (bike != null) {
+            // Try to get all images first
+            ArrayList<String> allImages = bike.getAllImages();
+
+            if (allImages != null && !allImages.isEmpty()) {
+                imageUrls.addAll(allImages);
+                Toast.makeText(this, "Found " + allImages.size() + " images", Toast.LENGTH_SHORT).show();
+            }
+            // Fallback to imageUrls
+            else if (bike.getImageUrls() != null && !bike.getImageUrls().isEmpty()) {
+                imageUrls.addAll(bike.getImageUrls());
+            }
+            // Last fallback: single image
+            else {
+                String singleImage = bike.getImageUrl();
+                if (singleImage != null && !singleImage.isEmpty()) {
+                    imageUrls.add(singleImage);
+                }
+            }
         }
 
+        // If still no images, show placeholder
         if (imageUrls.isEmpty()) {
             imageUrls.add("https://via.placeholder.com/600x400?text=No+Image");
+            Toast.makeText(this, "No images found", Toast.LENGTH_SHORT).show();
         }
 
+        // Setup ViewPager - ADD THESE LINES FOR FULL IMAGE VIEW
         imageSliderAdapter = new ImageSliderAdapter(this, imageUrls);
         imageViewPager.setAdapter(imageSliderAdapter);
 
+        // 🔥 ADD THESE LINES FOR FULL IMAGE VIEW
+        imageViewPager.setClipToPadding(false);
+        imageViewPager.setClipChildren(false);
+        imageViewPager.setOffscreenPageLimit(3);
+
+        // 🔥 Add page transformer for better visual effect
+        imageViewPager.setPageTransformer(new ViewPager2.PageTransformer() {
+            @Override
+            public void transformPage(@NonNull View page, float position) {
+                float absPosition = Math.abs(position);
+                page.setScaleY(0.85f + 0.15f * (1 - absPosition));
+            }
+        });
+
+        // Setup dots indicator
         setupDotsIndicator(imageUrls.size());
 
+        // Setup page change listener
         imageViewPager.registerOnPageChangeCallback(
                 new ViewPager2.OnPageChangeCallback() {
                     @Override
@@ -124,6 +172,7 @@ public class BikeDetailsActivity extends AppCompatActivity {
                 }
         );
 
+        // Auto slide if multiple images
         if (imageUrls.size() > 1) {
             startAutoSlide();
         }
@@ -193,17 +242,57 @@ public class BikeDetailsActivity extends AppCompatActivity {
     }
 
     private void setupNewBikeDetails(View view) {
+        if (bike == null) return;
+
         ((TextView) view.findViewById(R.id.tvBrand)).setText(bike.getBrand());
         ((TextView) view.findViewById(R.id.tvModel)).setText(bike.getModel());
-        ((TextView) view.findViewById(R.id.tvOnRoadPrice))
-                .setText("₹" + bike.getPrice());
+
+        // Set price - FIX FOR DOUBLE RUPEES
+        String price = bike.getPrice();
+        if (price != null && !price.isEmpty()) {
+            // Remove any existing rupee symbol and add fresh one
+            price = price.replace("₹", "").trim();
+            ((TextView) view.findViewById(R.id.tvOnRoadPrice)).setText("₹" + price);
+        }
+
+        // Set additional details if available
+        if (bike.getOnRoadPrice() != null && !bike.getOnRoadPrice().isEmpty()) {
+            String onRoadPrice = bike.getOnRoadPrice();
+            onRoadPrice = onRoadPrice.replace("₹", "").trim();
+            ((TextView) view.findViewById(R.id.tvOnRoadPrice)).setText("₹" + onRoadPrice);
+        }
+
+        if (bike.getEngineCC() != null && !bike.getEngineCC().isEmpty()) {
+            ((TextView) view.findViewById(R.id.tvEngine)).setText(bike.getEngineCC());
+        }
+
+        if (bike.getMileage() != null && !bike.getMileage().isEmpty()) {
+            ((TextView) view.findViewById(R.id.tvMileage)).setText(bike.getMileage());
+        }
     }
 
     private void setupSHBikeDetails(View view) {
+        if (bike == null) return;
+
         ((TextView) view.findViewById(R.id.tvBrand)).setText(bike.getBrand());
         ((TextView) view.findViewById(R.id.tvModel)).setText(bike.getModel());
-        ((TextView) view.findViewById(R.id.tvExpectedPrice))
-                .setText("₹" + bike.getPrice());
+
+        // Set price - FIX FOR DOUBLE RUPEES
+        String price = bike.getPrice();
+        if (price != null && !price.isEmpty()) {
+            // Remove any existing rupee symbol and add fresh one
+            price = price.replace("₹", "").trim();
+            ((TextView) view.findViewById(R.id.tvExpectedPrice)).setText("₹" + price);
+        }
+
+        // Set additional details if available
+        if (bike.getYear() != null && !bike.getYear().isEmpty()) {
+            ((TextView) view.findViewById(R.id.tvYear)).setText(bike.getYear());
+        }
+
+        if (bike.getOdometer() != null && !bike.getOdometer().isEmpty()) {
+            ((TextView) view.findViewById(R.id.tvOdometer)).setText(bike.getOdometer());
+        }
     }
 
     // ---------- DELETE ----------
@@ -228,6 +317,22 @@ public class BikeDetailsActivity extends AppCompatActivity {
         super.onDestroy();
         if (sliderRunnable != null) {
             sliderHandler.removeCallbacks(sliderRunnable);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (sliderRunnable != null) {
+            sliderHandler.removeCallbacks(sliderRunnable);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (imageUrls.size() > 1 && sliderRunnable != null) {
+            sliderHandler.postDelayed(sliderRunnable, 3000);
         }
     }
 }

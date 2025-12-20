@@ -42,10 +42,11 @@ public class AddBikeActivity extends AppCompatActivity {
 
     // UI Components
     private EditText etBrand, etModel, etOnRoadPrice;
-    private EditText etEngineCC, etMileage, etTopSpeed, etBrakingType, etFeatures;
-    private Spinner spinnerType;
+    private EditText etEngineCC, etMileage, etTopSpeed;
+    private Spinner spinnerBrakingType, spinnerType;
     private Button btnSaveBike, btnCancel;
     private ImageView btnBack, ivUploadIcon;
+    private EditText etFeatures;
 
     // Image handling
     private LinearLayout imagePreviewContainer;
@@ -59,7 +60,7 @@ public class AddBikeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_bike);
 
         initializeViews();
-        setupSpinner();
+        setupSpinners();
         setupClickListeners();
     }
 
@@ -70,13 +71,13 @@ public class AddBikeActivity extends AppCompatActivity {
         etEngineCC = findViewById(R.id.etEngineCC);
         etMileage = findViewById(R.id.etMileage);
         etTopSpeed = findViewById(R.id.etTopSpeed);
-        etBrakingType = findViewById(R.id.etBrakingType);
-        etFeatures = findViewById(R.id.etFeatures);
+        spinnerBrakingType = findViewById(R.id.spinnerBrakingType);
         spinnerType = findViewById(R.id.spinnerType);
         btnSaveBike = findViewById(R.id.btnSaveBike);
         btnCancel = findViewById(R.id.btnCancel);
         btnBack = findViewById(R.id.btnBack);
         ivUploadIcon = findViewById(R.id.ivUploadIcon);
+        etFeatures = findViewById(R.id.etFeatures);
 
         // Initialize image preview container
         imagePreviewContainer = findViewById(R.id.imagePreviewContainer);
@@ -85,15 +86,22 @@ public class AddBikeActivity extends AppCompatActivity {
         }
     }
 
-    private void setupSpinner() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.bike_types, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerType.setAdapter(adapter);
+    private void setupSpinners() {
+        // Setup Braking Type spinner
+        ArrayAdapter<CharSequence> brakingAdapter = ArrayAdapter.createFromResource(this,
+                R.array.braking_types, android.R.layout.simple_spinner_item);
+        brakingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerBrakingType.setAdapter(brakingAdapter);
+
+        // Setup Bike Type spinner
+        ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(this,
+                R.array.bike_types_new, android.R.layout.simple_spinner_item);
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerType.setAdapter(typeAdapter);
 
         // Set default to "Sports"
-        for (int i = 0; i < adapter.getCount(); i++) {
-            if (adapter.getItem(i).toString().equalsIgnoreCase("Sports")) {
+        for (int i = 0; i < typeAdapter.getCount(); i++) {
+            if (typeAdapter.getItem(i).toString().equalsIgnoreCase("Sports")) {
                 spinnerType.setSelection(i);
                 break;
             }
@@ -104,7 +112,7 @@ public class AddBikeActivity extends AppCompatActivity {
         btnBack.setOnClickListener(v -> finish());
         btnCancel.setOnClickListener(v -> finish());
 
-        View uploadContainer = findViewById(R.id.cardUploadImage);
+        View uploadContainer = findViewById(R.id.uploadContainer);
         uploadContainer.setOnClickListener(v -> openImageChooser());
         ivUploadIcon.setOnClickListener(v -> openImageChooser());
 
@@ -115,7 +123,7 @@ public class AddBikeActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true); // Enable multiple selection
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         startActivityForResult(Intent.createChooser(intent, "Select Pictures"), PICK_IMAGE_REQUEST);
     }
 
@@ -204,7 +212,7 @@ public class AddBikeActivity extends AppCompatActivity {
         String engineCC = etEngineCC.getText().toString().trim();
         String mileage = etMileage.getText().toString().trim();
         String topSpeed = etTopSpeed.getText().toString().trim();
-        String brakingType = etBrakingType.getText().toString().trim();
+        String brakingType = spinnerBrakingType.getSelectedItem().toString();
         String type = spinnerType.getSelectedItem().toString();
         String features = etFeatures.getText().toString().trim();
 
@@ -231,6 +239,16 @@ public class AddBikeActivity extends AppCompatActivity {
         if (etEngineCC.getText().toString().trim().isEmpty()) {
             etEngineCC.setError("Engine CC is required");
             etEngineCC.requestFocus();
+            return false;
+        }
+        if (etMileage.getText().toString().trim().isEmpty()) {
+            etMileage.setError("Mileage is required");
+            etMileage.requestFocus();
+            return false;
+        }
+        if (etTopSpeed.getText().toString().trim().isEmpty()) {
+            etTopSpeed.setError("Top speed is required");
+            etTopSpeed.requestFocus();
             return false;
         }
         return true;
@@ -302,7 +320,6 @@ public class AddBikeActivity extends AppCompatActivity {
                                 }
                             } else {
                                 progressDialog.dismiss();
-                                // Log the error
                                 try {
                                     String errorBody = response.errorBody().string();
                                     Toast.makeText(AddBikeActivity.this,
@@ -332,14 +349,12 @@ public class AddBikeActivity extends AppCompatActivity {
 
     private File getFileFromUri(Uri uri) {
         try {
-            // Try to get real path first
             String realPath = getRealPathFromUri(uri);
             if (realPath != null) {
                 File file = new File(realPath);
                 if (file.exists()) return file;
             }
 
-            // If not, create temp file from stream
             InputStream inputStream = getContentResolver().openInputStream(uri);
             if (inputStream == null) return null;
 
@@ -379,6 +394,7 @@ public class AddBikeActivity extends AppCompatActivity {
     }
 
     private void saveBikeData(Bike bike, String imagePaths, ProgressDialog progressDialog) {
+        // This should have 10 parameters for NEW BIKES
         AddBikeRequest request = new AddBikeRequest(
                 bike.getBrand(),
                 bike.getModel(),
@@ -443,9 +459,9 @@ public class AddBikeActivity extends AppCompatActivity {
         etEngineCC.setText("");
         etMileage.setText("");
         etTopSpeed.setText("");
-        etBrakingType.setText("");
-        etFeatures.setText("");
+        spinnerBrakingType.setSelection(0);
         spinnerType.setSelection(0);
+        etFeatures.setText("");
 
         // Clear images
         imageUris.clear();

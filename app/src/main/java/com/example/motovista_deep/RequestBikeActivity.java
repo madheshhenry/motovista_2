@@ -1,10 +1,12 @@
 package com.example.motovista_deep;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -17,137 +19,176 @@ import androidx.core.content.ContextCompat;
 public class RequestBikeActivity extends AppCompatActivity {
 
     // Input fields
-    private EditText etBikeBrand, etBikeModel, etFeatures, etEmail;
-    private TextView tvFullName, tvMobileNumber;
-
-    // Buttons
+    private EditText etBikeBrand, etBikeModel, etFeatures, etEmail, etFullName, etMobileNumber;
     private LinearLayout btnBack;
     private Button btnSubmit;
-
-    // User info
-    private String fullName, mobileNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_bike);
 
-        // Remove action bar
+        // Hide action bar
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
 
+        // Set status bar color
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(0xFFF8F9FA); // Same as background
+
         // Initialize views
         initializeViews();
 
-        // Load user data
+        // Load user data (optional - can be loaded from SharedPreferences)
         loadUserData();
 
         // Setup listeners
-        setupClickListeners();
-        setupFocusListeners();
+        setupListeners();
     }
 
     private void initializeViews() {
-        // Back button
         btnBack = findViewById(R.id.btnBack);
 
-        // Input fields
         etBikeBrand = findViewById(R.id.etBikeBrand);
         etBikeModel = findViewById(R.id.etBikeModel);
         etFeatures = findViewById(R.id.etFeatures);
         etEmail = findViewById(R.id.etEmail);
+        etFullName = findViewById(R.id.etFullName);
+        etMobileNumber = findViewById(R.id.etMobileNumber);
 
-        // Text views for read-only fields
-        tvFullName = findViewById(R.id.tvFullName);
-        tvMobileNumber = findViewById(R.id.tvMobileNumber);
-
-        // Submit button
         btnSubmit = findViewById(R.id.btnSubmit);
     }
 
     private void loadUserData() {
-        // Load from SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        // Load from SharedPreferences if you want to pre-fill
+        SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+        String name = prefs.getString("fullName", "");
+        String mobile = prefs.getString("mobileNumber", "");
 
-        fullName = sharedPreferences.getString("fullName", "Santhosh Kumar");
-        mobileNumber = sharedPreferences.getString("mobileNumber", "+91 98765 43210");
+        // Set hints or pre-filled values
+        if (!name.isEmpty()) {
+            etFullName.setText(name);
+        }
 
-        // Set text
-        tvFullName.setText(fullName);
-        tvMobileNumber.setText(mobileNumber);
+        if (!mobile.isEmpty()) {
+            etMobileNumber.setText(mobile);
+        }
     }
 
-    private void setupFocusListeners() {
-        View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener() {
+    private void setupListeners() {
+        // Back button
+        btnBack.setOnClickListener(v -> onBackPressed());
+
+        // Submit button
+        btnSubmit.setOnClickListener(v -> submitForm());
+
+        // Form validation listeners
+        TextWatcher validationWatcher = new TextWatcher() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    v.setBackgroundResource(R.drawable.input_background_focused);
-                } else {
-                    v.setBackgroundResource(R.drawable.input_background);
-                }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validateForm();
             }
         };
 
-        etBikeBrand.setOnFocusChangeListener(focusListener);
-        etBikeModel.setOnFocusChangeListener(focusListener);
-        etFeatures.setOnFocusChangeListener(focusListener);
-        etEmail.setOnFocusChangeListener(focusListener);
+        etBikeBrand.addTextChangedListener(validationWatcher);
+        etBikeModel.addTextChangedListener(validationWatcher);
+        etFullName.addTextChangedListener(validationWatcher);
+        etMobileNumber.addTextChangedListener(validationWatcher);
+        etEmail.addTextChangedListener(validationWatcher);
     }
 
-    private void setupClickListeners() {
-        // Back button
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+    private void validateForm() {
+        String brand = etBikeBrand.getText().toString().trim();
+        String model = etBikeModel.getText().toString().trim();
+        String fullName = etFullName.getText().toString().trim();
+        String mobile = etMobileNumber.getText().toString().trim();
+        String email = etEmail.getText().toString().trim();
 
-        // Submit button
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                submitRequest();
-            }
-        });
+        boolean isValid = !brand.isEmpty() && !model.isEmpty() &&
+                !fullName.isEmpty() && !mobile.isEmpty();
+
+        if (!email.isEmpty()) {
+            isValid = isValid && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        }
+
+        // Mobile number validation (basic - at least 10 digits)
+        if (!mobile.isEmpty()) {
+            String digitsOnly = mobile.replaceAll("[^0-9]", "");
+            isValid = isValid && digitsOnly.length() >= 10;
+        }
+
+        btnSubmit.setEnabled(isValid);
+        btnSubmit.setAlpha(isValid ? 1.0f : 0.5f);
     }
 
-    private void submitRequest() {
-        // Get values
-        String bikeBrand = etBikeBrand.getText().toString().trim();
-        String bikeModel = etBikeModel.getText().toString().trim();
+    private void submitForm() {
+        String brand = etBikeBrand.getText().toString().trim();
+        String model = etBikeModel.getText().toString().trim();
         String features = etFeatures.getText().toString().trim();
+        String fullName = etFullName.getText().toString().trim();
+        String mobile = etMobileNumber.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
 
         // Validation
-        if (bikeBrand.isEmpty()) {
+        if (brand.isEmpty()) {
             etBikeBrand.setError("Please enter bike brand");
             etBikeBrand.requestFocus();
             return;
         }
 
-        if (bikeModel.isEmpty()) {
+        if (model.isEmpty()) {
             etBikeModel.setError("Please enter bike model");
             etBikeModel.requestFocus();
             return;
         }
 
-        // Email validation (optional)
+        if (fullName.isEmpty()) {
+            etFullName.setError("Please enter your full name");
+            etFullName.requestFocus();
+            return;
+        }
+
+        if (mobile.isEmpty()) {
+            etMobileNumber.setError("Please enter your mobile number");
+            etMobileNumber.requestFocus();
+            return;
+        }
+
+        // Mobile validation
+        String digitsOnly = mobile.replaceAll("[^0-9]", "");
+        if (digitsOnly.length() < 10) {
+            etMobileNumber.setError("Please enter a valid mobile number (at least 10 digits)");
+            etMobileNumber.requestFocus();
+            return;
+        }
+
         if (!email.isEmpty() && !isValidEmail(email)) {
             etEmail.setError("Please enter a valid email address");
             etEmail.requestFocus();
             return;
         }
 
-        // Show success
-        Toast.makeText(this, "Bike request submitted successfully!", Toast.LENGTH_SHORT).show();
+        // Save user data to SharedPreferences for future use
+        saveUserData(fullName, mobile);
 
-        // For demo, show what was submitted
-        String message = "Brand: " + bikeBrand + "\n" +
-                "Model: " + bikeModel + "\n" +
-                "Features: " + features + "\n" +
+        // Show success message
+        Toast.makeText(this, "✓ Request submitted successfully!", Toast.LENGTH_LONG).show();
+
+        // For demo: Show submitted data
+        String message = "Submitted Details:\n" +
+                "Name: " + fullName + "\n" +
+                "Mobile: " + mobile + "\n" +
+                "Brand: " + brand + "\n" +
+                "Model: " + model + "\n" +
+                "Features: " + (features.isEmpty() ? "None" : features) + "\n" +
                 "Email: " + (email.isEmpty() ? "Not provided" : email);
 
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -156,12 +197,15 @@ public class RequestBikeActivity extends AppCompatActivity {
         clearForm();
 
         // Go back after delay
-        btnSubmit.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                finish();
-            }
-        }, 2000);
+        btnSubmit.postDelayed(this::finish, 2000);
+    }
+
+    private void saveUserData(String fullName, String mobileNumber) {
+        SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("fullName", fullName);
+        editor.putString("mobileNumber", mobileNumber);
+        editor.apply();
     }
 
     private boolean isValidEmail(String email) {
@@ -174,9 +218,15 @@ public class RequestBikeActivity extends AppCompatActivity {
         etFeatures.setText("");
         etEmail.setText("");
 
-        // Remove errors
+        // Don't clear full name and mobile number - keep them for convenience
+        // etFullName.setText("");
+        // etMobileNumber.setText("");
+
+        // Clear errors
         etBikeBrand.setError(null);
         etBikeModel.setError(null);
+        etFullName.setError(null);
+        etMobileNumber.setError(null);
         etEmail.setError(null);
     }
 

@@ -43,8 +43,8 @@ import android.database.Cursor;
 
 public class AddSecondHandBikeActivity extends AppCompatActivity {
 
-    private EditText etBrand, etModel, etYear, etOdometer, etPrice, etOwnerDetails, etFeatures;
-    private Spinner spinnerCondition;
+    private EditText etBrand, etModel, etYear, etOdometer, etPrice, etOwnerDetails, etConditionDetails, etEngineCC, etFeatures;
+    private Spinner spinnerCondition, spinnerOwnership, spinnerBrakingType;
     private Button btnSaveBike, btnCancel;
     private ImageView btnBack;
     private LinearLayout uploadContainer, imagePreviewContainer;
@@ -59,7 +59,7 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_second_hand_bike);
 
         initializeViews();
-        setupConditionSpinner();
+        setupSpinners();
         setupClickListeners();
     }
 
@@ -70,33 +70,52 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
         etOdometer = findViewById(R.id.etOdometer);
         etPrice = findViewById(R.id.etPrice);
         etOwnerDetails = findViewById(R.id.etOwnerDetails);
-        etFeatures = findViewById(R.id.etFeatures);
+        etConditionDetails = findViewById(R.id.etConditionDetails);
+        etEngineCC = findViewById(R.id.etEngineCC);
+        etFeatures = findViewById(R.id.etFeatures); // ADDED THIS LINE
         spinnerCondition = findViewById(R.id.spinnerCondition);
+        spinnerOwnership = findViewById(R.id.spinnerOwnership);
+        spinnerBrakingType = findViewById(R.id.spinnerBrakingType);
         btnSaveBike = findViewById(R.id.btnSaveBike);
         btnCancel = findViewById(R.id.btnCancel);
         btnBack = findViewById(R.id.btnBack);
         uploadContainer = findViewById(R.id.uploadContainer);
 
+        // Initialize selected count text view
+        tvSelectedCount = findViewById(R.id.tvSelectedCount);
+        if (tvSelectedCount == null) {
+            tvSelectedCount = new TextView(this);
+            tvSelectedCount.setTextSize(12);
+            tvSelectedCount.setTextColor(getResources().getColor(R.color.gray_600));
+            tvSelectedCount.setVisibility(View.GONE);
+        }
+
         // Initialize image preview container
         imagePreviewContainer = findViewById(R.id.imagePreviewContainer);
         if (imagePreviewContainer == null) {
-            // Create a new container if not in XML
             imagePreviewContainer = new LinearLayout(this);
             imagePreviewContainer.setOrientation(LinearLayout.HORIZONTAL);
         }
-
-        // Initialize selected count text view
-        tvSelectedCount = new TextView(this);
-        tvSelectedCount.setTextSize(12);
-        tvSelectedCount.setTextColor(getResources().getColor(R.color.gray_600));
-        tvSelectedCount.setVisibility(View.GONE);
     }
 
-    private void setupConditionSpinner() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+    private void setupSpinners() {
+        // Condition spinner
+        ArrayAdapter<CharSequence> conditionAdapter = ArrayAdapter.createFromResource(this,
                 R.array.bike_conditions, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCondition.setAdapter(adapter);
+        conditionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCondition.setAdapter(conditionAdapter);
+
+        // Ownership spinner
+        ArrayAdapter<CharSequence> ownershipAdapter = ArrayAdapter.createFromResource(this,
+                R.array.ownership_types, android.R.layout.simple_spinner_item);
+        ownershipAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerOwnership.setAdapter(ownershipAdapter);
+
+        // Braking type spinner for second-hand bikes
+        ArrayAdapter<CharSequence> brakingAdapter = ArrayAdapter.createFromResource(this,
+                R.array.braking_types_sh, android.R.layout.simple_spinner_item);
+        brakingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerBrakingType.setAdapter(brakingAdapter);
     }
 
     private void setupClickListeners() {
@@ -221,6 +240,12 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
             etPrice.requestFocus();
             return false;
         }
+        if (TextUtils.isEmpty(etEngineCC.getText().toString().trim())) {
+            etEngineCC.setError("Engine CC is required");
+            etEngineCC.requestFocus();
+            return false;
+        }
+        // Note: etFeatures is optional, so don't validate it
         return true;
     }
 
@@ -228,7 +253,7 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
         try {
             List<MultipartBody.Part> imageParts = new ArrayList<>();
 
-            // ✅ IMPORTANT: Create bike_type parameter
+            // Create bike_type parameter
             RequestBody bikeType = RequestBody.create(MediaType.parse("text/plain"), "second_hand");
 
             for (int i = 0; i < imageUris.size(); i++) {
@@ -259,7 +284,6 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
 
             ApiService apiService = RetrofitClient.getApiService();
 
-            // ✅ Call correct method with bike_type
             apiService.uploadBikeImages("Bearer " + token, bikeType, imageParts)
                     .enqueue(new Callback<UploadBikeImageResponse>() {
                         @Override
@@ -280,7 +304,6 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
                                 }
                             } else {
                                 progressDialog.dismiss();
-                                // Log error
                                 try {
                                     if (response.errorBody() != null) {
                                         String error = response.errorBody().string();
@@ -301,7 +324,7 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
                             Toast.makeText(AddSecondHandBikeActivity.this,
                                     "Network error: " + t.getMessage(),
                                     Toast.LENGTH_SHORT).show();
-                            t.printStackTrace(); // Add this to see full error
+                            t.printStackTrace();
                         }
                     });
         } catch (Exception e) {
@@ -313,14 +336,12 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
 
     private File getFileFromUri(Uri uri) {
         try {
-            // Try to get real path first
             String realPath = getRealPathFromUri(uri);
             if (realPath != null) {
                 File file = new File(realPath);
                 if (file.exists()) return file;
             }
 
-            // If not, create temp file from stream
             InputStream inputStream = getContentResolver().openInputStream(uri);
             if (inputStream == null) return null;
 
@@ -367,7 +388,11 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
                 etOdometer.getText().toString().trim(),
                 etPrice.getText().toString().trim(),
                 spinnerCondition.getSelectedItem().toString(),
+                spinnerOwnership.getSelectedItem().toString(),
+                etEngineCC.getText().toString().trim(),
+                spinnerBrakingType.getSelectedItem().toString(),
                 etOwnerDetails.getText().toString().trim(),
+                etConditionDetails.getText().toString().trim(),
                 etFeatures.getText().toString().trim(),
                 imagePaths
         );
@@ -419,9 +444,6 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, AdminDashboardActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
         finish();
     }
 }

@@ -39,7 +39,8 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
                 .load(imageUrl)
                 .placeholder(R.drawable.ic_bike_placeholder)
                 .error(R.drawable.ic_bike_placeholder)
-                .centerCrop()
+               // .centerInside()
+                .fitCenter() // 🔥 CHANGE THIS: from centerCrop() to centerInside()
                 .into(holder.imageView);
     }
 

@@ -194,13 +194,14 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
     }
 
     private void updateBikeList(List<BikeModel> apiBikes) {
-
         bikeList.clear();
 
         if (apiBikes != null) {
             for (BikeModel apiBike : apiBikes) {
-
                 BikeModel bike = new BikeModel();
+
+                // Set base URL first (important!)
+                bike.setBaseUrl(RetrofitClient.BASE_URL);
 
                 bike.setId(apiBike.getId());
                 bike.setBrand(apiBike.getBrand());
@@ -210,12 +211,21 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
                 bike.setType(apiBike.getType());
                 bike.setIsFeatured(apiBike.getIsFeatured());
 
-                // 🔥 IMPORTANT FIX
-                bike.setImageUrlsFromString(
-                        apiBike.getImageUrlRaw(),
-                        RetrofitClient.BASE_URL
-                );
+                // ✅ Process images with base URL
+                if (apiBike.getAllImages() != null && !apiBike.getAllImages().isEmpty()) {
+                    // Copy images with base URL
+                    ArrayList<String> imagesWithBaseUrl = new ArrayList<>();
+                    for (String img : apiBike.getAllImages()) {
+                        String fullUrl = buildFullUrl(img, RetrofitClient.BASE_URL);
+                        imagesWithBaseUrl.add(fullUrl);
+                    }
+                    bike.setAllImages(imagesWithBaseUrl);
+                } else if (apiBike.getImageUrlRaw() != null && !apiBike.getImageUrlRaw().isEmpty()) {
+                    // Process string with base URL
+                    bike.setImageUrlsFromString(apiBike.getImageUrlRaw());
+                }
 
+                // Set other details
                 if ("NEW".equals(apiBike.getType())) {
                     bike.setOnRoadPrice(apiBike.getOnRoadPrice());
                     bike.setEngineCC(apiBike.getEngineCC());
@@ -236,8 +246,35 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
 
         filteredList.clear();
         filteredList.addAll(bikeList);
-
         bikeAdapter.updateList(filteredList);
+    }
+
+    // Helper method to build full URL
+    private String buildFullUrl(String path, String baseUrl) {
+        if (path == null || path.isEmpty()) {
+            return "";
+        }
+
+        // If already a full URL, return as is
+        if (path.startsWith("http://") || path.startsWith("https://")) {
+            return path;
+        }
+
+        // Remove leading slash if present
+        if (path.startsWith("/")) {
+            path = path.substring(1);
+        }
+
+        // Add base URL
+        if (baseUrl != null && !baseUrl.isEmpty()) {
+            String base = baseUrl;
+            if (!base.endsWith("/")) {
+                base += "/";
+            }
+            return base + path;
+        }
+
+        return path;
     }
 
 
