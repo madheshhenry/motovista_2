@@ -236,7 +236,7 @@ public class AIChatbotActivity extends AppCompatActivity {
 
                         if (response.isSuccessful() && response.body() != null) {
                             // Handle the AI response
-                            handleAiResponse(response.body().getReply());
+                            handleAiResponse(response.body());
                         } else {
                             addBotMessage("Sorry 😕 I couldn’t understand that. Please try again.");
                         }
@@ -250,27 +250,31 @@ public class AIChatbotActivity extends AppCompatActivity {
                 });
     }
 
-    private void handleAiResponse(String aiReply) {
-        // Check if AI reply contains bike recommendations
-        if (aiReply.toLowerCase().contains("recommend") ||
-                aiReply.toLowerCase().contains("suggest") ||
-                (aiReply.toLowerCase().contains("bike") && aiReply.toLowerCase().contains("₹"))) {
-            // AI is recommending bikes
+    private void handleAiResponse(AiChatResponse aiResponse) {
+
+        String aiReply = aiResponse.getReply();
+        addBotMessage(aiReply);
+
+        // 🔥 SHOW RECOMMENDATIONS IF PRESENT
+        if (aiResponse.getRecommendations() != null &&
+                !aiResponse.getRecommendations().isEmpty()) {
+
             setAiState(AiState.RECOMMENDING);
 
-            // First add the AI message
-            addBotMessage(aiReply);
+            for (AiChatResponse.Recommendation rec : aiResponse.getRecommendations()) {
 
-            // Then show bike recommendations
-            handler.postDelayed(() -> {
-                showBikeRecommendations();
-            }, 500);
+                String bikeMsg =
+                        "• " + rec.getBike() +
+                                "\nConfidence: " + rec.getConfidence();
+
+                addBotMessage(bikeMsg);
+            }
+
         } else {
-            // Regular conversation
             setAiState(AiState.ASKING);
-            addBotMessage(aiReply);
         }
     }
+
 
     private void handleUserInput(String input) {
         // This method is now only for fallback if backend fails
