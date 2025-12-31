@@ -145,10 +145,11 @@ public interface ApiService {
     );
 
     // ✅ NEW: GET SINGLE BIKE APIs (for edit)
+    // In ApiService.java
     @GET("get_bike_by_id.php")
     Call<GetBikeByIdResponse> getBikeById(
             @Header("Authorization") String token,
-            @Query("bike_id") int bikeId
+            @Query("id") int bikeId  // Changed from bike_id to id
     );
 
     @GET("get_second_hand_bike_by_id.php")

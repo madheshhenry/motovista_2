@@ -25,6 +25,9 @@ public class AddBikeRequest {
     private String type = "NEW";
     private String features;
     private String image_path;
+    private String date;
+    private String engine_number;
+    private String chassis_number;
 
     // Constructor for updated bike fields
     public AddBikeRequest(String brand, String model, String on_road_price,
@@ -42,8 +45,7 @@ public class AddBikeRequest {
         this.image_path = image_path;
     }
 
-    // New constructor with all fields
-    // In AddBikeRequest.java - Make sure this constructor exists:
+    // New constructor with all fields including new ones
     public AddBikeRequest(String brand, String model, String variant, String year,
                           String engine_cc, String fuel_type, String transmission,
                           String braking_type, String on_road_price, String insurance,
@@ -52,7 +54,7 @@ public class AddBikeRequest {
                           String ground_clearance, String warranty_period,
                           String free_services_count, String registration_proof,
                           String price_disclaimer, String type, String features,
-                          String image_path) {
+                          String image_path, String date, String engine_number, String chassis_number) {
         this.brand = brand;
         this.model = model;
         this.variant = variant;
@@ -77,6 +79,9 @@ public class AddBikeRequest {
         this.type = type;
         this.features = features;
         this.image_path = image_path;
+        this.date = date;
+        this.engine_number = engine_number;
+        this.chassis_number = chassis_number;
     }
 
     // Getters and Setters for all fields
@@ -151,4 +156,13 @@ public class AddBikeRequest {
 
     public String getImage_path() { return image_path; }
     public void setImage_path(String image_path) { this.image_path = image_path; }
+
+    public String getDate() { return date; }
+    public void setDate(String date) { this.date = date; }
+
+    public String getEngine_number() { return engine_number; }
+    public void setEngine_number(String engine_number) { this.engine_number = engine_number; }
+
+    public String getChassis_number() { return chassis_number; }
+    public void setChassis_number(String chassis_number) { this.chassis_number = chassis_number; }
 }

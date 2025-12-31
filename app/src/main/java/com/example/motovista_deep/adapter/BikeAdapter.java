@@ -28,7 +28,6 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
     private Context context;
     private List<BikeModel> bikeList;
     private OnBikeClickListener listener;
-    private String baseUrl;
 
     public interface OnBikeClickListener {
         void onBikeClick(BikeModel bike);
@@ -38,12 +37,6 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
         this.context = context;
         this.bikeList = bikeList;
         this.listener = listener;
-        this.baseUrl = RetrofitClient.BASE_URL;
-
-        // Ensure base URL ends with /
-        if (this.baseUrl != null && !this.baseUrl.endsWith("/")) {
-            this.baseUrl += "/";
-        }
     }
 
     @NonNull
@@ -57,6 +50,12 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
     public void onBindViewHolder(@NonNull BikeViewHolder holder, int position) {
         BikeModel bike = bikeList.get(position);
 
+        // Get base URL from RetrofitClient
+        String baseUrl = RetrofitClient.BASE_URL;
+        // Ensure base URL ends with /
+        if (baseUrl != null && !baseUrl.endsWith("/")) {
+            baseUrl += "/";
+        }
         // Set base URL for bike model
         bike.setBaseUrl(baseUrl);
 
@@ -101,7 +100,7 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
         }
 
         // 3. LOAD BIKE IMAGE
-        loadBikeImage(holder, bike, position);
+        loadBikeImage(holder, bike, position, baseUrl);
 
         // 4. CLICK LISTENER
         holder.cardBike.setOnClickListener(v -> {
@@ -114,7 +113,7 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
         holder.ivChevron.setColorFilter(ContextCompat.getColor(context, R.color.primary_color));
     }
 
-    private void loadBikeImage(BikeViewHolder holder, BikeModel bike, int position) {
+    private void loadBikeImage(BikeViewHolder holder, BikeModel bike, int position, String baseUrl) {
         // Get the image URL from bike
         String imageUrl = bike.getImageUrl();
 
@@ -138,8 +137,8 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
                 .skipMemoryCache(false)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
-        // ✅ FIX: Create a final variable for use in inner class
-        final String finalImageUrl = imageUrl != null ? cleanImageUrl(imageUrl) : "";
+        // Clean the image URL
+        final String finalImageUrl = cleanImageUrl(imageUrl, baseUrl);
 
         if (finalImageUrl != null && !finalImageUrl.isEmpty()) {
             Log.d("BIKE_ADAPTER", "Cleaned Image URL: " + finalImageUrl);
@@ -170,7 +169,7 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
     }
 
     // Clean image URL
-    private String cleanImageUrl(String url) {
+    private String cleanImageUrl(String url, String baseUrl) {
         if (url == null || url.isEmpty()) {
             return "";
         }
@@ -180,20 +179,8 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
 
         Log.d("BIKE_ADAPTER", "URL before cleaning: " + url);
 
-        // If already a full URL, check if it has uploads/
+        // If already a full URL, return as is
         if (url.startsWith("http://") || url.startsWith("https://")) {
-            // Check if uploads/ is missing
-            if (url.contains(baseUrl)) {
-                String relative = url.replace(baseUrl, "");
-                if (!relative.contains("uploads/")) {
-                    if (relative.startsWith("bikes/")) {
-                        url = baseUrl + "uploads/" + relative;
-                    } else if (relative.startsWith("second_hand_bikes/")) {
-                        url = baseUrl + "uploads/" + relative;
-                    }
-                }
-            }
-            Log.d("BIKE_ADAPTER", "Cleaned URL: " + url);
             return url;
         }
 
@@ -208,15 +195,7 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
 
         // Add base URL
         if (baseUrl != null && !baseUrl.isEmpty()) {
-            String base = baseUrl;
-            if (!base.endsWith("/") && !url.startsWith("/")) {
-                url = "/" + url;
-            }
-            if (base.endsWith("/") && url.startsWith("/")) {
-                url = url.substring(1);
-            }
-
-            String finalUrl = base + url;
+            String finalUrl = baseUrl + url;
             Log.d("BIKE_ADAPTER", "Final URL: " + finalUrl);
             return finalUrl;
         }

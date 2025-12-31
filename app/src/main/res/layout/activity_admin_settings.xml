@@ -1,0 +1,927 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:fitsSystemWindows="true">
+
+    <!-- Main Scroll View -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="80dp">
+
+            <!-- Header with Back Button -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:orientation="horizontal"
+                android:background="@color/card_background"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="@dimen/padding_medium"
+                android:elevation="2dp">
+
+                <!-- Back Button -->
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_arrow_back"
+                    android:tint="@color/primary"
+                    android:padding="12dp"
+                    android:contentDescription="Back"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+                <!-- Title -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Admin Settings"
+                    android:textColor="@color/text_primary_light"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:fontFamily="sans-serif-medium" />
+
+                <!-- Empty space for alignment -->
+                <View
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+
+            </LinearLayout>
+
+            <!-- Settings Content -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_medium"
+                android:paddingTop="@dimen/padding_small">
+
+                <!-- Account Management Section -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ACCOUNT MANAGEMENT"
+                    android:textColor="@color/text_secondary_light"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.5"
+                    android:fontFamily="sans-serif"
+                    android:paddingHorizontal="@dimen/padding_small"
+                    android:paddingTop="@dimen/padding_large"
+                    android:paddingBottom="@dimen/padding_small" />
+
+                <!-- Manage Profile Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    android:background="@drawable/rounded_card_light">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_medium"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:id="@+id/cardManageProfile">
+
+                        <!-- Icon Container -->
+                        <LinearLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/icon_circle_bg_primary"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_person"
+                                android:tint="@color/primary"
+                                android:contentDescription="Manage Profile" />
+
+                        </LinearLayout>
+
+                        <!-- Text Content -->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:text="Manage Profile"
+                            android:textColor="@color/text_primary_light"
+                            android:textSize="16sp"
+                            android:textStyle="normal"
+                            android:fontFamily="sans-serif" />
+
+                        <!-- Chevron Icon -->
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_chevron_right"
+                            android:tint="@color/text_secondary_light"
+                            android:contentDescription="More" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Change Password Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    android:background="@drawable/rounded_card_light">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_medium"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:id="@+id/cardChangePassword">
+
+                        <!-- Icon Container -->
+                        <LinearLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/icon_circle_bg_primary"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_lock"
+                                android:tint="@color/primary"
+                                android:contentDescription="Change Password" />
+
+                        </LinearLayout>
+
+                        <!-- Text Content -->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:text="Change Password"
+                            android:textColor="@color/text_primary_light"
+                            android:textSize="16sp"
+                            android:textStyle="normal"
+                            android:fontFamily="sans-serif" />
+
+                        <!-- Chevron Icon -->
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_chevron_right"
+                            android:tint="@color/text_secondary_light"
+                            android:contentDescription="More" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Security Settings Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="@dimen/padding_large"
+                    android:background="@drawable/rounded_card_light">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_medium"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:id="@+id/cardSecuritySettings">
+
+                        <!-- Icon Container -->
+                        <LinearLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/icon_circle_bg_primary"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_verified_user"
+                                android:tint="@color/primary"
+                                android:contentDescription="Security Settings" />
+
+                        </LinearLayout>
+
+                        <!-- Text Content -->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:text="Security Settings"
+                            android:textColor="@color/text_primary_light"
+                            android:textSize="16sp"
+                            android:textStyle="normal"
+                            android:fontFamily="sans-serif" />
+
+                        <!-- Chevron Icon -->
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_chevron_right"
+                            android:tint="@color/text_secondary_light"
+                            android:contentDescription="More" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- User & Permissions Section -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="USER &amp; PERMISSIONS"
+                    android:textColor="@color/text_secondary_light"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.5"
+                    android:fontFamily="sans-serif"
+                    android:paddingHorizontal="@dimen/padding_small"
+                    android:paddingBottom="@dimen/padding_small" />
+
+                <!-- User Management Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    android:background="@drawable/rounded_card_light">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_medium"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:id="@+id/cardUserManagement">
+
+                        <!-- Icon Container -->
+                        <LinearLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/icon_circle_bg_primary"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_group"
+                                android:tint="@color/primary"
+                                android:contentDescription="User Management" />
+
+                        </LinearLayout>
+
+                        <!-- Text Content -->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:text="User Management"
+                            android:textColor="@color/text_primary_light"
+                            android:textSize="16sp"
+                            android:textStyle="normal"
+                            android:fontFamily="sans-serif" />
+
+                        <!-- Chevron Icon -->
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_chevron_right"
+                            android:tint="@color/text_secondary_light"
+                            android:contentDescription="More" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Role Management Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="@dimen/padding_large"
+                    android:background="@drawable/rounded_card_light">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_medium"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:id="@+id/cardRoleManagement">
+
+                        <!-- Icon Container -->
+                        <LinearLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/icon_circle_bg_primary"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_badge"
+                                android:tint="@color/primary"
+                                android:contentDescription="Role Management" />
+
+                        </LinearLayout>
+
+                        <!-- Text Content -->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:text="Role Management"
+                            android:textColor="@color/text_primary_light"
+                            android:textSize="16sp"
+                            android:textStyle="normal"
+                            android:fontFamily="sans-serif" />
+
+                        <!-- Chevron Icon -->
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_chevron_right"
+                            android:tint="@color/text_secondary_light"
+                            android:contentDescription="More" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- App Configuration Section -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="APP CONFIGURATION"
+                    android:textColor="@color/text_secondary_light"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.5"
+                    android:fontFamily="sans-serif"
+                    android:paddingHorizontal="@dimen/padding_small"
+                    android:paddingBottom="@dimen/padding_small" />
+
+                <!-- Notification Preferences Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    android:background="@drawable/rounded_card_light">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_medium"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:id="@+id/cardNotificationPreferences">
+
+                        <!-- Icon Container -->
+                        <LinearLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/icon_circle_bg_primary"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_notifications"
+                                android:tint="@color/primary"
+                                android:contentDescription="Notification Preferences" />
+
+                        </LinearLayout>
+
+                        <!-- Text Content -->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:text="Notification Preferences"
+                            android:textColor="@color/text_primary_light"
+                            android:textSize="16sp"
+                            android:textStyle="normal"
+                            android:fontFamily="sans-serif" />
+
+                        <!-- Chevron Icon -->
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_chevron_right"
+                            android:tint="@color/text_secondary_light"
+                            android:contentDescription="More" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- System Configurations Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    android:background="@drawable/rounded_card_light">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_medium"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:id="@+id/cardSystemConfigurations">
+
+                        <!-- Icon Container -->
+                        <LinearLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/icon_circle_bg_primary"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_tune"
+                                android:tint="@color/primary"
+                                android:contentDescription="System Configurations" />
+
+                        </LinearLayout>
+
+                        <!-- Text Content -->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:text="System Configurations"
+                            android:textColor="@color/text_primary_light"
+                            android:textSize="16sp"
+                            android:textStyle="normal"
+                            android:fontFamily="sans-serif" />
+
+                        <!-- Chevron Icon -->
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_chevron_right"
+                            android:tint="@color/text_secondary_light"
+                            android:contentDescription="More" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Maintenance Mode Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="@dimen/padding_large"
+                    android:background="@drawable/rounded_card_light">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_medium"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:id="@+id/cardMaintenanceMode">
+
+                        <!-- Icon Container -->
+                        <LinearLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/icon_circle_bg_primary"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_construction"
+                                android:tint="@color/primary"
+                                android:contentDescription="Maintenance Mode" />
+
+                        </LinearLayout>
+
+                        <!-- Text Content -->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:text="Maintenance Mode"
+                            android:textColor="@color/text_primary_light"
+                            android:textSize="16sp"
+                            android:textStyle="normal"
+                            android:fontFamily="sans-serif" />
+
+                        <!-- Toggle Switch -->
+                        <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/switchMaintenanceMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"/>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Support & Information Section -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="SUPPORT &amp; INFORMATION"
+                    android:textColor="@color/text_secondary_light"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.5"
+                    android:fontFamily="sans-serif"
+                    android:paddingHorizontal="@dimen/padding_small"
+                    android:paddingBottom="@dimen/padding_small" />
+
+                <!-- Help & Support Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    android:background="@drawable/rounded_card_light">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_medium"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:id="@+id/cardHelpSupport">
+
+                        <!-- Icon Container -->
+                        <LinearLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/icon_circle_bg_primary"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_help_outline"
+                                android:tint="@color/primary"
+                                android:contentDescription="Help &amp; Support" />
+
+                        </LinearLayout>
+
+                        <!-- Text Content -->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:text="Help &amp; Support"
+                            android:textColor="@color/text_primary_light"
+                            android:textSize="16sp"
+                            android:textStyle="normal"
+                            android:fontFamily="sans-serif" />
+
+                        <!-- Chevron Icon -->
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_chevron_right"
+                            android:tint="@color/text_secondary_light"
+                            android:contentDescription="More" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- About Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="1dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="@dimen/padding_large"
+                    android:background="@drawable/rounded_card_light">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_medium"
+                        android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:id="@+id/cardAbout">
+
+                        <!-- Icon Container -->
+                        <LinearLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/icon_circle_bg_primary"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_help_outline"
+                                android:tint="@color/primary"
+                                android:contentDescription="About" />
+
+                        </LinearLayout>
+
+                        <!-- Text Content -->
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:text="About"
+                            android:textColor="@color/text_primary_light"
+                            android:textSize="16sp"
+                            android:textStyle="normal"
+                            android:fontFamily="sans-serif" />
+
+                        <!-- Chevron Icon -->
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_chevron_right"
+                            android:tint="@color/text_secondary_light"
+                            android:contentDescription="More" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Logout Button -->
+                <Button
+                    android:id="@+id/btnLogout"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="Log Out"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif"
+                    android:background="@drawable/accent_button"
+                    android:drawableStart="@drawable/ic_logout"
+                    android:drawablePadding="8dp"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:paddingHorizontal="16dp" />
+
+                <!-- App Version -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="App Version 1.0.0"
+                    android:textColor="@color/text_secondary_light"
+                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginTop="@dimen/padding_medium"
+                    android:paddingHorizontal="16dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Navigation (Same as Admin Dashboard) -->
+    <LinearLayout
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:elevation="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Dashboard Tab -->
+        <LinearLayout
+            android:id="@+id/tabDashboard"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_dashboard"
+                android:tint="@color/gray_400"
+                android:contentDescription="Dashboard" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dashboard"
+                android:textColor="@color/gray_400"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- Inventory Tab -->
+        <LinearLayout
+            android:id="@+id/tabInventory"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_inventory"
+                android:tint="@color/gray_400"
+                android:contentDescription="Inventory" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Inventory"
+                android:textColor="@color/gray_400"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- Bikes Tab -->
+        <LinearLayout
+            android:id="@+id/tabBikes"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_two_wheeler"
+                android:tint="@color/gray_400"
+                android:contentDescription="Bikes" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bikes"
+                android:textColor="@color/gray_400"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- Customers Tab -->
+        <LinearLayout
+            android:id="@+id/tabCustomers"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_groups"
+                android:tint="@color/gray_400"
+                android:contentDescription="Customers" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Customers"
+                android:textColor="@color/gray_400"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- Settings Tab (Active) -->
+        <LinearLayout
+            android:id="@+id/tabSettings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_settings"
+                android:tint="@color/primary_color"
+                android:contentDescription="Settings" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Settings"
+                android:textColor="@color/primary_color"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

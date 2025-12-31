@@ -54,7 +54,7 @@ dependencies {
 
     implementation ("de.hdodenhof:circleimageview:3.1.0")
 
-
+    implementation("androidx.gridlayout:gridlayout:1.0.0")
 
 
     implementation ("com.github.chrisbanes:PhotoView:2.3.0")
@@ -63,6 +63,8 @@ dependencies {
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
     // Alternative: TouchImageView for zooming
     //implementation ("com.github.MikeOrtiz:TouchImageView:3.3")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("androidx.cardview:cardview:1.0.0")
 
 
 }

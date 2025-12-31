@@ -22,6 +22,7 @@ import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.helpers.SharedPrefManager;
 import com.example.motovista_deep.models.GenericResponse;
 import com.example.motovista_deep.models.DeleteBikeRequest;
+import com.example.motovista_deep.models.GetBikeByIdResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,6 +41,7 @@ public class BikeDetailsActivity extends AppCompatActivity {
     private BikeModel bike;
     private String bikeType;
     private int bikeId;
+    private boolean isDataLoaded = false;
 
     private ImageSliderAdapter imageSliderAdapter;
     private Handler sliderHandler = new Handler();
@@ -57,15 +59,32 @@ public class BikeDetailsActivity extends AppCompatActivity {
             bike = intent.getParcelableExtra("BIKE_MODEL");
             bikeType = intent.getStringExtra("BIKE_TYPE");
             bikeId = bike.getId();
+
+            // Debug: Check what data we have from intent
+            logBikeDetails("From Intent");
         }
 
         initializeViews();
         setupListeners();
         setupImageSlider();
-        loadBikeData();
+        // Changed from loadBikeData() to fetchFreshBikeData()
+        fetchFreshBikeData();
     }
 
-    // ✅ RENAME THIS METHOD to avoid duplicate
+    private void logBikeDetails(String source) {
+        Log.d("BIKE_DETAILS_DEBUG", "=== " + source + " ===");
+        if (bike != null) {
+            Log.d("BIKE_DETAILS_DEBUG", "Bike ID: " + bike.getId());
+            Log.d("BIKE_DETAILS_DEBUG", "Date: " + bike.getDate());
+            Log.d("BIKE_DETAILS_DEBUG", "Engine Number: " + bike.getEngine_number());
+            Log.d("BIKE_DETAILS_DEBUG", "Chassis Number: " + bike.getChassis_number());
+            Log.d("BIKE_DETAILS_DEBUG", "Variant: " + bike.getVariant());
+            Log.d("BIKE_DETAILS_DEBUG", "Year: " + bike.getYear());
+        } else {
+            Log.d("BIKE_DETAILS_DEBUG", "Bike object is null!");
+        }
+    }
+
     private String getCleanImageUrl(String url) {
         if (url == null || url.isEmpty()) {
             return "";
@@ -91,34 +110,6 @@ public class BikeDetailsActivity extends AppCompatActivity {
         }
 
         return baseUrl + url;
-    }
-
-    private void debugBikeDetails() {
-        Log.d("BIKE_DETAILS_DEBUG", "=== BIKE DETAILS DEBUG ===");
-        if (bike != null) {
-            Log.d("BIKE_DETAILS_DEBUG", "Bike ID: " + bike.getId());
-            Log.d("BIKE_DETAILS_DEBUG", "Bike Brand: " + bike.getBrand());
-            Log.d("BIKE_DETAILS_DEBUG", "Bike Model: " + bike.getModel());
-
-            // Check image paths
-            Log.d("BIKE_DETAILS_DEBUG", "Image URL from bike: " + bike.getImageUrl());
-            Log.d("BIKE_DETAILS_DEBUG", "Cleaned Image URL: " + getCleanImageUrl(bike.getImageUrl()));
-
-            ArrayList<String> allImages = bike.getAllImages();
-            if (allImages != null && !allImages.isEmpty()) {
-                for (int i = 0; i < allImages.size(); i++) {
-                    String original = allImages.get(i);
-                    Log.d("BIKE_DETAILS_DEBUG", "Image " + i + " Original: " + original);
-                    Log.d("BIKE_DETAILS_DEBUG", "Image " + i + " Cleaned: " + getCleanImageUrl(original));
-                }
-            }
-
-            // Test if image is accessible
-            String testUrl = "http://192.168.0.103/motovista_api/uploads/bikes/6954aa6ccbd79_1767156332.jpg";
-            Log.d("BIKE_DETAILS_DEBUG", "Test URL: " + testUrl);
-        } else {
-            Log.d("BIKE_DETAILS_DEBUG", "Bike object is null!");
-        }
     }
 
     private void initializeViews() {
@@ -158,7 +149,6 @@ public class BikeDetailsActivity extends AppCompatActivity {
         if (bike != null) {
             ArrayList<String> allImages = bike.getAllImages();
             if (allImages != null && !allImages.isEmpty()) {
-                // ✅ USE RENAMED METHOD getCleanImageUrl
                 for (String img : allImages) {
                     String cleanedUrl = getCleanImageUrl(img);
                     imageUrls.add(cleanedUrl);
@@ -251,6 +241,136 @@ public class BikeDetailsActivity extends AppCompatActivity {
         }
     }
 
+    private void fetchFreshBikeData() {
+        // Only fetch if it's a new bike (since new bikes have the date, engine number, chassis number fields)
+        if ("NEW".equalsIgnoreCase(bikeType)) {
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Loading bike details...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
+            String token = SharedPrefManager.getInstance(this).getToken();
+            if (token == null || token.isEmpty()) {
+                progressDialog.dismiss();
+                Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
+                loadBikeDataWithExistingData();
+                return;
+            }
+
+            ApiService apiService = RetrofitClient.getApiService();
+
+            // Debug: Log the bike ID
+            Log.d("BIKE_DETAILS_API", "Fetching bike details for ID: " + bikeId);
+            Log.d("BIKE_DETAILS_API", "Token present: " + (token != null));
+
+            Call<GetBikeByIdResponse> call = apiService.getBikeById("Bearer " + token, bikeId);
+
+            call.enqueue(new Callback<GetBikeByIdResponse>() {
+                @Override
+                public void onResponse(Call<GetBikeByIdResponse> call, Response<GetBikeByIdResponse> response) {
+                    progressDialog.dismiss();
+
+                    Log.d("BIKE_DETAILS_API", "Response code: " + response.code());
+                    Log.d("BIKE_DETAILS_API", "Response is successful: " + response.isSuccessful());
+
+                    if (response.isSuccessful() && response.body() != null) {
+                        GetBikeByIdResponse apiResponse = response.body();
+                        Log.d("BIKE_DETAILS_API", "Response status: " + apiResponse.getStatus());
+                        Log.d("BIKE_DETAILS_API", "Response message: " + apiResponse.getMessage());
+
+                        if ("success".equals(apiResponse.getStatus())) {
+                            GetBikeByIdResponse.BikeData bikeData = apiResponse.getData();
+                            if (bikeData != null) {
+                                Log.d("BIKE_DETAILS_API", "Bike data received:");
+                                Log.d("BIKE_DETAILS_API", "Date: " + bikeData.getDate());
+                                Log.d("BIKE_DETAILS_API", "Engine Number: " + bikeData.getEngine_number());
+                                Log.d("BIKE_DETAILS_API", "Chassis Number: " + bikeData.getChassis_number());
+
+                                // Update bike model with fresh data from API
+                                updateBikeModelWithApiData(bikeData);
+                                logBikeDetails("After API Fetch");
+                                loadBikeData();
+                                isDataLoaded = true;
+                            } else {
+                                Log.e("BIKE_DETAILS_API", "BikeData is null in response");
+                                Toast.makeText(BikeDetailsActivity.this,
+                                        "No bike data found", Toast.LENGTH_SHORT).show();
+                                loadBikeDataWithExistingData();
+                            }
+                        } else {
+                            Log.e("BIKE_DETAILS_API", "API returned error: " + apiResponse.getMessage());
+                            Toast.makeText(BikeDetailsActivity.this,
+                                    apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                            loadBikeDataWithExistingData();
+                        }
+                    } else {
+                        String errorBody = "Unknown error";
+                        try {
+                            if (response.errorBody() != null) {
+                                errorBody = response.errorBody().string();
+                            }
+                        } catch (Exception e) {
+                            errorBody = e.getMessage();
+                        }
+                        Log.e("BIKE_DETAILS_API", "Response not successful. Error: " + errorBody);
+                        Toast.makeText(BikeDetailsActivity.this,
+                                "Failed to fetch bike details. Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                        loadBikeDataWithExistingData();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<GetBikeByIdResponse> call, Throwable t) {
+                    progressDialog.dismiss();
+                    Log.e("BIKE_DETAILS_API", "API call failed: " + t.getMessage(), t);
+                    Toast.makeText(BikeDetailsActivity.this,
+                            "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    loadBikeDataWithExistingData();
+                }
+            });
+        } else {
+            // For second hand bikes, just use existing data
+            loadBikeDataWithExistingData();
+        }
+    }
+
+    private void updateBikeModelWithApiData(GetBikeByIdResponse.BikeData bikeData) {
+        if (bikeData != null && bike != null) {
+            // Update the bike object with fresh data from API
+            bike.setDate(bikeData.getDate());
+            bike.setEngine_number(bikeData.getEngine_number());
+            bike.setChassis_number(bikeData.getChassis_number());
+
+            // Also update other fields that might be missing
+            bike.setVariant(bikeData.getVariant());
+            bike.setYear(bikeData.getYear());
+            bike.setEngineCC(bikeData.getEngine_cc());
+            bike.setFuelType(bikeData.getFuel_type());
+            bike.setTransmission(bikeData.getTransmission());
+            bike.setBrakingType(bikeData.getBraking_type());
+            bike.setOnRoadPrice(bikeData.getOn_road_price());
+            bike.setMileage(bikeData.getMileage());
+            bike.setFuelTankCapacity(bikeData.getFuel_tank_capacity());
+            bike.setKerbWeight(bikeData.getKerb_weight());
+            bike.setSeatHeight(bikeData.getSeat_height());
+            bike.setGroundClearance(bikeData.getGround_clearance());
+            bike.setWarrantyPeriod(bikeData.getWarranty_period());
+            bike.setFreeServicesCount(bikeData.getFree_services_count());
+            bike.setRegistrationProof(bikeData.getRegistration_proof());
+            bike.setPriceDisclaimer(bikeData.getPrice_disclaimer());
+
+            // Set the price for display
+            if (bikeData.getOn_road_price() != null && !bikeData.getOn_road_price().isEmpty()) {
+                try {
+                    double price = Double.parseDouble(bikeData.getOn_road_price());
+                    bike.setPrice(String.valueOf(price));
+                } catch (NumberFormatException e) {
+                    // Keep existing price
+                }
+            }
+        }
+    }
+
     private void loadBikeData() {
         LayoutInflater inflater = LayoutInflater.from(this);
         View detailsView;
@@ -271,6 +391,11 @@ public class BikeDetailsActivity extends AppCompatActivity {
         detailsContainer.addView(detailsView);
     }
 
+    private void loadBikeDataWithExistingData() {
+        // Use existing data without API call
+        loadBikeData();
+    }
+
     private void setupNewBikeDetails(View view) {
         if (bike == null) return;
 
@@ -284,15 +409,41 @@ public class BikeDetailsActivity extends AppCompatActivity {
         TextView tvTransmission = view.findViewById(R.id.tvTransmission);
         TextView tvBrakingType = view.findViewById(R.id.tvBrakingType);
 
-        tvBrand.setText(bike.getBrand());
-        tvModel.setText(bike.getModel());
-        tvVariant.setText(bike.getFeatures() != null && bike.getFeatures().contains("Variant") ?
-                bike.getFeatures().split("Variant:")[1].split(",")[0].trim() : "Standard");
-        tvYear.setText("2024");
-        tvEngineCC.setText(bike.getEngineCC());
-        tvFuelType.setText("Petrol");
-        tvTransmission.setText(bike.getType().contains("Manual") ? "Manual" : "Automatic");
-        tvBrakingType.setText(bike.getBrakingType());
+        // NEW FIELDS: Add TextViews for date, engine number, chassis number
+        TextView tvDate = view.findViewById(R.id.tvDate);
+        TextView tvEngineNumber = view.findViewById(R.id.tvEngineNumber);
+        TextView tvChassisNumber = view.findViewById(R.id.tvChassisNumber);
+
+        // Set values with proper null checks
+        tvBrand.setText(bike.getBrand() != null ? bike.getBrand() : "N/A");
+        tvModel.setText(bike.getModel() != null ? bike.getModel() : "N/A");
+        tvVariant.setText(bike.getVariant() != null && !bike.getVariant().isEmpty() ?
+                bike.getVariant() : "Standard");
+        tvYear.setText(bike.getYear() != null && !bike.getYear().isEmpty() ?
+                bike.getYear() : "2024");
+        tvEngineCC.setText(bike.getEngineCC() != null && !bike.getEngineCC().isEmpty() ?
+                bike.getEngineCC() : "N/A");
+        tvFuelType.setText(bike.getFuel_type() != null && !bike.getFuel_type().isEmpty() ?
+                bike.getFuel_type() : "Petrol");
+        tvTransmission.setText(bike.getTransmission() != null && !bike.getTransmission().isEmpty() ?
+                bike.getTransmission() : "Manual");
+        tvBrakingType.setText(bike.getBrakingType() != null && !bike.getBrakingType().isEmpty() ?
+                bike.getBrakingType() : "N/A");
+
+        // SET NEW FIELDS - These should now have data from API
+        String date = bike.getDate();
+        String engineNumber = bike.getEngine_number();
+        String chassisNumber = bike.getChassis_number();
+
+        Log.d("BIKE_DETAILS_UI", "Date: " + date);
+        Log.d("BIKE_DETAILS_UI", "Engine Number: " + engineNumber);
+        Log.d("BIKE_DETAILS_UI", "Chassis Number: " + chassisNumber);
+
+        tvDate.setText(date != null && !date.isEmpty() ? date : "Not specified");
+        tvEngineNumber.setText(engineNumber != null && !engineNumber.isEmpty() ?
+                engineNumber : "Not specified");
+        tvChassisNumber.setText(chassisNumber != null && !chassisNumber.isEmpty() ?
+                chassisNumber : "Not specified");
 
         // Price Configuration
         TextView tvExShowroom = view.findViewById(R.id.tvExShowroom);
@@ -308,7 +459,17 @@ public class BikeDetailsActivity extends AppCompatActivity {
             try {
                 total = Double.parseDouble(price.replace(",", ""));
             } catch (NumberFormatException e) {
-                total = 210350;
+                // Try to use on_road_price if price parsing fails
+                String onRoadPrice = bike.getOnRoadPrice();
+                if (onRoadPrice != null && !onRoadPrice.isEmpty()) {
+                    try {
+                        total = Double.parseDouble(onRoadPrice.replace(",", ""));
+                    } catch (NumberFormatException ex) {
+                        total = 210350; // Default fallback
+                    }
+                } else {
+                    total = 210350; // Default fallback
+                }
             }
 
             tvExShowroom.setText("₹ " + formatPrice(total * 0.87));
@@ -316,6 +477,23 @@ public class BikeDetailsActivity extends AppCompatActivity {
             tvRegistration.setText("₹ " + formatPrice(total * 0.05));
             tvLTRT.setText("₹ " + formatPrice(total * 0.02));
             tvTotalPrice.setText("₹ " + formatPrice(total));
+        } else {
+            // Try to use on_road_price if price is empty
+            String onRoadPrice = bike.getOnRoadPrice();
+            if (onRoadPrice != null && !onRoadPrice.isEmpty()) {
+                try {
+                    double total = Double.parseDouble(onRoadPrice.replace(",", ""));
+                    tvExShowroom.setText("₹ " + formatPrice(total * 0.87));
+                    tvInsurance.setText("₹ " + formatPrice(total * 0.06));
+                    tvRegistration.setText("₹ " + formatPrice(total * 0.05));
+                    tvLTRT.setText("₹ " + formatPrice(total * 0.02));
+                    tvTotalPrice.setText("₹ " + formatPrice(total));
+                } catch (NumberFormatException e) {
+                    setDefaultPriceValues(tvExShowroom, tvInsurance, tvRegistration, tvLTRT, tvTotalPrice);
+                }
+            } else {
+                setDefaultPriceValues(tvExShowroom, tvInsurance, tvRegistration, tvLTRT, tvTotalPrice);
+            }
         }
 
         // Specifications
@@ -325,23 +503,32 @@ public class BikeDetailsActivity extends AppCompatActivity {
         TextView tvSeatHeight = view.findViewById(R.id.tvSeatHeight);
         TextView tvGroundClearance = view.findViewById(R.id.tvGroundClearance);
 
-        tvMileage.setText(bike.getMileage());
-        tvFuelTank.setText("11 L");
-        tvKerbWeight.setText("142 kg");
-        tvSeatHeight.setText("815 mm");
-        tvGroundClearance.setText("170 mm");
+        tvMileage.setText(bike.getMileage() != null && !bike.getMileage().isEmpty() ?
+                bike.getMileage() : "N/A");
+        tvFuelTank.setText(bike.getFuel_tank() != null && !bike.getFuel_tank().isEmpty() ?
+                bike.getFuel_tank() : "11 L");
+        tvKerbWeight.setText(bike.getKerb_weight() != null && !bike.getKerb_weight().isEmpty() ?
+                bike.getKerb_weight() : "142 kg");
+        tvSeatHeight.setText(bike.getSeat_height() != null && !bike.getSeat_height().isEmpty() ?
+                bike.getSeat_height() : "815 mm");
+        tvGroundClearance.setText(bike.getGround_clearance() != null && !bike.getGround_clearance().isEmpty() ?
+                bike.getGround_clearance() : "170 mm");
 
         // Warranty
         TextView tvWarrantyPeriod = view.findViewById(R.id.tvWarrantyPeriod);
         TextView tvFreeServices = view.findViewById(R.id.tvFreeServices);
-        tvWarrantyPeriod.setText("5 Years");
-        tvFreeServices.setText("4 Services");
+        tvWarrantyPeriod.setText(bike.getWarranty() != null && !bike.getWarranty().isEmpty() ?
+                bike.getWarranty() : "5 Years");
+        tvFreeServices.setText(bike.getFree_services() != null && !bike.getFree_services().isEmpty() ?
+                bike.getFree_services() : "4 Services");
 
         // Legal Notes
         TextView tvRegistrationProof = view.findViewById(R.id.tvRegistrationProof);
         TextView tvPriceDisclaimer = view.findViewById(R.id.tvPriceDisclaimer);
-        tvRegistrationProof.setText("For registration purpose any one of the following is required in ORIGINAL & XEROX for Address Proof: Aadhar Card, LIC Policy, Passport, GST, Voter ID, PAN Card");
-        tvPriceDisclaimer.setText("Price & taxes ruling at the time of delivery will be applicable.");
+        tvRegistrationProof.setText(bike.getRegistration_proof() != null && !bike.getRegistration_proof().isEmpty() ?
+                bike.getRegistration_proof() : "For registration purpose any one of the following is required in ORIGINAL & XEROX for Address Proof: Aadhar Card, LIC Policy, Passport, GST, Voter ID, PAN Card");
+        tvPriceDisclaimer.setText(bike.getPrice_disclaimer() != null && !bike.getPrice_disclaimer().isEmpty() ?
+                bike.getPrice_disclaimer() : "Price & taxes ruling at the time of delivery will be applicable.");
 
         // Bank Details
         TextView tvAccountName = view.findViewById(R.id.tvAccountName);
@@ -355,6 +542,15 @@ public class BikeDetailsActivity extends AppCompatActivity {
         setupFittings(view);
     }
 
+    private void setDefaultPriceValues(TextView tvExShowroom, TextView tvInsurance,
+                                       TextView tvRegistration, TextView tvLTRT, TextView tvTotalPrice) {
+        tvExShowroom.setText("₹ 1,82,000");
+        tvInsurance.setText("₹ 12,500");
+        tvRegistration.setText("₹ 14,350");
+        tvLTRT.setText("₹ 1,500");
+        tvTotalPrice.setText("₹ 2,10,350");
+    }
+
     private void setupSHBikeDetails(View view) {
         if (bike == null) return;
 
@@ -364,17 +560,20 @@ public class BikeDetailsActivity extends AppCompatActivity {
         TextView tvYear = view.findViewById(R.id.tvYear);
         TextView tvOdometer = view.findViewById(R.id.tvOdometer);
 
-        tvBrand.setText(bike.getBrand());
-        tvModel.setText(bike.getModel());
+        tvBrand.setText(bike.getBrand() != null ? bike.getBrand() : "N/A");
+        tvModel.setText(bike.getModel() != null ? bike.getModel() : "N/A");
 
         String price = bike.getPrice();
         if (price != null && !price.isEmpty()) {
             price = price.replace("₹", "").trim();
             tvExpectedPrice.setText("₹" + price);
+        } else {
+            tvExpectedPrice.setText("Price on request");
         }
 
-        tvYear.setText(bike.getYear());
-        tvOdometer.setText(bike.getOdometer());
+        tvYear.setText(bike.getYear() != null ? bike.getYear() : "N/A");
+        tvOdometer.setText(bike.getOdometer() != null && !bike.getOdometer().isEmpty() ?
+                bike.getOdometer() : "N/A");
     }
 
     private String formatPrice(double price) {
@@ -418,6 +617,8 @@ public class BikeDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddBikeActivity.class);
         intent.putExtra("EDIT_MODE", true);
         intent.putExtra("BIKE_ID", bikeId);
+        // Pass the updated bike data
+        intent.putExtra("BIKE_MODEL", bike);
         startActivityForResult(intent, 1);
     }
 
@@ -425,6 +626,7 @@ public class BikeDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AddSecondHandBikeActivity.class);
         intent.putExtra("EDIT_MODE", true);
         intent.putExtra("BIKE_ID", bikeId);
+        intent.putExtra("BIKE_MODEL", bike);
         startActivityForResult(intent, 1);
     }
 
@@ -432,8 +634,9 @@ public class BikeDetailsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            finish();
-            startActivity(getIntent());
+            // Refresh the data when coming back from edit
+            isDataLoaded = false;
+            fetchFreshBikeData();
         }
     }
 

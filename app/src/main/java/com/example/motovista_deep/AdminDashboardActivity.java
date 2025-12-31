@@ -226,9 +226,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setActiveTab(tabInventory);
-                Toast.makeText(AdminDashboardActivity.this, "Inventory selected", Toast.LENGTH_SHORT).show();
                 // Navigate to Inventory screen
-                // startActivity(new Intent(AdminDashboardActivity.this, InventoryActivity.class));
+                Intent intent = new Intent(AdminDashboardActivity.this, InventoryActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -259,8 +260,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 setActiveTab(tabSettings);
                 Toast.makeText(AdminDashboardActivity.this, "Settings selected", Toast.LENGTH_SHORT).show();
-                // Navigate to Settings screen
-                // startActivity(new Intent(AdminDashboardActivity.this, SettingsActivity.class));
+                // Navigate to Settings screen - ADD THIS LINE
+                Intent intent = new Intent(AdminDashboardActivity.this, AdminSettingsActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
     }

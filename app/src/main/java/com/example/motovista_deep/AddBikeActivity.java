@@ -21,9 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-// Your existing imports...
-import android.graphics.Bitmap; // If you have this
-import android.graphics.BitmapFactory; // Add this line
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.motovista_deep.api.ApiService;
@@ -59,6 +58,8 @@ public class AddBikeActivity extends AppCompatActivity {
     private EditText etFuelTank, etKerbWeight, etSeatHeight, etGroundClearance;
     private EditText etExShowroom, etInsurance, etRegistration, etLTRT, etTotalOnRoad;
     private EditText etFreeServices, etRegistrationProof, etPriceDisclaimer;
+    // Add after existing EditText declarations
+    private EditText etDate, etEngineNumber, etChassisNumber;
 
     private Spinner spinnerYear, spinnerFuelType, spinnerTransmission;
     private Spinner spinnerBrakingType, spinnerWarranty;
@@ -118,6 +119,7 @@ public class AddBikeActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        // Existing EditText initializations
         etBrand = findViewById(R.id.etBrand);
         etModel = findViewById(R.id.etModel);
         etVariant = findViewById(R.id.etVariant);
@@ -135,6 +137,11 @@ public class AddBikeActivity extends AppCompatActivity {
         etFreeServices = findViewById(R.id.etFreeServices);
         etRegistrationProof = findViewById(R.id.etRegistrationProof);
         etPriceDisclaimer = findViewById(R.id.etPriceDisclaimer);
+
+        // Add these lines after other EditText initializations
+        etDate = findViewById(R.id.etDate);
+        etEngineNumber = findViewById(R.id.etEngineNumber);
+        etChassisNumber = findViewById(R.id.etChassisNumber);
 
         spinnerYear = findViewById(R.id.spinnerYear);
         spinnerFuelType = findViewById(R.id.spinnerFuelType);
@@ -498,6 +505,17 @@ public class AddBikeActivity extends AppCompatActivity {
             etExShowroom.setText(bikeData.getOn_road_price());
         }
 
+        // Populate new fields if they exist
+        if (bikeData.getDate() != null) {
+            etDate.setText(bikeData.getDate());
+        }
+        if (bikeData.getEngine_number() != null) {
+            etEngineNumber.setText(bikeData.getEngine_number());
+        }
+        if (bikeData.getChassis_number() != null) {
+            etChassisNumber.setText(bikeData.getChassis_number());
+        }
+
         setSpinnerSelection(spinnerBrakingType, bikeData.getBraking_type());
         setSpinnerSelection(spinnerTransmission, bikeData.getType());
 
@@ -616,6 +634,18 @@ public class AddBikeActivity extends AppCompatActivity {
             etExShowroom.requestFocus();
             return false;
         }
+        // Add after existing validations
+        if (etEngineNumber.getText().toString().trim().isEmpty()) {
+            etEngineNumber.setError("Engine number is required");
+            etEngineNumber.requestFocus();
+            return false;
+        }
+
+        if (etChassisNumber.getText().toString().trim().isEmpty()) {
+            etChassisNumber.setError("Chassis number is required");
+            etChassisNumber.requestFocus();
+            return false;
+        }
         return true;
     }
 
@@ -686,7 +716,6 @@ public class AddBikeActivity extends AppCompatActivity {
                                 Log.d("IMAGE_UPLOAD", "Response status: " + status);
 
                                 if ("success".equals(status)) {
-                                    // ✅ ADD DEBUG LOGGING
                                     List<String> uploadedImages = uploadResponse.getData();
                                     if (uploadedImages != null) {
                                         for (int i = 0; i < uploadedImages.size(); i++) {
@@ -740,7 +769,6 @@ public class AddBikeActivity extends AppCompatActivity {
         }
     }
 
-    // Add this new method for image compression
     private File getCompressedImageFile(Uri uri) {
         try {
             InputStream inputStream = getContentResolver().openInputStream(uri);
@@ -784,7 +812,6 @@ public class AddBikeActivity extends AppCompatActivity {
         }
     }
 
-    // Helper method to calculate sample size
     private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -865,7 +892,6 @@ public class AddBikeActivity extends AppCompatActivity {
 
         Log.d("BIKE_SAVE", "Final Image Paths: " + imagePaths);
 
-        // ... rest of your saveBikeData method remains the same
         // Calculate total price
         double totalPrice = 0;
         try {
@@ -906,6 +932,10 @@ public class AddBikeActivity extends AppCompatActivity {
         String insurance = etInsurance.getText().toString().trim();
         String registrationCharge = etRegistration.getText().toString().trim();
         String ltrt = etLTRT.getText().toString().trim();
+        // Add these lines after other form value retrievals
+        String date = etDate.getText().toString().trim();
+        String engineNumber = etEngineNumber.getText().toString().trim();
+        String chassisNumber = etChassisNumber.getText().toString().trim();
 
         // Build features string
         StringBuilder featuresBuilder = new StringBuilder();
@@ -956,7 +986,8 @@ public class AddBikeActivity extends AppCompatActivity {
                     insurance, registrationCharge, ltrt,
                     mileage, fuelTank, kerbWeight, seatHeight, groundClearance,
                     warranty, freeServices, registrationProof, priceDisclaimer,
-                    "NEW", features, imagePaths
+                    "NEW", features, imagePaths,
+                    date, engineNumber, chassisNumber
             );
 
             Log.d("BIKE_SAVE", "Update request created");
@@ -1011,7 +1042,8 @@ public class AddBikeActivity extends AppCompatActivity {
                     insurance, registrationCharge, ltrt,
                     mileage, fuelTank, kerbWeight, seatHeight, groundClearance,
                     warranty, freeServices, registrationProof, priceDisclaimer,
-                    "NEW", features, imagePaths
+                    "NEW", features, imagePaths,
+                    date, engineNumber, chassisNumber
             );
 
             Log.d("BIKE_SAVE", "Add request created");
@@ -1076,6 +1108,9 @@ public class AddBikeActivity extends AppCompatActivity {
         etFreeServices.setText("");
         etRegistrationProof.setText("");
         etPriceDisclaimer.setText("");
+        etDate.setText("");
+        etEngineNumber.setText("");
+        etChassisNumber.setText("");
 
         spinnerYear.setSelection(0);
         spinnerFuelType.setSelection(0);

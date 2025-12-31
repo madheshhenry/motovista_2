@@ -87,4 +87,8 @@
 
     <color name="error">#B00020</color>
     <color name="error_light">#FFCDD2</color>
+
+    <color name="accent_color">#FFC72C</color>
+
+
 </resources>

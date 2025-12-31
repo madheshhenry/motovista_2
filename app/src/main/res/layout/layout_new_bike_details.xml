@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:columnCount="2"
-            android:rowCount="4"
+            android:rowCount="7"
             android:alignmentMode="alignBounds"
             android:columnOrderPreserved="false"
             android:useDefaultMargins="true">
@@ -122,6 +122,25 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
+            <!-- Date -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:text="Date:"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:text="Not specified"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
             <!-- Model Year -->
             <TextView
                 android:layout_width="wrap_content"
@@ -137,6 +156,44 @@
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:text="2024"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- Engine Number -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:text="Engine No:"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvEngineNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:text="Not specified"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- Chassis Number -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:text="Chassis No:"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvChassisNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:text="Not specified"
                 android:textColor="@color/text_dark"
                 android:textSize="14sp"
                 android:textStyle="bold" />

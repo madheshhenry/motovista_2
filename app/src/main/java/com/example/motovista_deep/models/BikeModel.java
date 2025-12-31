@@ -38,6 +38,11 @@ public class BikeModel implements Parcelable {
     private String price_disclaimer;
     private String registration_proof;
 
+    // NEW FIELDS - ADDED HERE
+    private String date;
+    private String engine_number;
+    private String chassis_number;
+
     private String odometer;
     private String owner_details;
     private String condition_details;
@@ -326,6 +331,35 @@ public class BikeModel implements Parcelable {
     public String getRegistrationProof() { return registration_proof != null ? registration_proof : ""; }
     public void setRegistrationProof(String registration_proof) { this.registration_proof = registration_proof; }
 
+    // NEW GETTERS AND SETTERS
+    public String getDate() { return date != null ? date : ""; }
+    public void setDate(String date) { this.date = date; }
+
+    public String getEngine_number() { return engine_number != null ? engine_number : ""; }
+    public void setEngine_number(String engine_number) { this.engine_number = engine_number; }
+
+    public String getChassis_number() { return chassis_number != null ? chassis_number : ""; }
+    public void setChassis_number(String chassis_number) { this.chassis_number = chassis_number; }
+
+    // Convenience getters for BikeDetailsActivity
+    public String getFuel_type() { return fuel_type != null ? fuel_type : ""; }
+
+    public String getFuel_tank() { return fuel_tank_capacity != null ? fuel_tank_capacity : ""; }
+
+    public String getKerb_weight() { return kerb_weight != null ? kerb_weight : ""; }
+
+    public String getSeat_height() { return seat_height != null ? seat_height : ""; }
+
+    public String getGround_clearance() { return ground_clearance != null ? ground_clearance : ""; }
+
+    public String getWarranty() { return warranty_period != null ? warranty_period : ""; }
+
+    public String getFree_services() { return free_services_count != null ? free_services_count : ""; }
+
+    public String getRegistration_proof() { return registration_proof != null ? registration_proof : ""; }
+
+    public String getPrice_disclaimer() { return price_disclaimer != null ? price_disclaimer : ""; }
+
     public String getOdometer() { return odometer != null ? odometer : ""; }
     public void setOdometer(String odometer) { this.odometer = odometer; }
 
@@ -367,6 +401,10 @@ public class BikeModel implements Parcelable {
         features = in.readString();
         price_disclaimer = in.readString();
         registration_proof = in.readString();
+        // Read new fields
+        date = in.readString();
+        engine_number = in.readString();
+        chassis_number = in.readString();
         odometer = in.readString();
         owner_details = in.readString();
         condition_details = in.readString();
@@ -406,6 +444,10 @@ public class BikeModel implements Parcelable {
         dest.writeString(features);
         dest.writeString(price_disclaimer);
         dest.writeString(registration_proof);
+        // Write new fields
+        dest.writeString(date);
+        dest.writeString(engine_number);
+        dest.writeString(chassis_number);
         dest.writeString(odometer);
         dest.writeString(owner_details);
         dest.writeString(condition_details);
@@ -452,6 +494,10 @@ public class BikeModel implements Parcelable {
             bike.features = in.readString();
             bike.price_disclaimer = in.readString();
             bike.registration_proof = in.readString();
+            // Read new fields
+            bike.date = in.readString();
+            bike.engine_number = in.readString();
+            bike.chassis_number = in.readString();
             bike.odometer = in.readString();
             bike.owner_details = in.readString();
             bike.condition_details = in.readString();

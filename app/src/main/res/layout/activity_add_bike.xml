@@ -227,6 +227,102 @@
 
                 </LinearLayout>
 
+                <!-- Add these fields in the Basic Bike Details section -->
+                <!-- Date Field -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Date"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="4dp" />
+
+                    <EditText
+                        android:id="@+id/etDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:hint="Select date"
+                        android:inputType="date"
+                        android:paddingHorizontal="12dp"
+                        android:background="@drawable/edittext_background"
+                        android:textColor="@color/text_dark"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <!-- Engine Number and Chassis Number Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <!-- Engine Number -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="8dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Engine Number"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp"
+                            android:layout_marginBottom="4dp" />
+
+                        <EditText
+                            android:id="@+id/etEngineNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:hint="e.g., ENG12345"
+                            android:inputType="text"
+                            android:paddingHorizontal="12dp"
+                            android:background="@drawable/edittext_background"
+                            android:textColor="@color/text_dark"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <!-- Chassis Number -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="8dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Chassis Number"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp"
+                            android:layout_marginBottom="4dp" />
+
+                        <EditText
+                            android:id="@+id/etChassisNumber"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:hint="e.g., CHS12345"
+                            android:inputType="text"
+                            android:paddingHorizontal="12dp"
+                            android:background="@drawable/edittext_background"
+                            android:textColor="@color/text_dark"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
                 <!-- Engine CC and Fuel Type Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
