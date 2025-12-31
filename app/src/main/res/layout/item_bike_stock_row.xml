@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingHorizontal="8dp"
+    android:paddingVertical="12dp"
+    android:gravity="center_vertical">
+
+    <!-- Model Column (30%) -->
+    <TextView
+        android:id="@+id/tvModel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:text="YZF R15 V4"
+        android:textColor="@color/text_dark"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:paddingStart="12dp"
+        android:paddingEnd="4dp"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <!-- Engine No Column (20%) -->
+    <TextView
+        android:id="@+id/tvEngineNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="E987654321"
+        android:textColor="@color/text_gray"
+        android:textSize="12sp"
+        android:fontFamily="monospace"
+        android:paddingHorizontal="4dp"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <!-- Chassis No Column (20%) -->
+    <TextView
+        android:id="@+id/tvChassisNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="C123456789"
+        android:textColor="@color/text_gray"
+        android:textSize="12sp"
+        android:fontFamily="monospace"
+        android:paddingHorizontal="4dp"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <!-- Stock Date Column (15%) -->
+    <TextView
+        android:id="@+id/tvStockDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:text="Oct 24, 2023"
+        android:textColor="@color/text_gray"
+        android:textSize="12sp"
+        android:fontFamily="sans-serif"
+        android:paddingHorizontal="4dp"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <!-- Customer Column (15%) -->
+    <TextView
+        android:id="@+id/tvCustomer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:text="Not Sold"
+        android:textColor="@color/text_gray"
+        android:textSize="12sp"
+        android:fontStyle="italic"
+        android:fontFamily="sans-serif"
+        android:paddingHorizontal="4dp"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <!-- Chevron Icon -->
+    <ImageView
+        android:id="@+id/ivChevron"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_chevron_right"
+        android:tint="@color/gray_400"
+        android:paddingEnd="12dp"
+        android:contentDescription="View Details" />
+
+</LinearLayout>

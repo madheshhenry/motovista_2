@@ -159,11 +159,11 @@ public class InventoryActivity extends AppCompatActivity implements
 
     @Override
     public void onBrandClick(int position, Brand brand) {
-        Toast.makeText(this, brand.getName() + " selected", Toast.LENGTH_SHORT).show();
-        // TODO: Navigate to brand stock screen
-        // Intent intent = new Intent(this, BrandStockActivity.class);
-        // intent.putExtra("BRAND_NAME", brand.getName());
-        // startActivity(intent);
+        // Navigate to brand stock screen
+        Intent intent = new Intent(InventoryActivity.this, BrandStockActivity.class);
+        intent.putExtra("BRAND_NAME", brand.getName());
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override
