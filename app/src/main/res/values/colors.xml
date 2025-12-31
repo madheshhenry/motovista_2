@@ -81,4 +81,10 @@
     <color name="icon_bg_red_light">#FFEF9A9A</color>
     <color name="icon_bg_green_light">#FFA5D6A7</color>
 
+    <color name="gray_50">#FAFAFA</color>
+    <color name="gray_100">#F5F5F5</color>
+    <color name="primary_dark">#3700B3</color>
+
+    <color name="error">#B00020</color>
+    <color name="error_light">#FFCDD2</color>
 </resources>

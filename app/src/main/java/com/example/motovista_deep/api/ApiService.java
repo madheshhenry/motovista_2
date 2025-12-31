@@ -1,5 +1,8 @@
 package com.example.motovista_deep.api;
 
+import com.example.motovista_deep.models.DeleteBikeRequest;
+import com.example.motovista_deep.models.GetBikeByIdResponse;
+import com.example.motovista_deep.models.GetSecondHandBikeByIdResponse;
 import com.example.motovista_deep.models.LoginRequest;
 import com.example.motovista_deep.models.LoginResponse;
 import com.example.motovista_deep.models.GenericResponse;
@@ -9,6 +12,8 @@ import com.example.motovista_deep.models.GetProfileResponse;
 import com.example.motovista_deep.models.GetCustomersResponse;
 import com.example.motovista_deep.models.GetCustomerDetailResponse;
 import com.example.motovista_deep.models.AddBikeRequest;
+import com.example.motovista_deep.models.UpdateBikeRequest;
+import com.example.motovista_deep.models.UpdateSecondHandBikeRequest;
 import com.example.motovista_deep.models.UploadBikeImageResponse;
 import com.example.motovista_deep.models.SecondHandBikeRequest;
 import com.example.motovista_deep.models.GetBikesResponse;
@@ -84,6 +89,7 @@ public interface ApiService {
             @Header("Authorization") String token,
             @Body SecondHandBikeRequest request
     );
+
     @Multipart
     @POST("upload_bike_image.php")
     Call<UploadBikeImageResponse> uploadBikeImages(
@@ -111,5 +117,44 @@ public interface ApiService {
 
     @POST("ai_chat.php")
     Call<AiChatResponse> chatWithAi(@Body AiChatRequest request);
+
+    // ✅ NEW: DELETE APIs
+    @POST("delete_bike.php")
+    Call<GenericResponse> deleteBike(
+            @Header("Authorization") String token,
+            @Body DeleteBikeRequest request
+    );
+
+    @POST("delete_second_hand_bike.php")
+    Call<GenericResponse> deleteSecondHandBike(
+            @Header("Authorization") String token,
+            @Body DeleteBikeRequest request
+    );
+
+    // ✅ NEW: UPDATE APIs
+    @POST("update_bike.php")
+    Call<GenericResponse> updateBike(
+            @Header("Authorization") String token,
+            @Body UpdateBikeRequest request
+    );
+
+    @POST("update_second_hand_bike.php")
+    Call<GenericResponse> updateSecondHandBike(
+            @Header("Authorization") String token,
+            @Body UpdateSecondHandBikeRequest request
+    );
+
+    // ✅ NEW: GET SINGLE BIKE APIs (for edit)
+    @GET("get_bike_by_id.php")
+    Call<GetBikeByIdResponse> getBikeById(
+            @Header("Authorization") String token,
+            @Query("bike_id") int bikeId
+    );
+
+    @GET("get_second_hand_bike_by_id.php")
+    Call<GetSecondHandBikeByIdResponse> getSecondHandBikeById(
+            @Header("Authorization") String token,
+            @Query("bike_id") int bikeId
+    );
 
 }

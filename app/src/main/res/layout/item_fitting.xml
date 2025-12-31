@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingVertical="8dp"
+    android:paddingHorizontal="4dp">
+
+    <CheckBox
+        android:id="@+id/cbFitting"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="12dp" />
+
+    <TextView
+        android:id="@+id/tvFittingName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Fitting Name"
+        android:textColor="@color/text_dark"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif-medium" />
+
+    <EditText
+        android:id="@+id/etFittingPrice"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:hint="0"
+        android:inputType="numberDecimal"
+        android:textSize="14sp"
+        android:paddingHorizontal="8dp"
+        android:gravity="end"
+        android:background="@drawable/edittext_background_small"
+        android:textColor="@color/text_dark" />
+
+</LinearLayout>

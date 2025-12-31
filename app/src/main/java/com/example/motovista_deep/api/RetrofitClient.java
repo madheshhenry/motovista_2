@@ -6,37 +6,35 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import com.google.gson.GsonBuilder;
 import com.google.gson.Gson;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonSerializer;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
+import java.util.concurrent.TimeUnit;
 
 public class RetrofitClient {
 
-    public static final String BASE_URL = "http://192.168.0.105/motovista_api/";
+    public static final String BASE_URL = "http://192.168.0.103/motovista_api/";
     private static ApiService apiService;
 
     public static ApiService getApiService() {
         if (apiService == null) {
+            // Create logging interceptor
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
+            // Create OkHttpClient
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .addInterceptor(loggingInterceptor)
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .writeTimeout(30, TimeUnit.SECONDS)
                     .build();
 
-            // Create Gson with custom type adapter for boolean
+            // Create Gson
             Gson gson = new GsonBuilder()
                     .setLenient()
-                    .registerTypeAdapter(Boolean.class, new BooleanTypeAdapter())
-                    .registerTypeAdapter(boolean.class, new BooleanTypeAdapter())
                     .create();
 
             Retrofit retrofit = new Retrofit.Builder()
@@ -44,12 +42,13 @@ public class RetrofitClient {
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
+
             apiService = retrofit.create(ApiService.class);
         }
         return apiService;
     }
 
-    // Custom Boolean type adapter to handle 0/1 from PHP
+    // Custom Boolean type adapter
     static class BooleanTypeAdapter extends TypeAdapter<Boolean> {
         @Override
         public void write(JsonWriter out, Boolean value) throws IOException {

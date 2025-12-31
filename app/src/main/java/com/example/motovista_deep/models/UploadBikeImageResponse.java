@@ -29,9 +29,15 @@ public class UploadBikeImageResponse {
 
     // Helper method to get all paths as JSON string
     public String getAllPathsAsJson() {
-        if (data != null) {
-            return data.toString(); // Returns as JSON array string
+        if (data == null || data.isEmpty()) return "[]";
+
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < data.size(); i++) {
+            sb.append("\"").append(data.get(i)).append("\"");
+            if (i < data.size() - 1) sb.append(",");
         }
-        return "[]";
+        sb.append("]");
+        return sb.toString();
     }
+
 }

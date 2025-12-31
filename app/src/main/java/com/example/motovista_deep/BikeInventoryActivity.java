@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -196,13 +197,18 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
     private void updateBikeList(List<BikeModel> apiBikes) {
         bikeList.clear();
 
-        if (apiBikes != null) {
+        if (apiBikes != null && !apiBikes.isEmpty()) {
+            Log.d("BIKE_INVENTORY", "Processing " + apiBikes.size() + " bikes from API");
+
             for (BikeModel apiBike : apiBikes) {
                 BikeModel bike = new BikeModel();
 
-                // Set base URL first (important!)
+                // Set base URL from RetrofitClient
                 bike.setBaseUrl(RetrofitClient.BASE_URL);
 
+                Log.d("BIKE_INVENTORY", "Processing bike: " + apiBike.getBrand() + " " + apiBike.getModel());
+
+                // Set basic info
                 bike.setId(apiBike.getId());
                 bike.setBrand(apiBike.getBrand());
                 bike.setModel(apiBike.getModel());
@@ -211,70 +217,61 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
                 bike.setType(apiBike.getType());
                 bike.setIsFeatured(apiBike.getIsFeatured());
 
-                // ✅ Process images with base URL
+                // Handle images
                 if (apiBike.getAllImages() != null && !apiBike.getAllImages().isEmpty()) {
-                    // Copy images with base URL
-                    ArrayList<String> imagesWithBaseUrl = new ArrayList<>();
-                    for (String img : apiBike.getAllImages()) {
-                        String fullUrl = buildFullUrl(img, RetrofitClient.BASE_URL);
-                        imagesWithBaseUrl.add(fullUrl);
-                    }
-                    bike.setAllImages(imagesWithBaseUrl);
-                } else if (apiBike.getImageUrlRaw() != null && !apiBike.getImageUrlRaw().isEmpty()) {
-                    // Process string with base URL
-                    bike.setImageUrlsFromString(apiBike.getImageUrlRaw());
+                    Log.d("BIKE_INVENTORY", "Bike has " + apiBike.getAllImages().size() + " images");
+                    bike.setAllImages(apiBike.getAllImages());
+                } else if (apiBike.getImageUrl() != null && !apiBike.getImageUrl().isEmpty()) {
+                    Log.d("BIKE_INVENTORY", "Bike has single image URL: " + apiBike.getImageUrl());
+                    bike.setImageUrl(apiBike.getImageUrl());
+                } else {
+                    Log.d("BIKE_INVENTORY", "Bike has no images");
                 }
 
-                // Set other details
-                if ("NEW".equals(apiBike.getType())) {
+                // Set other details based on type
+                if ("NEW".equalsIgnoreCase(apiBike.getType())) {
                     bike.setOnRoadPrice(apiBike.getOnRoadPrice());
                     bike.setEngineCC(apiBike.getEngineCC());
                     bike.setMileage(apiBike.getMileage());
                     bike.setTopSpeed(apiBike.getTopSpeed());
                     bike.setBrakingType(apiBike.getBrakingType());
                     bike.setFeatures(apiBike.getFeatures());
+                    bike.setVariant(apiBike.getVariant());
+                    bike.setYear(apiBike.getYear());
+                    bike.setFuelType(apiBike.getFuelType());
+                    bike.setTransmission(apiBike.getTransmission());
                 } else {
                     bike.setYear(apiBike.getYear());
                     bike.setOdometer(apiBike.getOdometer());
                     bike.setOwnerDetails(apiBike.getOwnerDetails());
                     bike.setFeatures(apiBike.getFeatures());
+                    bike.setEngineCC(apiBike.getEngineCC());
+                    bike.setBrakingType(apiBike.getBrakingType());
                 }
 
                 bikeList.add(bike);
+
+                // Debug log for images
+                if (bike.hasImages()) {
+                    ArrayList<String> images = bike.getAllImages();
+                    Log.d("BIKE_INVENTORY", "Final bike has " + images.size() + " images");
+                    for (int i = 0; i < images.size(); i++) {
+                        Log.d("BIKE_INVENTORY", "Image " + i + ": " + images.get(i));
+                    }
+                }
             }
+        } else {
+            Log.d("BIKE_INVENTORY", "No bikes received from API");
         }
 
         filteredList.clear();
         filteredList.addAll(bikeList);
-        bikeAdapter.updateList(filteredList);
-    }
 
-    // Helper method to build full URL
-    private String buildFullUrl(String path, String baseUrl) {
-        if (path == null || path.isEmpty()) {
-            return "";
+        if (bikeAdapter != null) {
+            bikeAdapter.updateList(filteredList);
         }
 
-        // If already a full URL, return as is
-        if (path.startsWith("http://") || path.startsWith("https://")) {
-            return path;
-        }
-
-        // Remove leading slash if present
-        if (path.startsWith("/")) {
-            path = path.substring(1);
-        }
-
-        // Add base URL
-        if (baseUrl != null && !baseUrl.isEmpty()) {
-            String base = baseUrl;
-            if (!base.endsWith("/")) {
-                base += "/";
-            }
-            return base + path;
-        }
-
-        return path;
+        Log.d("BIKE_INVENTORY", "Total bikes in adapter: " + bikeList.size());
     }
 
 

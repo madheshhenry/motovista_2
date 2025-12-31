@@ -26,7 +26,8 @@ import com.example.motovista_deep.helpers.SharedPrefManager;
 import com.example.motovista_deep.models.SecondHandBikeRequest;
 import com.example.motovista_deep.models.GenericResponse;
 import com.example.motovista_deep.models.UploadBikeImageResponse;
-
+import com.example.motovista_deep.models.GetSecondHandBikeByIdResponse;
+import com.example.motovista_deep.models.UpdateSecondHandBikeRequest;
 import java.io.File;
 import java.io.InputStream;
 import java.io.FileOutputStream;
@@ -48,7 +49,12 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
     private Button btnSaveBike, btnCancel;
     private ImageView btnBack;
     private LinearLayout uploadContainer, imagePreviewContainer;
-    private TextView tvSelectedCount;
+    private TextView tvSelectedCount, tvTitle;
+
+    // New fields for edit mode
+    private boolean isEditMode = false;
+    private int bikeId = 0;
+    private ArrayList<String> existingImagePaths = new ArrayList<>();
 
     private ArrayList<Uri> imageUris = new ArrayList<>();
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -58,9 +64,22 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_second_hand_bike);
 
+        // Check if in edit mode
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("EDIT_MODE")) {
+            isEditMode = intent.getBooleanExtra("EDIT_MODE", false);
+            bikeId = intent.getIntExtra("BIKE_ID", 0);
+        }
+
         initializeViews();
         setupSpinners();
         setupClickListeners();
+
+        if (isEditMode && bikeId > 0) {
+            loadBikeData();
+            btnSaveBike.setText("Update Bike");
+            tvTitle.setText("Edit Second-Hand Bike");
+        }
     }
 
     private void initializeViews() {
@@ -72,7 +91,7 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
         etOwnerDetails = findViewById(R.id.etOwnerDetails);
         etConditionDetails = findViewById(R.id.etConditionDetails);
         etEngineCC = findViewById(R.id.etEngineCC);
-        etFeatures = findViewById(R.id.etFeatures); // ADDED THIS LINE
+        etFeatures = findViewById(R.id.etFeatures);
         spinnerCondition = findViewById(R.id.spinnerCondition);
         spinnerOwnership = findViewById(R.id.spinnerOwnership);
         spinnerBrakingType = findViewById(R.id.spinnerBrakingType);
@@ -80,6 +99,7 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
         btnCancel = findViewById(R.id.btnCancel);
         btnBack = findViewById(R.id.btnBack);
         uploadContainer = findViewById(R.id.uploadContainer);
+        tvTitle = findViewById(R.id.tvTitle);
 
         // Initialize selected count text view
         tvSelectedCount = findViewById(R.id.tvSelectedCount);
@@ -197,21 +217,145 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
         }
     }
 
+    private void loadBikeData() {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading bike data...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        String token = SharedPrefManager.getInstance(this).getToken();
+        if (token == null || token.isEmpty()) {
+            progressDialog.dismiss();
+            Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ApiService apiService = RetrofitClient.getApiService();
+        apiService.getSecondHandBikeById("Bearer " + token, bikeId)
+                .enqueue(new Callback<com.example.motovista_deep.models.GetSecondHandBikeByIdResponse>() {
+                    @Override
+                    public void onResponse(Call<com.example.motovista_deep.models.GetSecondHandBikeByIdResponse> call,
+                                           Response<com.example.motovista_deep.models.GetSecondHandBikeByIdResponse> response) {
+                        progressDialog.dismiss();
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            com.example.motovista_deep.models.GetSecondHandBikeByIdResponse apiResponse = response.body();
+                            if ("success".equals(apiResponse.getStatus())) {
+                                populateForm(apiResponse.getData());
+                            } else {
+                                Toast.makeText(AddSecondHandBikeActivity.this,
+                                        apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(AddSecondHandBikeActivity.this,
+                                    "Failed to load bike data", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<com.example.motovista_deep.models.GetSecondHandBikeByIdResponse> call, Throwable t) {
+                        progressDialog.dismiss();
+                        Toast.makeText(AddSecondHandBikeActivity.this,
+                                "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void populateForm(com.example.motovista_deep.models.GetSecondHandBikeByIdResponse.SecondHandBikeData bikeData) {
+        etBrand.setText(bikeData.getBrand());
+        etModel.setText(bikeData.getModel());
+        etYear.setText(bikeData.getYear());
+        etOdometer.setText(bikeData.getOdometer());
+        etPrice.setText(bikeData.getPrice());
+        etEngineCC.setText(bikeData.getEngine_cc());
+        etOwnerDetails.setText(bikeData.getOwner_details());
+        etConditionDetails.setText(bikeData.getCondition_details());
+        etFeatures.setText(bikeData.getFeatures());
+
+        // Set spinners
+        setSpinnerSelection(spinnerCondition, bikeData.getCondition());
+        setSpinnerSelection(spinnerOwnership, bikeData.getOwnership());
+        setSpinnerSelection(spinnerBrakingType, bikeData.getBraking_type());
+
+        // Load existing images
+        if (bikeData.getImage_paths() != null && !bikeData.getImage_paths().isEmpty()) {
+            loadExistingImages(bikeData.getImage_paths());
+        }
+    }
+
+    private void setSpinnerSelection(Spinner spinner, String value) {
+        if (value == null || value.isEmpty()) return;
+
+        for (int i = 0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(value)) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+    }
+
+    private void loadExistingImages(String imagePaths) {
+        try {
+            existingImagePaths.clear();
+
+            String cleaned = imagePaths.trim();
+            if (cleaned.startsWith("[") && cleaned.endsWith("]")) {
+                cleaned = cleaned.substring(1, cleaned.length() - 1);
+            }
+            cleaned = cleaned.replace("\"", "");
+
+            String[] paths = cleaned.split(",");
+            for (String path : paths) {
+                path = path.trim();
+                if (!path.isEmpty()) {
+                    existingImagePaths.add(path);
+                }
+            }
+
+            if (!existingImagePaths.isEmpty()) {
+                tvSelectedCount.setText(existingImagePaths.size() + " existing image(s)");
+                tvSelectedCount.setVisibility(View.VISIBLE);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void saveBike() {
         if (!validateInputs()) {
             return;
         }
 
         ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Saving bike...");
+        progressDialog.setMessage(isEditMode ? "Updating bike..." : "Saving bike...");
         progressDialog.setCancelable(false);
         progressDialog.show();
 
         if (!imageUris.isEmpty()) {
             uploadImagesThenSaveBike(progressDialog);
         } else {
-            saveBikeData("", progressDialog);
+            // If no new images but we have existing images in edit mode
+            if (isEditMode && !existingImagePaths.isEmpty()) {
+                saveBikeData(formatImagePaths(existingImagePaths), progressDialog);
+            } else {
+                saveBikeData("", progressDialog);
+            }
         }
+    }
+
+    private String formatImagePaths(List<String> paths) {
+        if (paths == null || paths.isEmpty()) return "[]";
+
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < paths.size(); i++) {
+            sb.append("\"").append(paths.get(i)).append("\"");
+            if (i < paths.size() - 1) {
+                sb.append(",");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
     private boolean validateInputs() {
@@ -295,7 +439,18 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
                                     if (response.body().getData() != null) {
                                         imagePaths = response.body().getAllPathsAsJson();
                                     }
-                                    saveBikeData(imagePaths, progressDialog);
+                                    // In edit mode, combine with existing images
+                                    if (isEditMode && !existingImagePaths.isEmpty()) {
+                                        // Merge existing and new images
+                                        List<String> allImages = new ArrayList<>(existingImagePaths);
+                                        List<String> newImages = response.body().getData();
+                                        if (newImages != null) {
+                                            allImages.addAll(newImages);
+                                        }
+                                        saveBikeData(formatImagePaths(allImages), progressDialog);
+                                    } else {
+                                        saveBikeData(imagePaths, progressDialog);
+                                    }
                                 } else {
                                     progressDialog.dismiss();
                                     Toast.makeText(AddSecondHandBikeActivity.this,
@@ -381,21 +536,15 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
     }
 
     private void saveBikeData(String imagePaths, ProgressDialog progressDialog) {
-        SecondHandBikeRequest request = new SecondHandBikeRequest(
-                etBrand.getText().toString().trim(),
-                etModel.getText().toString().trim(),
-                etYear.getText().toString().trim(),
-                etOdometer.getText().toString().trim(),
-                etPrice.getText().toString().trim(),
-                spinnerCondition.getSelectedItem().toString(),
-                spinnerOwnership.getSelectedItem().toString(),
-                etEngineCC.getText().toString().trim(),
-                spinnerBrakingType.getSelectedItem().toString(),
-                etOwnerDetails.getText().toString().trim(),
-                etConditionDetails.getText().toString().trim(),
-                etFeatures.getText().toString().trim(),
-                imagePaths
-        );
+        // ✅ FIX: Ensure imagePaths is proper JSON
+        if (imagePaths == null || imagePaths.isEmpty()) {
+            imagePaths = "[]";
+        } else if (!imagePaths.trim().startsWith("[")) {
+            // If it's not JSON, wrap it as JSON array
+            imagePaths = "[\"" + imagePaths + "\"]";
+        }
+
+        Log.d("SECOND_HAND_BIKE", "Final Image Paths: " + imagePaths);
 
         String token = SharedPrefManager.getInstance(this).getToken();
         if (token == null || token.isEmpty()) {
@@ -405,41 +554,100 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
         }
 
         ApiService apiService = RetrofitClient.getApiService();
-        apiService.addSecondHandBike("Bearer " + token, request)
-                .enqueue(new Callback<GenericResponse>() {
-                    @Override
-                    public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                        progressDialog.dismiss();
 
-                        if (response.isSuccessful() && response.body() != null) {
-                            String status = response.body().getStatus();
-                            if ("success".equals(status)) {
-                                Toast.makeText(AddSecondHandBikeActivity.this,
-                                        "Second-hand bike saved successfully!",
-                                        Toast.LENGTH_SHORT).show();
-                                new Handler().postDelayed(() -> {
-                                    finish();
-                                }, 1500);
-                            } else {
-                                Toast.makeText(AddSecondHandBikeActivity.this,
-                                        response.body().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(AddSecondHandBikeActivity.this,
-                                    "Server error: " + response.code(),
-                                    Toast.LENGTH_SHORT).show();
+        if (isEditMode) {
+            // Update existing bike
+            com.example.motovista_deep.models.UpdateSecondHandBikeRequest request =
+                    new com.example.motovista_deep.models.UpdateSecondHandBikeRequest(
+                            bikeId,
+                            etBrand.getText().toString().trim(),
+                            etModel.getText().toString().trim(),
+                            etYear.getText().toString().trim(),
+                            etOdometer.getText().toString().trim(),
+                            etPrice.getText().toString().trim(),
+                            spinnerCondition.getSelectedItem().toString(),
+                            spinnerOwnership.getSelectedItem().toString(),
+                            etEngineCC.getText().toString().trim(),
+                            spinnerBrakingType.getSelectedItem().toString(),
+                            etOwnerDetails.getText().toString().trim(),
+                            etConditionDetails.getText().toString().trim(),
+                            etFeatures.getText().toString().trim(),
+                            imagePaths
+                    );
+
+            apiService.updateSecondHandBike("Bearer " + token, request)
+                    .enqueue(new Callback<GenericResponse>() {
+                        @Override
+                        public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                            handleSaveResponse(response, progressDialog, "Bike updated successfully!");
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<GenericResponse> call, Throwable t) {
-                        progressDialog.dismiss();
-                        Toast.makeText(AddSecondHandBikeActivity.this,
-                                "Network error: " + t.getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<GenericResponse> call, Throwable t) {
+                            handleSaveFailure(t, progressDialog);
+                        }
+                    });
+        } else {
+            // Add new bike
+            SecondHandBikeRequest request = new SecondHandBikeRequest(
+                    etBrand.getText().toString().trim(),
+                    etModel.getText().toString().trim(),
+                    etYear.getText().toString().trim(),
+                    etOdometer.getText().toString().trim(),
+                    etPrice.getText().toString().trim(),
+                    spinnerCondition.getSelectedItem().toString(),
+                    spinnerOwnership.getSelectedItem().toString(),
+                    etEngineCC.getText().toString().trim(),
+                    spinnerBrakingType.getSelectedItem().toString(),
+                    etOwnerDetails.getText().toString().trim(),
+                    etConditionDetails.getText().toString().trim(),
+                    etFeatures.getText().toString().trim(),
+                    imagePaths
+            );
+
+            apiService.addSecondHandBike("Bearer " + token, request)
+                    .enqueue(new Callback<GenericResponse>() {
+                        @Override
+                        public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                            handleSaveResponse(response, progressDialog, "Bike saved successfully!");
+                        }
+
+                        @Override
+                        public void onFailure(Call<GenericResponse> call, Throwable t) {
+                            handleSaveFailure(t, progressDialog);
+                        }
+                    });
+        }
+    }
+
+    private void handleSaveResponse(Response<GenericResponse> response, ProgressDialog progressDialog, String successMessage) {
+        progressDialog.dismiss();
+
+        if (response.isSuccessful() && response.body() != null) {
+            String status = response.body().getStatus();
+            if ("success".equals(status)) {
+                Toast.makeText(AddSecondHandBikeActivity.this, successMessage, Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(() -> {
+                    setResult(RESULT_OK);
+                    finish();
+                }, 1500);
+            } else {
+                Toast.makeText(AddSecondHandBikeActivity.this,
+                        response.body().getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(AddSecondHandBikeActivity.this,
+                    "Server error: " + response.code(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void handleSaveFailure(Throwable t, ProgressDialog progressDialog) {
+        progressDialog.dismiss();
+        Toast.makeText(AddSecondHandBikeActivity.this,
+                "Network error: " + t.getMessage(),
+                Toast.LENGTH_SHORT).show();
     }
 
     @Override
