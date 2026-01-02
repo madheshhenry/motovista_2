@@ -219,11 +219,19 @@ public class BrandStockActivity extends AppCompatActivity {
     }
 
     private void onRowClick(int position, BikeStock bike) {
-        Toast.makeText(this, "Selected: " + bike.getModel(), Toast.LENGTH_SHORT).show();
-        // TODO: Navigate to bike details screen
-        // Intent intent = new Intent(this, BikeDetailsActivity.class);
-        // intent.putExtra("BIKE_ID", bike.getId());
-        // startActivity(intent);
+        if ("Not Sold".equals(bike.getCustomer()) || "—".equals(bike.getCustomer())) {
+            // Navigate to unsold bike detail
+            Intent intent = new Intent(this, StockDetailUnsoldActivity.class);
+            intent.putExtra("BIKE_DATA", bike);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        } else {
+            // Navigate to sold bike detail
+            Intent intent = new Intent(this, StockDetailSoldActivity.class);
+            intent.putExtra("BIKE_DATA", bike);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        }
     }
 
     private void navigateToDashboard() {

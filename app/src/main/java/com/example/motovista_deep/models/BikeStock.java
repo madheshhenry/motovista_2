@@ -1,6 +1,8 @@
 package com.example.motovista_deep.models;
 
-public class BikeStock {
+import java.io.Serializable;
+
+public class BikeStock implements Serializable {
     private int id;
     private String model;
     private String engineNo;
