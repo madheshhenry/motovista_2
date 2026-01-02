@@ -45,4 +45,12 @@
             <item>Combi-Brake</item>
         </string-array>
 
+    <string-array name="emi_durations">
+        <item>6 Months</item>
+        <item>12 Months</item>
+        <item>18 Months</item>
+        <item>24 Months</item>
+        <item>36 Months</item>
+    </string-array>
+
 </resources>

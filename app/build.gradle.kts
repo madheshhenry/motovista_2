@@ -64,5 +64,5 @@ dependencies {
     // Alternative: TouchImageView for zooming
     //implementation ("com.github.MikeOrtiz:TouchImageView:3.3")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
-
+    implementation("com.google.android.material:material:1.11.0")
 }

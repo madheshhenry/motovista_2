@@ -167,16 +167,20 @@ public class AdminDashboardActivity extends AppCompatActivity {
         cardApplication.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AdminDashboardActivity.this, "Application clicked", Toast.LENGTH_SHORT).show();
                 // Navigate to Application screen
+                Intent intent = new Intent(AdminDashboardActivity.this, AdminRequestedCustomersActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
         cardSales.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AdminDashboardActivity.this, "Sales clicked", Toast.LENGTH_SHORT).show();
-                // Navigate to Sales screen
+                Intent intent = new Intent(AdminDashboardActivity.this,
+                        AdminRequestedCustomersActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 

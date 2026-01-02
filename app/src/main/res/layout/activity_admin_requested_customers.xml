@@ -1,0 +1,952 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:fitsSystemWindows="true">
+
+    <!-- Top Header -->
+    <LinearLayout
+        android:id="@+id/topHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/padding_medium"
+        android:paddingVertical="12dp"
+        android:gravity="center_vertical"
+        android:background="@color/background_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Back Button -->
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="@color/gray_800"
+            android:padding="12dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Application"
+            android:textColor="@color/text_dark"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:fontFamily="sans-serif-medium" />
+
+        <!-- Empty space for alignment -->
+        <View
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
+
+    </LinearLayout>
+
+    <!-- Main Content -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        android:paddingTop="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topHeader">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="80dp">
+
+            <!-- Screen Title -->
+            <TextView
+                android:id="@+id/tvScreenTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Requested Customers"
+                android:textColor="@color/text_dark"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif"
+                android:paddingHorizontal="@dimen/padding_medium"
+                android:paddingTop="8dp"
+                android:paddingBottom="16dp" />
+
+            <!-- Search Bar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/search_background"
+                android:paddingHorizontal="@dimen/padding_medium"
+                android:paddingVertical="12dp"
+                android:layout_marginHorizontal="@dimen/padding_medium"
+                android:layout_marginBottom="20dp"
+                android:gravity="center_vertical">
+
+                <!-- Search Icon -->
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_search"
+                    android:tint="@color/gray_400"
+                    android:layout_marginEnd="12dp"
+                    android:contentDescription="Search" />
+
+                <!-- Search Input -->
+                <EditText
+                    android:id="@+id/etSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="Search name or phone..."
+                    android:textColor="@color/text_dark"
+                    android:textColorHint="@color/gray_400"
+                    android:textSize="16sp"
+                    android:fontFamily="sans-serif"
+                    android:background="@android:color/transparent"
+                    android:paddingVertical="4dp"
+                    android:maxLines="1"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text" />
+
+            </LinearLayout>
+
+            <!-- Customer List Container -->
+            <LinearLayout
+                android:id="@+id/customerListContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/padding_medium"
+                android:paddingBottom="20dp">
+
+                <!-- Customer 1 Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardCustomer1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/customer_card_background">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- Customer Info Row -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="16dp">
+
+                            <!-- Profile Icon -->
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:background="@drawable/profile_icon_background"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_person"
+                                    android:tint="@color/primary_color"
+                                    android:contentDescription="Customer" />
+
+                            </LinearLayout>
+
+                            <!-- Customer Details -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="16dp">
+
+                                <TextView
+                                    android:id="@+id/tvCustomerName1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Rahul Sharma"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif" />
+
+                                <TextView
+                                    android:id="@+id/tvCustomerPhone1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="+91 98765 43210"
+                                    android:textColor="@color/primary_color"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginTop="4dp" />
+
+                                <TextView
+                                    android:id="@+id/tvTime1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Applied 2 mins ago"
+                                    android:textColor="@color/gray_400"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginTop="2dp" />
+
+                            </LinearLayout>
+
+                            <!-- Status Icons Container (Initially empty) -->
+                            <LinearLayout
+                                android:id="@+id/statusContainer1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:visibility="gone">
+
+                                <!-- Tick Mark (for Accepted) -->
+                                <ImageView
+                                    android:id="@+id/ivTick1"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_check_circle"
+                                    android:tint="@color/icon_green"
+                                    android:visibility="gone"
+                                    android:layout_marginEnd="8dp"
+                                    android:contentDescription="Accepted" />
+
+                                <!-- Cross Mark (for Rejected) -->
+                                <ImageView
+                                    android:id="@+id/ivCross1"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_cancel"
+                                    android:tint="@color/icon_red"
+                                    android:visibility="gone"
+                                    android:layout_marginEnd="8dp"
+                                    android:contentDescription="Rejected" />
+
+                                <!-- Right Arrow -->
+                                <ImageView
+                                    android:id="@+id/ivArrow1"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_chevron_right"
+                                    android:tint="@color/gray_400"
+                                    android:visibility="gone"
+                                    android:contentDescription="More" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- Action Buttons -->
+                        <LinearLayout
+                            android:id="@+id/actionContainer1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:paddingTop="8dp">
+
+                            <!-- Reject Button -->
+                            <Button
+                                android:id="@+id/btnReject1"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="8dp"
+                                android:text="REJECT"
+                                android:textColor="@color/icon_red"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:background="@drawable/reject_button_background"
+                                android:gravity="center" />
+
+                            <!-- Accept Button -->
+                            <Button
+                                android:id="@+id/btnAccept1"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginStart="8dp"
+                                android:text="ACCEPT"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:background="@drawable/accept_button_background"
+                                android:gravity="center" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Customer 2 Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardCustomer2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/customer_card_background">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="16dp">
+
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:background="@drawable/profile_icon_background"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_person"
+                                    android:tint="@color/primary_color"
+                                    android:contentDescription="Customer" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="16dp">
+
+                                <TextView
+                                    android:id="@+id/tvCustomerName2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Priya Patel"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif" />
+
+                                <TextView
+                                    android:id="@+id/tvCustomerPhone2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="+91 99887 76655"
+                                    android:textColor="@color/primary_color"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginTop="4dp" />
+
+                                <TextView
+                                    android:id="@+id/tvTime2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Applied 15 mins ago"
+                                    android:textColor="@color/gray_400"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginTop="2dp" />
+
+                            </LinearLayout>
+
+                            <!-- Status Icons Container (Initially empty) -->
+                            <LinearLayout
+                                android:id="@+id/statusContainer2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:id="@+id/ivTick2"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_check_circle"
+                                    android:tint="@color/icon_green"
+                                    android:visibility="gone"
+                                    android:layout_marginEnd="8dp"
+                                    android:contentDescription="Accepted" />
+
+                                <ImageView
+                                    android:id="@+id/ivCross2"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_cancel"
+                                    android:tint="@color/icon_red"
+                                    android:visibility="gone"
+                                    android:layout_marginEnd="8dp"
+                                    android:contentDescription="Rejected" />
+
+                                <ImageView
+                                    android:id="@+id/ivArrow2"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_chevron_right"
+                                    android:tint="@color/gray_400"
+                                    android:visibility="gone"
+                                    android:contentDescription="More" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/actionContainer2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:paddingTop="8dp">
+
+                            <Button
+                                android:id="@+id/btnReject2"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="8dp"
+                                android:text="REJECT"
+                                android:textColor="@color/icon_red"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:background="@drawable/reject_button_background"
+                                android:gravity="center" />
+
+                            <Button
+                                android:id="@+id/btnAccept2"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginStart="8dp"
+                                android:text="ACCEPT"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:background="@drawable/accept_button_background"
+                                android:gravity="center" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Customer 3 Card (Accepted Example) -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardCustomer3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/customer_card_accepted_background">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="8dp">
+
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:background="@drawable/profile_icon_background"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_person"
+                                    android:tint="@color/primary_color"
+                                    android:contentDescription="Customer" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="16dp">
+
+                                <TextView
+                                    android:id="@+id/tvCustomerName3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Amit Singh"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif" />
+
+                                <TextView
+                                    android:id="@+id/tvCustomerPhone3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="+91 88776 65544"
+                                    android:textColor="@color/primary_color"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginTop="4dp" />
+
+                                <TextView
+                                    android:id="@+id/tvTime3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Accepted"
+                                    android:textColor="@color/icon_green"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginTop="2dp"
+                                    android:drawableStart="@drawable/ic_check_circle"
+                                    android:drawablePadding="4dp"
+                                    android:gravity="center_vertical" />
+
+                            </LinearLayout>
+
+                            <!-- Status Icons Container -->
+                            <LinearLayout
+                                android:id="@+id/statusContainer3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:visibility="visible">
+
+                                <ImageView
+                                    android:id="@+id/ivArrow3"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_chevron_right"
+                                    android:tint="@color/gray_400"
+                                    android:contentDescription="More" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- Action Buttons (Hidden for accepted) -->
+                        <LinearLayout
+                            android:id="@+id/actionContainer3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:paddingTop="8dp"
+                            android:visibility="gone">
+
+                            <Button
+                                android:id="@+id/btnReject3"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="8dp"
+                                android:text="REJECT"
+                                android:textColor="@color/icon_red"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:background="@drawable/reject_button_background"
+                                android:gravity="center" />
+
+                            <Button
+                                android:id="@+id/btnAccept3"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginStart="8dp"
+                                android:text="ACCEPT"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:background="@drawable/accept_button_background"
+                                android:gravity="center" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Customer 4 Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardCustomer4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/customer_card_background">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="16dp">
+
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:background="@drawable/profile_icon_background"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_person"
+                                    android:tint="@color/primary_color"
+                                    android:contentDescription="Customer" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="16dp">
+
+                                <TextView
+                                    android:id="@+id/tvCustomerName4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Vikram Malhotra"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif" />
+
+                                <TextView
+                                    android:id="@+id/tvCustomerPhone4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="+91 77665 54433"
+                                    android:textColor="@color/primary_color"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginTop="4dp" />
+
+                                <TextView
+                                    android:id="@+id/tvTime4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Applied 1 hour ago"
+                                    android:textColor="@color/gray_400"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginTop="2dp" />
+
+                            </LinearLayout>
+
+                            <!-- Status Icons Container (Initially empty) -->
+                            <LinearLayout
+                                android:id="@+id/statusContainer4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:id="@+id/ivTick4"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_check_circle"
+                                    android:tint="@color/icon_green"
+                                    android:visibility="gone"
+                                    android:layout_marginEnd="8dp"
+                                    android:contentDescription="Accepted" />
+
+                                <ImageView
+                                    android:id="@+id/ivCross4"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_cancel"
+                                    android:tint="@color/icon_red"
+                                    android:visibility="gone"
+                                    android:layout_marginEnd="8dp"
+                                    android:contentDescription="Rejected" />
+
+                                <ImageView
+                                    android:id="@+id/ivArrow4"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_chevron_right"
+                                    android:tint="@color/gray_400"
+                                    android:visibility="gone"
+                                    android:contentDescription="More" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/actionContainer4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:paddingTop="8dp">
+
+                            <Button
+                                android:id="@+id/btnReject4"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="8dp"
+                                android:text="REJECT"
+                                android:textColor="@color/icon_red"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:background="@drawable/reject_button_background"
+                                android:gravity="center" />
+
+                            <Button
+                                android:id="@+id/btnAccept4"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginStart="8dp"
+                                android:text="ACCEPT"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:background="@drawable/accept_button_background"
+                                android:gravity="center" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Customer 5 Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardCustomer5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true"
+                    android:layout_marginBottom="24dp"
+                    android:background="@drawable/customer_card_background">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="16dp">
+
+                            <LinearLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:background="@drawable/profile_icon_background"
+                                android:gravity="center">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_person"
+                                    android:tint="@color/primary_color"
+                                    android:contentDescription="Customer" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:layout_marginStart="16dp">
+
+                                <TextView
+                                    android:id="@+id/tvCustomerName5"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Sneha Reddy"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif" />
+
+                                <TextView
+                                    android:id="@+id/tvCustomerPhone5"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="+91 90000 12345"
+                                    android:textColor="@color/primary_color"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginTop="4dp" />
+
+                                <TextView
+                                    android:id="@+id/tvTime5"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Applied 2 hours ago"
+                                    android:textColor="@color/gray_400"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginTop="2dp" />
+
+                            </LinearLayout>
+
+                            <!-- Status Icons Container (Initially empty) -->
+                            <LinearLayout
+                                android:id="@+id/statusContainer5"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:id="@+id/ivTick5"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_check_circle"
+                                    android:tint="@color/icon_green"
+                                    android:visibility="gone"
+                                    android:layout_marginEnd="8dp"
+                                    android:contentDescription="Accepted" />
+
+                                <ImageView
+                                    android:id="@+id/ivCross5"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_cancel"
+                                    android:tint="@color/icon_red"
+                                    android:visibility="gone"
+                                    android:layout_marginEnd="8dp"
+                                    android:contentDescription="Rejected" />
+
+                                <ImageView
+                                    android:id="@+id/ivArrow5"
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_chevron_right"
+                                    android:tint="@color/gray_400"
+                                    android:visibility="gone"
+                                    android:contentDescription="More" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/actionContainer5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:paddingTop="8dp">
+
+                            <Button
+                                android:id="@+id/btnReject5"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="8dp"
+                                android:text="REJECT"
+                                android:textColor="@color/icon_red"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:background="@drawable/reject_button_background"
+                                android:gravity="center" />
+
+                            <Button
+                                android:id="@+id/btnAccept5"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginStart="8dp"
+                                android:text="ACCEPT"
+                                android:textColor="@color/white"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:background="@drawable/accept_button_background"
+                                android:gravity="center" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

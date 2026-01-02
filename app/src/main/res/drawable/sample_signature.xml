@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="120dp"
+    android:height="60dp"
+    android:viewportWidth="120"
+    android:viewportHeight="60"
+    android:tint="@color/text_dark"
+    android:alpha="0.7">
+
+    <!-- Main signature curve -->
+    <path
+        android:strokeColor="@color/text_dark"
+        android:strokeWidth="3"
+        android:pathData="M15,40 Q35,25 55,35 Q75,45 95,30"
+        android:strokeLineCap="round"/>
+
+    <!-- Signature flourish 1 -->
+    <path
+        android:strokeColor="@color/text_dark"
+        android:strokeWidth="2"
+        android:pathData="M25,32 Q30,28 35,30"
+        android:strokeLineCap="round"/>
+
+    <!-- Signature flourish 2 -->
+    <path
+        android:strokeColor="@color/text_dark"
+        android:strokeWidth="1.5"
+        android:pathData="M75,28 Q80,25 85,27"
+        android:strokeLineCap="round"/>
+
+    <!-- Initial dot - using path instead of circle -->
+    <path
+        android:strokeColor="@color/text_dark"
+        android:strokeWidth="0"
+        android:fillColor="@color/text_dark"
+        android:pathData="M20,38 a2,2 0 1,1 4,0 a2,2 0 1,1 -4,0"/>
+</vector>

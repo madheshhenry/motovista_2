@@ -1,0 +1,711 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:fitsSystemWindows="true">
+
+    <!-- Header Section -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/card_bg"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/padding_medium"
+        android:paddingVertical="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="4dp">
+
+        <!-- Back Button -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
+            android:background="?attr/selectableItemBackgroundBorderless">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@color/text_dark"
+                android:contentDescription="Back" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Order Summary"
+            android:textColor="@color/text_dark"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:layout_marginEnd="40dp" />
+
+    </LinearLayout>
+
+    <!-- Main Content ScrollView -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        android:paddingTop="4dp"
+        android:paddingBottom="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium">
+
+            <!-- Customer Details Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Customer Details"
+                android:textColor="@color/text_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif"
+                android:layout_marginBottom="12dp"
+                android:paddingHorizontal="4dp" />
+
+            <!-- Customer Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                android:layout_marginBottom="24dp"
+                android:background="@color/card_bg">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Customer Info Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <!-- Profile Image -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            app:cardCornerRadius="28dp"
+                            app:cardElevation="0dp">
+
+                            <ImageView
+                                android:id="@+id/ivCustomerProfile"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/sample_profile"
+                                android:contentDescription="Customer Profile" />
+
+                        </androidx.cardview.widget.CardView>
+
+                        <!-- Customer Details -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_marginStart="16dp">
+
+                            <TextView
+                                android:id="@+id/tvCustomerName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rahul Sharma"
+                                android:textColor="@color/text_dark"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginTop="4dp">
+
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_call"
+                                    android:tint="@color/gray_500"
+                                    android:contentDescription="Phone"
+                                    android:layout_marginEnd="4dp" />
+
+                                <TextView
+                                    android:id="@+id/tvCustomerPhone"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="+91 98765 43210"
+                                    android:textColor="@color/gray_500"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- Status Badge -->
+                        <LinearLayout
+                            android:id="@+id/statusBadgeLayout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:background="@drawable/status_approved_background"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="6dp"
+                            android:layout_marginStart="8dp">
+
+                            <View
+                                android:id="@+id/statusDot"
+                                android:layout_width="8dp"
+                                android:layout_height="8dp"
+                                android:background="@drawable/circle_green"
+                                android:layout_marginEnd="4dp" />
+
+                            <TextView
+                                android:id="@+id/tvStatus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Approved"
+                                android:textColor="@color/icon_green"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Vehicle Details Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vehicle Details"
+                android:textColor="@color/text_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif"
+                android:layout_marginBottom="12dp"
+                android:paddingHorizontal="4dp" />
+
+            <!-- Vehicle Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                android:background="@color/card_bg"
+                android:layout_marginBottom="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Bike Image -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        app:cardCornerRadius="0dp"
+                        app:cardElevation="0dp"
+                        android:layout_marginBottom="20dp">
+
+                        <ImageView
+                            android:id="@+id/ivBikeImage"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/featured_bike_1"
+                            android:contentDescription="Yamaha R15 V4" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Bike Details -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingHorizontal="20dp"
+                        android:paddingBottom="20dp">
+
+                        <!-- Brand Badge -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@drawable/brand_badge_background"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
+                            android:layout_marginBottom="8dp">
+
+                            <TextView
+                                android:id="@+id/tvBrand"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Yamaha"
+                                android:textColor="@color/primary_color"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:letterSpacing="0.05" />
+
+                        </LinearLayout>
+
+                        <!-- Bike Name -->
+                        <TextView
+                            android:id="@+id/tvBikeName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="YZF R15 V4"
+                            android:textColor="@color/text_dark"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif"
+                            android:layout_marginBottom="4dp" />
+
+                        <!-- Edition -->
+                        <TextView
+                            android:id="@+id/tvEdition"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Standard Edition"
+                            android:textColor="@color/gray_500"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif"
+                            android:layout_marginBottom="20dp" />
+
+                        <!-- Divider -->
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/gray_200"
+                            android:layout_marginBottom="20dp" />
+
+                        <!-- Specifications -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginBottom="20dp">
+
+                            <!-- Row 1 -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Engine Number"
+                                        android:textColor="@color/gray_500"
+                                        android:textSize="12sp"
+                                        android:fontFamily="sans-serif" />
+
+                                    <TextView
+                                        android:id="@+id/tvEngineNumber"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="E155-239482"
+                                        android:textColor="@color/text_dark"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="monospace"
+                                        android:layout_marginTop="4dp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Chassis Number"
+                                        android:textColor="@color/gray_500"
+                                        android:textSize="12sp"
+                                        android:fontFamily="sans-serif" />
+
+                                    <TextView
+                                        android:id="@+id/tvChassisNumber"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="ME1-RG5-2024"
+                                        android:textColor="@color/text_dark"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="monospace"
+                                        android:layout_marginTop="4dp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <!-- Row 2 -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Engine CC"
+                                        android:textColor="@color/gray_500"
+                                        android:textSize="12sp"
+                                        android:fontFamily="sans-serif" />
+
+                                    <TextView
+                                        android:id="@+id/tvEngineCC"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="155 cc"
+                                        android:textColor="@color/text_dark"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="sans-serif"
+                                        android:layout_marginTop="4dp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Fuel Type"
+                                        android:textColor="@color/gray_500"
+                                        android:textSize="12sp"
+                                        android:fontFamily="sans-serif" />
+
+                                    <TextView
+                                        android:id="@+id/tvFuelType"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Petrol"
+                                        android:textColor="@color/text_dark"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="sans-serif"
+                                        android:layout_marginTop="4dp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <!-- Row 3 -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Mileage"
+                                        android:textColor="@color/gray_500"
+                                        android:textSize="12sp"
+                                        android:fontFamily="sans-serif" />
+
+                                    <TextView
+                                        android:id="@+id/tvMileage"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="45 kmpl"
+                                        android:textColor="@color/text_dark"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="sans-serif"
+                                        android:layout_marginTop="4dp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Fuel Tank Capacity"
+                                        android:textColor="@color/gray_500"
+                                        android:textSize="12sp"
+                                        android:fontFamily="sans-serif" />
+
+                                    <TextView
+                                        android:id="@+id/tvFuelCapacity"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="11 Liters"
+                                        android:textColor="@color/text_dark"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="sans-serif"
+                                        android:layout_marginTop="4dp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <!-- Row 4 -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="12dp">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Kerb Weight"
+                                        android:textColor="@color/gray_500"
+                                        android:textSize="12sp"
+                                        android:fontFamily="sans-serif" />
+
+                                    <TextView
+                                        android:id="@+id/tvKerbWeight"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="142 kg"
+                                        android:textColor="@color/text_dark"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="sans-serif"
+                                        android:layout_marginTop="4dp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Seat Height"
+                                        android:textColor="@color/gray_500"
+                                        android:textSize="12sp"
+                                        android:fontFamily="sans-serif" />
+
+                                    <TextView
+                                        android:id="@+id/tvSeatHeight"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="815 mm"
+                                        android:textColor="@color/text_dark"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="sans-serif"
+                                        android:layout_marginTop="4dp" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <!-- Row 5 - Full width -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ground Clearance"
+                                    android:textColor="@color/gray_500"
+                                    android:textSize="12sp"
+                                    android:fontFamily="sans-serif" />
+
+                                <TextView
+                                    android:id="@+id/tvGroundClearance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="170 mm"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:layout_marginTop="4dp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- Divider -->
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/gray_200"
+                            android:layout_marginBottom="20dp" />
+
+                        <!-- Price Section -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="8dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Total On-Road Price"
+                                android:textColor="@color/gray_500"
+                                android:textSize="14sp"
+                                android:fontFamily="sans-serif" />
+
+                            <TextView
+                                android:id="@+id/tvPrice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="₹ 1,82,000"
+                                android:textColor="@color/primary_color"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Footer Button -->
+    <LinearLayout
+        android:id="@+id/footerLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/card_bg"
+        android:paddingHorizontal="@dimen/padding_medium"
+        android:paddingVertical="16dp"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btnNext"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/primary_color">
+
+            <LinearLayout
+                android:id="@+id/btnNextLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingHorizontal="24dp">
+
+                <TextView
+                    android:id="@+id/btnNextText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Next"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif" />
+
+                <ImageView
+                    android:id="@+id/btnNextIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_arrow_forward"
+                    android:tint="@color/white"
+                    android:layout_marginStart="8dp"
+                    android:contentDescription="Next" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
