@@ -138,29 +138,37 @@ public class AdminDashboardActivity extends AppCompatActivity {
             }
         });
 
-        // Ledger card clicks
+        // LEDGER CARD CLICKS - Updated version
         cardEmiLedger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AdminDashboardActivity.this, "EMI Ledger clicked", Toast.LENGTH_SHORT).show();
                 // Navigate to EMI Ledger screen
-                // startActivity(new Intent(AdminDashboardActivity.this, EmiLedgerActivity.class));
+                Intent intent = new Intent(AdminDashboardActivity.this, EmiLedgerActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
+        // In the cardInsuranceLedger onClick listener
         cardInsuranceLedger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AdminDashboardActivity.this, "Insurance Ledger clicked", Toast.LENGTH_SHORT).show();
                 // Navigate to Insurance Ledger screen
+                Intent intent = new Intent(AdminDashboardActivity.this, InsuranceLedgerActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
+        // Find this code in your setupClickListeners() method:
         cardRegistrationLedger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(AdminDashboardActivity.this, "Registration Ledger clicked", Toast.LENGTH_SHORT).show();
-                // Navigate to Registration Ledger screen
+                // Navigate to Registration Ledger screen - ADD THIS:
+                Intent intent = new Intent(AdminDashboardActivity.this, RegistrationLedgerActivity.class);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -174,11 +182,12 @@ public class AdminDashboardActivity extends AppCompatActivity {
             }
         });
 
+        // Replace the existing cardSales click listener with this:
         cardSales.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AdminDashboardActivity.this,
-                        AdminRequestedCustomersActivity.class);
+                // Navigate to Sales History screen
+                Intent intent = new Intent(AdminDashboardActivity.this, SalesHistoryActivity.class);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }

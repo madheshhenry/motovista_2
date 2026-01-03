@@ -72,7 +72,13 @@ dependencies {
     implementation("com.itextpdf:itextpdf:5.5.13.3")
     implementation("commons-io:commons-io:2.11.0")
     implementation("androidx.documentfile:documentfile:1.0.1")
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 
+
+// For CardView
+    implementation("androidx.cardview:cardview:1.0.0")
+// For NestedScrollView
+    implementation("androidx.core:core:1.7.0")
     // PDF Viewer - CHOOSE ONE OPTION:
 
     // Option 1: Try a WORKING alternative (add this line)

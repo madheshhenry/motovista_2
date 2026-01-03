@@ -1,0 +1,995 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/padding_large">
+
+        <!-- Top App Bar -->
+        <LinearLayout
+            android:id="@+id/headerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:elevation="4dp"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="@dimen/padding_medium"
+            android:paddingEnd="56dp">
+
+            <!-- Back Button -->
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@color/text_primary_light"
+                android:padding="12dp"
+                android:contentDescription="Back"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Registration Record"
+                android:textColor="@color/text_primary_light"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:fontFamily="sans-serif" />
+
+        </LinearLayout>
+
+        <!-- Main Content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium"
+            android:paddingTop="@dimen/padding_small">
+
+            <!-- Section 1: Customer & Bike Information -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Customer &amp; Bike Information"
+                android:textColor="@color/text_primary_light"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/padding_small"
+                android:paddingHorizontal="@dimen/padding_small"
+                android:fontFamily="sans-serif" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardCustomerInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Customer Info Header -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_medium"
+                        android:background="@drawable/border_bottom_light">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvCustomerLabel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="CUSTOMER"
+                                android:textColor="@color/primary"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.1"
+                                android:fontFamily="sans-serif" />
+
+                            <TextView
+                                android:id="@+id/tvCustomerName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rahul Sharma"
+                                android:textColor="@color/text_primary_light"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="sans-serif" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginTop="8dp">
+
+                                <ImageView
+                                    android:layout_width="18dp"
+                                    android:layout_height="18dp"
+                                    android:src="@drawable/ic_call"
+                                    android:tint="@color/text_secondary_light"
+                                    android:contentDescription="Phone" />
+
+                                <TextView
+                                    android:id="@+id/tvCustomerPhone"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="+91 98765 43210"
+                                    android:textColor="@color/text_secondary_light"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- Customer Avatar -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            app:cardCornerRadius="24dp"
+                            app:cardElevation="0dp"
+                            android:background="@color/primary_light">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_person"
+                                android:tint="@color/primary"
+                                android:layout_gravity="center"
+                                android:contentDescription="Customer" />
+
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                    <!-- Bike Details Grid -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_medium"
+                        android:paddingTop="@dimen/padding_small">
+
+                        <!-- Bike Model -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginBottom="@dimen/padding_medium">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Bike Model"
+                                android:textColor="@color/text_secondary_light"
+                                android:textSize="12sp"
+                                android:fontFamily="sans-serif" />
+
+                            <TextView
+                                android:id="@+id/tvBikeModel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Royal Enfield Classic 350"
+                                android:textColor="@color/text_primary_light"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="sans-serif" />
+
+                        </LinearLayout>
+
+                        <!-- Engine Number and Order ID -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <!-- Engine Number -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Engine Number"
+                                    android:textColor="@color/text_secondary_light"
+                                    android:textSize="12sp"
+                                    android:fontFamily="sans-serif" />
+
+                                <TextView
+                                    android:id="@+id/tvEngineNumber"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="U3S59932"
+                                    android:textColor="@color/text_primary_light"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="4dp"
+                                    android:fontFamily="monospace"
+                                    android:background="@drawable/engine_bg"
+                                    android:paddingHorizontal="8dp"
+                                    android:paddingVertical="4dp" />
+
+                            </LinearLayout>
+
+                            <!-- Order ID -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:paddingStart="@dimen/padding_medium">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Order ID"
+                                    android:textColor="@color/text_secondary_light"
+                                    android:textSize="12sp"
+                                    android:fontFamily="sans-serif" />
+
+                                <TextView
+                                    android:id="@+id/tvOrderId"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="ORD-10234"
+                                    android:textColor="@color/text_primary_light"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="4dp"
+                                    android:fontFamily="monospace"
+                                    android:background="@drawable/engine_bg"
+                                    android:paddingHorizontal="8dp"
+                                    android:paddingVertical="4dp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Section 2: Registration Process -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/padding_small"
+                android:paddingHorizontal="@dimen/padding_small">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Registration Process"
+                    android:textColor="@color/text_primary_light"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif" />
+
+                <TextView
+                    android:id="@+id/tvProgressCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1/4 Completed"
+                    android:textColor="@color/text_secondary_light"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif" />
+
+            </LinearLayout>
+
+            <!-- Insurance Policy Card (Completed) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardInsurance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:cardUseCompatPadding="true"
+                android:layout_marginBottom="@dimen/padding_small"
+                android:background="@color/white"
+                android:alpha="0.8">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_medium">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <!-- Insurance Icon -->
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                android:background="@color/icon_bg_green"
+                                android:layout_marginEnd="12dp">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_shield"
+                                    android:tint="@color/icon_green"
+                                    android:layout_gravity="center"
+                                    android:contentDescription="Insurance" />
+
+                            </androidx.cardview.widget.CardView>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Insurance Policy"
+                                    android:textColor="@color/text_primary_light"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif" />
+
+                                <TextView
+                                    android:id="@+id/tvInsuranceDate"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Completed on 12 Oct 2023"
+                                    android:textColor="@color/text_secondary_light"
+                                    android:textSize="12sp"
+                                    android:layout_marginTop="2dp"
+                                    android:fontFamily="sans-serif" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- Status Badge -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            android:background="@color/icon_bg_green"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="6dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <View
+                                    android:layout_width="6dp"
+                                    android:layout_height="6dp"
+                                    android:background="@drawable/circle_green"
+                                    android:layout_marginEnd="4dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Done"
+                                    android:textColor="@color/icon_green"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif" />
+
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Vehicle Registration Card (Active) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardRegistration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                android:layout_marginBottom="@dimen/padding_small"
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_medium"
+                    android:paddingStart="12dp">
+
+                    <!-- Active Indicator Line -->
+                    <View
+                        android:layout_width="4dp"
+                        android:layout_height="match_parent"
+                        android:background="@color/primary"
+                        android:layout_marginStart="-12dp"
+                        android:layout_marginTop="-16dp"
+                        android:layout_marginBottom="-16dp"
+                        android:layout_gravity="start" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="16dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <!-- Registration Icon -->
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    app:cardCornerRadius="12dp"
+                                    app:cardElevation="0dp"
+                                    android:background="@color/icon_bg_blue"
+                                    android:layout_marginEnd="12dp">
+
+                                    <ImageView
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_app_registration"
+                                        android:tint="@color/primary"
+                                        android:layout_gravity="center"
+                                        android:contentDescription="Registration" />
+
+                                </androidx.cardview.widget.CardView>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Vehicle Registration"
+                                        android:textColor="@color/text_primary_light"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="sans-serif" />
+
+                                    <TextView
+                                        android:id="@+id/tvRegistrationStatus"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="RTO registration pending"
+                                        android:textColor="@color/text_secondary_light"
+                                        android:textSize="12sp"
+                                        android:layout_marginTop="2dp"
+                                        android:fontFamily="sans-serif" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <!-- Status Badge - FIXED WITH ID -->
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/statusBadgeRegistration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                android:background="@color/icon_bg_yellow"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="6dp">
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
+
+                                    <View
+                                        android:id="@+id/ivPendingDot"
+                                        android:layout_width="6dp"
+                                        android:layout_height="6dp"
+                                        android:background="@drawable/circle_yellow"
+                                        android:layout_marginEnd="4dp" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Pending"
+                                        android:textColor="@color/icon_yellow"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="sans-serif" />
+
+                                </LinearLayout>
+
+                            </androidx.cardview.widget.CardView>
+
+                        </LinearLayout>
+
+                        <!-- Action Button -->
+                        <Button
+                            android:id="@+id/btnMarkRegistration"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:background="@drawable/button_primary_rounded"
+                            android:text="Mark as Completed"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center"
+                            android:drawableStart="@drawable/ic_check_circle"
+                            android:drawablePadding="8dp"
+                            android:paddingHorizontal="16dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- RC Book Card (Waiting) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardRcBook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:cardUseCompatPadding="true"
+                android:layout_marginBottom="@dimen/padding_small"
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_medium">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <!-- RC Book Icon -->
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                android:background="@color/icon_bg_green"
+                                android:layout_marginEnd="12dp">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_menu_book"
+                                    android:tint="@color/icon_green"
+                                    android:layout_gravity="center"
+                                    android:contentDescription="RC Book" />
+
+                            </androidx.cardview.widget.CardView>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="RC Book Handover"
+                                    android:textColor="@color/text_primary_light"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif" />
+
+                                <TextView
+                                    android:id="@+id/tvRcBookStatus"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Waiting for registration"
+                                    android:textColor="@color/text_secondary_light"
+                                    android:textSize="12sp"
+                                    android:layout_marginTop="2dp"
+                                    android:fontFamily="sans-serif" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- Status Badge -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            android:background="@color/icon_bg_green"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="6dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <View
+                                    android:layout_width="6dp"
+                                    android:layout_height="6dp"
+                                    android:background="@drawable/circle_gray"
+                                    android:layout_marginEnd="4dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Waiting"
+                                    android:textColor="@color/text_secondary_light"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif" />
+
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                    <!-- Disabled Button -->
+                    <Button
+                        android:id="@+id/btnMarkRcBook"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/button_disabled_rounded"
+                        android:text="Mark as Completed"
+                        android:textColor="@color/text_secondary_light"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:enabled="false"
+                        android:clickable="false"
+                        android:paddingHorizontal="16dp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Number Plate Card (Waiting) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardNumberPlate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:cardUseCompatPadding="true"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_medium">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <!-- Number Plate Icon -->
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardElevation="0dp"
+                                android:background="@color/icon_bg_green"
+                                android:layout_marginEnd="12dp">
+
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:src="@drawable/ic_directions_car"
+                                    android:tint="@color/icon_green"
+                                    android:layout_gravity="center"
+                                    android:contentDescription="Number Plate" />
+
+                            </androidx.cardview.widget.CardView>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Number Plate"
+                                    android:textColor="@color/text_primary_light"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif" />
+
+                                <TextView
+                                    android:id="@+id/tvNumberPlateStatus"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Installation pending"
+                                    android:textColor="@color/text_secondary_light"
+                                    android:textSize="12sp"
+                                    android:layout_marginTop="2dp"
+                                    android:fontFamily="sans-serif" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- Status Badge -->
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="0dp"
+                            android:background="@color/icon_bg_green"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="6dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <View
+                                    android:layout_width="6dp"
+                                    android:layout_height="6dp"
+                                    android:background="@drawable/circle_gray"
+                                    android:layout_marginEnd="4dp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Waiting"
+                                    android:textColor="@color/text_secondary_light"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif" />
+
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+                    <!-- Disabled Button -->
+                    <Button
+                        android:id="@+id/btnMarkNumberPlate"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/button_disabled_rounded"
+                        android:text="Mark as Completed"
+                        android:textColor="@color/text_secondary_light"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:enabled="false"
+                        android:clickable="false"
+                        android:paddingHorizontal="16dp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Section 3: Customer Verification -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Customer Verification"
+                android:textColor="@color/text_primary_light"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/padding_small"
+                android:paddingHorizontal="@dimen/padding_small"
+                android:fontFamily="sans-serif" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardVerification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:cardUseCompatPadding="true"
+                android:background="@color/icon_bg_indigo">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/padding_medium"
+                    android:gravity="center_vertical">
+
+                    <!-- Verification Icon -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="0dp"
+                        android:background="@color/icon_bg_indigo"
+                        android:layout_marginEnd="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_phonelink_setup"
+                            android:tint="@color/icon_indigo"
+                            android:layout_gravity="center"
+                            android:contentDescription="Verification" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="4dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Customer App Status"
+                                android:textColor="@color/text_primary_light"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif" />
+
+                            <TextView
+                                android:id="@+id/tvVerificationBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="WAITING"
+                                android:textColor="@color/icon_yellow"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.1"
+                                android:background="@color/icon_bg_yellow"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="4dp"
+                                android:fontFamily="sans-serif" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvVerificationMessage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Waiting for customer to verify documents on the mobile app."
+                            android:textColor="@color/text_primary_light"
+                            android:textSize="12sp"
+                            android:layout_marginBottom="8dp"
+                            android:fontFamily="sans-serif" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_sync"
+                                android:tint="@color/icon_indigo"
+                                android:contentDescription="Sync"
+                                android:layout_marginEnd="4dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Syncs automatically from customer app"
+                                android:textColor="@color/icon_indigo"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

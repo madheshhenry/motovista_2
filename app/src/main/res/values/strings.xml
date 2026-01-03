@@ -53,4 +53,16 @@
         <item>36 Months</item>
     </string-array>
 
+        <string-array name="payment_modes">
+            <item>Select Payment Mode</item>
+            <item>Cash</item>
+            <item>GPay / UPI</item>
+            <item>PhonePe</item>
+            <item>Bank Transfer</item>
+            <item>Credit Card</item>
+            <item>Debit Card</item>
+            <item>Net Banking</item>
+            <item>Cheque</item>
+        </string-array>
+
 </resources>

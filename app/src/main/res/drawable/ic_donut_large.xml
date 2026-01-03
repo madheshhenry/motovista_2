@@ -1,0 +1,10 @@
+<!-- res/drawable/ic_donut_large.xml -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/primary_color"
+        android:pathData="M11 2v4.07c-1.95,0.46 -3.5,2 -3.96,3.93H2v2h5.04c0.46,1.93 2,3.47 3.96,3.93V22h2v-4.07c1.95,-0.46 3.5,-2 3.96,-3.93H22v-2h-5.04C16.5,8 14.95,6.46 13,6.07V2zM12 15.5c-1.93,0 -3.5,-1.57 -3.5,-3.5s1.57,-3.5 3.5,-3.5 3.5,1.57 3.5,3.5 -1.57,3.5 -3.5,3.5z" />
+</vector>
