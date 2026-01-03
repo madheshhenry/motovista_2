@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- For Android 11+ -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        android:minSdkVersion="30"
+        tools:ignore="ScopedStorage" />
 
     <application
         android:allowBackup="true"
@@ -16,12 +20,22 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.Motovista_deep"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
 
-
+        <!-- File Provider for PDF Sharing -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <!-- Splash Activity (Launcher) -->
         <activity
@@ -39,8 +53,7 @@
             android:name=".MainActivity"
             android:exported="false" />
 
-        <!-- RoleSelectionActivity  -->
-
+        <!-- RoleSelectionActivity -->
         <activity
             android:name=".CustomerHomeActivity"
             android:exported="false"
@@ -70,19 +83,16 @@
             android:name=".RoleSelectionActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
         <activity
             android:name=".AddBikeActivity"
             android:exported="false"
-
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
-        <!--            android:theme="@style/Theme.MotovistaDeep"/>-->
 
         <activity
             android:name=".AddSecondHandBikeActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
 
         <activity
             android:name=".BikeInventoryActivity"
@@ -93,7 +103,6 @@
             android:name=".BikeDetailsActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
 
         <activity
             android:name=".CustomerSignUpActivity"
@@ -231,11 +240,28 @@
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
+        <!-- PDF Generation Activities -->
         <activity
             android:name=".AdminDocumentsActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
+        <activity
+            android:name=".PdfPreviewActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
+            android:name=".PdfGenerationActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
+            android:name=".PrintDialogActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <!-- Old activities (can be removed if not needed) -->
         <activity
             android:name=".BillReceiptActivity"
             android:exported="false"
