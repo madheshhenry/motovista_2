@@ -19,6 +19,9 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+import com.example.motovista_deep.helpers.SharedPrefManager;
+import com.example.motovista_deep.models.User;
+
 public class RoleSelectionActivity extends AppCompatActivity {
 
     private CardView cardCustomer, cardAdmin;
@@ -210,16 +213,36 @@ public class RoleSelectionActivity extends AppCompatActivity {
             cardCustomer.setCardBackgroundColor(getResources().getColor(R.color.primary_light));
             cardCustomer.setCardElevation(12f);
             ivCustomerSelected.setVisibility(View.VISIBLE);
+
+            // Check if user is already logged in as customer
+            if (SharedPrefManager.getInstance(this).isLoggedIn() &&
+                    "customer".equals(SharedPrefManager.getInstance(this).getRole())) {
+                // Auto-enable continue button for logged-in customers
+                btnContinue.setEnabled(true);
+                btnContinue.setAlpha(1f);
+                btnContinue.setText("Continue as Customer");
+            }
         } else if (role.equals("admin")) {
             // Highlight admin card
             cardAdmin.setCardBackgroundColor(getResources().getColor(R.color.primary_light));
             cardAdmin.setCardElevation(12f);
             ivAdminSelected.setVisibility(View.VISIBLE);
+
+            // Check if user is already logged in as admin
+            if (SharedPrefManager.getInstance(this).isLoggedIn() &&
+                    "admin".equals(SharedPrefManager.getInstance(this).getRole())) {
+                // Auto-enable continue button for logged-in admins
+                btnContinue.setEnabled(true);
+                btnContinue.setAlpha(1f);
+                btnContinue.setText("Continue as Admin");
+            }
         }
 
-        // Enable continue button
-        btnContinue.setEnabled(true);
-        btnContinue.setAlpha(1f);
+        // Enable continue button if not already enabled
+        if (!btnContinue.isEnabled()) {
+            btnContinue.setEnabled(true);
+            btnContinue.setAlpha(1f);
+        }
     }
 
     private void resetSelections() {
@@ -238,14 +261,33 @@ public class RoleSelectionActivity extends AppCompatActivity {
         Intent intent;
 
         if (selectedRole.equals("customer")) {
-            // Navigate to Customer Login/Home
-            intent = new Intent(RoleSelectionActivity.this, CustomerLoginActivity.class);
+            SharedPrefManager prefManager = SharedPrefManager.getInstance(this);
+
+            // ✅ 1. Check if the user is already logged in as a Customer
+            if (prefManager.isLoggedIn() && "customer".equals(prefManager.getRole())) {
+
+                // ✅ 2. Check if the profile is already completed (Old User)
+                if (prefManager.isProfileCompleted()) {
+                    // OLD USER -> Go to Home Screen
+                    intent = new Intent(this, CustomerHomeActivity.class);
+                } else {
+                    // NEW USER -> Go to Profile Setup Screen
+                    intent = new Intent(this, CustomerProfileActivity.class);
+                }
+            } else {
+                // ✅ 3. NOT LOGGED IN -> Go to Login Screen
+                intent = new Intent(this, CustomerLoginActivity.class);
+            }
         } else {
-            // Navigate to Admin Login
-            intent = new Intent(RoleSelectionActivity.this, AdminLoginActivity.class);
+            // Admin Logic
+            if (SharedPrefManager.getInstance(this).isLoggedIn() &&
+                    "admin".equals(SharedPrefManager.getInstance(this).getRole())) {
+                intent = new Intent(this, AdminDashboardActivity.class);
+            } else {
+                intent = new Intent(this, AdminLoginActivity.class);
+            }
         }
 
-        // Pass selected role
         intent.putExtra("SELECTED_ROLE", selectedRole);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

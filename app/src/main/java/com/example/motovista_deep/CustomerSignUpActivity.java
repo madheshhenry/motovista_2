@@ -1,11 +1,5 @@
 package com.example.motovista_deep;
-import com.example.motovista_deep.api.RetrofitClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import com.example.motovista_deep.models.User;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -21,12 +15,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.text.TextUtils;
-import com.example.motovista_deep.models.RegisterResponse;
-import com.example.motovista_deep.models.RegisterRequest;
 import com.example.motovista_deep.helpers.SharedPrefManager;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.motovista_deep.api.ApiService;
+import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.models.RegisterRequest;
+import com.example.motovista_deep.models.RegisterResponse;
+import com.example.motovista_deep.models.User;
 
-
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CustomerSignUpActivity extends AppCompatActivity {
 
@@ -44,13 +44,8 @@ public class CustomerSignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_signup);
 
-        // Initialize views
         initializeViews();
-
-        // Setup click listeners
         setupClickListeners();
-
-        // Setup login link with clickable span
         setupLoginLink();
     }
 
@@ -69,7 +64,6 @@ public class CustomerSignUpActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // Back button
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +71,6 @@ public class CustomerSignUpActivity extends AppCompatActivity {
             }
         });
 
-        // Toggle password visibility
         btnTogglePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +78,6 @@ public class CustomerSignUpActivity extends AppCompatActivity {
             }
         });
 
-        // Toggle confirm password visibility
         btnToggleConfirmPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +85,6 @@ public class CustomerSignUpActivity extends AppCompatActivity {
             }
         });
 
-        // Sign Up button
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,7 +92,6 @@ public class CustomerSignUpActivity extends AppCompatActivity {
             }
         });
 
-        // Terms checkbox - make whole text clickable
         View termsContainer = findViewById(R.id.termsContainer);
         termsContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,32 +103,26 @@ public class CustomerSignUpActivity extends AppCompatActivity {
 
     private void togglePasswordVisibility() {
         if (isPasswordVisible) {
-            // Hide password
             etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             btnTogglePassword.setImageResource(R.drawable.ic_visibility_off);
-            etPassword.setSelection(etPassword.getText().length());
         } else {
-            // Show password
             etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             btnTogglePassword.setImageResource(R.drawable.ic_visibility);
-            etPassword.setSelection(etPassword.getText().length());
         }
         isPasswordVisible = !isPasswordVisible;
+        etPassword.setSelection(etPassword.getText().length());
     }
 
     private void toggleConfirmPasswordVisibility() {
         if (isConfirmPasswordVisible) {
-            // Hide password
             etConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             btnToggleConfirmPassword.setImageResource(R.drawable.ic_visibility_off);
-            etConfirmPassword.setSelection(etConfirmPassword.getText().length());
         } else {
-            // Show password
             etConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             btnToggleConfirmPassword.setImageResource(R.drawable.ic_visibility);
-            etConfirmPassword.setSelection(etConfirmPassword.getText().length());
         }
         isConfirmPasswordVisible = !isConfirmPasswordVisible;
+        etConfirmPassword.setSelection(etConfirmPassword.getText().length());
     }
 
     private void setupLoginLink() {
@@ -148,12 +132,10 @@ public class CustomerSignUpActivity extends AppCompatActivity {
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View widget) {
-                // Navigate back to login screen
                 finish();
             }
         };
 
-        // Make "Log in" clickable
         int startIndex = text.indexOf("Log in");
         int endIndex = startIndex + "Log in".length();
         spannableString.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -163,7 +145,6 @@ public class CustomerSignUpActivity extends AppCompatActivity {
     }
 
     private void attemptSignUp() {
-        // Get input values
         String fullName = etFullName.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String phone = etPhone.getText().toString().trim();
@@ -171,7 +152,6 @@ public class CustomerSignUpActivity extends AppCompatActivity {
         String confirmPassword = etConfirmPassword.getText().toString().trim();
         boolean agreedToTerms = cbTerms.isChecked();
 
-        // Validate inputs
         if (TextUtils.isEmpty(fullName)) {
             etFullName.setError("Full name is required");
             etFullName.requestFocus();
@@ -231,7 +211,6 @@ public class CustomerSignUpActivity extends AppCompatActivity {
             return;
         }
 
-        // All validations passed - Proceed with sign up
         performSignUp(fullName, email, phone, password);
     }
 
@@ -240,49 +219,60 @@ public class CustomerSignUpActivity extends AppCompatActivity {
     }
 
     private void performSignUp(String fullName, String email, String phone, String password) {
-
         btnSignUp.setText("Creating account...");
         btnSignUp.setEnabled(false);
 
         RegisterRequest request = new RegisterRequest(fullName, email, phone, password);
-
         ApiService api = RetrofitClient.getApiService();
         Call<RegisterResponse> call = api.register(request);
 
         call.enqueue(new Callback<RegisterResponse>() {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-
                 btnSignUp.setText("Sign Up");
                 btnSignUp.setEnabled(true);
 
                 if (response.isSuccessful() && response.body() != null) {
-
                     RegisterResponse res = response.body();
 
-                    if ("success".equals(res.getStatus())) {
+                    // Check if registration was successful
+                    if (res.isSuccess()) {
+                        
+                        // DO NOT Auto Login - Flow: Register -> Verify -> Login
+                        
+                        String message = "Sign up successful!";
+                        if (res.getData().isRequires_verification()) {
+                            message += " Please check your email for verification link.";
+                        }
+                        
+                        Toast.makeText(CustomerSignUpActivity.this, message, Toast.LENGTH_LONG).show();
 
-                        User customer = res.getData().getCustomer();
-                        String token = res.getData().getToken();
-
-                        SharedPrefManager.getInstance(CustomerSignUpActivity.this)
-                                .saveCustomerLogin(customer, token);
-
-                        Toast.makeText(CustomerSignUpActivity.this,
-                                "Sign up successful!", Toast.LENGTH_SHORT).show();
-
-                        startActivity(new Intent(CustomerSignUpActivity.this,
-                                CustomerProfileActivity.class));
+                        // Navigate back to Login Screen
+                        // Assuming this activity was started from Login, finish() brings us back.
+                        // Or we can explicitly start LoginActivity.
+                        Intent intent = new Intent(CustomerSignUpActivity.this, CustomerLoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
                         finish();
 
                     } else {
+                        // Show error message from PHP backend
                         Toast.makeText(CustomerSignUpActivity.this,
                                 res.getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
+                    // Handle server errors
+                    String errorMsg = "Signup failed";
+                    if (response.code() == 400) {
+                        errorMsg = "Invalid data. Please check your inputs.";
+                    } else if (response.code() == 409) {
+                        errorMsg = "Email already registered";
+                    } else if (response.code() == 500) {
+                        errorMsg = "Server error. Please try again later.";
+                    }
                     Toast.makeText(CustomerSignUpActivity.this,
-                            "Signup failed (Server Error).", Toast.LENGTH_SHORT).show();
+                            errorMsg, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -290,14 +280,11 @@ public class CustomerSignUpActivity extends AppCompatActivity {
             public void onFailure(Call<RegisterResponse> call, Throwable t) {
                 btnSignUp.setText("Sign Up");
                 btnSignUp.setEnabled(true);
-
                 Toast.makeText(CustomerSignUpActivity.this,
                         "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-
 
     @Override
     public void onBackPressed() {

@@ -1,11 +1,14 @@
 package com.example.motovista_deep.api;
 
+import com.example.motovista_deep.models.CompleteProfileRequest;
 import com.example.motovista_deep.models.DeleteBikeRequest;
 import com.example.motovista_deep.models.GetBikeByIdResponse;
 import com.example.motovista_deep.models.GetSecondHandBikeByIdResponse;
 import com.example.motovista_deep.models.LoginRequest;
 import com.example.motovista_deep.models.LoginResponse;
 import com.example.motovista_deep.models.GenericResponse;
+import com.example.motovista_deep.models.ProfileUpdateRequest;
+import com.example.motovista_deep.models.ProfileUpdateResponse;
 import com.example.motovista_deep.models.RegisterRequest;
 import com.example.motovista_deep.models.RegisterResponse;
 import com.example.motovista_deep.models.GetProfileResponse;
@@ -13,12 +16,14 @@ import com.example.motovista_deep.models.GetCustomersResponse;
 import com.example.motovista_deep.models.GetCustomerDetailResponse;
 import com.example.motovista_deep.models.AddBikeRequest;
 import com.example.motovista_deep.models.UpdateBikeRequest;
+import com.example.motovista_deep.models.UpdateProfileRequest;
 import com.example.motovista_deep.models.UpdateSecondHandBikeRequest;
 import com.example.motovista_deep.models.UploadBikeImageResponse;
 import com.example.motovista_deep.models.SecondHandBikeRequest;
 import com.example.motovista_deep.models.GetBikesResponse;
 import com.example.motovista_deep.ai.AiChatRequest;
 import com.example.motovista_deep.ai.AiChatResponse;
+import com.example.motovista_deep.models.OtpRequest;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -26,6 +31,7 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -34,16 +40,25 @@ import retrofit2.http.Query;
 
 public interface ApiService {
 
-    // ✅ CUSTOMER LOGIN
-    @POST("login.php")
-    Call<LoginResponse> login(@Body LoginRequest request);
+    // ✅ CUSTOMER LOGIN (PHP BACKEND)
 
-    @POST("register.php")
-    Call<RegisterResponse> register(@Body RegisterRequest request);
 
+    // ✅ CUSTOMER REGISTRATION (PHP BACKEND)
+
+
+    // ✅ GET PROFILE (PHP BACKEND) - CHANGED FROM get_profile.php
+
+    // ✅ UPDATE PROFILE (PHP BACKEND) - CHANGED FROM profile_update.php
+    @POST("update_profile.php")
+    Call<GenericResponse> updateProfile(
+            @Header("Authorization") String token,
+            @Body UpdateProfileRequest request
+    );
+
+    // ✅ KEEP OLD UPDATE PROFILE (for backward compatibility)
     @Multipart
     @POST("profile_update.php")
-    Call<GenericResponse> updateProfile(
+    Call<GenericResponse> updateProfileMultipart(
             @Header("Authorization") String token,
             @Part MultipartBody.Part profile_image,
             @Part MultipartBody.Part aadhar_front,
@@ -57,30 +72,26 @@ public interface ApiService {
             @Part("pan") RequestBody pan
     );
 
-    @GET("get_profile.php")
-    Call<GetProfileResponse> getProfile(
-            @Header("Authorization") String token
-    );
+    // ✅ VERIFY EMAIL (PHP BACKEND)
+    @POST("verify_email_link.php")
+    Call<GenericResponse> verifyEmail(@Body VerifyEmailRequest request);
 
+    // ✅ RESEND VERIFICATION EMAIL (PHP BACKEND)
+    @POST("resend_verification_email.php")
+    Call<GenericResponse> resendVerification(@Body ResendVerificationRequest request);
 
-    @POST("admin_login.php")
-    Call<LoginResponse> adminLogin(@Body LoginRequest request);
+    // ✅ ADMIN LOGIN (YOUR OLD BACKEND)
+    @POST("admin_send_otp.php")
+    Call<GenericResponse> adminSendOtp(@Body LoginRequest request); // We reuse LoginRequest (email, password)
 
-    @GET("admin_get_customers.php")
-    Call<GetCustomersResponse> getCustomers(
-            @Header("Authorization") String token
-    );
+    @POST("admin_verify_otp.php")
+    Call<LoginResponse> adminVerifyOtp(@Body OtpRequest request); // Need a new (or reused) OtpRequest
+
 
     @GET("admin_get_customer_detail.php")
     Call<GetCustomerDetailResponse> getCustomerDetail(
             @Header("Authorization") String token,
             @Query("customer_id") int customerId
-    );
-
-    @POST("add_bike.php")
-    Call<GenericResponse> addBike(
-            @Header("Authorization") String token,
-            @Body AddBikeRequest request
     );
 
 
@@ -98,8 +109,6 @@ public interface ApiService {
             @Part List<MultipartBody.Part> bike_images
     );
 
-
-    // Add these methods to your existing ApiService interface
     @GET("get_all_bikes.php")
     Call<GetBikesResponse> getAllBikes(
             @Header("Authorization") String token
@@ -118,7 +127,6 @@ public interface ApiService {
     @POST("ai_chat.php")
     Call<AiChatResponse> chatWithAi(@Body AiChatRequest request);
 
-    // ✅ NEW: DELETE APIs
     @POST("delete_bike.php")
     Call<GenericResponse> deleteBike(
             @Header("Authorization") String token,
@@ -131,7 +139,6 @@ public interface ApiService {
             @Body DeleteBikeRequest request
     );
 
-    // ✅ NEW: UPDATE APIs
     @POST("update_bike.php")
     Call<GenericResponse> updateBike(
             @Header("Authorization") String token,
@@ -144,12 +151,10 @@ public interface ApiService {
             @Body UpdateSecondHandBikeRequest request
     );
 
-    // ✅ NEW: GET SINGLE BIKE APIs (for edit)
-    // In ApiService.java
     @GET("get_bike_by_id.php")
     Call<GetBikeByIdResponse> getBikeById(
             @Header("Authorization") String token,
-            @Query("id") int bikeId  // Changed from bike_id to id
+            @Query("id") int bikeId
     );
 
     @GET("get_second_hand_bike_by_id.php")
@@ -158,4 +163,82 @@ public interface ApiService {
             @Query("bike_id") int bikeId
     );
 
+    @POST("login.php")
+    Call<LoginResponse> login(@Body LoginRequest request);
+
+    @POST("register.php")
+    Call<RegisterResponse> register(@Body RegisterRequest request);
+
+    // This matches our update_profile.php script
+    @Multipart
+    @POST("update_profile.php")
+    Call<ProfileUpdateResponse> updateProfile(
+            @Header("Authorization") String token,
+            @Part MultipartBody.Part profile_image,
+            @Part MultipartBody.Part aadhar_front,
+            @Part MultipartBody.Part aadhar_back,
+            @Part("full_name") RequestBody full_name,
+            @Part("email") RequestBody email,
+            @Part("phone") RequestBody phone,
+            @Part("dob") RequestBody dob,
+            @Part("house_no") RequestBody house_no,
+            @Part("street") RequestBody street,
+            @Part("city") RequestBody city,
+            @Part("state") RequestBody state,
+            @Part("pincode") RequestBody pincode,
+            @Part("pan_no") RequestBody pan_no
+    );
+    @GET("admin_get_customers.php")
+    Call<GetCustomersResponse> getCustomers(@Header("Authorization") String token);
+    @POST("update_profile_complete.php")
+    @Headers("Content-Type: application/json")
+    Call<ProfileUpdateResponse> completeProfile(
+            @Header("Authorization") String token,
+            @Body ProfileUpdateRequest request
+    );
+    @POST("add_bike.php")
+    Call<GenericResponse> addBike(@Header("Authorization") String token, @Body AddBikeRequest request);
+    @GET("profile.php")
+    Call<GetProfileResponse> getProfile(@Header("Authorization") String token);
+
+    // ✅ MULTIPART PROFILE UPDATE (WITH IMAGES)
+    @Multipart
+    @POST("upload_profile_images.php")
+    Call<GenericResponse> uploadProfileWithImages(
+            @Header("Authorization") String token,
+            @Part MultipartBody.Part profile_image,
+            @Part MultipartBody.Part aadhar_front,
+            @Part MultipartBody.Part aadhar_back,
+            @Part("dob") RequestBody dob,
+            @Part("house_no") RequestBody house_no,
+            @Part("street") RequestBody street,
+            @Part("city") RequestBody city,
+            @Part("state") RequestBody state,
+            @Part("pincode") RequestBody pincode,
+            @Part("pan") RequestBody pan
+    );
+
+    // Inner classes for verification requests
+    class VerifyEmailRequest {
+        private String email;
+        private String verification_code;
+
+        public VerifyEmailRequest(String email, String verification_code) {
+            this.email = email;
+            this.verification_code = verification_code;
+        }
+
+        public String getEmail() { return email; }
+        public String getVerification_code() { return verification_code; }
+    }
+
+    class ResendVerificationRequest {
+        private String email;
+
+        public ResendVerificationRequest(String email) {
+            this.email = email;
+        }
+
+        public String getEmail() { return email; }
+    }
 }

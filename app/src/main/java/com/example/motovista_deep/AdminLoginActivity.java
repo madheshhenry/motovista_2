@@ -5,13 +5,11 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +19,7 @@ import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.helpers.SharedPrefManager;
 import com.example.motovista_deep.models.LoginRequest;
 import com.example.motovista_deep.models.LoginResponse;
+import com.example.motovista_deep.models.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,25 +27,25 @@ import retrofit2.Response;
 
 public class AdminLoginActivity extends AppCompatActivity {
 
-    private EditText etEmail, etPassword;
+    private EditText etEmail, etPassword, etOtp;
+    private android.widget.LinearLayout layoutOtp;
     private ImageView ivPasswordToggle;
-    private Button btnLogin, btnBiometric;
-    private TextView tvForgotPassword;
+    private Button btnLogin;
     private boolean isPasswordVisible = false;
-
+    private boolean isOtpSent = false;
     private ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         makeFullScreen();
         setContentView(R.layout.activity_admin_login);
 
-        // FIXED AUTO LOGIN
-        String role = SharedPrefManager.getInstance(this).getRole();
-        if (SharedPrefManager.getInstance(this).isLoggedIn() && "admin".equals(role)) {
-            navigateToAdminDashboard();
+        // Check if Admin is already logged in
+        if (SharedPrefManager.getInstance(this).isLoggedIn() &&
+                "admin".equals(SharedPrefManager.getInstance(this).getRole())) {
+            startActivity(new Intent(this, AdminDashboardActivity.class));
+            finish();
             return;
         }
 
@@ -57,36 +56,31 @@ public class AdminLoginActivity extends AppCompatActivity {
 
     private void makeFullScreen() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             WindowManager.LayoutParams params = getWindow().getAttributes();
-            params.layoutInDisplayCutoutMode =
-                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
             getWindow().setAttributes(params);
         }
-
         getWindow().setStatusBarColor(Color.TRANSPARENT);
     }
 
     private void initViews() {
         etEmail = findViewById(R.id.et_email);
         etPassword = findViewById(R.id.et_password);
+        etOtp = findViewById(R.id.et_otp);
+        layoutOtp = findViewById(R.id.layout_otp);
         ivPasswordToggle = findViewById(R.id.iv_password_toggle);
         btnLogin = findViewById(R.id.btn_login);
-        btnBiometric = findViewById(R.id.btn_biometric);
-        tvForgotPassword = findViewById(R.id.tv_forgot_password);
+        
+        // Initial State
+        btnLogin.setText("Send OTP");
+        layoutOtp.setVisibility(android.view.View.GONE);
     }
 
     private void setupClickListeners() {
         ivPasswordToggle.setOnClickListener(v -> togglePasswordVisibility());
-        btnLogin.setOnClickListener(v -> attemptLogin());
-        tvForgotPassword.setOnClickListener(v ->
-                Toast.makeText(this, "Forgot Password clicked", Toast.LENGTH_SHORT).show()
-        );
+        btnLogin.setOnClickListener(v -> handleLoginButton());
     }
 
     private void togglePasswordVisibility() {
@@ -101,79 +95,94 @@ public class AdminLoginActivity extends AppCompatActivity {
         etPassword.setSelection(etPassword.getText().length());
     }
 
-    private void attemptLogin() {
+    private void handleLoginButton() {
+        if (!isOtpSent) {
+            sendOtp();
+        } else {
+            verifyOtpAndLogin();
+        }
+    }
+
+    private void sendOtp() {
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
 
-        if (email.isEmpty()) {
-            etEmail.setError("Please enter email or username");
-            return;
-        }
-        if (password.isEmpty()) {
-            etPassword.setError("Please enter password");
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please enter Email and Password", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        btnLogin.setText("Logging in...");
+        btnLogin.setText("Sending...");
         btnLogin.setEnabled(false);
 
-        performLogin(email, password);
+        apiService.adminSendOtp(new LoginRequest(email, password)).enqueue(new Callback<com.example.motovista_deep.models.GenericResponse>() {
+            @Override
+            public void onResponse(Call<com.example.motovista_deep.models.GenericResponse> call, Response<com.example.motovista_deep.models.GenericResponse> response) {
+                btnLogin.setEnabled(true);
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    Toast.makeText(AdminLoginActivity.this, "OTP Sent to Email", Toast.LENGTH_SHORT).show();
+                    
+                    // Switch UI to OTP mode
+                    isOtpSent = true;
+                    layoutOtp.setVisibility(android.view.View.VISIBLE);
+                    btnLogin.setText("Verify & Login");
+                    
+                    // Disable inputs
+                    etEmail.setEnabled(false);
+                    etPassword.setEnabled(false);
+                } else {
+                     btnLogin.setText("Send OTP");
+                     String msg = (response.body() != null) ? response.body().getMessage() : "Failed to send OTP";
+                     Toast.makeText(AdminLoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<com.example.motovista_deep.models.GenericResponse> call, Throwable t) {
+                btnLogin.setEnabled(true);
+                btnLogin.setText("Send OTP");
+                Toast.makeText(AdminLoginActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private void performLogin(String email, String password) {
+    private void verifyOtpAndLogin() {
+        String email = etEmail.getText().toString().trim();
+        String otp = etOtp.getText().toString().trim();
 
-        LoginRequest loginRequest = new LoginRequest(email, password);
+        if (otp.isEmpty() || otp.length() < 6) {
+            Toast.makeText(this, "Please enter valid OTP", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        Call<LoginResponse> call = apiService.adminLogin(loginRequest);
+        btnLogin.setText("Verifying...");
+        btnLogin.setEnabled(false);
 
-        call.enqueue(new Callback<LoginResponse>() {
+        apiService.adminVerifyOtp(new com.example.motovista_deep.models.OtpRequest(email, otp)).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-
-                btnLogin.setText("Log In");
                 btnLogin.setEnabled(true);
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    // Login Success
+                    SharedPrefManager.getInstance(AdminLoginActivity.this)
+                            .saveAdminLogin(response.body().getData().getCustomer(), response.body().getData().getToken());
 
-                if (response.isSuccessful() && response.body() != null) {
-
-                    LoginResponse loginResponse = response.body();
-
-                    if ("success".equals(loginResponse.getStatus())) {
-
-                        LoginResponse.Admin admin = loginResponse.getData().getAdmin();
-                        String token = loginResponse.getData().getToken();
-
-                        SharedPrefManager.getInstance(AdminLoginActivity.this)
-                                .saveAdminLogin(admin.getUsername(), admin.getId(), token);
-
-                        navigateToAdminDashboard();
-
-
-
-                    Toast.makeText(AdminLoginActivity.this,
-                                "Admin login successful!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(AdminLoginActivity.this,
-                                loginResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
+                    Toast.makeText(AdminLoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(AdminLoginActivity.this, AdminDashboardActivity.class));
+                    finish();
                 } else {
-                    Toast.makeText(AdminLoginActivity.this,
-                            "Login failed. Try again.", Toast.LENGTH_SHORT).show();
+                    btnLogin.setText("Verify & Login");
+                    String msg = (response.body() != null) ? response.body().getMessage() : "Verification Failed";
+                    Toast.makeText(AdminLoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                btnLogin.setText("Log In");
                 btnLogin.setEnabled(true);
-                Toast.makeText(AdminLoginActivity.this,
-                        "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                btnLogin.setText("Verify & Login");
+                Toast.makeText(AdminLoginActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void navigateToAdminDashboard() {
-        startActivity(new Intent(this, AdminDashboardActivity.class));
-        finish();
     }
 }

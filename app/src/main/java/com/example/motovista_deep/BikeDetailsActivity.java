@@ -16,10 +16,10 @@ import android.app.ProgressDialog;
 import android.util.Log;
 
 import com.example.motovista_deep.adapter.ImageSliderAdapter;
+import com.example.motovista_deep.helpers.SharedPrefManager;
 import com.example.motovista_deep.models.BikeModel;
 import com.example.motovista_deep.api.ApiService;
 import com.example.motovista_deep.api.RetrofitClient;
-import com.example.motovista_deep.helpers.SharedPrefManager;
 import com.example.motovista_deep.models.GenericResponse;
 import com.example.motovista_deep.models.DeleteBikeRequest;
 import com.example.motovista_deep.models.GetBikeByIdResponse;

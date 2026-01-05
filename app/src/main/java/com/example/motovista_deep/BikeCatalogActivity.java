@@ -169,30 +169,50 @@ public class BikeCatalogActivity extends AppCompatActivity {
         });
 
         // View Details buttons
+        // Update in setupClickListeners() method:
+
         btnViewDetailsRaptor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(BikeCatalogActivity.this, "Viewing details for SB-Raptor 500", Toast.LENGTH_SHORT).show();
-                // Navigate to bike details page
-                // startActivity(new Intent(BikeCatalogActivity.this, BikeDetailsActivity.class));
+                Intent intent = new Intent(BikeCatalogActivity.this, BikeDetailsScreenActivity.class);
+                intent.putExtra("BIKE_NAME", "SB-Raptor 500");
+                intent.putExtra("BIKE_PRICE", "₹2,40,000");
+                intent.putExtra("BIKE_VARIANT", "Sports");
+                intent.putExtra("BIKE_YEAR", "2024");
+                intent.putExtra("BIKE_BRAND", "SB Motors");
+                intent.putExtra("BIKE_MODEL", "Raptor 500");
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
         btnViewDetailsCruiser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(BikeCatalogActivity.this, "Viewing details for SB-Cruiser King", Toast.LENGTH_SHORT).show();
-                // Navigate to bike details page
-                // startActivity(new Intent(BikeCatalogActivity.this, BikeDetailsActivity.class));
+                Intent intent = new Intent(BikeCatalogActivity.this, BikeDetailsScreenActivity.class);
+                intent.putExtra("BIKE_NAME", "SB-Cruiser King");
+                intent.putExtra("BIKE_PRICE", "₹3,10,000");
+                intent.putExtra("BIKE_VARIANT", "Cruiser");
+                intent.putExtra("BIKE_YEAR", "2024");
+                intent.putExtra("BIKE_BRAND", "SB Motors");
+                intent.putExtra("BIKE_MODEL", "Cruiser King");
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 
         btnViewDetailsTrailBlazer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(BikeCatalogActivity.this, "Viewing details for SB-TrailBlazer", Toast.LENGTH_SHORT).show();
-                // Navigate to bike details page
-                // startActivity(new Intent(BikeCatalogActivity.this, BikeDetailsActivity.class));
+                Intent intent = new Intent(BikeCatalogActivity.this, BikeDetailsScreenActivity.class);
+                intent.putExtra("BIKE_NAME", "SB-TrailBlazer");
+                intent.putExtra("BIKE_PRICE", "₹3,50,000");
+                intent.putExtra("BIKE_VARIANT", "Adventure");
+                intent.putExtra("BIKE_YEAR", "2024");
+                intent.putExtra("BIKE_BRAND", "SB Motors");
+                intent.putExtra("BIKE_MODEL", "TrailBlazer");
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
         });
 

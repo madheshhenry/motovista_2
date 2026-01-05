@@ -23,6 +23,9 @@ import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.helpers.FileUtil;
 import com.example.motovista_deep.helpers.SharedPrefManager;
 import com.example.motovista_deep.models.GenericResponse;
+import com.example.motovista_deep.models.ProfileUpdateRequest;
+import com.example.motovista_deep.models.ProfileUpdateResponse;
+import com.example.motovista_deep.models.User;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -185,42 +188,94 @@ public class CustomerProfileActivity extends AppCompatActivity {
     }
 
     private void uploadProfile() {
-
         String token = SharedPrefManager.getInstance(this).getToken();
         if (token == null) {
             toast("Login expired");
             return;
         }
 
+        // 1. Show loading state
+        btnCompleteSetup.setText("Saving...");
+        btnCompleteSetup.setEnabled(false);
+
+        // 2. Prepare Multipart Parts
+        MultipartBody.Part profileBody = filePart("profile_image", profileImageUri);
+        MultipartBody.Part frontBody = filePart("aadhar_front", aadharFrontUri);
+        MultipartBody.Part backBody = filePart("aadhar_back", aadharBackUri);
+
+        RequestBody dob = text(etDOB);
+        RequestBody house_no = text(etHouseNo);
+        RequestBody street = text(etStreet);
+        RequestBody city = text(etCity);
+        RequestBody state = text(etState);
+        RequestBody pincode = text(etPincode);
+        RequestBody pan = text(etPAN);
+
         ApiService api = RetrofitClient.getApiService();
 
-        Call<GenericResponse> call = api.updateProfile(
+        // 3. Call Multipart Endpoint
+        Call<ProfileUpdateResponse> call = api.updateProfile(
                 "Bearer " + token,
-                filePart("profile_image", profileImageUri),
-                filePart("aadhar_front", aadharFrontUri),
-                filePart("aadhar_back", aadharBackUri),
-                text(etDOB),
-                text(etHouseNo),
-                text(etStreet),
-                text(etCity),
-                text(etState),
-                text(etPincode),
-                text(etPAN)
+                profileBody,
+                frontBody,
+                backBody,
+                null, // full_name (not updating here)
+                null, // email
+                null, // phone
+                dob,
+                house_no,
+                street,
+                city,
+                state,
+                pincode,
+                pan
         );
 
-        call.enqueue(new Callback<GenericResponse>() {
+        // 4. Execute
+        call.enqueue(new Callback<ProfileUpdateResponse>() {
             @Override
-            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                if (response.isSuccessful()) {
-                    toast("Profile updated");
-                    startActivity(new Intent(CustomerProfileActivity.this, CustomerHomeActivity.class));
-                    finish();
-                } else toast("Update failed");
+            public void onResponse(Call<ProfileUpdateResponse> call, Response<ProfileUpdateResponse> response) {
+                btnCompleteSetup.setText("Complete Setup");
+                btnCompleteSetup.setEnabled(true);
+
+                if (response.isSuccessful() && response.body() != null) {
+                    ProfileUpdateResponse updateResponse = response.body();
+
+                    if (updateResponse.isSuccess()) {
+                        // Update local user object
+                        User currentUser = SharedPrefManager.getInstance(CustomerProfileActivity.this).getUser();
+                        if (currentUser != null) {
+                            currentUser.setIs_profile_completed(true);
+                            currentUser.setDob(etDOB.getText().toString().trim());
+                            // Update other fields if needed, but the server response 'user' object is best
+                            // Actually, let's use the user from response if available
+                            if (updateResponse.getUser() != null) {
+                                SharedPrefManager.getInstance(CustomerProfileActivity.this)
+                                        .saveCustomerLogin(updateResponse.getUser(), token);
+                            } else {
+                                // Fallback update local fields
+                                currentUser.setCity(etCity.getText().toString().trim());
+                                SharedPrefManager.getInstance(CustomerProfileActivity.this)
+                                        .saveCustomerLogin(currentUser, token);
+                            }
+                        }
+
+                        toast("Profile completed successfully!");
+                        startActivity(new Intent(CustomerProfileActivity.this, CustomerHomeActivity.class));
+                        finish();
+                    } else {
+                        toast(updateResponse.getMessage());
+                    }
+                } else {
+                    toast("Update failed: " + response.code());
+                }
             }
 
             @Override
-            public void onFailure(Call<GenericResponse> call, Throwable t) {
-                toast("Network error");
+            public void onFailure(Call<ProfileUpdateResponse> call, Throwable t) {
+                btnCompleteSetup.setText("Complete Setup");
+                btnCompleteSetup.setEnabled(true);
+                toast("Network error: " + t.getMessage());
             }
         });
     }

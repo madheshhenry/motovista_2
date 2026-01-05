@@ -1,181 +1,163 @@
 package com.example.motovista_deep;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.motovista_deep.api.ApiService;
+import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.helpers.FileUtil;
+import com.example.motovista_deep.helpers.SharedPrefManager;
+import com.example.motovista_deep.models.GenericResponse;
+
+import java.io.File;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class CustomerEditProfileActivity extends AppCompatActivity {
 
-    // UI Components
-    private ImageView btnBack, btnEditPhoto;
+    private ImageView btnBack, btnEditPhoto, ivProfilePicture;
     private EditText etFullName, etEmail, etPhone;
     private CardView btnSaveChanges, btnCancel;
 
-    private SharedPreferences sharedPreferences;
+    private Uri selectedImageUri = null;
+    private static final int PICK_IMAGE_REQUEST = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_edit_profile);
 
-        // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("CustomerPrefs", MODE_PRIVATE);
-
-        // Initialize views
         initializeViews();
-
-        // Load user data
-        loadUserData();
-
-        // Setup click listeners
+        loadCurrentData();
         setupClickListeners();
     }
 
     private void initializeViews() {
-        // Header
         btnBack = findViewById(R.id.btnBack);
-
-        // Profile Picture
         btnEditPhoto = findViewById(R.id.btnEditPhoto);
-
-        // Form Fields
+        ivProfilePicture = findViewById(R.id.ivProfilePicture);
         etFullName = findViewById(R.id.etFullName);
         etEmail = findViewById(R.id.etEmail);
         etPhone = findViewById(R.id.etPhone);
-
-        // Buttons
         btnSaveChanges = findViewById(R.id.btnSaveChanges);
         btnCancel = findViewById(R.id.btnCancel);
     }
 
-    private void loadUserData() {
-        // Load data from SharedPreferences or use defaults
-        String fullName = sharedPreferences.getString("customer_name", "Santhosh Kumar");
-        String email = sharedPreferences.getString("customer_email", "santhosh.k@example.com");
-        String phone = sharedPreferences.getString("customer_phone", "+91 98765 43210");
-
-        // Set data to views
-        etFullName.setText(fullName);
-        etEmail.setText(email);
-        etPhone.setText(phone);
-    }
-
-    private void saveUserData() {
-        String fullName = etFullName.getText().toString().trim();
-        String email = etEmail.getText().toString().trim();
-        String phone = etPhone.getText().toString().trim();
-
-        // Basic validation
-        if (fullName.isEmpty()) {
-            etFullName.setError("Full name is required");
-            etFullName.requestFocus();
-            return;
+    private void loadCurrentData() {
+        com.example.motovista_deep.models.User user = SharedPrefManager.getInstance(this).getUser();
+        if (user != null) {
+            etFullName.setText(user.getFull_name());
+            etEmail.setText(user.getEmail());
+            etPhone.setText(user.getPhone());
         }
-
-        if (email.isEmpty()) {
-            etEmail.setError("Email is required");
-            etEmail.requestFocus();
-            return;
-        }
-
-        if (phone.isEmpty()) {
-            etPhone.setError("Phone number is required");
-            etPhone.requestFocus();
-            return;
-        }
-
-        // Save to SharedPreferences
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("customer_name", fullName);
-        editor.putString("customer_email", email);
-        editor.putString("customer_phone", phone);
-        editor.apply();
-
-        // Show success message
-        Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
-
-        // Set result and finish
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("updated_name", fullName);
-        resultIntent.putExtra("updated_email", email);
-        resultIntent.putExtra("updated_phone", phone);
-        setResult(RESULT_OK, resultIntent);
-
-        // Navigate back
-        finish();
     }
 
     private void setupClickListeners() {
-        // Back Button
-        btnBack.setOnClickListener(new View.OnClickListener() {
+        btnBack.setOnClickListener(v -> finish());
+        btnCancel.setOnClickListener(v -> finish());
+
+        // Select Photo
+        btnEditPhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        });
+
+        // Update Profile on Server
+        btnSaveChanges.setOnClickListener(v -> saveProfileChanges());
+    }
+
+    private void saveProfileChanges() {
+        String name = etFullName.getText().toString().trim();
+        String email = etEmail.getText().toString().trim();
+        String phone = etPhone.getText().toString().trim();
+        String token = SharedPrefManager.getInstance(this).getToken();
+
+        // Convert Strings to RequestBody for Multipart
+        RequestBody namePart = RequestBody.create(name, MultipartBody.FORM);
+        RequestBody emailPart = RequestBody.create(email, MultipartBody.FORM);
+        RequestBody phonePart = RequestBody.create(phone, MultipartBody.FORM);
+
+        MultipartBody.Part imagePart = null;
+        if (selectedImageUri != null) {
+            String path = FileUtil.getPath(this, selectedImageUri);
+            if (path != null) {
+                File file = new File(path);
+                RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+                imagePart = MultipartBody.Part.createFormData("profile_image", file.getName(), requestFile);
+            }
+        }
+
+        btnSaveChanges.setEnabled(false);
+        ApiService api = RetrofitClient.getApiService();
+
+        // Pass NULL for address fields (not editing them here)
+        api.updateProfile(
+                "Bearer " + token,
+                imagePart,
+                null, // aadhar_front
+                null, // aadhar_back
+                namePart,
+                emailPart,
+                phonePart,
+                null, // dob
+                null, // house_no
+                null, // street
+                null, // city
+                null, // state
+                null, // pincode
+                null  // pan_no
+        ).enqueue(new Callback<com.example.motovista_deep.models.ProfileUpdateResponse>() {
             @Override
-            public void onClick(View v) {
-                onBackPressed();
+            public void onResponse(Call<com.example.motovista_deep.models.ProfileUpdateResponse> call, Response<com.example.motovista_deep.models.ProfileUpdateResponse> response) {
+                btnSaveChanges.setEnabled(true);
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().isSuccess()) {
+                        Toast.makeText(CustomerEditProfileActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
+                        
+                        // Update SharedPrefs with new data if returned
+                        if (response.body().getUser() != null) {
+                            SharedPrefManager.getInstance(CustomerEditProfileActivity.this)
+                                    .saveCustomerLogin(response.body().getUser(), token);
+                        }
+                        
+                        setResult(RESULT_OK);
+                        finish();
+                    } else {
+                         Toast.makeText(CustomerEditProfileActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(CustomerEditProfileActivity.this, "Update failed: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
             }
-        });
 
-        // Edit Photo Button
-        btnEditPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // TODO: Implement photo selection functionality
-                Toast.makeText(CustomerEditProfileActivity.this, "Edit profile photo", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<com.example.motovista_deep.models.ProfileUpdateResponse> call, Throwable t) {
+                btnSaveChanges.setEnabled(true);
+                Toast.makeText(CustomerEditProfileActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        });
-
-        // Save Changes Button
-        btnSaveChanges.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveUserData();
-            }
-        });
-
-        // Cancel Button
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Just go back without saving
-                finish();
-            }
-        });
-
-        // Handle Enter key in fields
-        etFullName.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_NEXT) {
-                etEmail.requestFocus();
-                return true;
-            }
-            return false;
-        });
-
-        etEmail.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_NEXT) {
-                etPhone.requestFocus();
-                return true;
-            }
-            return false;
-        });
-
-        etPhone.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
-                saveUserData();
-                return true;
-            }
-            return false;
         });
     }
 
     @Override
-    public void onBackPressed() {
-        // Optionally show confirmation dialog if changes were made
-        finish();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+            selectedImageUri = data.getData();
+            ivProfilePicture.setImageURI(selectedImageUri); // Show preview
+        }
     }
 }

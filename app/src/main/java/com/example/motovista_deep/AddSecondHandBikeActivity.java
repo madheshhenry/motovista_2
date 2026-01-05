@@ -26,8 +26,7 @@ import com.example.motovista_deep.helpers.SharedPrefManager;
 import com.example.motovista_deep.models.SecondHandBikeRequest;
 import com.example.motovista_deep.models.GenericResponse;
 import com.example.motovista_deep.models.UploadBikeImageResponse;
-import com.example.motovista_deep.models.GetSecondHandBikeByIdResponse;
-import com.example.motovista_deep.models.UpdateSecondHandBikeRequest;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.FileOutputStream;

@@ -20,9 +20,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.motovista_deep.adapter.BikeAdapter;
+import com.example.motovista_deep.helpers.SharedPrefManager;
 import com.example.motovista_deep.models.BikeModel;
 import com.example.motovista_deep.models.GetBikesResponse;
-import com.example.motovista_deep.helpers.SharedPrefManager;
 import com.example.motovista_deep.api.RetrofitClient;
 
 import retrofit2.Call;
