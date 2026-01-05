@@ -109,7 +109,7 @@ public interface ApiService {
             @Part List<MultipartBody.Part> bike_images
     );
 
-    @GET("get_all_bikes.php")
+    @GET("get_bikes.php")
     Call<GetBikesResponse> getAllBikes(
             @Header("Authorization") String token
     );
@@ -151,7 +151,7 @@ public interface ApiService {
             @Body UpdateSecondHandBikeRequest request
     );
 
-    @GET("get_bike_by_id.php")
+    @GET("get_bike_details.php")
     Call<GetBikeByIdResponse> getBikeById(
             @Header("Authorization") String token,
             @Query("id") int bikeId

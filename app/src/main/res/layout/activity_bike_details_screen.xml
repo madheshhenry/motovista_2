@@ -170,14 +170,16 @@
 
                 </LinearLayout>
 
-                <!-- Specification Icons Row -->
+                <!-- Specification Icons Row - HIDDEN -->
                 <LinearLayout
+                    android:id="@+id/specsIconsRow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingVertical="@dimen/padding_medium"
                     android:paddingHorizontal="@dimen/padding_large"
-                    android:background="@color/white">
+                    android:background="@color/white"
+                    android:visibility="gone">
 
                     <!-- Engine -->
                     <LinearLayout
@@ -657,8 +659,9 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Specifications Card -->
+            <!-- Specifications Card - HIDDEN -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/specificationsCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/padding_medium"
@@ -667,7 +670,8 @@
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/white"
-                app:cardUseCompatPadding="true">
+                app:cardUseCompatPadding="true"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"

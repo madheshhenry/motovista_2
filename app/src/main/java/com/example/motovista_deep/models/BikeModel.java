@@ -6,47 +6,109 @@ import java.util.ArrayList;
 
 public class BikeModel implements Parcelable {
 
+    @com.google.gson.annotations.SerializedName("id")
     private int id;
+
+    @com.google.gson.annotations.SerializedName("brand")
     private String brand;
+
+    @com.google.gson.annotations.SerializedName("model")
     private String model;
+
+    @com.google.gson.annotations.SerializedName("price") // Note: Database uses on_road_price mostly, but keeping this
     private String price;
+
+    @com.google.gson.annotations.SerializedName("condition_type")
     private String condition;
+
+    @com.google.gson.annotations.SerializedName("thumbnail") // Mapped from get_bikes.php
     private String image_url;
+
     private ArrayList<String> imageUrls = new ArrayList<>();
+
+    @com.google.gson.annotations.SerializedName("type")
     private String type;
+
     private int is_featured;
 
+    @com.google.gson.annotations.SerializedName("variant")
     private String variant;
+
+    @com.google.gson.annotations.SerializedName("engine_cc")
     private String engine_cc;
+
+    @com.google.gson.annotations.SerializedName("year")
     private String year;
+
+    @com.google.gson.annotations.SerializedName("fuel_type")
     private String fuel_type;
+
+    @com.google.gson.annotations.SerializedName("transmission")
     private String transmission;
+
+    @com.google.gson.annotations.SerializedName("braking_type")
     private String braking_type;
+
+    @com.google.gson.annotations.SerializedName("on_road_price")
     private String on_road_price;
+
+    @com.google.gson.annotations.SerializedName("insurance_price")
     private String insurance;
+
+    @com.google.gson.annotations.SerializedName("registration_price")
     private String registration_charge;
+
+    @com.google.gson.annotations.SerializedName("ltrt_price")
     private String ltrt;
+
+    @com.google.gson.annotations.SerializedName("mileage")
     private String mileage;
+
+    @com.google.gson.annotations.SerializedName("fuel_tank_capacity")
     private String fuel_tank_capacity;
+
+    @com.google.gson.annotations.SerializedName("kerb_weight")
     private String kerb_weight;
+
+    @com.google.gson.annotations.SerializedName("seat_height")
     private String seat_height;
+
+    @com.google.gson.annotations.SerializedName("ground_clearance")
     private String ground_clearance;
+
+    @com.google.gson.annotations.SerializedName("top_speed")
     private String top_speed;
+
+    @com.google.gson.annotations.SerializedName("warranty")
     private String warranty_period;
+
+    @com.google.gson.annotations.SerializedName("free_services")
     private String free_services_count;
+
+    @com.google.gson.annotations.SerializedName("features")
     private String features;
+
+    @com.google.gson.annotations.SerializedName("price_disclaimer")
     private String price_disclaimer;
+
+    @com.google.gson.annotations.SerializedName("registration_proof")
     private String registration_proof;
 
     // NEW FIELDS - ADDED HERE
+    @com.google.gson.annotations.SerializedName("date")
     private String date;
+
+    @com.google.gson.annotations.SerializedName("engine_number")
     private String engine_number;
+
+    @com.google.gson.annotations.SerializedName("chassis_number")
     private String chassis_number;
 
     private String odometer;
     private String owner_details;
     private String condition_details;
 
+    @com.google.gson.annotations.SerializedName("image_paths") // Mapped from API
     private ArrayList<String> all_images = new ArrayList<>();
 
     // Base URL - will be set from adapter

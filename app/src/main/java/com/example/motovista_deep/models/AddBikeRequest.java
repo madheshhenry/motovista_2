@@ -24,7 +24,7 @@ public class AddBikeRequest {
     private String price_disclaimer;
     private String type = "NEW";
     private String features;
-    private String image_path;
+    private String image_paths;
     private String date;
     private String engine_number;
     private String chassis_number;
@@ -33,7 +33,7 @@ public class AddBikeRequest {
     public AddBikeRequest(String brand, String model, String on_road_price,
                           String engine_cc, String mileage, String top_speed,
                           String braking_type, String type, String features,
-                          String image_path) {
+                          String image_paths) {
         this.brand = brand;
         this.model = model;
         this.on_road_price = on_road_price;
@@ -42,7 +42,7 @@ public class AddBikeRequest {
         this.braking_type = braking_type;
         this.type = type;
         this.features = features;
-        this.image_path = image_path;
+        this.image_paths = image_paths;
     }
 
     // New constructor with all fields including new ones
@@ -54,7 +54,8 @@ public class AddBikeRequest {
                           String ground_clearance, String warranty_period,
                           String free_services_count, String registration_proof,
                           String price_disclaimer, String type, String features,
-                          String image_path, String date, String engine_number, String chassis_number) {
+            String image_paths, String date, String engine_number, String chassis_number,
+            java.util.List<String> colors, java.util.List<CustomFitting> custom_fittings) {
         this.brand = brand;
         this.model = model;
         this.variant = variant;
@@ -78,11 +79,21 @@ public class AddBikeRequest {
         this.price_disclaimer = price_disclaimer;
         this.type = type;
         this.features = features;
-        this.image_path = image_path;
+        this.image_paths = image_paths;
         this.date = date;
         this.engine_number = engine_number;
         this.chassis_number = chassis_number;
+        this.colors = colors;
+        this.custom_fittings = custom_fittings;
     }
+
+    private java.util.List<String> colors;
+    public java.util.List<String> getColors() { return colors; }
+    public void setColors(java.util.List<String> colors) { this.colors = colors; }
+
+    private java.util.List<CustomFitting> custom_fittings;
+    public java.util.List<CustomFitting> getCustom_fittings() { return custom_fittings; }
+    public void setCustom_fittings(java.util.List<CustomFitting> custom_fittings) { this.custom_fittings = custom_fittings; }
 
     // Getters and Setters for all fields
     public String getBrand() { return brand; }
@@ -154,8 +165,8 @@ public class AddBikeRequest {
     public String getFeatures() { return features; }
     public void setFeatures(String features) { this.features = features; }
 
-    public String getImage_path() { return image_path; }
-    public void setImage_path(String image_path) { this.image_path = image_path; }
+    public String getImage_paths() { return image_paths; }
+    public void setImage_paths(String image_paths) { this.image_paths = image_paths; }
 
     public String getDate() { return date; }
     public void setDate(String date) { this.date = date; }

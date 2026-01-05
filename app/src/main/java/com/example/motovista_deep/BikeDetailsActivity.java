@@ -278,9 +278,9 @@ public class BikeDetailsActivity extends AppCompatActivity {
                         Log.d("BIKE_DETAILS_API", "Response status: " + apiResponse.getStatus());
                         Log.d("BIKE_DETAILS_API", "Response message: " + apiResponse.getMessage());
 
-                        if ("success".equals(apiResponse.getStatus())) {
-                            GetBikeByIdResponse.BikeData bikeData = apiResponse.getData();
-                            if (bikeData != null) {
+                            if ("success".equals(apiResponse.getStatus())) {
+                                com.example.motovista_deep.models.BikeModel bikeData = apiResponse.getData();
+                                if (bikeData != null) {
                                 Log.d("BIKE_DETAILS_API", "Bike data received:");
                                 Log.d("BIKE_DETAILS_API", "Date: " + bikeData.getDate());
                                 Log.d("BIKE_DETAILS_API", "Engine Number: " + bikeData.getEngine_number());
@@ -334,7 +334,7 @@ public class BikeDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void updateBikeModelWithApiData(GetBikeByIdResponse.BikeData bikeData) {
+    private void updateBikeModelWithApiData(com.example.motovista_deep.models.BikeModel bikeData) {
         if (bikeData != null && bike != null) {
             // Update the bike object with fresh data from API
             bike.setDate(bikeData.getDate());
@@ -344,25 +344,25 @@ public class BikeDetailsActivity extends AppCompatActivity {
             // Also update other fields that might be missing
             bike.setVariant(bikeData.getVariant());
             bike.setYear(bikeData.getYear());
-            bike.setEngineCC(bikeData.getEngine_cc());
-            bike.setFuelType(bikeData.getFuel_type());
+            bike.setEngineCC(bikeData.getEngineCC());
+            bike.setFuelType(bikeData.getFuelType());
             bike.setTransmission(bikeData.getTransmission());
-            bike.setBrakingType(bikeData.getBraking_type());
-            bike.setOnRoadPrice(bikeData.getOn_road_price());
+            bike.setBrakingType(bikeData.getBrakingType());
+            bike.setOnRoadPrice(bikeData.getOnRoadPrice());
             bike.setMileage(bikeData.getMileage());
-            bike.setFuelTankCapacity(bikeData.getFuel_tank_capacity());
-            bike.setKerbWeight(bikeData.getKerb_weight());
-            bike.setSeatHeight(bikeData.getSeat_height());
-            bike.setGroundClearance(bikeData.getGround_clearance());
-            bike.setWarrantyPeriod(bikeData.getWarranty_period());
-            bike.setFreeServicesCount(bikeData.getFree_services_count());
-            bike.setRegistrationProof(bikeData.getRegistration_proof());
-            bike.setPriceDisclaimer(bikeData.getPrice_disclaimer());
+            bike.setFuelTankCapacity(bikeData.getFuelTankCapacity());
+            bike.setKerbWeight(bikeData.getKerbWeight());
+            bike.setSeatHeight(bikeData.getSeatHeight());
+            bike.setGroundClearance(bikeData.getGroundClearance());
+            bike.setWarrantyPeriod(bikeData.getWarrantyPeriod());
+            bike.setFreeServicesCount(bikeData.getFreeServicesCount());
+            bike.setRegistrationProof(bikeData.getRegistrationProof());
+            bike.setPriceDisclaimer(bikeData.getPriceDisclaimer());
 
             // Set the price for display
-            if (bikeData.getOn_road_price() != null && !bikeData.getOn_road_price().isEmpty()) {
+            if (bikeData.getOnRoadPrice() != null && !bikeData.getOnRoadPrice().isEmpty()) {
                 try {
-                    double price = Double.parseDouble(bikeData.getOn_road_price());
+                    double price = Double.parseDouble(bikeData.getOnRoadPrice());
                     bike.setPrice(String.valueOf(price));
                 } catch (NumberFormatException e) {
                     // Keep existing price

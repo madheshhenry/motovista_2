@@ -1,17 +1,30 @@
 package com.example.motovista_deep;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.motovista_deep.api.ApiService;
+import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.helpers.SharedPrefManager;
+import com.example.motovista_deep.models.BikeModel;
+import com.example.motovista_deep.models.GetBikeByIdResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class BikeDetailsScreenActivity extends AppCompatActivity {
+
+    private static final String TAG = "BikeDetailsActivity";
 
     // Header views
     private ImageView btnBack;
@@ -35,46 +48,50 @@ public class BikeDetailsScreenActivity extends AppCompatActivity {
     private TextView tvSpecMileage, tvFuelCapacity, tvKerbWeight, tvSeatHeight, tvGroundClearance;
 
     // Bike data
+    private int bikeId;
+    private BikeModel currentBike;
+
+    // Fallback data from intent
     private String bikeName, bikePrice, bikeImage;
-    private String bikeVariant, bikeYear, bikeBrand, bikeModel;
+    private String bikeVariant, bikeYear, bikeBrand, bikeModelName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bike_details_screen);
 
-        // Get data from intent
-        getIntentData();
-
         // Initialize all views
         initializeViews();
 
-        // Set bike data to views
-        populateBikeData();
+        // Get data from intent
+        getIntentData();
 
         // Setup click listeners
         setupClickListeners();
+
+        // Fetch full details if ID is available
+        if (bikeId != -1) {
+            fetchBikeDetails(bikeId);
+        } else {
+            // Populate with basic data from intent if no ID (fallback)
+            populateBasicData();
+        }
     }
 
     private void getIntentData() {
         Intent intent = getIntent();
 
-        // Get bike details from intent
+        // Get bike ID
+        bikeId = intent.getIntExtra("BIKE_ID", -1);
+
+        // Get basic details from intent (as placeholder while loading)
         bikeName = intent.getStringExtra("BIKE_NAME");
         bikePrice = intent.getStringExtra("BIKE_PRICE");
         bikeVariant = intent.getStringExtra("BIKE_VARIANT");
         bikeYear = intent.getStringExtra("BIKE_YEAR");
         bikeBrand = intent.getStringExtra("BIKE_BRAND");
-        bikeModel = intent.getStringExtra("BIKE_MODEL");
+        bikeModelName = intent.getStringExtra("BIKE_MODEL");
         bikeImage = intent.getStringExtra("BIKE_IMAGE");
-
-        // Set default values if not provided
-        if (bikeName == null) bikeName = "Yamaha YZF R15 V4";
-        if (bikePrice == null) bikePrice = "₹2,450";
-        if (bikeVariant == null) bikeVariant = "Racing Blue";
-        if (bikeYear == null) bikeYear = "2024";
-        if (bikeBrand == null) bikeBrand = "Yamaha";
-        if (bikeModel == null) bikeModel = "YZF R15 V4";
     }
 
     private void initializeViews() {
@@ -117,90 +134,160 @@ public class BikeDetailsScreenActivity extends AppCompatActivity {
         tvGroundClearance = findViewById(R.id.tvGroundClearance);
     }
 
-    private void populateBikeData() {
-        // Set main bike details
-        tvBikeTitle.setText(bikeName);
-        tvBikePrice.setText(bikePrice);
-        tvBikeVariant.setText(bikeVariant + " Variant");
-        tvModelYear.setText(bikeYear + " Model");
+    private void fetchBikeDetails(int id) {
+        String token = SharedPrefManager.getInstance(this).getToken();
+        if (token == null) {
+            populateBasicData();
+            return;
+        }
 
-        // Set basic details
-        tvBrandName.setText(bikeBrand);
-        tvModelName.setText(bikeModel);
-        tvDetailVariant.setText(bikeVariant);
-        tvDetailYear.setText(bikeYear);
+        com.example.motovista_deep.api.ApiService apiService = RetrofitClient.getApiService();
+        Call<GetBikeByIdResponse> call = apiService.getBikeById("Bearer " + token, id);
 
-        // Set specification values (these would come from API/database)
-        // For now, using defaults
-        tvEngineValue.setText("155 cc");
-        tvMileageValue.setText("45 km/l");
-        tvFuelValue.setText("Petrol");
-        tvGearValue.setText("6-Speed");
+        call.enqueue(new Callback<GetBikeByIdResponse>() {
+            @Override
+            public void onResponse(Call<GetBikeByIdResponse> call, Response<GetBikeByIdResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    GetBikeByIdResponse bikeResponse = response.body();
+                    if ("success".equals(bikeResponse.getStatus()) && bikeResponse.getData() != null) {
+                        currentBike = bikeResponse.getData();
+                        populateFullData(currentBike);
+                    } else {
+                        Toast.makeText(BikeDetailsScreenActivity.this, "Details not found", Toast.LENGTH_SHORT).show();
+                        populateBasicData();
+                    }
+                } else {
+                    Log.e(TAG, "Fetch failed: " + response.code());
+                    populateBasicData();
+                }
+            }
 
-        tvDetailEngine.setText("155 cc");
-        tvDetailFuel.setText("Petrol");
-        tvTransmission.setText("6-Speed Manual");
-        tvBraking.setText("Dual Channel ABS");
+            @Override
+            public void onFailure(Call<GetBikeByIdResponse> call, Throwable t) {
+                Log.e(TAG, "Network error", t);
+                populateBasicData();
+            }
+        });
+    }
 
-        tvSpecMileage.setText("45 km/l");
-        tvFuelCapacity.setText("11 Litres");
-        tvKerbWeight.setText("142 kg");
-        tvSeatHeight.setText("815 mm");
-        tvGroundClearance.setText("170 mm");
+    private void populateBasicData() {
+        tvBikeTitle.setText(bikeName != null ? bikeName : "");
+        tvBikePrice.setText(bikePrice != null ? bikePrice : "");
+        tvBikeVariant.setText((bikeVariant != null ? bikeVariant : "") + " Variant");
+        tvModelYear.setText((bikeYear != null ? bikeYear : "") + " Model");
 
-        // Set image if available (you would use Glide/Picasso for network images)
-        // For now, using drawable
-        // ivBikeImage.setImageResource(R.drawable.bike_raptor);
+        tvBrandName.setText(bikeBrand != null ? bikeBrand : "");
+        tvModelName.setText(bikeModelName != null ? bikeModelName : "");
+        tvDetailVariant.setText(bikeVariant != null ? bikeVariant : "");
+        tvDetailYear.setText(bikeYear != null ? bikeYear : "");
+
+        // Load image if available from intent
+        if (bikeImage != null && !bikeImage.isEmpty()) {
+            loadImage(bikeImage);
+        }
+    }
+
+    private void populateFullData(BikeModel bike) {
+        // Main details
+        tvBikeTitle.setText(bike.getBrand() + " " + bike.getModel());
+        
+        String price = bike.getOnRoadPrice();
+        if (price == null || price.isEmpty()) price = bike.getPrice();
+        tvBikePrice.setText(price != null ? "₹ " + price : "Price on request");
+        
+        tvBikeVariant.setText(bike.getVariant() + " Variant");
+        tvModelYear.setText(bike.getYear() + " Model");
+
+        // Basic details
+        tvBrandName.setText(bike.getBrand());
+        tvModelName.setText(bike.getModel());
+        tvDetailVariant.setText(bike.getVariant());
+        tvDetailYear.setText(bike.getYear());
+        
+        tvDetailEngine.setText(bike.getEngineCC() != null ? bike.getEngineCC() : "-");
+        tvDetailFuel.setText(bike.getFuelType() != null ? bike.getFuelType() : "-");
+        tvTransmission.setText(bike.getTransmission() != null ? bike.getTransmission() : "-");
+        tvBraking.setText(bike.getBrakingType() != null ? bike.getBrakingType() : "-");
+
+        // Specs View
+        tvEngineValue.setText(bike.getEngineCC() != null ? bike.getEngineCC() : "-");
+        tvMileageValue.setText(bike.getMileage() != null ? bike.getMileage() : "-");
+        tvFuelValue.setText(bike.getFuelType() != null ? bike.getFuelType() : "-");
+        // Ensure getTransmission() exists or use another field
+        tvGearValue.setText(bike.getTransmission() != null ? bike.getTransmission() : "-");
+
+        // More Specs
+        tvSpecMileage.setText(bike.getMileage() != null ? bike.getMileage() : "-");
+        tvFuelCapacity.setText(bike.getFuelTankCapacity() != null ? bike.getFuelTankCapacity() : "-");
+        tvKerbWeight.setText(bike.getKerbWeight() != null ? bike.getKerbWeight() : "-");
+        tvSeatHeight.setText(bike.getSeatHeight() != null ? bike.getSeatHeight() : "-");
+        tvGroundClearance.setText(bike.getGroundClearance() != null ? bike.getGroundClearance() : "-");
+
+        // Image
+        String imageUrl = bike.getImageUrl();
+        // If not in main object, check images list
+        if ((imageUrl == null || imageUrl.isEmpty()) && bike.getAllImages() != null && !bike.getAllImages().isEmpty()) {
+            imageUrl = bike.getAllImages().get(0);
+        }
+        
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            loadImage(imageUrl);
+        }
+    }
+
+    private void loadImage(String imageUrl) {
+        // Construct full URL if needed (similar to Adapter logic)
+        String baseUrl = RetrofitClient.BASE_URL;
+        if (baseUrl != null && !baseUrl.endsWith("/")) baseUrl += "/";
+        
+        if (!imageUrl.startsWith("http")) {
+            // Simple check to append base url if relative
+             if (!imageUrl.contains("uploads/")) {
+                if (imageUrl.startsWith("bikes/") || imageUrl.startsWith("second_hand_bikes/")) {
+                    imageUrl = "uploads/" + imageUrl;
+                } else {
+                    imageUrl = "uploads/bikes/" + imageUrl;
+                }
+            }
+            imageUrl = baseUrl + imageUrl;
+        }
+
+        Glide.with(this)
+                .load(imageUrl)
+                .placeholder(R.drawable.placeholder_bike)
+                .error(R.drawable.placeholder_bike)
+                .centerCrop()
+                .into(ivBikeImage);
     }
 
     private void setupClickListeners() {
         // Back button
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        btnBack.setOnClickListener(v -> onBackPressed());
 
         // View Invoice Sample button
-        btnViewInvoice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewInvoiceSample();
-            }
-        });
+        btnViewInvoice.setOnClickListener(v -> viewInvoiceSample());
 
         // Order Now button
-        btnOrderBike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                placeOrder();
-            }
-        });
+        btnOrderBike.setOnClickListener(v -> placeOrder());
     }
 
     private void viewInvoiceSample() {
-        // View invoice logic here
-        Toast.makeText(this, "Viewing invoice sample for " + bikeName, Toast.LENGTH_SHORT).show();
-
-        // Navigate to invoice sample screen
+        Toast.makeText(this, "Viewing invoice sample for " + tvBikeTitle.getText().toString(), Toast.LENGTH_SHORT).show();
         // Intent invoiceIntent = new Intent(this, InvoiceSampleActivity.class);
-        // invoiceIntent.putExtra("BIKE_NAME", bikeName);
-        // invoiceIntent.putExtra("BIKE_PRICE", bikePrice);
+        // invoiceIntent.putExtra("BIKE_NAME", tvBikeTitle.getText().toString());
         // startActivity(invoiceIntent);
     }
 
     private void placeOrder() {
-        // Navigate to Request Sent screen
         Intent requestSentIntent = new Intent(BikeDetailsScreenActivity.this, RequestSentActivity.class);
 
-        // Pass bike details
-        requestSentIntent.putExtra("BIKE_NAME", bikeName);
-        requestSentIntent.putExtra("BIKE_PRICE", bikePrice);
-        requestSentIntent.putExtra("BIKE_VARIANT", bikeVariant);
-        requestSentIntent.putExtra("BIKE_BRAND", bikeBrand);
-        requestSentIntent.putExtra("BIKE_MODEL", bikeModel);
-        requestSentIntent.putExtra("BIKE_YEAR", bikeYear);
+        // Pass bike details from current loaded data
+        requestSentIntent.putExtra("BIKE_NAME", tvBikeTitle.getText().toString());
+        requestSentIntent.putExtra("BIKE_PRICE", tvBikePrice.getText().toString());
+        requestSentIntent.putExtra("BIKE_VARIANT", tvDetailVariant.getText().toString());
+        requestSentIntent.putExtra("BIKE_BRAND", tvBrandName.getText().toString());
+        requestSentIntent.putExtra("BIKE_MODEL", tvModelName.getText().toString());
+        requestSentIntent.putExtra("BIKE_YEAR", tvDetailYear.getText().toString());
 
         // Generate order ID
         String orderId = "#ORD" + System.currentTimeMillis() % 1000000;

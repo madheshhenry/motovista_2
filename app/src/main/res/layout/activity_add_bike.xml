@@ -248,11 +248,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:hint="Select date"
-                        android:inputType="date"
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:clickable="true"
                         android:paddingHorizontal="12dp"
                         android:background="@drawable/edittext_background"
                         android:textColor="@color/text_dark"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:drawableEnd="@drawable/ic_calendar"
+                        android:drawablePadding="8dp" />
 
                 </LinearLayout>
 
@@ -541,9 +545,90 @@
                     android:textSize="12sp"
                     android:gravity="center" />
 
+            <!-- Section 2: Bike Images (End) -->
             </LinearLayout>
 
-            <!-- Section 3: Price Configuration -->
+            <!-- Section 2.5: Bike Colors -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/card_background"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp"
+                android:elevation="2dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bike Colors"
+                    android:textColor="@color/text_dark"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="12dp"
+                    android:drawableStart="@drawable/ic_upload" 
+                    android:drawablePadding="8dp"
+                    android:drawableTint="@color/primary_color" />
+                <!-- Reusing ic_upload as palette icon placeholder if needed, or stick to simple text -->
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Add available colors for this bike"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Colors Container -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/colorsContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical" />
+
+                </HorizontalScrollView>
+
+                <!-- Add Color Button -->
+                <LinearLayout
+                    android:id="@+id/btnAddColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/button_secondary_background"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="8dp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_upload"
+                        android:rotation="45"
+                        android:tint="@color/primary_color"
+                        android:layout_marginEnd="8dp" />
+                    <!-- Using rotated upload icon as generic plus if plus not explicitly found, or assume vector asset exists -->
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add Color"
+                        android:textColor="@color/primary_color"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -1234,9 +1319,13 @@
                     <EditText
                         android:id="@+id/etRegistrationProof"
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:hint="For registration purpose any one of the following is required..."
-                        android:inputType="textMultiLine"
+                        android:layout_height="wrap_content"
+                        android:minLines="3"
+                        android:text="For registration purpose any one of the following is required:\n1. Aadhar Card\n2. Pan Card\n3. Address Proof"
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:longClickable="false"
                         android:padding="12dp"
                         android:background="@drawable/edittext_background"
                         android:textColor="@color/text_dark"
@@ -1262,9 +1351,13 @@
                     <EditText
                         android:id="@+id/etPriceDisclaimer"
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"
-                        android:hint="Price &amp; taxes ruling at the time of delivery will be applicable."
-                        android:inputType="textMultiLine"
+                        android:layout_height="wrap_content"
+                        android:minLines="2"
+                        android:text="Price &amp; taxes ruling at the time of delivery will be applicable."
+                        android:inputType="none"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:longClickable="false"
                         android:padding="12dp"
                         android:background="@drawable/edittext_background"
                         android:textColor="@color/text_dark"

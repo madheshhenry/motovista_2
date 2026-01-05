@@ -3,17 +3,35 @@ package com.example.motovista_deep;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class BikeCatalogActivity extends AppCompatActivity {
+import com.example.motovista_deep.adapter.BikeAdapter;
+import com.example.motovista_deep.api.ApiService;
+import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.helpers.SharedPrefManager;
+import com.example.motovista_deep.models.BikeModel;
+import com.example.motovista_deep.models.GetBikesResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class BikeCatalogActivity extends AppCompatActivity implements BikeAdapter.OnBikeClickListener {
+
+    private static final String TAG = "BikeCatalogActivity";
 
     // Top header
     private ImageView btnBack;
@@ -22,11 +40,10 @@ public class BikeCatalogActivity extends AppCompatActivity {
     // Filter chips
     private CardView chipAll, chipPetrol, chipEBikes, chipSecondHand;
 
-    // Bike cards
-    private CardView cardRaptor, cardCruiser, cardTrailBlazer;
-
-    // View Details buttons
-    private Button btnViewDetailsRaptor, btnViewDetailsCruiser, btnViewDetailsTrailBlazer;
+    // RecyclerView
+    private RecyclerView rvBikes;
+    private BikeAdapter bikeAdapter;
+    private List<BikeModel> allBikesList = new ArrayList<>();
 
     // Bottom navigation
     private LinearLayout tabHome, tabBikes, tabEmiCalculator, tabOrders, tabProfile;
@@ -41,6 +58,9 @@ public class BikeCatalogActivity extends AppCompatActivity {
         // Initialize views
         initializeViews();
 
+        // Setup RecyclerView
+        setupRecyclerView();
+
         // Setup click listeners
         setupClickListeners();
 
@@ -49,6 +69,9 @@ public class BikeCatalogActivity extends AppCompatActivity {
 
         // Set active filter chip (All is active by default)
         setActiveChip(chipAll);
+
+        // Fetch bikes from API
+        fetchBikes();
     }
 
     private void initializeViews() {
@@ -62,15 +85,8 @@ public class BikeCatalogActivity extends AppCompatActivity {
         chipEBikes = findViewById(R.id.chipEBikes);
         chipSecondHand = findViewById(R.id.chipSecondHand);
 
-        // Bike cards
-        cardRaptor = findViewById(R.id.cardRaptor);
-        cardCruiser = findViewById(R.id.cardCruiser);
-        cardTrailBlazer = findViewById(R.id.cardTrailBlazer);
-
-        // View Details buttons
-        btnViewDetailsRaptor = findViewById(R.id.btnViewDetailsRaptor);
-        btnViewDetailsCruiser = findViewById(R.id.btnViewDetailsCruiser);
-        btnViewDetailsTrailBlazer = findViewById(R.id.btnViewDetailsTrailBlazer);
+        // RecyclerView
+        rvBikes = findViewById(R.id.rvBikes);
 
         // Bottom navigation tabs
         tabHome = findViewById(R.id.tabHome);
@@ -94,177 +110,159 @@ public class BikeCatalogActivity extends AppCompatActivity {
         tvProfile = findViewById(R.id.tvProfile);
     }
 
+    private void setupRecyclerView() {
+        rvBikes.setLayoutManager(new LinearLayoutManager(this));
+        bikeAdapter = new BikeAdapter(this, new ArrayList<>(), this);
+        rvBikes.setAdapter(bikeAdapter);
+    }
+
+    private void fetchBikes() {
+        // Show loading if needed? 
+        // Ideally we should have a ProgressBar in the layout. For now, we just fetch.
+        
+        String token = SharedPrefManager.getInstance(this).getToken();
+        if (token == null) {
+            Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ApiService apiService = RetrofitClient.getApiService();
+        Call<GetBikesResponse> call = apiService.getAllBikes("Bearer " + token);
+
+        call.enqueue(new Callback<GetBikesResponse>() {
+            @Override
+            public void onResponse(Call<GetBikesResponse> call, Response<GetBikesResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    GetBikesResponse bikesResponse = response.body();
+                    if ("success".equals(bikesResponse.getStatus()) && bikesResponse.getData() != null) {
+                        allBikesList = bikesResponse.getData();
+                        bikeAdapter.updateList(allBikesList);
+                        Log.d(TAG, "Fetched " + allBikesList.size() + " bikes");
+                    } else {
+                        Toast.makeText(BikeCatalogActivity.this, "No bikes found", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(BikeCatalogActivity.this, "Failed to load bikes: " + response.message(), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Fetch failed: " + response.code() + " " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetBikesResponse> call, Throwable t) {
+                Toast.makeText(BikeCatalogActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Network error", t);
+            }
+        });
+    }
+
+    private void filterBikes(String filterType) {
+        if (allBikesList == null || allBikesList.isEmpty()) return;
+
+        List<BikeModel> filteredList = new ArrayList<>();
+        for (BikeModel bike : allBikesList) {
+            switch (filterType) {
+                case "ALL":
+                    filteredList.add(bike);
+                    break;
+                case "PETROL":
+                    if ("Petrol".equalsIgnoreCase(bike.getFuelType())) {
+                        filteredList.add(bike);
+                    }
+                    break;
+                case "ELECTRIC":
+                    if ("Electric".equalsIgnoreCase(bike.getFuelType())) {
+                        filteredList.add(bike);
+                    }
+                    break;
+                case "SECOND_HAND":
+                    if ("USED".equalsIgnoreCase(bike.getType())) {
+                        filteredList.add(bike);
+                    }
+                    break;
+            }
+        }
+        bikeAdapter.updateList(filteredList);
+    }
+
     private void setupClickListeners() {
         // Back button
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        btnBack.setOnClickListener(v -> onBackPressed());
 
         // Filter chips
-        chipAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveChip(chipAll);
-                Toast.makeText(BikeCatalogActivity.this, "Showing all bikes", Toast.LENGTH_SHORT).show();
-                // Filter logic for all bikes
-            }
+        chipAll.setOnClickListener(v -> {
+            setActiveChip(chipAll);
+            filterBikes("ALL");
         });
 
-        chipPetrol.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveChip(chipPetrol);
-                Toast.makeText(BikeCatalogActivity.this, "Showing petrol bikes", Toast.LENGTH_SHORT).show();
-                // Filter logic for petrol bikes
-            }
+        chipPetrol.setOnClickListener(v -> {
+            setActiveChip(chipPetrol);
+            filterBikes("PETROL");
         });
 
-        chipEBikes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveChip(chipEBikes);
-                Toast.makeText(BikeCatalogActivity.this, "Showing e-bikes", Toast.LENGTH_SHORT).show();
-                // Filter logic for e-bikes
-            }
+        chipEBikes.setOnClickListener(v -> {
+            setActiveChip(chipEBikes);
+            filterBikes("ELECTRIC");
         });
 
-        chipSecondHand.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveChip(chipSecondHand);
-                Toast.makeText(BikeCatalogActivity.this, "Showing second-hand bikes", Toast.LENGTH_SHORT).show();
-                // Filter logic for second-hand bikes
-            }
-        });
-
-        // Bike cards click listeners
-        cardRaptor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(BikeCatalogActivity.this, "SB-Raptor 500", Toast.LENGTH_SHORT).show();
-                // Navigate to bike details
-                // startActivity(new Intent(BikeCatalogActivity.this, BikeDetailsActivity.class));
-            }
-        });
-
-        cardCruiser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(BikeCatalogActivity.this, "SB-Cruiser King", Toast.LENGTH_SHORT).show();
-                // Navigate to bike details
-                // startActivity(new Intent(BikeCatalogActivity.this, BikeDetailsActivity.class));
-            }
-        });
-
-        cardTrailBlazer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(BikeCatalogActivity.this, "SB-TrailBlazer", Toast.LENGTH_SHORT).show();
-                // Navigate to bike details
-                // startActivity(new Intent(BikeCatalogActivity.this, BikeDetailsActivity.class));
-            }
-        });
-
-        // View Details buttons
-        // Update in setupClickListeners() method:
-
-        btnViewDetailsRaptor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(BikeCatalogActivity.this, BikeDetailsScreenActivity.class);
-                intent.putExtra("BIKE_NAME", "SB-Raptor 500");
-                intent.putExtra("BIKE_PRICE", "₹2,40,000");
-                intent.putExtra("BIKE_VARIANT", "Sports");
-                intent.putExtra("BIKE_YEAR", "2024");
-                intent.putExtra("BIKE_BRAND", "SB Motors");
-                intent.putExtra("BIKE_MODEL", "Raptor 500");
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            }
-        });
-
-        btnViewDetailsCruiser.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(BikeCatalogActivity.this, BikeDetailsScreenActivity.class);
-                intent.putExtra("BIKE_NAME", "SB-Cruiser King");
-                intent.putExtra("BIKE_PRICE", "₹3,10,000");
-                intent.putExtra("BIKE_VARIANT", "Cruiser");
-                intent.putExtra("BIKE_YEAR", "2024");
-                intent.putExtra("BIKE_BRAND", "SB Motors");
-                intent.putExtra("BIKE_MODEL", "Cruiser King");
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            }
-        });
-
-        btnViewDetailsTrailBlazer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(BikeCatalogActivity.this, BikeDetailsScreenActivity.class);
-                intent.putExtra("BIKE_NAME", "SB-TrailBlazer");
-                intent.putExtra("BIKE_PRICE", "₹3,50,000");
-                intent.putExtra("BIKE_VARIANT", "Adventure");
-                intent.putExtra("BIKE_YEAR", "2024");
-                intent.putExtra("BIKE_BRAND", "SB Motors");
-                intent.putExtra("BIKE_MODEL", "TrailBlazer");
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            }
+        chipSecondHand.setOnClickListener(v -> {
+            setActiveChip(chipSecondHand);
+            filterBikes("SECOND_HAND");
         });
 
         // Bottom navigation tabs
-        tabHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveTab(tabHome);
-                // Navigate to home screen
-                startActivity(new Intent(BikeCatalogActivity.this, CustomerHomeActivity.class));
-                finish();
-                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-            }
+        tabHome.setOnClickListener(v -> {
+            setActiveTab(tabHome);
+            startActivity(new Intent(BikeCatalogActivity.this, CustomerHomeActivity.class));
+            finish();
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         });
 
-        tabBikes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Already on bikes screen
-                setActiveTab(tabBikes);
-            }
+        tabBikes.setOnClickListener(v -> {
+            // Already on bikes screen
+            setActiveTab(tabBikes);
         });
 
-        tabEmiCalculator.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveTab(tabEmiCalculator);
-                // Navigate to EMI calculator
-                startActivity(new Intent(BikeCatalogActivity.this, EmiCalculatorActivity.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            }
+        tabEmiCalculator.setOnClickListener(v -> {
+            setActiveTab(tabEmiCalculator);
+            startActivity(new Intent(BikeCatalogActivity.this, EmiCalculatorActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
-        tabOrders.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveTab(tabOrders);
-                Toast.makeText(BikeCatalogActivity.this, "Orders", Toast.LENGTH_SHORT).show();
-                // Navigate to orders
-                // startActivity(new Intent(BikeCatalogActivity.this, OrdersActivity.class));
-            }
+        tabOrders.setOnClickListener(v -> {
+            setActiveTab(tabOrders);
+            Toast.makeText(BikeCatalogActivity.this, "Orders", Toast.LENGTH_SHORT).show();
+            // Navigate to orders if implemented
         });
 
-        tabProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveTab(tabProfile);
-                // Navigate to profile screen
-                startActivity(new Intent(BikeCatalogActivity.this, CustomerProfileScreenActivity.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            }
+        tabProfile.setOnClickListener(v -> {
+            setActiveTab(tabProfile);
+            startActivity(new Intent(BikeCatalogActivity.this, CustomerProfileScreenActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
+    }
+
+    @Override
+    public void onBikeClick(BikeModel bike) {
+        Intent intent = new Intent(BikeCatalogActivity.this, BikeDetailsScreenActivity.class);
+        intent.putExtra("BIKE_NAME", bike.getBrand() + " " + bike.getModel());
+        
+        // Price logic - check onRoadPrice or price
+        String price = bike.getOnRoadPrice();
+        if (price == null || price.isEmpty()) price = bike.getPrice();
+        intent.putExtra("BIKE_PRICE", price != null ? "₹ " + price : "Price on Request");
+        
+        intent.putExtra("BIKE_VARIANT", bike.getVariant());
+        intent.putExtra("BIKE_YEAR", bike.getYear());
+        intent.putExtra("BIKE_BRAND", bike.getBrand());
+        intent.putExtra("BIKE_MODEL", bike.getModel());
+        // Pass ID if needed for deeper details fetching
+        intent.putExtra("BIKE_ID", bike.getId());
+        
+        // Pass image URL
+        intent.putExtra("BIKE_IMAGE", bike.getImageUrl());
+
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     private void setActiveTab(LinearLayout activeTab) {
@@ -347,7 +345,6 @@ public class BikeCatalogActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Go back to home screen
         startActivity(new Intent(this, CustomerHomeActivity.class));
         finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);

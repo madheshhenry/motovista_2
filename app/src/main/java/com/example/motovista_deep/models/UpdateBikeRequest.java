@@ -25,7 +25,7 @@ public class UpdateBikeRequest {
     private String price_disclaimer;
     private String type;
     private String features;
-    private String image_path;
+    private String image_paths;
     private String date;
     private String engine_number;
     private String chassis_number;
@@ -40,7 +40,7 @@ public class UpdateBikeRequest {
                              String ground_clearance, String warranty_period,
                              String free_services_count, String registration_proof,
                              String price_disclaimer, String type, String features,
-                             String image_path, String date, String engine_number, String chassis_number) {
+                             String image_paths, String date, String engine_number, String chassis_number) {
         this.bike_id = bike_id;
         this.brand = brand;
         this.model = model;
@@ -65,7 +65,7 @@ public class UpdateBikeRequest {
         this.price_disclaimer = price_disclaimer;
         this.type = type;
         this.features = features;
-        this.image_path = image_path;
+        this.image_paths = image_paths;
         this.date = date;
         this.engine_number = engine_number;
         this.chassis_number = chassis_number;
@@ -144,8 +144,8 @@ public class UpdateBikeRequest {
     public String getFeatures() { return features; }
     public void setFeatures(String features) { this.features = features; }
 
-    public String getImage_path() { return image_path; }
-    public void setImage_path(String image_path) { this.image_path = image_path; }
+    public String getImage_paths() { return image_paths; }
+    public void setImage_paths(String image_paths) { this.image_paths = image_paths; }
 
     public String getDate() { return date; }
     public void setDate(String date) { this.date = date; }

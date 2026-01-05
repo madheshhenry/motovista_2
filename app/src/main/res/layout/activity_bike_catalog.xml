@@ -8,684 +8,176 @@
     android:background="@color/background_light"
     android:fitsSystemWindows="true">
 
-    <!-- Main Scroll View -->
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
-        app:layout_constraintEnd_toEndOf="parent"
+    <!-- Header Layout (Sticky) -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:elevation="4dp"
+        android:paddingTop="@dimen/status_bar_height"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
+        <!-- Top Bar with Back Button and Title -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingHorizontal="@dimen/padding_medium">
+
+            <!-- Back Button -->
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/text_dark"
+                android:padding="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Back" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Bike Catalog"
+                android:textColor="@color/text_dark"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium" />
+
+            <!-- Empty view for alignment -->
+            <View
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+        <!-- Filter Chips Horizontal Scroll -->
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:paddingHorizontal="@dimen/padding_medium"
+            android:paddingBottom="12dp"
+            android:scrollbars="none">
 
-            <!-- Sticky Header -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/chipContainer"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@color/white"
-                android:elevation="4dp"
-                android:paddingTop="@dimen/status_bar_height">
+                android:orientation="horizontal">
 
-                <!-- Top Bar with Back Button and Title -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:paddingHorizontal="@dimen/padding_medium">
+                <!-- All Chip -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/chipAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="8dp"
+                    app:cardBackgroundColor="@color/primary_light"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="0dp">
 
-                    <!-- Back Button -->
-                    <ImageView
-                        android:id="@+id/btnBack"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_arrow_back"
-                        android:tint="@color/text_dark"
-                        android:padding="8dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="Back" />
-
-                    <!-- Title -->
                     <TextView
-                        android:id="@+id/tvTitle"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="Bike Catalog"
-                        android:textColor="@color/text_dark"
-                        android:textSize="18sp"
+                        android:layout_height="match_parent"
+                        android:paddingHorizontal="16dp"
+                        android:gravity="center"
+                        android:text="All"
+                        android:textColor="@color/primary"
+                        android:textSize="14sp"
                         android:textStyle="bold"
-                        android:fontFamily="sans-serif-medium" />
+                        android:fontFamily="sans-serif" />
 
-                    <!-- Empty view for alignment -->
-                    <View
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true" />
+                </androidx.cardview.widget.CardView>
 
-                </RelativeLayout>
+                <!-- Petrol Bikes Chip -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/chipPetrol"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="8dp"
+                    app:cardBackgroundColor="@color/background_light"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="0dp">
 
-                <!-- Filter Chips Horizontal Scroll -->
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="@dimen/padding_medium"
-                    android:paddingBottom="12dp"
-                    android:scrollbars="none">
-
-                    <LinearLayout
-                        android:id="@+id/chipContainer"
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:paddingHorizontal="16dp"
+                        android:gravity="center"
+                        android:text="Petrol Bikes"
+                        android:textColor="@color/text_gray"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif" />
 
-                        <!-- All Chip -->
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/chipAll"
-                            android:layout_width="wrap_content"
-                            android:layout_height="36dp"
-                            android:layout_marginEnd="8dp"
-                            app:cardBackgroundColor="@color/primary_light"
-                            app:cardCornerRadius="18dp"
-                            app:cardElevation="0dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingHorizontal="16dp"
-                                android:gravity="center"
-                                android:text="All"
-                                android:textColor="@color/primary"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:fontFamily="sans-serif" />
-
-                        </androidx.cardview.widget.CardView>
-
-                        <!-- Petrol Bikes Chip -->
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/chipPetrol"
-                            android:layout_width="wrap_content"
-                            android:layout_height="36dp"
-                            android:layout_marginEnd="8dp"
-                            app:cardBackgroundColor="@color/background_light"
-                            app:cardCornerRadius="18dp"
-                            app:cardElevation="0dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingHorizontal="16dp"
-                                android:gravity="center"
-                                android:text="Petrol Bikes"
-                                android:textColor="@color/text_gray"
-                                android:textSize="14sp"
-                                android:fontFamily="sans-serif" />
-
-                        </androidx.cardview.widget.CardView>
-
-                        <!-- E-bikes Chip -->
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/chipEBikes"
-                            android:layout_width="wrap_content"
-                            android:layout_height="36dp"
-                            android:layout_marginEnd="8dp"
-                            app:cardBackgroundColor="@color/background_light"
-                            app:cardCornerRadius="18dp"
-                            app:cardElevation="0dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingHorizontal="16dp"
-                                android:gravity="center"
-                                android:text="E-bikes"
-                                android:textColor="@color/text_gray"
-                                android:textSize="14sp"
-                                android:fontFamily="sans-serif" />
-
-                        </androidx.cardview.widget.CardView>
-
-                        <!-- Second-hand Chip -->
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/chipSecondHand"
-                            android:layout_width="wrap_content"
-                            android:layout_height="36dp"
-                            app:cardBackgroundColor="@color/background_light"
-                            app:cardCornerRadius="18dp"
-                            app:cardElevation="0dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:paddingHorizontal="16dp"
-                                android:gravity="center"
-                                android:text="Second-hand"
-                                android:textColor="@color/text_gray"
-                                android:textSize="14sp"
-                                android:fontFamily="sans-serif" />
-
-                        </androidx.cardview.widget.CardView>
-
-                    </LinearLayout>
-                </HorizontalScrollView>
-            </LinearLayout>
-
-            <!-- Bike List -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/padding_medium"
-                android:paddingTop="16dp">
-
-                <!-- SB-Raptor 500 Card -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardRaptor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardUseCompatPadding="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <!-- Bike Image -->
-                        <!-- New code -->
-                        <ImageView
-                            android:id="@+id/ivRaptor"
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/bike_raptor"
-                            android:background="@color/gray_300"
-                            android:contentDescription="SB-Raptor 500" />
-
-                        <!-- Details Section -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <!-- Title and Price -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginBottom="12dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="SB-Raptor 500"
-                                    android:textColor="@color/text_dark"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="₹ 2,40,000"
-                                    android:textColor="@color/primary"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="4dp" />
-
-                            </LinearLayout>
-
-                            <!-- Specifications Grid -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginBottom="16dp">
-
-                                <!-- Engine Capacity -->
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:src="@drawable/ic_speed"
-                                        android:tint="@color/text_secondary"
-                                        android:contentDescription="Engine" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="500cc"
-                                        android:textColor="@color/text_secondary"
-                                        android:textSize="12sp"
-                                        android:fontFamily="sans-serif"
-                                        android:layout_marginTop="4dp" />
-
-                                </LinearLayout>
-
-                                <!-- Mileage -->
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:src="@drawable/ic_local_gas_station"
-                                        android:tint="@color/text_secondary"
-                                        android:contentDescription="Mileage" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="25 kmpl"
-                                        android:textColor="@color/text_secondary"
-                                        android:textSize="12sp"
-                                        android:fontFamily="sans-serif"
-                                        android:layout_marginTop="4dp" />
-
-                                </LinearLayout>
-
-                                <!-- Type -->
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:src="@drawable/ic_two_wheeler"
-                                        android:tint="@color/text_secondary"
-                                        android:contentDescription="Type" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Sports"
-                                        android:textColor="@color/text_secondary"
-                                        android:textSize="12sp"
-                                        android:fontFamily="sans-serif"
-                                        android:layout_marginTop="4dp" />
-
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                            <!-- View Details Button -->
-                            <Button
-                                android:id="@+id/btnViewDetailsRaptor"
-                                android:layout_width="match_parent"
-                                android:layout_height="44dp"
-                                android:background="@drawable/primary_outline_button"
-                                android:text="View Details"
-                                android:textColor="@color/primary"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:fontFamily="sans-serif" />
-
-                        </LinearLayout>
-                    </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- SB-Cruiser King Card -->
+                <!-- E-bikes Chip -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardCruiser"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardUseCompatPadding="true">
+                    android:id="@+id/chipEBikes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="8dp"
+                    app:cardBackgroundColor="@color/background_light"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="0dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingHorizontal="16dp"
+                        android:gravity="center"
+                        android:text="E-bikes"
+                        android:textColor="@color/text_gray"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif" />
 
-                        <!-- Bike Image -->
-                        <ImageView
-                            android:id="@+id/ivCruiser"
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/bike_cruiser_king"
-                            android:background="@color/gray_300"
-                            android:contentDescription="SB-Cruiser King" />
-
-                        <!-- Details Section -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <!-- Title and Price -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginBottom="12dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="SB-Cruiser King"
-                                    android:textColor="@color/text_dark"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="₹ 3,10,000"
-                                    android:textColor="@color/primary"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="4dp" />
-
-                            </LinearLayout>
-
-                            <!-- Specifications Grid -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginBottom="16dp">
-
-                                <!-- Engine Capacity -->
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:src="@drawable/ic_speed"
-                                        android:tint="@color/text_secondary"
-                                        android:contentDescription="Engine" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="750cc"
-                                        android:textColor="@color/text_secondary"
-                                        android:textSize="12sp"
-                                        android:fontFamily="sans-serif"
-                                        android:layout_marginTop="4dp" />
-
-                                </LinearLayout>
-
-                                <!-- Mileage -->
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:src="@drawable/ic_local_gas_station"
-                                        android:tint="@color/text_secondary"
-                                        android:contentDescription="Mileage" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="18 kmpl"
-                                        android:textColor="@color/text_secondary"
-                                        android:textSize="12sp"
-                                        android:fontFamily="sans-serif"
-                                        android:layout_marginTop="4dp" />
-
-                                </LinearLayout>
-
-                                <!-- Type -->
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:src="@drawable/ic_two_wheeler"
-                                        android:tint="@color/text_secondary"
-                                        android:contentDescription="Type" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Cruiser"
-                                        android:textColor="@color/text_secondary"
-                                        android:textSize="12sp"
-                                        android:fontFamily="sans-serif"
-                                        android:layout_marginTop="4dp" />
-
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                            <!-- View Details Button -->
-                            <Button
-                                android:id="@+id/btnViewDetailsCruiser"
-                                android:layout_width="match_parent"
-                                android:layout_height="44dp"
-                                android:background="@drawable/primary_outline_button"
-                                android:text="View Details"
-                                android:textColor="@color/primary"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:fontFamily="sans-serif" />
-
-                        </LinearLayout>
-                    </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- SB-TrailBlazer Card -->
+                <!-- Second-hand Chip -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardTrailBlazer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardUseCompatPadding="true">
+                    android:id="@+id/chipSecondHand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    app:cardBackgroundColor="@color/background_light"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="0dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingHorizontal="16dp"
+                        android:gravity="center"
+                        android:text="Second-hand"
+                        android:textColor="@color/text_gray"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif" />
 
-                        <!-- Bike Image -->
-                        <ImageView
-                            android:id="@+id/ivTrailBlazer"
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:scaleType="centerCrop"
-                            android:background="@color/gray_300"
-                            android:src="@drawable/bike_trailblazer"
-                            android:contentDescription="SB-TrailBlazer" />
-
-                        <!-- Details Section -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <!-- Title and Price -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:layout_marginBottom="12dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="SB-TrailBlazer"
-                                    android:textColor="@color/text_dark"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="₹ 3,50,000"
-                                    android:textColor="@color/primary"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="4dp" />
-
-                            </LinearLayout>
-
-                            <!-- Specifications Grid -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginBottom="16dp">
-
-                                <!-- Engine Capacity -->
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:src="@drawable/ic_speed"
-                                        android:tint="@color/text_secondary"
-                                        android:contentDescription="Engine" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="450cc"
-                                        android:textColor="@color/text_secondary"
-                                        android:textSize="12sp"
-                                        android:fontFamily="sans-serif"
-                                        android:layout_marginTop="4dp" />
-
-                                </LinearLayout>
-
-                                <!-- Mileage -->
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:src="@drawable/ic_local_gas_station"
-                                        android:tint="@color/text_secondary"
-                                        android:contentDescription="Mileage" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="30 kmpl"
-                                        android:textColor="@color/text_secondary"
-                                        android:textSize="12sp"
-                                        android:fontFamily="sans-serif"
-                                        android:layout_marginTop="4dp" />
-
-                                </LinearLayout>
-
-                                <!-- Type -->
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="24dp"
-                                        android:layout_height="24dp"
-                                        android:src="@drawable/ic_two_wheeler"
-                                        android:tint="@color/text_secondary"
-                                        android:contentDescription="Type" />
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Adventure"
-                                        android:textColor="@color/text_secondary"
-                                        android:textSize="12sp"
-                                        android:fontFamily="sans-serif"
-                                        android:layout_marginTop="4dp" />
-
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                            <!-- View Details Button -->
-                            <Button
-                                android:id="@+id/btnViewDetailsTrailBlazer"
-                                android:layout_width="match_parent"
-                                android:layout_height="44dp"
-                                android:background="@drawable/primary_outline_button"
-                                android:text="View Details"
-                                android:textColor="@color/primary"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:fontFamily="sans-serif" />
-
-                        </LinearLayout>
-                    </LinearLayout>
                 </androidx.cardview.widget.CardView>
-
-                <!-- Bottom Padding -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp" />
 
             </LinearLayout>
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <!-- RecyclerView for Bikes -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBikes"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingTop="16dp"
+        android:paddingBottom="96dp"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Bottom Navigation -->
     <LinearLayout
@@ -717,7 +209,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home_filled"
-                android:tint="@color/gray_400"
+                app:tint="@color/gray_400"
                 android:contentDescription="Home" />
 
             <TextView
@@ -748,7 +240,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_two_wheeler"
-                android:tint="@color/primary_color"
+                app:tint="@color/primary_color"
                 android:contentDescription="Bikes" />
 
             <TextView
@@ -780,14 +272,14 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_calculate"
-                android:tint="@color/gray_400"
-                android:contentDescription="EMI Calculator" />
+                app:tint="@color/gray_400"
+                android:contentDescription="EMI" />
 
             <TextView
                 android:id="@+id/tvEmiCalculator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EMI Calculator"
+                android:text="EMI"
                 android:textColor="@color/gray_400"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif"
@@ -810,8 +302,8 @@
                 android:id="@+id/ivOrders"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_receipt_long"
-                android:tint="@color/gray_400"
+                android:src="@drawable/ic_shopping_bag"
+                app:tint="@color/gray_400"
                 android:contentDescription="Orders" />
 
             <TextView
@@ -842,7 +334,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_person"
-                android:tint="@color/gray_400"
+                app:tint="@color/gray_400"
                 android:contentDescription="Profile" />
 
             <TextView
