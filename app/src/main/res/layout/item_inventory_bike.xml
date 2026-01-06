@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:background="@drawable/table_row_selector">
+
+    <!-- Model -->
+    <TextView
+        android:id="@+id/tvBikeModel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.8"
+        android:text="YZF R15 V4"
+        android:textColor="@color/black"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:ellipsize="end"
+        android:maxLines="2" />
+
+    <!-- Engine No -->
+    <TextView
+        android:id="@+id/tvEngineNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:text="E987654321"
+        android:textColor="@color/gray_600"
+        android:textSize="12sp"
+        android:fontFamily="monospace"
+        android:ellipsize="middle"
+        android:singleLine="true" />
+
+    <!-- Chassis No -->
+    <TextView
+        android:id="@+id/tvChassisNo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:text="C123456789"
+        android:textColor="@color/gray_600"
+        android:textSize="12sp"
+        android:fontFamily="monospace"
+        android:ellipsize="middle"
+        android:singleLine="true" />
+
+    <!-- Stock Date -->
+    <TextView
+        android:id="@+id/tvStockDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.2"
+        android:text="Oct 24, 2023"
+        android:textColor="@color/gray_600"
+        android:textSize="12sp" />
+
+    <!-- Status/Customer -->
+    <TextView
+        android:id="@+id/tvStatus"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0"
+        android:text="Not Sold"
+        android:textColor="@color/gray_500"
+        android:textSize="12sp"
+        android:textStyle="italic" />
+
+</LinearLayout>
