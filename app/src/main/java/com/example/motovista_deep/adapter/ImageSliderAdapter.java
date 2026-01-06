@@ -67,6 +67,13 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
                 .load(finalUrl)
                 .apply(requestOptions)
                 .into(holder.imageView);
+
+        holder.itemView.setOnClickListener(v -> {
+            android.content.Intent intent = new android.content.Intent(context, com.example.motovista_deep.FullScreenImageActivity.class);
+            intent.putStringArrayListExtra("IMAGE_URLS", new java.util.ArrayList<>(imageUrls));
+            intent.putExtra("START_POSITION", position);
+            context.startActivity(intent);
+        });
     }
 
     private String cleanImageUrl(String url) {

@@ -86,11 +86,13 @@
                         android:layout_marginBottom="12dp">
 
                         <!-- Profile Image Circle -->
-                        <ImageView
+                        <de.hdodenhof.circleimageview.CircleImageView
                             android:id="@+id/ivProfile"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/ic_person"
+                            app:civ_border_width="2dp"
+                            app:civ_border_color="@color/gray_200"
                             android:scaleType="centerCrop"
                             android:background="@drawable/bg_circle_gray"
                             android:contentDescription="Profile" />

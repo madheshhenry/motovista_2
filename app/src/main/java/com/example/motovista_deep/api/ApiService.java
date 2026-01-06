@@ -4,6 +4,7 @@ import com.example.motovista_deep.models.CompleteProfileRequest;
 import com.example.motovista_deep.models.DeleteBikeRequest;
 import com.example.motovista_deep.models.GetBikeByIdResponse;
 import com.example.motovista_deep.models.GetSecondHandBikeByIdResponse;
+import com.example.motovista_deep.models.InventoryResponse;
 import com.example.motovista_deep.models.LoginRequest;
 import com.example.motovista_deep.models.LoginResponse;
 import com.example.motovista_deep.models.GenericResponse;
@@ -188,7 +189,7 @@ public interface ApiService {
             @Part("pincode") RequestBody pincode,
             @Part("pan_no") RequestBody pan_no
     );
-    @GET("admin_get_customers.php")
+    @GET("get_all_customers.php")
     Call<GetCustomersResponse> getCustomers(@Header("Authorization") String token);
     @POST("update_profile_complete.php")
     @Headers("Content-Type: application/json")
@@ -200,6 +201,9 @@ public interface ApiService {
     Call<GenericResponse> addBike(@Header("Authorization") String token, @Body AddBikeRequest request);
     @GET("profile.php")
     Call<GetProfileResponse> getProfile(@Header("Authorization") String token);
+
+    @GET("get_inventory.php")
+    Call<InventoryResponse> getInventory(@Header("Authorization") String token);
 
     // ✅ MULTIPART PROFILE UPDATE (WITH IMAGES)
     @Multipart

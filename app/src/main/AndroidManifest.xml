@@ -89,6 +89,7 @@
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
+
         <activity
             android:name=".AddSecondHandBikeActivity"
             android:exported="false"
@@ -186,6 +187,11 @@
 
         <activity
             android:name=".InventoryActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:exported="false" />
+
+        <activity
+            android:name=".BrandBikesActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="false" />
 

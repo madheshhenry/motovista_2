@@ -1,69 +1,62 @@
 package com.example.motovista_deep;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.github.chrisbanes.photoview.PhotoView;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.motovista_deep.adapter.FullScreenImageAdapter;
+
+import java.util.ArrayList;
 
 public class FullScreenImageActivity extends AppCompatActivity {
 
-    private PhotoView fullScreenImageView;
-    private TextView tvTitle;
-    private ImageView btnClose;
+    private ViewPager2 viewPager;
+    private ImageButton btnClose;
+    private ArrayList<String> imageUrls;
+    private int startPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_screen_image);
 
-        // Initialize views
-        fullScreenImageView = findViewById(R.id.fullScreenImageView);
-        tvTitle = findViewById(R.id.tvTitle);
+        // Hide action bar
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
+        viewPager = findViewById(R.id.viewPager);
         btnClose = findViewById(R.id.btnClose);
 
-        // Get data from intent
-        String imageUrl = getIntent().getStringExtra("image_url");
-        String title = getIntent().getStringExtra("title");
-
-        // Set title
-        if (title != null) {
-            tvTitle.setText(title);
+        // Get data
+        Intent intent = getIntent();
+        if (intent != null) {
+            if (intent.hasExtra("IMAGE_URLS")) {
+                imageUrls = intent.getStringArrayListExtra("IMAGE_URLS");
+                startPosition = intent.getIntExtra("START_POSITION", 0);
+            } else if (intent.hasExtra("image_url")) {
+                // Handle single image request
+                imageUrls = new ArrayList<>();
+                String singleUrl = intent.getStringExtra("image_url");
+                if (singleUrl != null) {
+                    imageUrls.add(singleUrl);
+                }
+                startPosition = 0;
+            }
         }
 
-        // Load image
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-            Glide.with(this)
-                    .load(imageUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(fullScreenImageView);
+        if (imageUrls != null && !imageUrls.isEmpty()) {
+            FullScreenImageAdapter adapter = new FullScreenImageAdapter(this, imageUrls);
+            viewPager.setAdapter(adapter);
+            viewPager.setCurrentItem(startPosition, false);
+        } else {
+            // Fallback for debugging
+            // Toast.makeText(this, "No image to display", Toast.LENGTH_SHORT).show();
         }
 
-        // Close button click
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        // Click on image to close
-        fullScreenImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        btnClose.setOnClickListener(v -> finish());
     }
 }

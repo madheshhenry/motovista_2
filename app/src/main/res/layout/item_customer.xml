@@ -8,6 +8,9 @@
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true"
     android:layout_marginBottom="12dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
     android:background="@drawable/rounded_card_light">
 
     <LinearLayout
@@ -15,9 +18,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
-        android:gravity="center_vertical"
-        android:clickable="true"
-        android:focusable="true">
+        android:gravity="center_vertical">
 
         <!-- Customer Info -->
         <LinearLayout
@@ -48,16 +49,14 @@
 
         </LinearLayout>
 
-        <!-- Chevron Icon - ADD ID AND CLICKABLE -->
+        <!-- Chevron Icon -->
         <ImageView
             android:id="@+id/ivArrow"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_chevron_right"
-            android:tint="@color/gray_400"
-            android:contentDescription="View Details"
-            android:clickable="true"
-            android:focusable="true" />
+            app:tint="@color/gray_400"
+            android:contentDescription="View Details" />
 
     </LinearLayout>
 

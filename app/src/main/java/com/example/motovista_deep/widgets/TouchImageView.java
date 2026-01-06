@@ -52,6 +52,7 @@ public class TouchImageView extends AppCompatImageView {
     }
 
     private void resetImage() {
+        if (getDrawable() == null) return;
         matrix.reset();
         float scale;
         float[] m = new float[9];
@@ -113,26 +114,21 @@ public class TouchImageView extends AppCompatImageView {
 
                     float[] m = new float[9];
                     matrix.getValues(m);
+                    float transX = m[Matrix.MTRANS_X];
+                    float transY = m[Matrix.MTRANS_Y];
+                    
                     float imageWidth = origWidth * saveScale;
                     float imageHeight = origHeight * saveScale;
 
-                    // Only move if image is larger than screen
-                    if (imageWidth > viewWidth) {
-                        float newTransX = m[Matrix.MTRANS_X] + dx;
-                        if (newTransX > 0) newTransX = 0;
-                        else if (newTransX < viewWidth - imageWidth) newTransX = viewWidth - imageWidth;
-                        matrix.postTranslate(dx, 0);
-                    }
+                    float fixTransX = getFixDragTrans(dx, viewWidth, imageWidth, transX);
+                    float fixTransY = getFixDragTrans(dy, viewHeight, imageHeight, transY);
 
-                    if (imageHeight > viewHeight) {
-                        float newTransY = m[Matrix.MTRANS_Y] + dy;
-                        if (newTransY > 0) newTransY = 0;
-                        else if (newTransY < viewHeight - imageHeight) newTransY = viewHeight - imageHeight;
-                        matrix.postTranslate(0, dy);
+                    if (fixTransX != 0 || fixTransY != 0) {
+                        matrix.postTranslate(fixTransX, fixTransY);
+                        setImageMatrix(matrix);
                     }
-
+                    
                     start.set(curr.x, curr.y);
-                    setImageMatrix(matrix);
                 }
                 break;
 
@@ -142,6 +138,23 @@ public class TouchImageView extends AppCompatImageView {
         }
 
         return true;
+    }
+
+    private float getFixDragTrans(float delta, float viewSize, float contentSize, float currentTrans) {
+        if (contentSize <= viewSize) {
+            return 0;
+        }
+        // contentSize > viewSize
+        float minTrans = viewSize - contentSize;
+        float maxTrans = 0;
+
+        if (currentTrans + delta > maxTrans) {
+            return maxTrans - currentTrans; // Overshoot top/left
+        }
+        if (currentTrans + delta < minTrans) {
+            return minTrans - currentTrans; // Overshoot bottom/right
+        }
+        return delta;
     }
 
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
@@ -166,6 +179,7 @@ public class TouchImageView extends AppCompatImageView {
             }
 
             centerImage();
+            setImageMatrix(matrix); // Apply changes immediately
             return true;
         }
     }
@@ -181,6 +195,7 @@ public class TouchImageView extends AppCompatImageView {
                 matrix.postScale(minScale / saveScale, minScale / saveScale, e.getX(), e.getY());
             }
             centerImage();
+            setImageMatrix(matrix); // Apply changes immediately
             return true;
         }
     }

@@ -256,8 +256,11 @@ public class CustomerDetailsActivity extends AppCompatActivity {
 
         // Set date of birth
         if (tvDob != null) {
-            tvDob.setText(customer.dob != null && !customer.dob.equals("N/A") ?
-                    customer.dob : "Not available");
+            boolean isValidDob = customer.dob != null && 
+                               !customer.dob.equals("N/A") && 
+                               !customer.dob.equals("0000-00-00");
+            
+            tvDob.setText(isValidDob ? customer.dob : "Not available");
         }
 
         // Set PAN
@@ -266,9 +269,12 @@ public class CustomerDetailsActivity extends AppCompatActivity {
                     customer.pan : "Not available");
         }
 
+        // Helper to get image base URL (strips "api/" from BASE_URL)
+        String imageBaseUrl = RetrofitClient.BASE_URL.replace("api/", "");
+
         // Load profile image
         if (customer.profile_image != null && !customer.profile_image.equals("N/A")) {
-            profileImageUrl = RetrofitClient.BASE_URL + "uploads/" + customer.profile_image;
+            profileImageUrl = imageBaseUrl + "uploads/profile_pics/" + customer.profile_image;
             Log.d(TAG, "Loading profile image from: " + profileImageUrl);
 
             Glide.with(this)
@@ -287,7 +293,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
 
         // Load Aadhar front image
         if (customer.aadhar_front != null && !customer.aadhar_front.equals("N/A")) {
-            aadharFrontUrl = RetrofitClient.BASE_URL + "uploads/" + customer.aadhar_front;
+            aadharFrontUrl = imageBaseUrl + "uploads/aadhar/" + customer.aadhar_front;
             Log.d(TAG, "Loading Aadhar front from: " + aadharFrontUrl);
 
             // Create ImageView for Aadhar front
@@ -333,7 +339,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
 
         // Load Aadhar back image
         if (customer.aadhar_back != null && !customer.aadhar_back.equals("N/A")) {
-            aadharBackUrl = RetrofitClient.BASE_URL + "uploads/" + customer.aadhar_back;
+            aadharBackUrl = imageBaseUrl + "uploads/aadhar/" + customer.aadhar_back;
             Log.d(TAG, "Loading Aadhar back from: " + aadharBackUrl);
 
             // Create ImageView for Aadhar back
