@@ -52,6 +52,9 @@ public class BikeModel implements Parcelable {
     @com.google.gson.annotations.SerializedName("on_road_price")
     private String on_road_price;
 
+    @com.google.gson.annotations.SerializedName("ex_showroom_price")
+    private String ex_showroom_price;
+
     @com.google.gson.annotations.SerializedName("insurance_price")
     private String insurance;
 
@@ -104,10 +107,30 @@ public class BikeModel implements Parcelable {
     @com.google.gson.annotations.SerializedName("chassis_number")
     private String chassis_number;
 
+    @com.google.gson.annotations.SerializedName("odometer")
     private String odometer;
+
+    @com.google.gson.annotations.SerializedName("owner_details")
     private String owner_details;
+    
+    @com.google.gson.annotations.SerializedName("ownership")
+    private String ownership;
+
+    @com.google.gson.annotations.SerializedName("condition_details")
     private String condition_details;
 
+    @com.google.gson.annotations.SerializedName("colors")
+    private java.util.List<String> colors;
+
+    @com.google.gson.annotations.SerializedName("custom_fittings")
+    private java.util.List<CustomFitting> custom_fittings;
+
+    @com.google.gson.annotations.SerializedName("mandatory_fittings")
+    private java.util.List<CustomFitting> mandatory_fittings;
+
+    @com.google.gson.annotations.SerializedName("additional_fittings")
+    private java.util.List<CustomFitting> additional_fittings;
+    
     @com.google.gson.annotations.SerializedName("image_paths") // Mapped from API
     private ArrayList<String> all_images = new ArrayList<>();
 
@@ -127,6 +150,9 @@ public class BikeModel implements Parcelable {
             }
         }
     }
+
+    public String getExShowroomPrice() { return ex_showroom_price; }
+    public void setExShowroomPrice(String ex_showroom_price) { this.ex_showroom_price = ex_showroom_price; }
 
     public String getBaseUrl() {
         return baseUrl;
@@ -262,11 +288,11 @@ public class BikeModel implements Parcelable {
             return image_url;
         }
 
-        if (!imageUrls.isEmpty()) {
+        if (imageUrls != null && !imageUrls.isEmpty()) {
             return imageUrls.get(0);
         }
 
-        if (!all_images.isEmpty()) {
+        if (all_images != null && !all_images.isEmpty()) {
             return all_images.get(0);
         }
 
@@ -431,6 +457,21 @@ public class BikeModel implements Parcelable {
     public String getConditionDetails() { return condition_details != null ? condition_details : ""; }
     public void setConditionDetails(String condition_details) { this.condition_details = condition_details; }
 
+    public String getOwnership() { return ownership != null ? ownership : ""; }
+    public void setOwnership(String ownership) { this.ownership = ownership; }
+
+    public java.util.List<String> getColors() { return colors; }
+    public void setColors(java.util.List<String> colors) { this.colors = colors; }
+
+    public java.util.List<CustomFitting> getCustomFittings() { return custom_fittings; }
+    public void setCustomFittings(java.util.List<CustomFitting> custom_fittings) { this.custom_fittings = custom_fittings; }
+
+    public java.util.List<CustomFitting> getMandatoryFittings() { return mandatory_fittings; }
+    public void setMandatoryFittings(java.util.List<CustomFitting> mandatory_fittings) { this.mandatory_fittings = mandatory_fittings; }
+
+    public java.util.List<CustomFitting> getAdditionalFittings() { return additional_fittings; }
+    public void setAdditionalFittings(java.util.List<CustomFitting> additional_fittings) { this.additional_fittings = additional_fittings; }
+
     /* ========== PARCELABLE ========== */
     protected BikeModel(Parcel in) {
         id = in.readInt();
@@ -470,6 +511,11 @@ public class BikeModel implements Parcelable {
         odometer = in.readString();
         owner_details = in.readString();
         condition_details = in.readString();
+        ownership = in.readString();
+        colors = in.createStringArrayList();
+        custom_fittings = in.createTypedArrayList(CustomFitting.CREATOR);
+        mandatory_fittings = in.createTypedArrayList(CustomFitting.CREATOR);
+        additional_fittings = in.createTypedArrayList(CustomFitting.CREATOR);
         all_images = in.createStringArrayList();
         baseUrl = in.readString();
     }
@@ -492,6 +538,7 @@ public class BikeModel implements Parcelable {
         dest.writeString(transmission);
         dest.writeString(braking_type);
         dest.writeString(on_road_price);
+        dest.writeString(ex_showroom_price); // Added
         dest.writeString(insurance);
         dest.writeString(registration_charge);
         dest.writeString(ltrt);
@@ -513,6 +560,11 @@ public class BikeModel implements Parcelable {
         dest.writeString(odometer);
         dest.writeString(owner_details);
         dest.writeString(condition_details);
+        dest.writeString(ownership);
+        dest.writeStringList(colors);
+        dest.writeTypedList(custom_fittings);
+        dest.writeTypedList(mandatory_fittings);
+        dest.writeTypedList(additional_fittings);
         dest.writeStringList(all_images);
         dest.writeString(baseUrl);
     }
@@ -542,6 +594,7 @@ public class BikeModel implements Parcelable {
             bike.transmission = in.readString();
             bike.braking_type = in.readString();
             bike.on_road_price = in.readString();
+            bike.ex_showroom_price = in.readString(); // Added
             bike.insurance = in.readString();
             bike.registration_charge = in.readString();
             bike.ltrt = in.readString();
@@ -563,6 +616,7 @@ public class BikeModel implements Parcelable {
             bike.odometer = in.readString();
             bike.owner_details = in.readString();
             bike.condition_details = in.readString();
+            bike.ownership = in.readString();
             bike.all_images = in.createStringArrayList();
             bike.baseUrl = in.readString();
             return bike;

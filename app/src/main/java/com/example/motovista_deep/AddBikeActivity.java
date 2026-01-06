@@ -466,17 +466,48 @@ public class AddBikeActivity extends AppCompatActivity {
                     Double.parseDouble(etLTRT.getText().toString());
 
             double total = exShowroom + insurance + registration + ltrt;
+            Log.d("PRICE_CALC", "Base Total: " + total);
 
-            for (double price : mandatoryFittings.values()) {
-                total += price;
+            // Calculate Mandatory Fittings from UI directly
+            if (mandatoryFittingsContainer != null) {
+                for (int i = 0; i < mandatoryFittingsContainer.getChildCount(); i++) {
+                    View view = mandatoryFittingsContainer.getChildAt(i);
+                    EditText etPrice = view.findViewById(R.id.etFittingPrice);
+                    if (etPrice != null) {
+                        try {
+                            String p = etPrice.getText().toString();
+                            if (!p.isEmpty()) {
+                                total += Double.parseDouble(p);
+                            }
+                        } catch (NumberFormatException e) { }
+                    }
+                }
             }
-            for (double price : additionalFittings.values()) {
-                total += price;
+
+            // Calculate Additional Fittings from UI directly (only checked ones)
+            if (additionalFittingsContainer != null) {
+                 for (int i = 0; i < additionalFittingsContainer.getChildCount(); i++) {
+                    View view = additionalFittingsContainer.getChildAt(i);
+                    CheckBox checkBox = view.findViewById(R.id.cbFitting);
+                    EditText etPrice = view.findViewById(R.id.etFittingPrice);
+                    
+                    if (checkBox != null && checkBox.isChecked() && etPrice != null) {
+                        try {
+                             String p = etPrice.getText().toString();
+                             if (!p.isEmpty()) {
+                                 total += Double.parseDouble(p);
+                             }
+                        } catch (NumberFormatException e) { }
+                    }
+                }
             }
+            
+            // Custom fittings already updated in map/list
             for (CustomFitting fitting : customFittings) {
                 total += fitting.getPrice();
             }
 
+            Log.d("PRICE_CALC", "Final Total: " + total);
             etTotalOnRoad.setText(String.format("₹%.0f", total));
         } catch (NumberFormatException e) {
             etTotalOnRoad.setText("₹0");
@@ -677,9 +708,11 @@ public class AddBikeActivity extends AppCompatActivity {
         etEngineCC.setText(bikeData.getEngineCC());
         etMileage.setText(bikeData.getMileage());
 
-        if (bikeData.getOnRoadPrice() != null && !bikeData.getOnRoadPrice().isEmpty()) {
-            etExShowroom.setText(bikeData.getOnRoadPrice());
-        }
+        if (bikeData.getExShowroomPrice() != null) etExShowroom.setText(bikeData.getExShowroomPrice());
+        if (bikeData.getInsurance() != null) etInsurance.setText(bikeData.getInsurance());
+        if (bikeData.getRegistrationCharge() != null) etRegistration.setText(bikeData.getRegistrationCharge());
+        if (bikeData.getLtrt() != null) etLTRT.setText(bikeData.getLtrt());
+        if (bikeData.getOnRoadPrice() != null) etTotalOnRoad.setText(bikeData.getOnRoadPrice());
 
         // Populate new fields if they exist
         if (bikeData.getDate() != null) {
@@ -694,9 +727,52 @@ public class AddBikeActivity extends AppCompatActivity {
 
         setSpinnerSelection(spinnerBrakingType, bikeData.getBrakingType());
         setSpinnerSelection(spinnerTransmission, bikeData.getType());
+        setSpinnerSelection(spinnerYear, bikeData.getYear());
+        setSpinnerSelection(spinnerFuelType, bikeData.getFuelType());
+        setSpinnerSelection(spinnerWarranty, bikeData.getWarrantyPeriod());
+        if (bikeData.getFreeServicesCount() != null) etFreeServices.setText(bikeData.getFreeServicesCount());
+        if (bikeData.getFuelTankCapacity() != null) etFuelTank.setText(bikeData.getFuelTankCapacity());
+        if (bikeData.getKerbWeight() != null) etKerbWeight.setText(bikeData.getKerbWeight());
+        if (bikeData.getSeatHeight() != null) etSeatHeight.setText(bikeData.getSeatHeight());
+        if (bikeData.getGroundClearance() != null) etGroundClearance.setText(bikeData.getGroundClearance());
+        if (bikeData.getRegistrationProof() != null) etRegistrationProof.setText(bikeData.getRegistrationProof());
+        if (bikeData.getPriceDisclaimer() != null) etPriceDisclaimer.setText(bikeData.getPriceDisclaimer());
+        if (bikeData.getVariant() != null) etVariant.setText(bikeData.getVariant());
+        
+        // Populate Colors
+        if (bikeData.getColors() != null) {
+            for (String colorData : bikeData.getColors()) {
+                // Expected format: "Name|#Hex"
+                String[] parts = colorData.split("\\|");
+                String name = parts.length > 0 ? parts[0] : colorData;
+                String hex = parts.length > 1 ? parts[1] : "#000000";
+                addColorToLayout(name, hex);
+            }
+        }
 
-        if (bikeData.getAllImages() != null && !bikeData.getAllImages().isEmpty()) {
-            loadExistingImages(bikeData.getAllImages());
+        // Populate Custom Fittings
+        if (bikeData.getCustomFittings() != null) {
+            for (com.example.motovista_deep.models.CustomFitting fitting : bikeData.getCustomFittings()) {
+                addCustomFittingToLayout(fitting.getName(), fitting.getPrice());
+            }
+        }
+
+        // Populate Mandatory Fittings
+        if (bikeData.getMandatoryFittings() != null) {
+            for (com.example.motovista_deep.models.CustomFitting fitting : bikeData.getMandatoryFittings()) {
+                checkFitting(mandatoryFittingsContainer, fitting.getName(), fitting.getPrice());
+                // Crucial: Update the map so calculation works!
+                mandatoryFittings.put(fitting.getName(), fitting.getPrice());
+            }
+        }
+
+        // Populate Additional Fittings
+        if (bikeData.getAdditionalFittings() != null) {
+            for (com.example.motovista_deep.models.CustomFitting fitting : bikeData.getAdditionalFittings()) {
+                checkFitting(additionalFittingsContainer, fitting.getName(), fitting.getPrice());
+                // Crucial: Update the map so calculation works!
+                additionalFittings.put(fitting.getName(), fitting.getPrice());
+            }
         }
     }
 
@@ -1103,6 +1179,7 @@ public class AddBikeActivity extends AppCompatActivity {
         String registrationProof = etRegistrationProof.getText().toString().trim();
         String priceDisclaimer = etPriceDisclaimer.getText().toString().trim();
         String insurance = etInsurance.getText().toString().trim();
+        String exShowroom = etExShowroom.getText().toString().trim(); // Added
         String registrationCharge = etRegistration.getText().toString().trim();
         String ltrt = etLTRT.getText().toString().trim();
         // Add these lines after other form value retrievals
@@ -1151,17 +1228,24 @@ public class AddBikeActivity extends AppCompatActivity {
             // UPDATE BIKE
             Log.d("BIKE_SAVE", "Updating bike ID: " + bikeId);
 
+            // Prepare fitting lists for update
+            List<CustomFitting> mandatoryList = getMandatoryFittingsFromUI();
+            List<CustomFitting> additionalList = getAdditionalFittingsFromUI();
+
+
             UpdateBikeRequest request = new UpdateBikeRequest(
                     bikeId,
                     brand, model, variant, year,
                     engineCC, fuelType, transmission,
                     brakingType,
                     String.valueOf(totalPrice),  // on_road_price
+                    exShowroom, // Added ex_showroom_price
                     insurance, registrationCharge, ltrt,
                     mileage, fuelTank, kerbWeight, seatHeight, groundClearance,
                     warranty, freeServices, registrationProof, priceDisclaimer,
-                    "NEW", features, initialImagePaths,
-                    date, engineNumber, chassisNumber
+                    "NEW", features, imagePaths,
+                    date, engineNumber, chassisNumber, colorsList, customFittings,
+                    mandatoryList, additionalList
             );
 
             Log.d("BIKE_SAVE", "Update request created");
@@ -1189,9 +1273,18 @@ public class AddBikeActivity extends AppCompatActivity {
                                             Toast.LENGTH_SHORT).show();
                                 }
                             } else {
+                                String errorBody = "";
+                                try {
+                                    if (response.errorBody() != null) {
+                                        errorBody = response.errorBody().string();
+                                    }
+                                } catch (java.io.IOException e) {
+                                    e.printStackTrace();
+                                }
+                                Log.e("BIKE_SAVE", "Server error body: " + errorBody);
                                 Toast.makeText(AddBikeActivity.this,
-                                        "Server error: " + response.code(),
-                                        Toast.LENGTH_SHORT).show();
+                                        "Server error: " + response.code() + " " + errorBody,
+                                        Toast.LENGTH_LONG).show();
                             }
                         }
 
@@ -1208,16 +1301,22 @@ public class AddBikeActivity extends AppCompatActivity {
             // ADD NEW BIKE
             Log.d("BIKE_SAVE", "Adding new bike");
 
+            // Collect Fittings using helper methods
+            List<CustomFitting> mandatoryList = getMandatoryFittingsFromUI();
+            List<CustomFitting> additionalList = getAdditionalFittingsFromUI();
+
             AddBikeRequest request = new AddBikeRequest(
                     brand, model, variant, year,
                     engineCC, fuelType, transmission,
                     brakingType,
                     String.valueOf(totalPrice),  // on_road_price
+                    exShowroom, // Added ex_showroom_price
                     insurance, registrationCharge, ltrt,
                     mileage, fuelTank, kerbWeight, seatHeight, groundClearance,
                     warranty, freeServices, registrationProof, priceDisclaimer,
                     "NEW", features, initialImagePaths,
-                    date, engineNumber, chassisNumber, colorsList, customFittings
+                    date, engineNumber, chassisNumber, colorsList, customFittings,
+                    mandatoryList, additionalList
             );
 
             if (!imageUris.isEmpty()) {
@@ -1302,10 +1401,9 @@ public class AddBikeActivity extends AppCompatActivity {
         for (String item : mandatoryItems) {
             mandatoryFittings.put(item, 0.0);
         }
-        for (String item : additionalItems) {
-            additionalFittings.put(item, 0.0);
-        }
-
+        // Fix: Don't pre-populate additional fittings with 0.0. Let them be added only when checked.
+        additionalFittings.clear(); 
+        
         customFittings.clear();
 
         colorsList.clear();
@@ -1365,5 +1463,78 @@ public class AddBikeActivity extends AppCompatActivity {
         });
     }
 
+
+
+    // Helper Methods to Extract Fittings from UI
+    private List<CustomFitting> getMandatoryFittingsFromUI() {
+        List<CustomFitting> list = new ArrayList<>();
+        if (mandatoryFittingsContainer == null) return list;
+
+        for (int i = 0; i < mandatoryFittingsContainer.getChildCount(); i++) {
+            View view = mandatoryFittingsContainer.getChildAt(i);
+            TextView tvName = view.findViewById(R.id.tvFittingName);
+            EditText etPrice = view.findViewById(R.id.etFittingPrice);
+            if (tvName != null) {
+                String name = tvName.getText().toString();
+                String priceStr = etPrice.getText().toString();
+                double price = priceStr.isEmpty() ? 0 : Double.parseDouble(priceStr);
+                list.add(new CustomFitting(name, price));
+            }
+        }
+        return list;
+    }
+
+    private List<CustomFitting> getAdditionalFittingsFromUI() {
+        List<CustomFitting> list = new ArrayList<>();
+        if (additionalFittingsContainer == null) return list;
+
+        for (int i = 0; i < additionalFittingsContainer.getChildCount(); i++) {
+            View view = additionalFittingsContainer.getChildAt(i);
+            CheckBox checkBox = view.findViewById(R.id.cbFitting);
+            TextView tvName = view.findViewById(R.id.tvFittingName);
+            EditText etPrice = view.findViewById(R.id.etFittingPrice);
+
+            // Only add if checked!
+            if (checkBox != null && checkBox.isChecked() && tvName != null) {
+                String name = tvName.getText().toString();
+                boolean isPredefined = false;
+                for (String item : additionalItems) {
+                    if (item.equalsIgnoreCase(name)) {
+                        isPredefined = true;
+                        break;
+                    }
+                }
+
+                double price = 0;
+                try {
+                    String p = etPrice.getText().toString();
+                    if (!p.isEmpty()) price = Double.parseDouble(p);
+                } catch (Exception e) {}
+
+                if (isPredefined) {
+                    list.add(new CustomFitting(name, price));
+                }
+            }
+        }
+        return list;
+    }
+
+    // Helper to check fitting checkboxes
+    private void checkFitting(LinearLayout container, String name, double price) {
+        for (int i = 0; i < container.getChildCount(); i++) {
+            View view = container.getChildAt(i);
+            TextView tvName = view.findViewById(R.id.tvFittingName);
+            CheckBox checkBox = view.findViewById(R.id.cbFitting);
+            EditText etPrice = view.findViewById(R.id.etFittingPrice);
+            
+            if (tvName != null && tvName.getText().toString().equalsIgnoreCase(name)) {
+                checkBox.setChecked(true);
+                if (etPrice != null) {
+                    etPrice.setText(String.valueOf(price));
+                }
+                return; 
+            }
+        }
+    }
 
 }

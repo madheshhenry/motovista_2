@@ -84,19 +84,23 @@
             android:layout_marginTop="@dimen/padding_medium"
             android:layout_marginBottom="@dimen/padding_medium" />
 
-        <!-- Year, Odometer, Ownership -->
-        <LinearLayout
+        <!-- Year, Odometer, Ownership, Condition Row -->
+        <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:columnCount="2"
+            android:rowCount="2"
+            android:useDefaultMargins="true"
+            android:alignmentMode="alignBounds">
 
             <!-- Year -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_columnWeight="1"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:padding="8dp">
 
                 <TextView
                     android:id="@+id/tvYear"
@@ -114,16 +118,16 @@
                     android:textColor="@color/text_light_gray"
                     android:textSize="12sp"
                     android:layout_marginTop="2dp" />
-
             </LinearLayout>
 
             <!-- Odometer -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_columnWeight="1"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:padding="8dp">
 
                 <TextView
                     android:id="@+id/tvOdometer"
@@ -141,16 +145,16 @@
                     android:textColor="@color/text_light_gray"
                     android:textSize="12sp"
                     android:layout_marginTop="2dp" />
-
             </LinearLayout>
 
             <!-- Ownership -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_columnWeight="1"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:padding="8dp">
 
                 <TextView
                     android:id="@+id/tvOwnership"
@@ -168,10 +172,36 @@
                     android:textColor="@color/text_light_gray"
                     android:textSize="12sp"
                     android:layout_marginTop="2dp" />
-
             </LinearLayout>
 
-        </LinearLayout>
+            <!-- Condition -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/tvCondition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Good"
+                    android:textColor="@color/text_dark"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Condition"
+                    android:textColor="@color/text_light_gray"
+                    android:textSize="12sp"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
+
+        </GridLayout>
 
     </LinearLayout>
 
@@ -198,17 +228,18 @@
             android:id="@+id/tvConditionDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="The bike is in excellent running condition with minor scratches on the tank. Recently serviced with new tires. All documents are clear and available."
+            android:text="The bike is in excellent running condition..."
             android:textColor="@color/text_light_gray"
             android:textSize="14sp"
             android:lineSpacingExtra="4dp" />
 
     </LinearLayout>
 
-    <!-- Key Features Card -->
+    <!-- Key Features & Specs Card -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_medium"
         android:background="@color/card_background"
         android:padding="@dimen/padding_medium"
         android:orientation="vertical"
@@ -217,18 +248,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Key Features"
+            android:text="Specifications &amp; Features"
             android:textColor="@color/text_dark"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="@dimen/padding_medium" />
 
-        <!-- Features Grid -->
+        <!-- Specs Grid -->
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:columnCount="2"
-            android:rowCount="4"
+            android:rowCount="1"
             android:alignmentMode="alignBounds"
             android:columnOrderPreserved="false"
             android:useDefaultMargins="true">
@@ -252,26 +283,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <!-- Row 2: Mileage -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="Mileage:"
-                android:textColor="@color/text_light_gray"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tvMileage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="40 kmpl"
-                android:textColor="@color/text_dark"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <!-- Row 3: Brakes -->
+            <!-- Row 1: Brakes -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -290,26 +302,61 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <!-- Row 4: ABS -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="ABS:"
-                android:textColor="@color/text_light_gray"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tvABS"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:text="Single Channel"
-                android:textColor="@color/text_dark"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
         </GridLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_300"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Features:"
+            android:textColor="@color/text_light_gray"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvAdditionalFeatures"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Original silencer available, single hand used, timely serviced."
+            android:textColor="@color/text_dark"
+            android:textSize="14sp"
+            android:lineSpacingExtra="4dp" />
+
+    </LinearLayout>
+
+    <!-- Owner / Seller Details Card -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/padding_medium"
+        android:background="@color/card_background"
+        android:padding="@dimen/padding_medium"
+        android:orientation="vertical"
+        android:elevation="2dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seller / Owner Details"
+            android:textColor="@color/text_dark"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="@dimen/padding_medium" />
+
+        <TextView
+            android:id="@+id/tvOwnerDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contact: +91 9876543210"
+            android:textColor="@color/text_dark"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

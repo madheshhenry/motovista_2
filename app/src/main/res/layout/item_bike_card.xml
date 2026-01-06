@@ -10,45 +10,63 @@
     app:cardUseCompatPadding="true"
     android:background="@color/white">
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
+
+        <!-- Bike Image -->
+        <ImageView
+            android:id="@+id/ivBike"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/placeholder_bike"
+            android:contentDescription="Bike Image"
+            android:background="@color/white"
+            android:layout_margin="12dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTag"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <!-- Tag (NEW BIKE / SH BIKES) -->
+        <!-- Poistioned at top-left, flush with card edges or slightly offset -->
         <TextView
             android:id="@+id/tvTag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="12dp"
-            android:paddingVertical="6dp"
+            android:paddingVertical="4dp"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
-            android:background="@drawable/tag_new_bike" />
+            android:textAllCaps="true"
+            android:includeFontPadding="false"
+            android:letterSpacing="0.05"
+            android:background="@drawable/tag_new_bike"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="12dp"
+            android:layout_marginStart="12dp"
+            android:elevation="4dp"
+            />
+            <!-- In the design, it looks like a tag OVER the image or content area. 
+                 But based on the screenshot, the tag is actually above the image area or part of the layout flow.
+                 Wait, looking closely at "Royal Enfield Classic 350", the tag is top-left, and image is below it? 
+                 No, the tag is overlapping the top-left corner of the content card area.
+                 Let's place it top-left with a small marginTop to sit nicely. -->
 
-        <!-- Bike Image -->
-        <ImageView
-            android:id="@+id/ivBike"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_marginTop="8dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/placeholder_bike"
-            android:contentDescription="Bike Image"
-            android:background="@color/gray_200"
-            android:layout_centerVertical="true" />
-
-        <!-- Bike Details -->
+        <!-- Bike Details Container -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/ivBike"
-            android:layout_toLeftOf="@+id/ivChevron"
+            android:orientation="vertical"
             android:layout_marginStart="16dp"
-            android:layout_centerVertical="true"
-            android:orientation="vertical">
+            android:layout_marginEnd="16dp"
+            app:layout_constraintStart_toEndOf="@+id/ivBike"
+            app:layout_constraintEnd_toStartOf="@+id/ivChevron"
+            app:layout_constraintTop_toTopOf="@+id/ivBike"
+            app:layout_constraintBottom_toBottomOf="@+id/ivBike">
 
             <!-- Brand -->
             <TextView
@@ -56,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray_500"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:fontFamily="sans-serif" />
 
             <!-- Model -->
@@ -68,17 +86,17 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="2dp" />
 
             <!-- Price or Condition -->
             <TextView
                 android:id="@+id/tvInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="6dp" />
 
         </LinearLayout>
 
@@ -87,12 +105,14 @@
             android:id="@+id/ivChevron"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
             android:src="@drawable/ic_chevron_right"
-            android:tint="@color/gray_400"
-            android:contentDescription="More" />
+            app:tint="@color/gray_400"
+            android:contentDescription="More"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

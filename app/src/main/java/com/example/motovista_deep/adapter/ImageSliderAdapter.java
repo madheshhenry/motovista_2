@@ -59,7 +59,7 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.ic_bike_placeholder)
                 .error(R.drawable.ic_bike_placeholder)
-                .centerCrop()
+                .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         // Load image with Glide
@@ -74,21 +74,11 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
             return "";
         }
 
-        // Remove quotes and backslashes
-        url = url.replace("\"", "").replace("\\", "");
+        // Remove quotes, backslashes and whitespace
+        url = url.replace("\"", "").replace("\\", "").trim();
 
         // If already a full URL, check if uploads/ is missing
         if (url.startsWith("http://") || url.startsWith("https://")) {
-            if (url.contains(baseUrl)) {
-                String relative = url.replace(baseUrl, "");
-                if (!relative.contains("uploads/")) {
-                    if (relative.startsWith("bikes/")) {
-                        url = baseUrl + "uploads/" + relative;
-                    } else if (relative.startsWith("second_hand_bikes/")) {
-                        url = baseUrl + "uploads/" + relative;
-                    }
-                }
-            }
             return url;
         }
 
@@ -103,14 +93,24 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
 
         // Add base URL
         if (baseUrl != null && !baseUrl.isEmpty()) {
-            String base = baseUrl;
-            if (!base.endsWith("/") && !url.startsWith("/")) {
+            // IMPORTANT: The uploads folder is OUTSIDE the api folder.
+            // BASE_URL is .../motovista_backend/api/
+            // Images are at .../motovista_backend/uploads/
+            // So we need to remove "api/" from the base URL
+            
+            String serverBase = baseUrl;
+            if (serverBase.endsWith("api/")) {
+                serverBase = serverBase.replace("api/", "");
+            }
+            
+            // Handle slashes
+            if (!serverBase.endsWith("/") && !url.startsWith("/")) {
                 url = "/" + url;
             }
-            if (base.endsWith("/") && url.startsWith("/")) {
+            if (serverBase.endsWith("/") && url.startsWith("/")) {
                 url = url.substring(1);
             }
-            return base + url;
+            return serverBase + url;
         }
 
         return url;

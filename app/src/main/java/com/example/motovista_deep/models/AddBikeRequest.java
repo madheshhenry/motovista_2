@@ -10,6 +10,7 @@ public class AddBikeRequest {
     private String transmission;
     private String braking_type;
     private String on_road_price;
+    private String ex_showroom_price;
     private String insurance;
     private String registration_charge;
     private String ltrt;
@@ -48,14 +49,15 @@ public class AddBikeRequest {
     // New constructor with all fields including new ones
     public AddBikeRequest(String brand, String model, String variant, String year,
                           String engine_cc, String fuel_type, String transmission,
-                          String braking_type, String on_road_price, String insurance,
+                          String braking_type, String on_road_price, String ex_showroom_price, String insurance,
                           String registration_charge, String ltrt, String mileage,
                           String fuel_tank_capacity, String kerb_weight, String seat_height,
                           String ground_clearance, String warranty_period,
                           String free_services_count, String registration_proof,
                           String price_disclaimer, String type, String features,
             String image_paths, String date, String engine_number, String chassis_number,
-            java.util.List<String> colors, java.util.List<CustomFitting> custom_fittings) {
+            java.util.List<String> colors, java.util.List<CustomFitting> custom_fittings,
+            java.util.List<CustomFitting> mandatory_fittings, java.util.List<CustomFitting> additional_fittings) {
         this.brand = brand;
         this.model = model;
         this.variant = variant;
@@ -65,6 +67,7 @@ public class AddBikeRequest {
         this.transmission = transmission;
         this.braking_type = braking_type;
         this.on_road_price = on_road_price;
+        this.ex_showroom_price = ex_showroom_price;
         this.insurance = insurance;
         this.registration_charge = registration_charge;
         this.ltrt = ltrt;
@@ -85,6 +88,8 @@ public class AddBikeRequest {
         this.chassis_number = chassis_number;
         this.colors = colors;
         this.custom_fittings = custom_fittings;
+        this.mandatory_fittings = mandatory_fittings;
+        this.additional_fittings = additional_fittings;
     }
 
     private java.util.List<String> colors;
@@ -94,6 +99,14 @@ public class AddBikeRequest {
     private java.util.List<CustomFitting> custom_fittings;
     public java.util.List<CustomFitting> getCustom_fittings() { return custom_fittings; }
     public void setCustom_fittings(java.util.List<CustomFitting> custom_fittings) { this.custom_fittings = custom_fittings; }
+
+    private java.util.List<CustomFitting> mandatory_fittings;
+    public java.util.List<CustomFitting> getMandatory_fittings() { return mandatory_fittings; }
+    public void setMandatory_fittings(java.util.List<CustomFitting> mandatory_fittings) { this.mandatory_fittings = mandatory_fittings; }
+
+    private java.util.List<CustomFitting> additional_fittings;
+    public java.util.List<CustomFitting> getAdditional_fittings() { return additional_fittings; }
+    public void setAdditional_fittings(java.util.List<CustomFitting> additional_fittings) { this.additional_fittings = additional_fittings; }
 
     // Getters and Setters for all fields
     public String getBrand() { return brand; }
@@ -122,6 +135,9 @@ public class AddBikeRequest {
 
     public String getOn_road_price() { return on_road_price; }
     public void setOn_road_price(String on_road_price) { this.on_road_price = on_road_price; }
+
+    public String getEx_showroom_price() { return ex_showroom_price; }
+    public void setEx_showroom_price(String ex_showroom_price) { this.ex_showroom_price = ex_showroom_price; }
 
     public String getInsurance() { return insurance; }
     public void setInsurance(String insurance) { this.insurance = insurance; }

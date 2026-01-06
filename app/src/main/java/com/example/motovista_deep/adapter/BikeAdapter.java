@@ -51,12 +51,21 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
         BikeModel bike = bikeList.get(position);
 
         // Get base URL from RetrofitClient
+        // Get base URL from RetrofitClient
         String baseUrl = RetrofitClient.BASE_URL;
+        
+        // CLEAN THE BASE URL HERE
+        // RetrofitClient.BASE_URL includes "api/", but images are in "uploads/" (sibling folder)
+        if (baseUrl != null && baseUrl.endsWith("api/")) {
+            baseUrl = baseUrl.replace("api/", "");
+        }
+        
         // Ensure base URL ends with /
         if (baseUrl != null && !baseUrl.endsWith("/")) {
             baseUrl += "/";
         }
-        // Set base URL for bike model
+        
+        // Set CLEAN base URL for bike model
         bike.setBaseUrl(baseUrl);
 
         // 1. SET TEXT CONTENT
@@ -70,20 +79,23 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
                     ContextCompat.getDrawable(context, R.drawable.tag_new_bike)
             );
 
-            String price = bike.getPrice();
+            String price = bike.getOnRoadPrice();
             if (price == null || price.isEmpty()) {
-                price = bike.getOnRoadPrice();
+                price = bike.getPrice();
             }
+            // For NEW bikes, show Price. Do NOT show Condition.
             holder.tvInfo.setText(price != null && !price.isEmpty() ? "₹" + price : "Price on request");
             holder.tvInfo.setTextColor(
                     ContextCompat.getColor(context, R.color.primary_color)
             );
         } else {
-            holder.tvTag.setText("USED BIKE");
+            // SECOND HAND
+            holder.tvTag.setText("SH BIKES");
             holder.tvTag.setBackground(
                     ContextCompat.getDrawable(context, R.drawable.tag_sh_bike)
             );
 
+            // For USED bikes, show Condition.
             String condition = bike.getCondition();
             if (condition == null || condition.isEmpty()) {
                 condition = "Good";
@@ -117,16 +129,9 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
         // Get the image URL from bike
         String imageUrl = bike.getImageUrl();
 
-        // Debug log
-        Log.d("BIKE_ADAPTER", "Position: " + position +
-                ", Brand: " + bike.getBrand() +
-                ", Model: " + bike.getModel() +
-                ", Image URL: " + imageUrl);
-
         // If no image URL, try to get from all images
         if ((imageUrl == null || imageUrl.isEmpty()) && bike.getAllImages() != null && !bike.getAllImages().isEmpty()) {
             imageUrl = bike.getAllImages().get(0);
-            Log.d("BIKE_ADAPTER", "Using image from getAllImages: " + imageUrl);
         }
 
         // Create request options
@@ -141,29 +146,13 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
         final String finalImageUrl = cleanImageUrl(imageUrl, baseUrl);
 
         if (finalImageUrl != null && !finalImageUrl.isEmpty()) {
-            Log.d("BIKE_ADAPTER", "Cleaned Image URL: " + finalImageUrl);
-
             // Load with Glide
             Glide.with(context)
                     .load(finalImageUrl)
                     .apply(requestOptions)
                     .transition(DrawableTransitionOptions.withCrossFade(300))
-                    .listener(new com.bumptech.glide.request.RequestListener<android.graphics.drawable.Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@androidx.annotation.Nullable com.bumptech.glide.load.engine.GlideException e, Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target, boolean isFirstResource) {
-                            Log.e("BIKE_ADAPTER", "Failed to load image: " + finalImageUrl + ", Error: " + (e != null ? e.getMessage() : "Unknown"));
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(android.graphics.drawable.Drawable resource, Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target, com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
-                            Log.d("BIKE_ADAPTER", "Image loaded successfully: " + finalImageUrl);
-                            return false;
-                        }
-                    })
                     .into(holder.ivBike);
         } else {
-            Log.d("BIKE_ADAPTER", "No image URL, using placeholder");
             holder.ivBike.setImageResource(R.drawable.placeholder_bike);
         }
     }
@@ -174,30 +163,43 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
             return "";
         }
 
-        // Remove quotes and backslashes
-        url = url.replace("\"", "").replace("\\", "");
-
-        Log.d("BIKE_ADAPTER", "URL before cleaning: " + url);
+        // Remove quotes, backslashes and whitespace
+        url = url.replace("\"", "").replace("\\", "").trim();
 
         // If already a full URL, return as is
         if (url.startsWith("http://") || url.startsWith("https://")) {
             return url;
         }
 
-        // If it's a relative path
+        // Handle paths that might come as "bikes/..." or "uploads/bikes/..."
+        // If it starts with [ or ", it might be a JSON failure string, try to clean it
+        if (url.startsWith("[") || url.startsWith("]")) {
+            url = url.replaceAll("[\\[\\]\"]", "");
+        }
+        
+        // Construct partial path
         if (!url.contains("uploads/")) {
-            if (url.startsWith("bikes/") || url.startsWith("second_hand_bikes/")) {
-                url = "uploads/" + url;
-            } else if (!url.startsWith("uploads/")) {
-                url = "uploads/bikes/" + url;
-            }
+             if (url.startsWith("bikes/") || url.startsWith("second_hand_bikes/")) {
+                 url = "uploads/" + url;
+             } else if (!url.startsWith("uploads/")) {
+                 // Default to uploads/bikes/ if pure filename
+                 url = "uploads/bikes/" + url;
+             }
         }
 
         // Add base URL
         if (baseUrl != null && !baseUrl.isEmpty()) {
-            String finalUrl = baseUrl + url;
-            Log.d("BIKE_ADAPTER", "Final URL: " + finalUrl);
-            return finalUrl;
+            // IMPORTANT: The uploads folder is OUTSIDE the api folder.
+            // BASE_URL is .../motovista_backend/api/
+            // Images are at .../motovista_backend/uploads/
+            // So we need to remove "api/" from the base URL
+            
+            String serverBase = baseUrl;
+            if (serverBase.endsWith("api/")) {
+                serverBase = serverBase.replace("api/", "");
+            }
+            
+            return serverBase + url;
         }
 
         return url;

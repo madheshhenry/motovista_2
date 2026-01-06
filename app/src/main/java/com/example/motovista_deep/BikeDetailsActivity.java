@@ -71,6 +71,8 @@ public class BikeDetailsActivity extends AppCompatActivity {
         fetchFreshBikeData();
     }
 
+
+
     private void logBikeDetails(String source) {
         Log.d("BIKE_DETAILS_DEBUG", "=== " + source + " ===");
         if (bike != null) {
@@ -100,6 +102,9 @@ public class BikeDetailsActivity extends AppCompatActivity {
 
         // If it's a relative path, add base URL
         String baseUrl = RetrofitClient.BASE_URL;
+        if (baseUrl != null && baseUrl.endsWith("api/")) {
+            baseUrl = baseUrl.replace("api/", "");
+        }
         if (!baseUrl.endsWith("/")) {
             baseUrl += "/";
         }
@@ -349,6 +354,10 @@ public class BikeDetailsActivity extends AppCompatActivity {
             bike.setTransmission(bikeData.getTransmission());
             bike.setBrakingType(bikeData.getBrakingType());
             bike.setOnRoadPrice(bikeData.getOnRoadPrice());
+            bike.setExShowroomPrice(bikeData.getExShowroomPrice()); // Added
+            bike.setInsurance(bikeData.getInsurance()); // Added
+            bike.setRegistrationCharge(bikeData.getRegistrationCharge()); // Added
+            bike.setLtrt(bikeData.getLtrt()); // Added
             bike.setMileage(bikeData.getMileage());
             bike.setFuelTankCapacity(bikeData.getFuelTankCapacity());
             bike.setKerbWeight(bikeData.getKerbWeight());
@@ -358,6 +367,19 @@ public class BikeDetailsActivity extends AppCompatActivity {
             bike.setFreeServicesCount(bikeData.getFreeServicesCount());
             bike.setRegistrationProof(bikeData.getRegistrationProof());
             bike.setPriceDisclaimer(bikeData.getPriceDisclaimer());
+
+            bike.setPriceDisclaimer(bikeData.getPriceDisclaimer());
+
+            // Update Collections with logging
+            Log.d("BIKE_DETAILS_API", "Colors size: " + (bikeData.getColors() != null ? bikeData.getColors().size() : "null"));
+            Log.d("BIKE_DETAILS_API", "Custom Fittings size: " + (bikeData.getCustomFittings() != null ? bikeData.getCustomFittings().size() : "null"));
+            Log.d("BIKE_DETAILS_API", "Mandatory Fittings size: " + (bikeData.getMandatoryFittings() != null ? bikeData.getMandatoryFittings().size() : "null"));
+            Log.d("BIKE_DETAILS_API", "Additional Fittings size: " + (bikeData.getAdditionalFittings() != null ? bikeData.getAdditionalFittings().size() : "null"));
+
+            bike.setColors(bikeData.getColors());
+            bike.setCustomFittings(bikeData.getCustomFittings());
+            bike.setMandatoryFittings(bikeData.getMandatoryFittings());
+            bike.setAdditionalFittings(bikeData.getAdditionalFittings());
 
             // Set the price for display
             if (bikeData.getOnRoadPrice() != null && !bikeData.getOnRoadPrice().isEmpty()) {
@@ -409,6 +431,21 @@ public class BikeDetailsActivity extends AppCompatActivity {
         TextView tvTransmission = view.findViewById(R.id.tvTransmission);
         TextView tvBrakingType = view.findViewById(R.id.tvBrakingType);
 
+        // Colors
+        LinearLayout llColorsSection = view.findViewById(R.id.llColorsSection);
+        LinearLayout colorsContainer = view.findViewById(R.id.colorsContainer);
+        if (bike.getColors() != null && !bike.getColors().isEmpty()) {
+            llColorsSection.setVisibility(View.VISIBLE);
+            if (colorsContainer != null) {
+                colorsContainer.removeAllViews();
+                for (String color : bike.getColors()) {
+                    addColorItem(colorsContainer, color);
+                }
+            }
+        } else {
+            if (llColorsSection != null) llColorsSection.setVisibility(View.GONE);
+        }
+
         // NEW FIELDS: Add TextViews for date, engine number, chassis number
         TextView tvDate = view.findViewById(R.id.tvDate);
         TextView tvEngineNumber = view.findViewById(R.id.tvEngineNumber);
@@ -452,48 +489,38 @@ public class BikeDetailsActivity extends AppCompatActivity {
         TextView tvLTRT = view.findViewById(R.id.tvLTRT);
         TextView tvTotalPrice = view.findViewById(R.id.tvTotalPrice);
 
-        String price = bike.getPrice();
-        if (price != null && !price.isEmpty()) {
-            price = price.replace("₹", "").trim();
-            double total = 0;
-            try {
-                total = Double.parseDouble(price.replace(",", ""));
-            } catch (NumberFormatException e) {
-                // Try to use on_road_price if price parsing fails
-                String onRoadPrice = bike.getOnRoadPrice();
-                if (onRoadPrice != null && !onRoadPrice.isEmpty()) {
-                    try {
-                        total = Double.parseDouble(onRoadPrice.replace(",", ""));
-                    } catch (NumberFormatException ex) {
-                        total = 210350; // Default fallback
-                    }
-                } else {
-                    total = 210350; // Default fallback
-                }
-            }
-
-            tvExShowroom.setText("₹ " + formatPrice(total * 0.87));
-            tvInsurance.setText("₹ " + formatPrice(total * 0.06));
-            tvRegistration.setText("₹ " + formatPrice(total * 0.05));
-            tvLTRT.setText("₹ " + formatPrice(total * 0.02));
-            tvTotalPrice.setText("₹ " + formatPrice(total));
+        // Display stored values if available, otherwise fallback to calculation
+        if (bike.getExShowroomPrice() != null && !bike.getExShowroomPrice().isEmpty()) {
+            tvExShowroom.setText("₹ " + bike.getExShowroomPrice());
         } else {
-            // Try to use on_road_price if price is empty
-            String onRoadPrice = bike.getOnRoadPrice();
-            if (onRoadPrice != null && !onRoadPrice.isEmpty()) {
-                try {
-                    double total = Double.parseDouble(onRoadPrice.replace(",", ""));
-                    tvExShowroom.setText("₹ " + formatPrice(total * 0.87));
-                    tvInsurance.setText("₹ " + formatPrice(total * 0.06));
-                    tvRegistration.setText("₹ " + formatPrice(total * 0.05));
-                    tvLTRT.setText("₹ " + formatPrice(total * 0.02));
-                    tvTotalPrice.setText("₹ " + formatPrice(total));
-                } catch (NumberFormatException e) {
-                    setDefaultPriceValues(tvExShowroom, tvInsurance, tvRegistration, tvLTRT, tvTotalPrice);
-                }
-            } else {
-                setDefaultPriceValues(tvExShowroom, tvInsurance, tvRegistration, tvLTRT, tvTotalPrice);
-            }
+             // Fallback logic if needed, or set default
+             tvExShowroom.setText("₹ " + formatPrice(Double.parseDouble(bike.getOnRoadPrice().replace(",","")) * 0.87));
+        }
+
+        if (bike.getInsurance() != null && !bike.getInsurance().isEmpty()) {
+            tvInsurance.setText("₹ " + bike.getInsurance());
+        } else {
+             tvInsurance.setText("₹ " + formatPrice(Double.parseDouble(bike.getOnRoadPrice().replace(",","")) * 0.06));
+        }
+
+        if (bike.getRegistrationCharge() != null && !bike.getRegistrationCharge().isEmpty()) {
+            tvRegistration.setText("₹ " + bike.getRegistrationCharge());
+        } else {
+             tvRegistration.setText("₹ " + formatPrice(Double.parseDouble(bike.getOnRoadPrice().replace(",","")) * 0.05));
+        }
+
+        if (bike.getLtrt() != null && !bike.getLtrt().isEmpty()) {
+            tvLTRT.setText("₹ " + bike.getLtrt());
+        } else {
+             tvLTRT.setText("₹ " + formatPrice(Double.parseDouble(bike.getOnRoadPrice().replace(",","")) * 0.02));
+        }
+        
+        // Total Price
+        String onRoad = bike.getOnRoadPrice();
+        if (onRoad != null && !onRoad.isEmpty()) {
+             tvTotalPrice.setText("₹ " + onRoad);
+        } else {
+             tvTotalPrice.setText(bike.getPrice() != null ? bike.getPrice() : "N/A");
         }
 
         // Specifications
@@ -559,6 +586,13 @@ public class BikeDetailsActivity extends AppCompatActivity {
         TextView tvExpectedPrice = view.findViewById(R.id.tvExpectedPrice);
         TextView tvYear = view.findViewById(R.id.tvYear);
         TextView tvOdometer = view.findViewById(R.id.tvOdometer);
+        TextView tvOwnership = view.findViewById(R.id.tvOwnership);
+        TextView tvCondition = view.findViewById(R.id.tvCondition);
+        TextView tvConditionDetails = view.findViewById(R.id.tvConditionDetails);
+        TextView tvEngine = view.findViewById(R.id.tvEngine);
+        TextView tvBrakes = view.findViewById(R.id.tvBrakes);
+        TextView tvAdditionalFeatures = view.findViewById(R.id.tvAdditionalFeatures);
+        TextView tvOwnerDetails = view.findViewById(R.id.tvOwnerDetails);
 
         tvBrand.setText(bike.getBrand() != null ? bike.getBrand() : "N/A");
         tvModel.setText(bike.getModel() != null ? bike.getModel() : "N/A");
@@ -574,6 +608,31 @@ public class BikeDetailsActivity extends AppCompatActivity {
         tvYear.setText(bike.getYear() != null ? bike.getYear() : "N/A");
         tvOdometer.setText(bike.getOdometer() != null && !bike.getOdometer().isEmpty() ?
                 bike.getOdometer() : "N/A");
+        
+        tvOwnership.setText(bike.getOwnership() != null && !bike.getOwnership().isEmpty() ?
+                bike.getOwnership() : "N/A");
+        
+        // Show condition (Excellent/Good)
+        String condition = bike.getCondition();
+        if (condition == null || condition.isEmpty()) {
+            condition = "Good"; 
+        }
+        tvCondition.setText(condition);
+
+        tvConditionDetails.setText(bike.getConditionDetails() != null && !bike.getConditionDetails().isEmpty() ?
+                bike.getConditionDetails() : "No details provided.");
+
+        tvEngine.setText(bike.getEngineCC() != null && !bike.getEngineCC().isEmpty() ?
+                bike.getEngineCC() : "N/A");
+
+        tvBrakes.setText(bike.getBrakingType() != null && !bike.getBrakingType().isEmpty() ?
+                bike.getBrakingType() : "N/A");
+
+        tvAdditionalFeatures.setText(bike.getFeatures() != null && !bike.getFeatures().isEmpty() ?
+                bike.getFeatures() : "No additional features specified.");
+
+        tvOwnerDetails.setText(bike.getOwnerDetails() != null && !bike.getOwnerDetails().isEmpty() ?
+                bike.getOwnerDetails() : "Contact Admin for details.");
     }
 
     private String formatPrice(double price) {
@@ -588,17 +647,89 @@ public class BikeDetailsActivity extends AppCompatActivity {
         LinearLayout mandatoryContainer = view.findViewById(R.id.fittingsMandatoryContainer);
         LinearLayout additionalContainer = view.findViewById(R.id.fittingsAdditionalContainer);
 
+        if (bike == null) return;
+
         if (mandatoryContainer != null) {
-            addFittingItem(mandatoryContainer, "Crash Bar", "₹ 850");
-            addFittingItem(mandatoryContainer, "Saree Guard", "₹ 450");
-            addFittingItem(mandatoryContainer, "Front & Rear Number Plate", "₹ 300");
-            addFittingItem(mandatoryContainer, "Side Stand", "₹ 250");
+            mandatoryContainer.removeAllViews();
+            if (bike.getMandatoryFittings() != null) {
+                for (com.example.motovista_deep.models.CustomFitting fitting : bike.getMandatoryFittings()) {
+                    addFittingItem(mandatoryContainer, fitting.getName(), "₹ " + fitting.getPrice());
+                }
+            }
         }
 
         if (additionalContainer != null) {
-            addFittingItem(additionalContainer, "Helmet", "FREE");
-            addFittingItem(additionalContainer, "Seat Cover", "₹ 350");
+            additionalContainer.removeAllViews();
+            
+            // Standard Additional Fittings
+            if (bike.getAdditionalFittings() != null) {
+                for (com.example.motovista_deep.models.CustomFitting fitting : bike.getAdditionalFittings()) {
+                    addFittingItem(additionalContainer, fitting.getName(), "₹ " + fitting.getPrice());
+                }
+            }
+            
+            // Custom Fittings added by user
+            if (bike.getCustomFittings() != null) {
+                for (com.example.motovista_deep.models.CustomFitting fitting : bike.getCustomFittings()) {
+                    addFittingItem(additionalContainer, fitting.getName(), "₹ " + fitting.getPrice());
+                }
+            }
         }
+    }
+
+    private void addColorItem(LinearLayout container, String colorData) {
+        // Expected format: "Name|#HexCode" (e.g. "Red|#FF0000") or just "Name"
+        String colorName = colorData;
+        String colorHex = "#CCCCCC"; // Default gray
+
+        if (colorData.contains("|")) {
+            String[] parts = colorData.split("\\|");
+            if (parts.length > 0) colorName = parts[0];
+            if (parts.length > 1) colorHex = parts[1];
+        }
+
+        LinearLayout itemLayout = new LinearLayout(this);
+        itemLayout.setOrientation(LinearLayout.VERTICAL);
+        itemLayout.setGravity(android.view.Gravity.CENTER);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        layoutParams.setMargins(16, 0, 16, 0);
+        itemLayout.setLayoutParams(layoutParams);
+
+        // Color Circle
+        View colorCircle = new View(this);
+        int size = (int) (40 * getResources().getDisplayMetrics().density); // 40dp
+        LinearLayout.LayoutParams circleParams = new LinearLayout.LayoutParams(size, size);
+        circleParams.bottomMargin = (int) (4 * getResources().getDisplayMetrics().density);
+        colorCircle.setLayoutParams(circleParams);
+
+        // Create rounded background dynamically
+        android.graphics.drawable.GradientDrawable drawable = new android.graphics.drawable.GradientDrawable();
+        drawable.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+        try {
+            drawable.setColor(android.graphics.Color.parseColor(colorHex));
+        } catch (IllegalArgumentException e) {
+            drawable.setColor(android.graphics.Color.LTGRAY);
+        }
+        // Add border
+        drawable.setStroke(2, android.graphics.Color.LTGRAY);
+        
+        colorCircle.setBackground(drawable);
+
+        // Color Name
+        TextView tvName = new TextView(this);
+        tvName.setText(colorName);
+        tvName.setTextColor(getResources().getColor(R.color.text_dark));
+        tvName.setTextSize(12);
+        tvName.setTypeface(null, android.graphics.Typeface.BOLD);
+        tvName.setGravity(android.view.Gravity.CENTER);
+
+        itemLayout.addView(colorCircle);
+        itemLayout.addView(tvName);
+
+        container.addView(itemLayout);
     }
 
     private void addFittingItem(LinearLayout container, String name, String price) {
@@ -746,6 +877,7 @@ public class BikeDetailsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        fetchFreshBikeData();
         if (imageUrls.size() > 1 && sliderRunnable != null) {
             sliderHandler.postDelayed(sliderRunnable, 3000);
         }

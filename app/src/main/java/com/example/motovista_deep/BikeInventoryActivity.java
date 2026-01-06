@@ -204,7 +204,11 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
                 BikeModel bike = new BikeModel();
 
                 // Set base URL from RetrofitClient
-                bike.setBaseUrl(RetrofitClient.BASE_URL);
+                String baseUrl = RetrofitClient.BASE_URL;
+                if (baseUrl != null && baseUrl.endsWith("api/")) {
+                    baseUrl = baseUrl.replace("api/", "");
+                }
+                bike.setBaseUrl(baseUrl);
 
                 Log.d("BIKE_INVENTORY", "Processing bike: " + apiBike.getBrand() + " " + apiBike.getModel());
 

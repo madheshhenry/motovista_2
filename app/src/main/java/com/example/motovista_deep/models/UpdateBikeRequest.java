@@ -1,6 +1,7 @@
 package com.example.motovista_deep.models;
 
 public class UpdateBikeRequest {
+    @com.google.gson.annotations.SerializedName("id")
     private int bike_id;
     private String brand;
     private String model;
@@ -10,9 +11,15 @@ public class UpdateBikeRequest {
     private String fuel_type;
     private String transmission;
     private String braking_type;
+    @com.google.gson.annotations.SerializedName("on_road_price")
     private String on_road_price;
+    @com.google.gson.annotations.SerializedName("ex_showroom_price")
+    private String ex_showroom_price;
+    @com.google.gson.annotations.SerializedName("insurance_price")
     private String insurance;
+    @com.google.gson.annotations.SerializedName("registration_price")
     private String registration_charge;
+    @com.google.gson.annotations.SerializedName("ltrt_price")
     private String ltrt;
     private String mileage;
     private String fuel_tank_capacity;
@@ -30,17 +37,24 @@ public class UpdateBikeRequest {
     private String engine_number;
     private String chassis_number;
 
+    private java.util.List<String> colors;
+    private java.util.List<CustomFitting> custom_fittings;
+    private java.util.List<CustomFitting> mandatory_fittings;
+    private java.util.List<CustomFitting> additional_fittings;
+
     // Constructor with all fields
     public UpdateBikeRequest(int bike_id,
                              String brand, String model, String variant, String year,
                              String engine_cc, String fuel_type, String transmission,
-                             String braking_type, String on_road_price, String insurance,
+                             String braking_type, String on_road_price, String ex_showroom_price, String insurance,
                              String registration_charge, String ltrt, String mileage,
                              String fuel_tank_capacity, String kerb_weight, String seat_height,
                              String ground_clearance, String warranty_period,
                              String free_services_count, String registration_proof,
                              String price_disclaimer, String type, String features,
-                             String image_paths, String date, String engine_number, String chassis_number) {
+                             String image_paths, String date, String engine_number, String chassis_number,
+                             java.util.List<String> colors, java.util.List<CustomFitting> custom_fittings,
+                             java.util.List<CustomFitting> mandatory_fittings, java.util.List<CustomFitting> additional_fittings) {
         this.bike_id = bike_id;
         this.brand = brand;
         this.model = model;
@@ -51,6 +65,7 @@ public class UpdateBikeRequest {
         this.transmission = transmission;
         this.braking_type = braking_type;
         this.on_road_price = on_road_price;
+        this.ex_showroom_price = ex_showroom_price;
         this.insurance = insurance;
         this.registration_charge = registration_charge;
         this.ltrt = ltrt;
@@ -69,6 +84,10 @@ public class UpdateBikeRequest {
         this.date = date;
         this.engine_number = engine_number;
         this.chassis_number = chassis_number;
+        this.colors = colors;
+        this.custom_fittings = custom_fittings;
+        this.mandatory_fittings = mandatory_fittings;
+        this.additional_fittings = additional_fittings;
     }
 
     // Getters and setters for all fields
