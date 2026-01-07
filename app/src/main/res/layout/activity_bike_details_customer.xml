@@ -5,15 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_50"
-    android:fitsSystemWindows="false"
-    tools:context=".BikeDetailsScreenActivity">
+    android:fitsSystemWindows="false">
 
     <!-- Header -->
     <LinearLayout
-        android:id="@+id/headerLayout"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -38,7 +37,7 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/tvTitle"
+            android:id="@+id/toolbarTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="40dp"
@@ -55,7 +54,7 @@
         android:id="@+id/headerDivider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/headerLayout"
+        android:layout_below="@id/toolbar"
         android:background="@color/gray_200" />
 
     <!-- Content -->
@@ -113,7 +112,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvBikeTitle"
+                        android:id="@+id/tvModelName"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -123,7 +122,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvBikePrice"
+                        android:id="@+id/tvPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -141,7 +140,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvBikeVariant"
+                        android:id="@+id/tvVariant"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Racing Blue Variant"
@@ -210,7 +209,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvEngineValue"
+                        android:id="@+id/tvEngineCC"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="155 cc"
@@ -256,7 +255,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvMileageValue"
+                        android:id="@+id/tvMileage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="45 km/l"
@@ -302,7 +301,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvFuelValue"
+                        android:id="@+id/tvFuelType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Petrol"
@@ -340,11 +339,63 @@
                     android:textStyle="bold" />
 
                 <LinearLayout
-                    android:id="@+id/layoutColors"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
+                    <!-- Blue -->
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp">
+
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circle_dot"
+                            android:backgroundTint="#2563EB" />
+                        <!-- Ring effect would need more complex drawable, keeping simple for now -->
+                    </FrameLayout>
                     
+                    <!-- Black -->
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp">
+
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circle_dot"
+                            android:backgroundTint="#0F172A" />
+                    </FrameLayout>
+
+                    <!-- Red -->
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp">
+
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circle_dot"
+                            android:backgroundTint="#DC2626" />
+                    </FrameLayout>
+                    
+                     <!-- Silver -->
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp">
+
+                        <View
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circle_dot"
+                            android:backgroundTint="#9CA3AF" />
+                    </FrameLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -403,7 +454,7 @@
                             layout="@layout/item_spec_row" />
 
                         <include
-                            android:id="@+id/rowEngine"
+                            android:id="@+id/rowCC"
                             layout="@layout/item_spec_row" />
                             
                         <include
@@ -415,7 +466,7 @@
                             layout="@layout/item_spec_row" />
 
                         <include
-                            android:id="@+id/rowBraking"
+                            android:id="@+id/rowBrakes"
                             layout="@layout/item_spec_row" />
                     </LinearLayout>
                 </LinearLayout>
@@ -462,7 +513,7 @@
                             layout="@layout/item_spec_row" />
 
                         <include
-                            android:id="@+id/rowTank"
+                            android:id="@+id/rowFuelTank"
                             layout="@layout/item_spec_row" />
 
                         <include
@@ -470,11 +521,11 @@
                             layout="@layout/item_spec_row" />
 
                         <include
-                            android:id="@+id/rowSeat"
+                            android:id="@+id/rowSeatHeight"
                             layout="@layout/item_spec_row" />
 
                         <include
-                            android:id="@+id/rowClearance"
+                            android:id="@+id/rowGroundClearance"
                             layout="@layout/item_spec_row" />
                     </LinearLayout>
                 </LinearLayout>
@@ -513,7 +564,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/btnOrderBike"
+            android:id="@+id/btnOrderNow"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:background="@drawable/btn_gradient_primary"

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.motovista_deep.adapter.BikeAdapter;
+import com.example.motovista_deep.adapter.CustomerBikeAdapter;
 import com.example.motovista_deep.api.ApiService;
 import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.helpers.SharedPrefManager;
@@ -29,7 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BikeCatalogActivity extends AppCompatActivity implements BikeAdapter.OnBikeClickListener {
+public class BikeCatalogActivity extends AppCompatActivity implements CustomerBikeAdapter.OnBikeClickListener {
 
     private static final String TAG = "BikeCatalogActivity";
 
@@ -42,7 +43,7 @@ public class BikeCatalogActivity extends AppCompatActivity implements BikeAdapte
 
     // RecyclerView
     private RecyclerView rvBikes;
-    private BikeAdapter bikeAdapter;
+    private CustomerBikeAdapter bikeAdapter;
     private List<BikeModel> allBikesList = new ArrayList<>();
 
     // Bottom navigation
@@ -112,7 +113,7 @@ public class BikeCatalogActivity extends AppCompatActivity implements BikeAdapte
 
     private void setupRecyclerView() {
         rvBikes.setLayoutManager(new LinearLayoutManager(this));
-        bikeAdapter = new BikeAdapter(this, new ArrayList<>(), this);
+        bikeAdapter = new CustomerBikeAdapter(this, new ArrayList<>(), this);
         rvBikes.setAdapter(bikeAdapter);
     }
 

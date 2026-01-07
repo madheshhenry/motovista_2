@@ -283,14 +283,12 @@ public class BikeDetailsActivity extends AppCompatActivity {
                         Log.d("BIKE_DETAILS_API", "Response status: " + apiResponse.getStatus());
                         Log.d("BIKE_DETAILS_API", "Response message: " + apiResponse.getMessage());
 
-                            if ("success".equals(apiResponse.getStatus())) {
+                        if ("success".equalsIgnoreCase(apiResponse.getStatus()) || "true".equalsIgnoreCase(apiResponse.getStatus())) {
                                 com.example.motovista_deep.models.BikeModel bikeData = apiResponse.getData();
                                 if (bikeData != null) {
                                 Log.d("BIKE_DETAILS_API", "Bike data received:");
                                 Log.d("BIKE_DETAILS_API", "Date: " + bikeData.getDate());
-                                Log.d("BIKE_DETAILS_API", "Engine Number: " + bikeData.getEngine_number());
-                                Log.d("BIKE_DETAILS_API", "Chassis Number: " + bikeData.getChassis_number());
-
+                                
                                 // Update bike model with fresh data from API
                                 updateBikeModelWithApiData(bikeData);
                                 logBikeDetails("After API Fetch");
@@ -303,9 +301,10 @@ public class BikeDetailsActivity extends AppCompatActivity {
                                 loadBikeDataWithExistingData();
                             }
                         } else {
-                            Log.e("BIKE_DETAILS_API", "API returned error: " + apiResponse.getMessage());
+                            String msg = apiResponse.getMessage() != null ? apiResponse.getMessage() : "Unknown error";
+                            Log.e("BIKE_DETAILS_API", "API returned error: " + msg);
                             Toast.makeText(BikeDetailsActivity.this,
-                                    apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                                    msg, Toast.LENGTH_SHORT).show();
                             loadBikeDataWithExistingData();
                         }
                     } else {
