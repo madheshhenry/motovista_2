@@ -42,6 +42,19 @@ public class BikeDetailsScreenActivity extends AppCompatActivity {
     private View rowMileage, rowTank, rowWeight, rowSeat, rowClearance;
 
     // Bike data
+
+    private String bikeMileage;
+    private String bikeEngine;
+    private String bikeFuel;
+    private String bikeWeight;
+    private String bikeSeat;
+    private String bikeClearance;
+    
+    // Color Selection
+    private String selectedColor = null;
+    private android.view.View selectedColorView = null;
+
+    // Bike data
     private int bikeId;
     private BikeModel currentBike;
 
@@ -264,34 +277,101 @@ public class BikeDetailsScreenActivity extends AppCompatActivity {
             loadImage(imageUrl);
         }
 
-        // Populate Colors
+    // Populate Colors
         android.widget.LinearLayout layoutColors = findViewById(R.id.layoutColors);
+        android.widget.TextView tvSelectedColorName = findViewById(R.id.tvSelectedColorName);
         layoutColors.removeAllViews();
+        
         if (bike.getColors() != null) {
             for (String colorName : bike.getColors()) {
+                // Container (The Ring)
                 android.widget.FrameLayout frame = new android.widget.FrameLayout(this);
-                android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(
-                        (int)(40 * getResources().getDisplayMetrics().density), 
-                        (int)(40 * getResources().getDisplayMetrics().density));
-                params.setMargins(0, 0, (int)(16 * getResources().getDisplayMetrics().density), 0);
-                frame.setLayoutParams(params);
-                frame.setBackgroundResource(R.drawable.circle_dot); // ensure this drawable exists individually or reuse
+                int size = (int)(48 * getResources().getDisplayMetrics().density); // 48dp container
+                int margin = (int)(12 * getResources().getDisplayMetrics().density);
                 
-                // Since circle_dot might be just a shape, we apply tint
-                // We'll use a simple View inside
-                 View colorView = new View(this);
-                 colorView.setLayoutParams(new android.widget.FrameLayout.LayoutParams(
-                         android.view.ViewGroup.LayoutParams.MATCH_PARENT, 
-                         android.view.ViewGroup.LayoutParams.MATCH_PARENT));
-                 colorView.setBackgroundResource(R.drawable.circle_dot);
-                 colorView.setBackgroundTintList(android.content.res.ColorStateList.valueOf(getColorFromName(colorName)));
-                 
-                 frame.addView(colorView);
-                 layoutColors.addView(frame);
+                android.widget.LinearLayout.LayoutParams params = new android.widget.LinearLayout.LayoutParams(size, size);
+                params.setMargins(0, 0, margin, 0);
+                frame.setLayoutParams(params);
+                
+                // Color Dot (The Inner Circle)
+                View colorDot = new View(this);
+                // Unselected size: 32dp
+                int dotSize = (int)(32 * getResources().getDisplayMetrics().density);
+                android.widget.FrameLayout.LayoutParams dotParams = new android.widget.FrameLayout.LayoutParams(dotSize, dotSize);
+                dotParams.gravity = android.view.Gravity.CENTER;
+                colorDot.setLayoutParams(dotParams);
+                colorDot.setBackgroundResource(R.drawable.circle_dot);
+                
+                int colorValue = getColorFromName(colorName);
+                colorDot.setBackgroundTintList(android.content.res.ColorStateList.valueOf(colorValue));
+                
+                frame.addView(colorDot);
+                
+                final String finalColorName = colorName;
+                
+                // Restore state if previously selected (though populate usually runs once, logic helps if re-run)
+                if (selectedColor != null && selectedColor.equals(finalColorName)) {
+                     // Selected State
+                     frame.setBackgroundResource(R.drawable.ring_selection);
+                     frame.setBackgroundTintList(android.content.res.ColorStateList.valueOf(colorValue));
+                     
+                     // Smaller dot when selected? Design says "gap". 
+                     // If Container is 48dp and Dot is 32dp, there is (48-32)/2 = 8dp gap/ring thickness combined.
+                     // Ring stroke is 2dp. So 6dp gap. Looks good.
+                     // Don't need to change dot size necessarily, but could make it slightly smaller like 24dp if needed.
+                     // Let's keep 32dp for now, 8dp padding around is plenty for gap + ring.
+                     
+                     selectedColorView = frame; // Store the FRAME as the selected view handle
+                     tvSelectedColorName.setText(finalColorName);
+                     tvSelectedColorName.setTextColor(android.graphics.Color.BLACK);
+                }
+
+                frame.setOnClickListener(v -> {
+                    if (selectedColor != null && selectedColor.equals(finalColorName)) {
+                        // Deselect
+                        selectedColor = null;
+                        
+                        // Reset Visuals
+                        frame.setBackground(null); // Remove ring
+                        
+                        // Can reset dot size if we changed it, but we didn't.
+                        
+                        selectedColorView = null;
+                        
+                        tvSelectedColorName.setText("Select a color");
+                        tvSelectedColorName.setTextColor(getResources().getColor(R.color.gray_500));
+                        
+                        // Toast.makeText(BikeDetailsScreenActivity.this, "Color deselected", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Select New
+                        
+                        // 1. Reset Previous
+                        if (selectedColorView != null) {
+                            selectedColorView.setBackground(null); // Remove ring from old
+                        }
+                        
+                        // 2. Set New
+                        selectedColor = finalColorName;
+                        selectedColorView = frame;
+                        
+                        // Apply Ring
+                        frame.setBackgroundResource(R.drawable.ring_selection);
+                        frame.setBackgroundTintList(android.content.res.ColorStateList.valueOf(getColorFromName(finalColorName)));
+                        
+                        // Update Text
+                        tvSelectedColorName.setText(finalColorName);
+                         // Make text black or dark
+                        tvSelectedColorName.setTextColor(android.graphics.Color.BLACK);
+                        
+                        // Toast.makeText(BikeDetailsScreenActivity.this, "Selected: " + finalColorName, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                
+                layoutColors.addView(frame);
             }
         }
     }
-    
+
     private int getColorFromName(String colorName) {
         if (colorName == null) return android.graphics.Color.GRAY;
         String lower = colorName.toLowerCase().trim();
@@ -360,6 +440,11 @@ public class BikeDetailsScreenActivity extends AppCompatActivity {
     }
 
     private void placeOrder() {
+        if (selectedColor == null) {
+            Toast.makeText(this, "Please select the colour", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Intent requestSentIntent = new Intent(BikeDetailsScreenActivity.this, RequestSentActivity.class);
 
         String name = currentBike != null ? (currentBike.getBrand() + " " + currentBike.getModel()) : bikeName;
@@ -372,6 +457,7 @@ public class BikeDetailsScreenActivity extends AppCompatActivity {
         requestSentIntent.putExtra("BIKE_NAME", name);
         requestSentIntent.putExtra("BIKE_PRICE", price);
         requestSentIntent.putExtra("BIKE_VARIANT", variant);
+        requestSentIntent.putExtra("BIKE_Color", selectedColor); // Pass selected color
         requestSentIntent.putExtra("BIKE_BRAND", brand);
         requestSentIntent.putExtra("BIKE_MODEL", model);
         requestSentIntent.putExtra("BIKE_YEAR", year);

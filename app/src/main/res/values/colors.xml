@@ -105,6 +105,7 @@
     <color name="green_500">#22C55E</color>
     <color name="red_100">#FEE2E2</color>
     <color name="red_200">#FECACA</color>
+    <color name="red_500">#EF4444</color>
     <color name="red_600">#DC2626</color>
     <color name="red_800">#991B1B</color>
 

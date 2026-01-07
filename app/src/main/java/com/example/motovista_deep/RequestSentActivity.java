@@ -30,12 +30,17 @@ public class RequestSentActivity extends AppCompatActivity {
     private Button btnGoToOrders;
 
     // Order details views
+    // Order details views
     private TextView tvOrderId;
     private TextView tvBikeName;
     private TextView tvBikeVariant;
     private TextView tvBikePrice;
     private TextView tvRequestTime;
     private TextView tvOrderStatus;
+    
+    // Color views
+    private TextView tvBikeColor;
+    private View viewBikeColorDot;
 
     // Animation views
     private View outerRing;
@@ -44,6 +49,7 @@ public class RequestSentActivity extends AppCompatActivity {
     private String bikeName;
     private String bikePrice;
     private String bikeVariant;
+    private String bikeColor;
     private String orderId;
 
     @Override
@@ -73,6 +79,7 @@ public class RequestSentActivity extends AppCompatActivity {
         bikeName = intent.getStringExtra("BIKE_NAME");
         bikePrice = intent.getStringExtra("BIKE_PRICE");
         bikeVariant = intent.getStringExtra("BIKE_VARIANT");
+        bikeColor = intent.getStringExtra("BIKE_Color");
 
         // Generate order ID if not provided
         orderId = intent.getStringExtra("ORDER_ID");
@@ -84,6 +91,7 @@ public class RequestSentActivity extends AppCompatActivity {
         if (bikeName == null) bikeName = "Yamaha YZF R15 V4";
         if (bikePrice == null) bikePrice = "₹2,450";
         if (bikeVariant == null) bikeVariant = "Racing Blue";
+        if (bikeColor == null) bikeColor = "Blue";
     }
 
     private void initializeViews() {
@@ -96,10 +104,13 @@ public class RequestSentActivity extends AppCompatActivity {
         tvBikePrice = findViewById(R.id.tvBikePrice);
         tvRequestTime = findViewById(R.id.tvRequestTime);
         tvOrderStatus = findViewById(R.id.tvOrderStatus);
+        
+        tvBikeColor = findViewById(R.id.tvBikeColor);
+        viewBikeColorDot = findViewById(R.id.viewBikeColorDot);
 
         outerRing = findViewById(R.id.outerRing);
     }
-
+    
     private void setupClickListeners() {
         // Back button
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -171,6 +182,13 @@ public class RequestSentActivity extends AppCompatActivity {
         tvBikeName.setText(bikeName);
         tvBikeVariant.setText(bikeVariant);
         tvBikePrice.setText(bikePrice);
+        
+        if (bikeColor != null) {
+            tvBikeColor.setText(bikeColor);
+            if (viewBikeColorDot != null) {
+                viewBikeColorDot.setBackgroundTintList(android.content.res.ColorStateList.valueOf(getColorFromName(bikeColor)));
+            }
+        }
 
         // Set current time
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
@@ -179,6 +197,21 @@ public class RequestSentActivity extends AppCompatActivity {
 
         // Set status
         tvOrderStatus.setText("Pending Review");
+    }
+    
+    // Helper to get color code
+    private int getColorFromName(String colorName) {
+        if (colorName == null) return android.graphics.Color.GRAY;
+        String lower = colorName.toLowerCase().trim();
+        if (lower.contains("blue")) return 0xFF2563EB;
+        if (lower.contains("black")) return 0xFF0F172A;
+        if (lower.contains("red")) return 0xFFDC2626;
+        if (lower.contains("silver") || lower.contains("grey") || lower.contains("gray")) return 0xFF9CA3AF;
+        if (lower.contains("white")) return 0xFFFFFFFF;
+        if (lower.contains("green")) return 0xFF16A34A;
+        if (lower.contains("orange")) return 0xFFEA580C;
+        if (lower.contains("yellow")) return 0xFFCA8A04;
+        return android.graphics.Color.GRAY; // Default
     }
 
     private void goToOrders() {
