@@ -20,14 +20,13 @@ public class PaymentTypeActivity extends AppCompatActivity {
     private ImageView iconFullCash, iconPrivateEMI;
 
     // State variables
-    private String selectedPaymentType = "full_cash"; // Default selection
+    private String selectedPaymentType = "full_cash";
+    private int requestId = -1; // New
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_type);
-
-        Toast.makeText(this, "Payment Type Screen", Toast.LENGTH_SHORT).show();
 
         // Initialize views
         initializeViews();
@@ -65,13 +64,14 @@ public class PaymentTypeActivity extends AppCompatActivity {
     private void handleIntentData() {
         Intent intent = getIntent();
         if (intent != null) {
+            requestId = intent.getIntExtra("request_id", -1);
             String testData = intent.getStringExtra("test");
             if (testData != null) {
                 Toast.makeText(this, "Data: " + testData, Toast.LENGTH_SHORT).show();
             }
         }
     }
-
+    
     private void setupPaymentSelection() {
         // Set initial selection
         updateSelectionUI();
@@ -82,7 +82,6 @@ public class PaymentTypeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 selectedPaymentType = "full_cash";
                 updateSelectionUI();
-                Toast.makeText(PaymentTypeActivity.this, "Full Cash selected", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -92,7 +91,6 @@ public class PaymentTypeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 selectedPaymentType = "private_emi";
                 updateSelectionUI();
-                Toast.makeText(PaymentTypeActivity.this, "Private EMI selected", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -159,27 +157,22 @@ public class PaymentTypeActivity extends AppCompatActivity {
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (requestId == -1) {
+                    Toast.makeText(PaymentTypeActivity.this, "Error: Invalid Request ID", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (selectedPaymentType.equals("full_cash")) {
                     // Navigate to Cash Payment screen
                     Intent intent = new Intent(PaymentTypeActivity.this, CashPaymentActivity.class);
-
-                    // Pass vehicle data (you can get this from previous screens)
-                    // TODO: Replace with actual data from your app
-                    intent.putExtra("vehicle_model", "Royal Enfield Classic 350");
-                    intent.putExtra("vehicle_price", 150000.00);
-
+                    intent.putExtra("request_id", requestId);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
                 } else if (selectedPaymentType.equals("private_emi")) {
                     // Navigate to EMI Setup screen
                     Intent intent = new Intent(PaymentTypeActivity.this, EMISetupActivity.class);
-
-                    // Pass vehicle data
-                    // TODO: Replace with actual data from your app
-                    intent.putExtra("vehicle_model", "Royal Enfield Classic 350");
-                    intent.putExtra("vehicle_price", 140000.00);
-
+                    intent.putExtra("request_id", requestId);
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }

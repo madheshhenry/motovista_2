@@ -38,12 +38,16 @@ public class EMISetupActivity extends AppCompatActivity {
     private DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
     private NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("en", "IN"));
 
+    // Payment data
+    private int requestId = -1;
+    private String customerName = "Customer";
+    private String vehicleName = "Vehicle";
+    private String vehicleDetails = "Details";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_emi_setup);
-
-        Toast.makeText(this, "EMI Setup Screen", Toast.LENGTH_SHORT).show();
 
         // Initialize views
         initializeViews();
@@ -62,8 +66,15 @@ public class EMISetupActivity extends AppCompatActivity {
 
         // Initial calculation
         calculateEMI();
+        
+        // Fetch data if request ID is valid
+        if (requestId != -1) {
+            fetchVehicleDetails(requestId);
+        } else {
+            Toast.makeText(this, "Error: Invalid Request ID", Toast.LENGTH_SHORT).show();
+        }
     }
-
+    
     private void initializeViews() {
         // Header
         btnBack = findViewById(R.id.btnBack);
@@ -90,16 +101,71 @@ public class EMISetupActivity extends AppCompatActivity {
     private void handleIntentData() {
         Intent intent = getIntent();
         if (intent != null) {
-            double price = intent.getDoubleExtra("vehicle_price", 140000.00);
+            requestId = intent.getIntExtra("request_id", -1);
+            // Fallback price if passed directly, though API is preferred source now
+            double price = intent.getDoubleExtra("vehicle_price", -1);
             if (price > 0) {
                 vehiclePrice = price;
                 etVehiclePrice.setText(formatIndianCurrency(vehiclePrice));
+                // Recalculate down payment based on passed price
+                minDownPayment = vehiclePrice * 0.20;
+                downPayment = minDownPayment; // Set default down payment to minimum
+                updateMinDownPaymentText();
+                etDownPayment.setText(formatIndianCurrency(downPayment));
             }
         }
+    }
 
-        // Calculate minimum down payment (20%)
-        minDownPayment = vehiclePrice * 0.20;
-        updateMinDownPaymentText();
+    private void fetchVehicleDetails(int id) {
+        com.example.motovista_deep.api.ApiService apiService = com.example.motovista_deep.api.RetrofitClient.getApiService();
+        retrofit2.Call<com.example.motovista_deep.models.GetOrderSummaryResponse> call = apiService.getOrderSummary(id);
+
+        call.enqueue(new retrofit2.Callback<com.example.motovista_deep.models.GetOrderSummaryResponse>() {
+            @Override
+            public void onResponse(retrofit2.Call<com.example.motovista_deep.models.GetOrderSummaryResponse> call, retrofit2.Response<com.example.motovista_deep.models.GetOrderSummaryResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().isSuccess() && response.body().getData() != null) {
+                        com.example.motovista_deep.models.OrderSummaryData data = response.body().getData();
+                        
+                        // Update Data
+                        customerName = data.getCustomerName();
+                        String brand = data.getBrand() != null ? data.getBrand() : "";
+                        String model = data.getBikeName() != null ? data.getBikeName() : "";
+                        vehicleName = brand + " " + model;
+                        vehicleDetails = data.getBikeVariant(); // Use variant as details
+
+                        // Parse Price
+                        String priceStr = data.getOnRoadPrice();
+                        if (priceStr != null) {
+                            priceStr = priceStr.replaceAll("[^\\d.]", "");
+                            try {
+                                double price = Double.parseDouble(priceStr);
+                                if (price > 0) {
+                                    vehiclePrice = price;
+                                    etVehiclePrice.setText(formatIndianCurrency(vehiclePrice));
+                                    
+                                    // Update derived values
+                                    minDownPayment = vehiclePrice * 0.20;
+                                    downPayment = minDownPayment;
+                                    updateMinDownPaymentText();
+                                    etDownPayment.setText(formatIndianCurrency(downPayment));
+                                    
+                                    // Recalculate EMI with new values
+                                    calculateEMI();
+                                }
+                            } catch (NumberFormatException e) {
+                                // Keep default if parse fails
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<com.example.motovista_deep.models.GetOrderSummaryResponse> call, Throwable t) {
+                Toast.makeText(EMISetupActivity.this, "Failed to load vehicle details", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void setupSpinner() {
@@ -298,12 +364,18 @@ public class EMISetupActivity extends AppCompatActivity {
                 // Pass all necessary data for initial payment
                 intent.putExtra("vehicle_price", vehiclePrice);
                 intent.putExtra("down_payment", downPayment);
+                intent.putExtra("request_id", requestId); // Pass ID forward
 
                 // Calculate and pass EMI details
                 double principalAmount = vehiclePrice - downPayment;
                 double monthlyInterestRate = interestRate / 12 / 100;
                 double power = Math.pow(1 + monthlyInterestRate, durationMonths);
-                double monthlyEMI = principalAmount * monthlyInterestRate * power / (power - 1);
+                double monthlyEMI = 0;
+                 if (monthlyInterestRate > 0 && durationMonths > 0) {
+                     monthlyEMI = principalAmount * monthlyInterestRate * power / (power - 1);
+                } else if (durationMonths > 0) {
+                     monthlyEMI = principalAmount / durationMonths;
+                }
                 double totalPayable = monthlyEMI * durationMonths;
 
                 // Pass EMI calculation details
@@ -312,10 +384,10 @@ public class EMISetupActivity extends AppCompatActivity {
                 intent.putExtra("interest_rate", interestRate);
                 intent.putExtra("total_payable", totalPayable);
 
-                // Pass customer and vehicle info (you may need to get these from your data source)
-                intent.putExtra("customer_name", "Rahul Sharma");
-                intent.putExtra("vehicle_name", "Hero Splendor+");
-                intent.putExtra("vehicle_details", "Matte Black • Drum Brake");
+                // Pass customer and vehicle info (dynamically fetched)
+                intent.putExtra("customer_name", customerName);
+                intent.putExtra("vehicle_name", vehicleName);
+                intent.putExtra("vehicle_details", vehicleDetails != null ? vehicleDetails : "");
 
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

@@ -248,6 +248,11 @@
 
         <!-- PDF Generation Activities -->
         <activity
+            android:name=".DocumentsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
             android:name=".AdminDocumentsActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

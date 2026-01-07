@@ -76,7 +76,34 @@ public class OrderCompletedActivity extends AppCompatActivity {
             }
 
             // You can add more data handling as needed
+            int requestId = intent.getIntExtra("request_id", -1);
+            String orderType = intent.getStringExtra("order_type");
+            
+            if (orderType != null && orderType.equals("Full Cash")) {
+                btnEmiLedger.setVisibility(View.GONE);
+            }
+            
+            if (requestId != -1) {
+                completeOrder(requestId);
+            }
         }
+    }
+    
+    private void completeOrder(int requestId) {
+        com.example.motovista_deep.api.ApiService apiService = com.example.motovista_deep.api.RetrofitClient.getApiService();
+        com.example.motovista_deep.models.CompleteOrderRequest request = new com.example.motovista_deep.models.CompleteOrderRequest(requestId);
+        
+        apiService.completeOrder(request).enqueue(new retrofit2.Callback<com.example.motovista_deep.models.GenericResponse>() {
+            @Override
+            public void onResponse(retrofit2.Call<com.example.motovista_deep.models.GenericResponse> call, retrofit2.Response<com.example.motovista_deep.models.GenericResponse> response) {
+                // Done silently or show success?
+                // User didn't ask for feedback, just logic.
+            }
+            @Override
+            public void onFailure(retrofit2.Call<com.example.motovista_deep.models.GenericResponse> call, Throwable t) {
+                // Ignore
+            }
+        });
     }
 
     private void setupClickListeners() {

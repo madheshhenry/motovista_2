@@ -15,6 +15,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -30,6 +31,10 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
     private Handler handler = new Handler();
     private Runnable pulseRunnable;
     private boolean isPulsing = false;
+
+    // Data
+    private int requestId = -1;
+    private String orderType = "Full Cash";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,12 +78,17 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
     private void handleIntentData() {
         Intent intent = getIntent();
         if (intent != null) {
+            requestId = intent.getIntExtra("request_id", -1);
+            
             // Get customer data
             String customerName = intent.getStringExtra("customer_name");
             String vehicleModel = intent.getStringExtra("vehicle_model");
             String paymentMode = intent.getStringExtra("payment_mode");
             double amountPaid = intent.getDoubleExtra("amount_paid", 25000);
             String transactionId = intent.getStringExtra("transaction_id");
+            if (intent.hasExtra("order_type")) {
+                orderType = intent.getStringExtra("order_type");
+            }
 
             // Set data to views
             if (customerName != null) {
@@ -195,18 +205,21 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
             }
         });
 
-        // Proceed button
-        // In the setupClickListeners() method, update the btnProceed onClick listener:
-
+        // Proceed button (View Documents)
         btnProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigate to Admin Documents screen
-                Intent intent = new Intent(PaymentConfirmedActivity.this, AdminDocumentsActivity.class);
+                // Navigate to Documents screen
+                Intent intent = new Intent(PaymentConfirmedActivity.this, DocumentsActivity.class);
 
-                // Pass all necessary data
+                // Pass all necessary data including request_id
+                intent.putExtra("request_id", requestId);
                 intent.putExtra("customer_name", tvCustomerName.getText().toString());
                 intent.putExtra("vehicle_model", tvModel.getText().toString());
+                intent.putExtra("vehicle_model", tvModel.getText().toString()); // Duplicate line in original? No, just ensuring context.
+                intent.putExtra("payment_mode", tvPaymentMode.getText().toString());
+                intent.putExtra("order_type", orderType);
+
                 intent.putExtra("transaction_id",
                         tvTransactionId.getText().toString().replace("Transaction ID: ", ""));
                 intent.putExtra("amount_paid",

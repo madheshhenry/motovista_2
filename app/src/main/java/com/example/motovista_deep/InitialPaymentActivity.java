@@ -276,6 +276,7 @@ public class InitialPaymentActivity extends AppCompatActivity {
         intent.putExtra("payment_mode", selectedPaymentMode);
         intent.putExtra("amount_paid", downPayment);
         intent.putExtra("transaction_id", "#TXN-" + System.currentTimeMillis());
+        intent.putExtra("order_type", "EMI");
 
         // Pass additional data if needed
         intent.putExtra("vehicle_price", vehiclePrice);

@@ -16,6 +16,9 @@ import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.helpers.SharedPrefManager;
 import com.example.motovista_deep.models.BikeModel;
 import com.example.motovista_deep.models.GetBikeByIdResponse;
+import com.example.motovista_deep.models.CustomerRequest;
+import com.example.motovista_deep.models.RequestResponse;
+import com.example.motovista_deep.models.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -439,35 +442,98 @@ public class BikeDetailsScreenActivity extends AppCompatActivity {
         // startActivity(invoiceIntent);
     }
 
+
+
     private void placeOrder() {
         if (selectedColor == null) {
             Toast.makeText(this, "Please select the colour", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Intent requestSentIntent = new Intent(BikeDetailsScreenActivity.this, RequestSentActivity.class);
+        // Check if user is logged in
+        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
+             Toast.makeText(this, "Please login to place an order", Toast.LENGTH_LONG).show();
+             startActivity(new Intent(this, CustomerLoginActivity.class));
+             return;
+        }
+        
+        User user = SharedPrefManager.getInstance(this).getCustomer();
+        if (user == null) {
+             Toast.makeText(this, "User data error. Please re-login.", Toast.LENGTH_SHORT).show();
+             return;
+        }
 
+        // Prepare Data
         String name = currentBike != null ? (currentBike.getBrand() + " " + currentBike.getModel()) : bikeName;
         String price = currentBike != null ? (currentBike.getOnRoadPrice() != null ? currentBike.getOnRoadPrice() : currentBike.getPrice()) : bikePrice;
         String variant = currentBike != null ? currentBike.getVariant() : bikeVariant;
         String brand = currentBike != null ? currentBike.getBrand() : bikeBrand;
         String model = currentBike != null ? currentBike.getModel() : bikeModelName;
         String year = currentBike != null ? currentBike.getYear() : bikeYear;
+        
+        // Disable button to prevent double clicks
+        btnOrderBike.setEnabled(false);
+        btnOrderBike.setText("Processing...");
 
-        requestSentIntent.putExtra("BIKE_NAME", name);
-        requestSentIntent.putExtra("BIKE_PRICE", price);
-        requestSentIntent.putExtra("BIKE_VARIANT", variant);
-        requestSentIntent.putExtra("BIKE_Color", selectedColor); // Pass selected color
-        requestSentIntent.putExtra("BIKE_BRAND", brand);
-        requestSentIntent.putExtra("BIKE_MODEL", model);
-        requestSentIntent.putExtra("BIKE_YEAR", year);
+        // Create Request Object
+        CustomerRequest request = new CustomerRequest(
+            user.getId(),
+            user.getFull_name(),
+            user.getPhone(),
+            user.getProfile_image(), // Optional if backend supports it
+            bikeId != -1 ? bikeId : 0, // Fallback ID
+            name,
+            variant,
+            selectedColor,
+            price
+        );
+        
+        // Call API
+        ApiService apiService = RetrofitClient.getApiService();
+        Call<RequestResponse> call = apiService.addCustomerRequest(request);
+        
+        call.enqueue(new Callback<RequestResponse>() {
+            @Override
+            public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
+                btnOrderBike.setEnabled(true);
+                btnOrderBike.setText("ORDER NOW");
 
-        // Generate order ID
-        String orderId = "#ORD" + System.currentTimeMillis() % 1000000;
-        requestSentIntent.putExtra("ORDER_ID", orderId);
+                if (response.isSuccessful() && response.body() != null) {
+                    RequestResponse res = response.body();
+                    if (res.isSuccess()) {
+                         // Success - Go to Request Sent Screen
+                        Intent requestSentIntent = new Intent(BikeDetailsScreenActivity.this, RequestSentActivity.class);
+                        requestSentIntent.putExtra("BIKE_NAME", name);
+                        requestSentIntent.putExtra("BIKE_PRICE", price);
+                        requestSentIntent.putExtra("BIKE_VARIANT", variant);
+                        requestSentIntent.putExtra("BIKE_Color", selectedColor); 
+                        requestSentIntent.putExtra("BIKE_BRAND", brand);
+                        requestSentIntent.putExtra("BIKE_MODEL", model);
+                        requestSentIntent.putExtra("BIKE_YEAR", year);
+                        
+                        // Use Order ID from Backend if valid
+                        if (res.getOrderId() != null) {
+                            requestSentIntent.putExtra("ORDER_ID", res.getOrderId());
+                        }
 
-        startActivity(requestSentIntent);
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        startActivity(requestSentIntent);
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        finish(); // Optional: Close details screen? Maybe not.
+                    } else {
+                        Toast.makeText(BikeDetailsScreenActivity.this, "Failed: " + res.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(BikeDetailsScreenActivity.this, "Server Error: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RequestResponse> call, Throwable t) {
+                btnOrderBike.setEnabled(true);
+                btnOrderBike.setText("ORDER NOW");
+                Toast.makeText(BikeDetailsScreenActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

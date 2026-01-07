@@ -1,8 +1,10 @@
 package com.example.motovista_deep.api;
 
 import com.example.motovista_deep.models.CompleteProfileRequest;
+import com.example.motovista_deep.models.CustomerRequest;
 import com.example.motovista_deep.models.DeleteBikeRequest;
 import com.example.motovista_deep.models.GetBikeByIdResponse;
+import com.example.motovista_deep.models.GetCustomerRequestsResponse;
 import com.example.motovista_deep.models.GetSecondHandBikeByIdResponse;
 import com.example.motovista_deep.models.InventoryResponse;
 import com.example.motovista_deep.models.LoginRequest;
@@ -16,6 +18,7 @@ import com.example.motovista_deep.models.GetProfileResponse;
 import com.example.motovista_deep.models.GetCustomersResponse;
 import com.example.motovista_deep.models.GetCustomerDetailResponse;
 import com.example.motovista_deep.models.AddBikeRequest;
+import com.example.motovista_deep.models.RequestResponse;
 import com.example.motovista_deep.models.UpdateBikeRequest;
 import com.example.motovista_deep.models.UpdateProfileRequest;
 import com.example.motovista_deep.models.UpdateSecondHandBikeRequest;
@@ -245,4 +248,23 @@ public interface ApiService {
 
         public String getEmail() { return email; }
     }
+
+    
+    @POST("add_customer_request.php")
+    Call<RequestResponse> addCustomerRequest(@Body CustomerRequest request);
+
+    @GET("get_customer_requests.php")
+    Call<GetCustomerRequestsResponse> getCustomerRequests();
+
+    @POST("update_request_status.php")
+    Call<GenericResponse> updateRequestStatus(@Body com.example.motovista_deep.models.UpdateRequestStatusRequest request);
+
+    @POST("complete_order.php")
+    Call<GenericResponse> completeOrder(@Body com.example.motovista_deep.models.CompleteOrderRequest request);
+
+    @POST("delete_customer_request.php")
+    Call<GenericResponse> deleteCustomerRequest(@Body com.example.motovista_deep.models.DeleteRequestRequest request);
+
+    @GET("get_order_summary.php")
+    Call<com.example.motovista_deep.models.GetOrderSummaryResponse> getOrderSummary(@Query("request_id") int requestId);
 }
