@@ -331,8 +331,8 @@ public class AdminRequestedCustomersActivity extends AppCompatActivity {
                 acceptBtns[i].setOnClickListener(v -> updateRequestStatus(requestId, "approved"));
                 rejectBtns[i].setOnClickListener(v -> updateRequestStatus(requestId, "rejected"));
                 
-                // Navigate to Order Summary
-                ivArrows[i].setOnClickListener(v -> {
+                // Navigate to Order Summary (Clicking Card)
+                cards[i].setOnClickListener(v -> {
                      Intent intent = new Intent(AdminRequestedCustomersActivity.this, OrderSummaryActivity.class);
                      intent.putExtra("request_id", requestId);
                      intent.putExtra("customer_name", req.getCustomer_name());
