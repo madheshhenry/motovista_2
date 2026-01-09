@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enter Brand Details"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
+        android:id="@+id/etBrandName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Brand Name (e.g., Ducati)"
+        android:inputType="textCapWords"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="#13c8ec" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Brand Logo"
+        android:textColor="#555"
+        android:layout_marginBottom="8dp"/>
+
+    <FrameLayout
+        android:id="@+id/frameLogo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/border_gray_light"
+        android:layout_marginBottom="12dp">
+
+        <ImageView
+            android:id="@+id/ivBrandLogo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_bike_placeholder"
+            android:padding="20dp"/>
+            
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_add_circle_outline"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="4dp"
+            android:background="@drawable/circle_white_bg"/>
+
+    </FrameLayout>
+    
+    <Button
+        android:id="@+id/btnSelectImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Image"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="#13c8ec"
+        android:visibility="gone"/>
+
+</LinearLayout>

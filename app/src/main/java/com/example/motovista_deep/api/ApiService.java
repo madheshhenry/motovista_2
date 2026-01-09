@@ -267,4 +267,21 @@ public interface ApiService {
 
     @GET("get_order_summary.php")
     Call<com.example.motovista_deep.models.GetOrderSummaryResponse> getOrderSummary(@Query("request_id") int requestId);
+
+    @Multipart
+    @POST("add_brand.php")
+    Call<GenericResponse> addBrand(
+            @Header("Authorization") String token,
+            @Part("brand_name") RequestBody brandName,
+            @Part MultipartBody.Part brandLogo
+    );
+
+    @GET("get_brands.php")
+    Call<com.example.motovista_deep.models.InventoryResponse> getBrands(@Header("Authorization") String token);
+
+    @GET("get_brand_bikes.php")
+    Call<com.example.motovista_deep.models.BikeListResponse> getBikesByBrand(
+            @Header("Authorization") String token,
+            @Query("brand") String brand
+    );
 }

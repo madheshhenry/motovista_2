@@ -4,13 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import org.json.JSONObject;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +20,8 @@ import android.widget.Toast;
 
 import com.example.motovista_deep.ai.AiChatRequest;
 import com.example.motovista_deep.ai.AiChatResponse;
-import com.example.motovista_deep.api.RetrofitClient;
-import com.example.motovista_deep.helpers.SharedPrefManager;
+import com.example.motovista_deep.api.AiApiService;
+import com.example.motovista_deep.api.AiRetrofitClient;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,6 +32,9 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import android.widget.ImageView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 public class AIChatbotActivity extends AppCompatActivity {
 
@@ -43,25 +43,13 @@ public class AIChatbotActivity extends AppCompatActivity {
     private RecyclerView rvChatMessages;
     private EditText etMessage;
     private CardView btnSend;
-    private CardView btnShowMore;
-    private CardView btnRefineSearch;
-    private LinearLayout quickActionsLayout;
+    private LinearLayout quickActionsLayout; // Now used for dynamic chips
 
     // Adapter and data
     private ChatAdapter chatAdapter;
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
-    // IMPROVEMENT 1: AI State Management
-    private enum AiState {
-        ASKING,
-        WAITING_FOR_INPUT,
-        RECOMMENDING
-    }
-
-    private AiState currentState = AiState.ASKING;
-
     // Handler for typing simulation
-    private Handler handler = new Handler();
     private boolean isTypingIndicatorShown = false;
     private int typingIndicatorPosition = -1;
 
@@ -70,20 +58,19 @@ public class AIChatbotActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ai_chatbot);
 
-        // Initialize views
         initializeViews();
-
-        // Setup click listeners
         setupClickListeners();
-
-        // Setup chat recycler view
         setupChatRecyclerView();
 
-        // Set initial state
-        setAiState(AiState.ASKING);
-
-        // Add initial bot message
-        addInitialMessages();
+        // Restore History or Start New
+        if (ChatRepository.getInstance().hasMessages()) {
+            chatMessages.addAll(ChatRepository.getInstance().getMessages());
+            chatAdapter.notifyDataSetChanged();
+            rvChatMessages.scrollToPosition(chatMessages.size() - 1);
+        } else {
+            // Start the AI Conversation ONLY if no history
+            startConversation();
+        }
     }
 
     private void initializeViews() {
@@ -91,60 +78,22 @@ public class AIChatbotActivity extends AppCompatActivity {
         rvChatMessages = findViewById(R.id.rvChatMessages);
         etMessage = findViewById(R.id.etMessage);
         btnSend = findViewById(R.id.btnSend);
-        btnShowMore = findViewById(R.id.btnShowMore);
-        btnRefineSearch = findViewById(R.id.btnRefineSearch);
-        quickActionsLayout = findViewById(R.id.quickActionsLayout);
+        quickActionsLayout = findViewById(R.id.quickActionsLayout); // Container for Options
+        
+        // Hide unused buttons from previous layout if they exist via find, or just ignore
     }
 
     private void setupClickListeners() {
-        // Back button
-        btnBack.setOnClickListener(v -> {
-            finish();
-        });
+        btnBack.setOnClickListener(v -> finish());
 
-        // Send button
-        btnSend.setOnClickListener(v -> {
-            sendMessage();
-        });
+        btnSend.setOnClickListener(v -> sendMessage(etMessage.getText().toString().trim()));
 
-        // Send on enter
         etMessage.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                sendMessage();
+                sendMessage(etMessage.getText().toString().trim());
                 return true;
             }
             return false;
-        });
-
-        // Show more options
-        btnShowMore.setOnClickListener(v -> {
-            if (currentState == AiState.RECOMMENDING) {
-                addBotMessage("Here are more options for you...");
-                // You can add more bike recommendations here
-            }
-        });
-
-        // Refine search
-        btnRefineSearch.setOnClickListener(v -> {
-            if (currentState == AiState.RECOMMENDING) {
-                setAiState(AiState.ASKING);
-                addBotMessage("Let's refine your search. What specific features are you looking for?");
-            }
-        });
-
-        // Enable/disable send button based on input
-        etMessage.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                btnSend.setEnabled(s.toString().trim().length() > 0);
-                btnSend.setAlpha(s.toString().trim().length() > 0 ? 1f : 0.5f);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
         });
     }
 
@@ -154,239 +103,155 @@ public class AIChatbotActivity extends AppCompatActivity {
         rvChatMessages.setAdapter(chatAdapter);
     }
 
-    private void addInitialMessages() {
-        // IMPROVEMENT 5: Better welcome message
-        ChatMessage welcomeMessage = new ChatMessage(
-                "Hi 👋 I'm your AI bike assistant.\n\nTell me your budget or press Start to begin.",
-                getCurrentTime(),
-                false,
-                ChatMessage.TYPE_TEXT
-        );
-        chatMessages.add(welcomeMessage);
-        chatAdapter.notifyItemInserted(chatMessages.size() - 1);
-        scrollToBottom();
-    }
-
-    // Helper method to get AI user ID
-    private String getAiUserId() {
-        try {
-            SharedPrefManager sp = SharedPrefManager.getInstance(this);
-
-            String userJson = getSharedPreferences(
-                    "motovista_prefs", MODE_PRIVATE
-            ).getString("user", null);
-
-            if (userJson != null) {
-                JSONObject obj = new JSONObject(userJson);
-                return obj.getString("id"); // reads private field safely
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return "guest";
-    }
-
-
-    private void sendMessage() {
-        String message = etMessage.getText().toString().trim();
-        if (message.isEmpty()) return;
-
-        // Remove typing indicator if shown
-        removeTypingIndicator();
-
-        // Add user message
-        ChatMessage userMessage = new ChatMessage(
-                message,
-                getCurrentTime(),
-                true,
-                ChatMessage.TYPE_TEXT
-        );
-        chatMessages.add(userMessage);
-        chatAdapter.notifyItemInserted(chatMessages.size() - 1);
-
-        // Clear input
-        etMessage.setText("");
-
-        // Scroll to bottom
-        scrollToBottom();
-
-        // Change state to waiting for AI response
-        setAiState(AiState.WAITING_FOR_INPUT);
-
-        // Show typing indicator
+    private void startConversation() {
+        // Send hidden "START" message to init state
         showTypingIndicator();
-
-        // REAL BACKEND CALL - Replace the simulated AI delay
-        String userId = getAiUserId();
-
-        AiChatRequest request = new AiChatRequest(userId, message);
-
-        RetrofitClient.getApiService()
-                .chatWithAi(request)
+        AiRetrofitClient.getApiService().chatWithAi(new AiChatRequest("user", "START"))
                 .enqueue(new Callback<AiChatResponse>() {
                     @Override
                     public void onResponse(Call<AiChatResponse> call, Response<AiChatResponse> response) {
-
                         removeTypingIndicator();
-
                         if (response.isSuccessful() && response.body() != null) {
-                            // Handle the AI response
                             handleAiResponse(response.body());
                         } else {
-                            addBotMessage("Sorry 😕 I couldn’t understand that. Please try again.");
+                            addBotMessage("⚠️ Connection Failed. Ensure Python server is running.");
                         }
                     }
 
                     @Override
                     public void onFailure(Call<AiChatResponse> call, Throwable t) {
                         removeTypingIndicator();
-                        addBotMessage("⚠️ AI service is currently unavailable.");
+                        addBotMessage("⚠️ Network Error. Is port 5000 open?");
                     }
                 });
     }
 
-    private void handleAiResponse(AiChatResponse aiResponse) {
+    private void sendMessage(String message) {
+        if (message.isEmpty()) return;
 
-        String aiReply = aiResponse.getReply();
-        addBotMessage(aiReply);
+        // User Message
+        addMessage(new ChatMessage(message, getCurrentTime(), true, ChatMessage.TYPE_TEXT, null));
+        etMessage.setText("");
+        
+        // Clear Options while thinking
+        quickActionsLayout.removeAllViews();
 
-        // 🔥 SHOW RECOMMENDATIONS IF PRESENT
-        if (aiResponse.getRecommendations() != null &&
-                !aiResponse.getRecommendations().isEmpty()) {
+        // AI Request
+        showTypingIndicator();
+        AiRetrofitClient.getApiService().chatWithAi(new AiChatRequest("user", message))
+                .enqueue(new Callback<AiChatResponse>() {
+                    @Override
+                    public void onResponse(Call<AiChatResponse> call, Response<AiChatResponse> response) {
+                        removeTypingIndicator();
+                        if (response.isSuccessful() && response.body() != null) {
+                            handleAiResponse(response.body());
+                        } else {
+                            addBotMessage("I'm having trouble thinking right now.");
+                        }
+                    }
 
-            setAiState(AiState.RECOMMENDING);
+                    @Override
+                    public void onFailure(Call<AiChatResponse> call, Throwable t) {
+                        removeTypingIndicator();
+                        addBotMessage("⚠️ Server unreachable.");
+                    }
+                });
+    }
 
-            for (AiChatResponse.Recommendation rec : aiResponse.getRecommendations()) {
+    private void handleAiResponse(AiChatResponse response) {
+        // 1. Show Text Message
+        if (response.getMessage() != null && !response.getMessage().isEmpty()) {
+            addBotMessage(response.getMessage());
+        }
 
-                String bikeMsg =
-                        "• " + rec.getBike() +
-                                "\nConfidence: " + rec.getConfidence();
-
-                addBotMessage(bikeMsg);
+        // 2. Show Options (Dynamic Chips)
+        quickActionsLayout.removeAllViews();
+        List<String> options = response.getOptions();
+        if (options != null && !options.isEmpty()) {
+            for (String opt : options) {
+                addOptionChip(opt);
             }
+        }
 
-        } else {
-            setAiState(AiState.ASKING);
+        // 3. Show Recommendations (if any)
+        if ("recommendation".equals(response.getType()) && response.getData() != null) {
+            // Pass data to adapter to render specific card
+            addRecommendationMessage(response.getData());
         }
     }
 
-
-    private void handleUserInput(String input) {
-        // This method is now only for fallback if backend fails
-        // Simulate AI responses based on user input
-        if (input.contains("start") || input.contains("begin") || input.contains("hello") || input.contains("hi")) {
-            setAiState(AiState.ASKING);
-            addBotMessage("Great! Let's find your dream bike. Are you looking for new bikes?");
-        }
-        else if (input.contains("new bike") || input.contains("new bikes") || input.contains("yes")) {
-            setAiState(AiState.ASKING);
-            addBotMessage("Great choice! To narrow it down, do you have a specific budget range in mind?");
-        }
-        else if ((input.contains("1.5") && input.contains("2.5")) ||
-                input.contains("1.5l") || input.contains("2.5l") ||
-                input.contains("1.5 l") || input.contains("2.5 l")) {
-            setAiState(AiState.RECOMMENDING);
-            showBikeRecommendations();
-        }
-        else if (input.contains("budget") || input.contains("price")) {
-            setAiState(AiState.ASKING);
-            addBotMessage("We have bikes in various price ranges. Could you please specify your budget?\n\nFor example: ₹1.5L - ₹2.5L");
-        }
-        else if (input.contains("help") || input.contains("assist")) {
-            setAiState(AiState.ASKING);
-            addBotMessage("I can help you with:\n• Finding new bikes\n• Budget recommendations\n• Bike comparisons\n• Booking test rides\n• Service information\n\nWhat would you like to know?");
-        }
-        else {
-            setAiState(AiState.ASKING);
-            addBotMessage("I understand you're looking for: " + input + "\n\nCould you tell me more about what you're looking for? For example, you can ask about:\n• New bikes\n• Budget range\n• Bike types\n• Features");
-        }
-    }
-
-    private void addBotMessage(String message) {
-        ChatMessage botMessage = new ChatMessage(
-                message,
-                getCurrentTime(),
-                false,
-                ChatMessage.TYPE_TEXT
+    private void addOptionChip(String text) {
+        // Create a simple styled button acting as a chip
+        androidx.cardview.widget.CardView card = new androidx.cardview.widget.CardView(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, 
+                LinearLayout.LayoutParams.WRAP_CONTENT
         );
-        chatMessages.add(botMessage);
-        chatAdapter.notifyItemInserted(chatMessages.size() - 1);
-        scrollToBottom();
+        params.setMargins(0, 0, 16, 0);
+        card.setLayoutParams(params);
+        card.setCardBackgroundColor(getResources().getColor(R.color.primary_light));
+        card.setRadius(50f);
+        card.setCardElevation(0f);
+
+        TextView tv = new TextView(this);
+        tv.setText(text);
+        tv.setPadding(32, 16, 32, 16);
+        tv.setTextColor(getResources().getColor(R.color.primary_color));
+        tv.setTypeface(null, Typeface.BOLD);
+        
+        card.addView(tv);
+        
+        card.setOnClickListener(v -> sendMessage(text)); // Send option text as message
+        
+        quickActionsLayout.addView(card);
     }
 
-    private void showBikeRecommendations() {
-        // This will show the bike cards in the chat
-        ChatMessage recommendationMessage = new ChatMessage(
-                "Perfect. Based on your budget, I highly recommend these 2 models for you:",
-                getCurrentTime(),
-                false,
-                ChatMessage.TYPE_RECOMMENDATION
-        );
-        chatMessages.add(recommendationMessage);
-        chatAdapter.notifyItemInserted(chatMessages.size() - 1);
-        scrollToBottom();
+    private void addBotMessage(String text) {
+        addMessage(new ChatMessage(text, getCurrentTime(), false, ChatMessage.TYPE_TEXT, null));
     }
 
-    // IMPROVEMENT 1: AI State Management
-    private void setAiState(AiState state) {
-        this.currentState = state;
-        updateQuickActions();
+    private void addRecommendationMessage(List<AiChatResponse.RecommendationData> data) {
+         addMessage(new ChatMessage("Here are the best matches:", getCurrentTime(), false, ChatMessage.TYPE_RECOMMENDATION, data));
+    }
 
-        // Clear input if AI is recommending
-        if (state == AiState.RECOMMENDING) {
-            etMessage.setText("");
+    private void addMessage(ChatMessage msg) {
+        chatMessages.add(msg);
+        
+        // Save to Valid Repository logic
+        // Only save real messages, not temporary typing indicators
+        if (!msg.message.equals("AI is thinking...")) {
+             ChatRepository.getInstance().addMessage(msg);
         }
+        
+        chatAdapter.notifyItemInserted(chatMessages.size() - 1);
+        rvChatMessages.scrollToPosition(chatMessages.size() - 1);
     }
 
-    // IMPROVEMENT 2: Update Quick Actions based on state
-    private void updateQuickActions() {
-        if (currentState == AiState.RECOMMENDING) {
-            quickActionsLayout.setVisibility(View.VISIBLE);
-        } else {
-            quickActionsLayout.setVisibility(View.GONE);
-        }
-    }
-
-    // IMPROVEMENT 3: Typing Indicator
+    // TYPING INDICATOR
     private void showTypingIndicator() {
         if (isTypingIndicatorShown) return;
-
-        ChatMessage typing = new ChatMessage(
-                "AI is typing...",
-                getCurrentTime(),
-                false,
-                ChatMessage.TYPE_TEXT
-        );
+        ChatMessage typing = new ChatMessage("AI is thinking...", getCurrentTime(), false, ChatMessage.TYPE_TEXT, null);
         chatMessages.add(typing);
         typingIndicatorPosition = chatMessages.size() - 1;
         chatAdapter.notifyItemInserted(typingIndicatorPosition);
         isTypingIndicatorShown = true;
-        scrollToBottom();
+        rvChatMessages.scrollToPosition(typingIndicatorPosition);
     }
 
     private void removeTypingIndicator() {
-        if (isTypingIndicatorShown && typingIndicatorPosition >= 0) {
+        if (isTypingIndicatorShown && typingIndicatorPosition >= 0 && typingIndicatorPosition < chatMessages.size()) {
             chatMessages.remove(typingIndicatorPosition);
             chatAdapter.notifyItemRemoved(typingIndicatorPosition);
             isTypingIndicatorShown = false;
-            typingIndicatorPosition = -1;
-        }
-    }
-
-    private void scrollToBottom() {
-        if (chatMessages.size() > 0) {
-            rvChatMessages.scrollToPosition(chatMessages.size() - 1);
         }
     }
 
     private String getCurrentTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
-        return sdf.format(new Date());
+        return new SimpleDateFormat("hh:mm a", Locale.getDefault()).format(new Date());
     }
 
-    // Chat Message Model Class
+    // --- INNER CLASSES ---
+
     public static class ChatMessage {
         public static final int TYPE_TEXT = 1;
         public static final int TYPE_RECOMMENDATION = 2;
@@ -395,197 +260,148 @@ public class AIChatbotActivity extends AppCompatActivity {
         private String time;
         private boolean isUser;
         private int type;
+        private List<AiChatResponse.RecommendationData> recData;
 
-        public ChatMessage(String message, String time, boolean isUser, int type) {
+        public ChatMessage(String message, String time, boolean isUser, int type, List<AiChatResponse.RecommendationData> recData) {
             this.message = message;
             this.time = time;
             this.isUser = isUser;
             this.type = type;
+            this.recData = recData;
         }
 
-        public String getMessage() { return message; }
-        public String getTime() { return time; }
-        public boolean isUser() { return isUser; }
-        public int getType() { return type; }
-
-        // Helper method to check if it's a question
-        public boolean isQuestion() {
-            return !isUser && message.trim().endsWith("?");
-        }
+        public List<AiChatResponse.RecommendationData> getRecData() { return recData; }
     }
 
-    // Chat Adapter Class
     public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-        private static final int TYPE_USER = 1;
-        private static final int TYPE_BOT = 2;
-        private static final int TYPE_RECOMMENDATION = 3;
-
         private List<ChatMessage> messages;
 
-        public ChatAdapter(List<ChatMessage> messages) {
-            this.messages = messages;
-        }
+        public ChatAdapter(List<ChatMessage> messages) { this.messages = messages; }
 
         @Override
         public int getItemViewType(int position) {
-            ChatMessage message = messages.get(position);
-            if (message.isUser()) {
-                return TYPE_USER;
-            } else if (message.getType() == ChatMessage.TYPE_RECOMMENDATION) {
-                return TYPE_RECOMMENDATION;
-            } else {
-                return TYPE_BOT;
-            }
+            return messages.get(position).type == ChatMessage.TYPE_RECOMMENDATION ? 2 : 1;
         }
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view;
-            if (viewType == TYPE_RECOMMENDATION) {
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_chat_message, parent, false);
-                return new RecommendationViewHolder(view);
-            } else {
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_chat_message, parent, false);
-                return new MessageViewHolder(view);
-            }
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            if (viewType == 2) return new RecViewHolder(inflater.inflate(R.layout.item_chat_message, parent, false));
+            return new MsgViewHolder(inflater.inflate(R.layout.item_chat_message, parent, false));
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            ChatMessage message = messages.get(position);
-
-            if (holder.getItemViewType() == TYPE_RECOMMENDATION) {
-                RecommendationViewHolder rvh = (RecommendationViewHolder) holder;
-                rvh.bind(message);
-            } else {
-                MessageViewHolder mvh = (MessageViewHolder) holder;
-                mvh.bind(message);
-            }
+            ChatMessage msg = messages.get(position);
+            if (holder instanceof RecViewHolder) ((RecViewHolder) holder).bind(msg);
+            else ((MsgViewHolder) holder).bind(msg);
         }
 
         @Override
-        public int getItemCount() {
-            return messages.size();
-        }
+        public int getItemCount() { return messages.size(); }
 
-        // Message ViewHolder for regular text messages
-        public class MessageViewHolder extends RecyclerView.ViewHolder {
-            LinearLayout botMessageLayout, userMessageLayout;
-            TextView tvBotMessage, tvBotTime, tvUserMessage, tvUserTime;
+        class MsgViewHolder extends RecyclerView.ViewHolder {
+            LinearLayout botLayout, userLayout;
+            TextView botTv, userTv, botTime, userTime;
 
-            public MessageViewHolder(View itemView) {
-                super(itemView);
-                botMessageLayout = itemView.findViewById(R.id.botMessageLayout);
-                userMessageLayout = itemView.findViewById(R.id.userMessageLayout);
-                tvBotMessage = itemView.findViewById(R.id.tvBotMessage);
-                tvBotTime = itemView.findViewById(R.id.tvBotTime);
-                tvUserMessage = itemView.findViewById(R.id.tvUserMessage);
-                tvUserTime = itemView.findViewById(R.id.tvUserTime);
+            MsgViewHolder(View v) {
+                super(v);
+                botLayout = v.findViewById(R.id.botMessageLayout);
+                userLayout = v.findViewById(R.id.userMessageLayout);
+                botTv = v.findViewById(R.id.tvBotMessage);
+                userTv = v.findViewById(R.id.tvUserMessage);
+                botTime = v.findViewById(R.id.tvBotTime);
+                userTime = v.findViewById(R.id.tvUserTime);
+                v.findViewById(R.id.recommendationLayout).setVisibility(View.GONE);
             }
 
-            public void bind(ChatMessage message) {
-                if (message.isUser()) {
-                    botMessageLayout.setVisibility(View.GONE);
-                    userMessageLayout.setVisibility(View.VISIBLE);
-                    tvUserMessage.setText(message.getMessage());
-                    tvUserTime.setText(message.getTime());
+            void bind(ChatMessage msg) {
+                if (msg.isUser) {
+                    botLayout.setVisibility(View.GONE);
+                    userLayout.setVisibility(View.VISIBLE);
+                    userTv.setText(msg.message);
+                    userTime.setText(msg.time);
                 } else {
-                    userMessageLayout.setVisibility(View.GONE);
-                    botMessageLayout.setVisibility(View.VISIBLE);
-                    tvBotMessage.setText(message.getMessage());
-                    tvBotTime.setText(message.getTime());
-
-                    // IMPROVEMENT 4: Question Styling - Only text styling
-                    if (message.isQuestion()) {
-                        // Make question text bold
-                        tvBotMessage.setTypeface(null, Typeface.BOLD);
-                    } else {
-                        tvBotMessage.setTypeface(null, Typeface.NORMAL);
-                    }
-
-                    // Special styling for typing indicator
-                    if (message.getMessage().equals("AI is typing...")) {
-                        tvBotMessage.setTypeface(null, Typeface.ITALIC);
-                        tvBotMessage.setTextColor(
-                                getResources().getColor(R.color.gray_500)
-                        );
-                    } else {
-                        tvBotMessage.setTextColor(
-                                getResources().getColor(R.color.text_dark)
-                        );
-                    }
+                    userLayout.setVisibility(View.GONE);
+                    botLayout.setVisibility(View.VISIBLE);
+                    botTv.setText(msg.message);
+                    botTime.setText(msg.time);
+                    if(msg.message.equals("AI is thinking...")) botTv.setTypeface(null, Typeface.ITALIC);
+                    else botTv.setTypeface(null, Typeface.NORMAL);
                 }
             }
         }
 
-        // Recommendation ViewHolder for bike recommendations
-        public class RecommendationViewHolder extends RecyclerView.ViewHolder {
-            LinearLayout recommendationLayout;
-            TextView tvRecommendationMessage, tvRecommendationTime;
-            androidx.cardview.widget.CardView cardBike1, cardBike2;
-            Button btnViewDetails1, btnBuyNow1, btnViewDetails2, btnBuyNow2;
+        class RecViewHolder extends RecyclerView.ViewHolder {
+            LinearLayout recLayout;
+            TextView title;
+            TextView name1, desc1, price1;
+            TextView name2, desc2, price2;
+            CardView card1, card2;
 
-            public RecommendationViewHolder(View itemView) {
-                super(itemView);
-                recommendationLayout = itemView.findViewById(R.id.recommendationLayout);
-                tvRecommendationMessage = itemView.findViewById(R.id.tvRecommendationMessage);
-                tvRecommendationTime = itemView.findViewById(R.id.tvRecommendationTime);
-
-                cardBike1 = itemView.findViewById(R.id.cardBike1);
-                cardBike2 = itemView.findViewById(R.id.cardBike2);
-
-                btnViewDetails1 = itemView.findViewById(R.id.btnViewDetails1);
-                btnBuyNow1 = itemView.findViewById(R.id.btnBuyNow1);
-                btnViewDetails2 = itemView.findViewById(R.id.btnViewDetails2);
-                btnBuyNow2 = itemView.findViewById(R.id.btnBuyNow2);
-
-                setupClickListeners();
+            RecViewHolder(View v) {
+                super(v);
+                recLayout = v.findViewById(R.id.recommendationLayout);
+                title = v.findViewById(R.id.tvRecommendationMessage);
+                
+                // Existing layout IDs might differ slightly, assume standard layout access
+                // I need to bind data to cardBike1 and cardBike2 sub-views
+                card1 = v.findViewById(R.id.cardBike1);
+                card2 = v.findViewById(R.id.cardBike2);
+                
+                v.findViewById(R.id.botMessageLayout).setVisibility(View.GONE);
+                v.findViewById(R.id.userMessageLayout).setVisibility(View.GONE);
             }
 
-            private void setupClickListeners() {
-                // Bike 1 buttons
-                btnViewDetails1.setOnClickListener(v -> {
-                    Toast.makeText(AIChatbotActivity.this, "View Adventure Tourer Pro Details", Toast.LENGTH_SHORT).show();
-                });
-
-                btnBuyNow1.setOnClickListener(v -> {
-                    Toast.makeText(AIChatbotActivity.this, "Buy Adventure Tourer Pro", Toast.LENGTH_SHORT).show();
-                });
-
-                // Bike 2 buttons
-                btnViewDetails2.setOnClickListener(v -> {
-                    Toast.makeText(AIChatbotActivity.this, "View Street Fighter 200 Details", Toast.LENGTH_SHORT).show();
-                });
-
-                btnBuyNow2.setOnClickListener(v -> {
-                    Toast.makeText(AIChatbotActivity.this, "Buy Street Fighter 200", Toast.LENGTH_SHORT).show();
-                });
+            void bind(ChatMessage msg) {
+                recLayout.setVisibility(View.VISIBLE);
+                title.setText(msg.message);
+                
+                List<AiChatResponse.RecommendationData> data = msg.getRecData();
+                if(data != null) {
+                    if (data.size() > 0) bindCard(card1, data.get(0), 1);
+                    else card1.setVisibility(View.GONE);
+                    
+                    if (data.size() > 1) bindCard(card2, data.get(1), 2);
+                    else card2.setVisibility(View.GONE);
+                }
             }
 
-            public void bind(ChatMessage message) {
-                recommendationLayout.setVisibility(View.VISIBLE);
-                tvRecommendationMessage.setText(message.getMessage());
-                tvRecommendationTime.setText(message.getTime());
-
-                // IMPROVEMENT 4: Make recommendation message bold
-                tvRecommendationMessage.setTypeface(null, Typeface.BOLD);
+            void bindCard(CardView card, AiChatResponse.RecommendationData d, int index) {
+                card.setVisibility(View.VISIBLE);
+                
+                // Identify Views based on Index (1 or 2)
+                TextView tvTitle = card.findViewById(index == 1 ? R.id.tvBike1Title : R.id.tvBike2Title);
+                TextView tvPrice = card.findViewById(index == 1 ? R.id.tvBike1Price : R.id.tvBike2Price);
+                Button btnDetails = card.findViewById(index == 1 ? R.id.btnViewDetails1 : R.id.btnViewDetails2);
+                Button btnBuy = card.findViewById(index == 1 ? R.id.btnBuyNow1 : R.id.btnBuyNow2);
+                ImageView ivBike = card.findViewById(index == 1 ? R.id.ivBike1 : R.id.ivBike2);
+                
+                // Bind Data
+                if (tvTitle != null) tvTitle.setText(d.getName());
+                if (tvPrice != null) tvPrice.setText("₹ " + d.getPrice());
+                
+                // Load Image
+                if (ivBike != null && d.getImage() != null && !d.getImage().isEmpty()) {
+                     Glide.with(itemView.getContext())
+                          .load(d.getImage())
+                          .apply(new RequestOptions().placeholder(R.color.gray_200).error(R.color.gray_400))
+                          .into(ivBike);
+                }
+                
+                // Click Listeners
+                if (btnDetails != null) {
+                    btnDetails.setOnClickListener(v -> 
+                        Toast.makeText(itemView.getContext(), "Details: " + d.getName(), Toast.LENGTH_SHORT).show()
+                    );
+                }
+                
+                if (btnBuy != null) {
+                    btnBuy.setOnClickListener(v -> 
+                        Toast.makeText(itemView.getContext(), "Booking: " + d.getName(), Toast.LENGTH_SHORT).show()
+                    );
+                }
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Clean up handler to prevent memory leaks
-        handler.removeCallbacksAndMessages(null);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
     }
 }

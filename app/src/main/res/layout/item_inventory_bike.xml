@@ -1,95 +1,282 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="12dp"
-    android:background="@drawable/table_row_selector">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    android:layout_marginBottom="16dp"
+    app:cardBackgroundColor="@color/white">
 
-    <!-- Thumbnail -->
-    <ImageView
-        android:id="@+id/ivBikeThumbnail"
-        android:layout_width="50dp"
-        android:layout_height="35dp"
-        android:src="@drawable/ic_two_wheeler"
-        android:scaleType="centerCrop"
-        android:layout_marginEnd="8dp"/>
-
-    <!-- Model & Variant Container -->
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1.8"
         android:orientation="vertical"
-        android:gravity="center_vertical">
-        
-        <TextView
-            android:id="@+id/tvBikeModel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="YZF R15 V4"
-            android:textColor="@color/black"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:ellipsize="end"
-            android:maxLines="1" />
+        android:padding="20dp">
 
-        <TextView
-            android:id="@+id/tvBikeVariant"
-            android:layout_width="wrap_content"
+        <!-- Header: Model & Status -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dual Channel ABS"
-            android:textColor="@color/gray_600"
-            android:textSize="11sp"
-            android:ellipsize="end"
-            android:singleLine="true" />
+            android:orientation="horizontal"
+            android:gravity="start|top"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvBikeModel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="R15 V4"
+                    android:textColor="#0f172a"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvBikeVariant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dark Knight"
+                    android:textColor="#64748b"
+                    android:textSize="14sp"
+                    android:layout_marginTop="2dp"/>
+            </LinearLayout>
+
+            <!-- Status Badge -->
+            <TextView
+                android:id="@+id/tvStatusBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DELIVERED"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="#15803d"
+                android:background="@drawable/badge_green_bg"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:letterSpacing="0.05"/>
+        </LinearLayout>
+
+        <!-- Details Grid -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingVertical="16dp"
+            android:background="@drawable/border_y_gray">
+
+            <!-- Row 1 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <!-- Color -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="COLOR"
+                        android:textColor="#94a3b8"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp"
+                        android:letterSpacing="0.1"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+                        
+                        <View
+                            android:id="@+id/viewColorDot"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:background="@drawable/circle_black"
+                            android:layout_marginEnd="8dp"/>
+                        
+                        <TextView
+                            android:id="@+id/tvColorName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Metallic Black"
+                            android:textColor="#334155"
+                            android:textSize="14sp"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Inward Date -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="INWARD DATE"
+                        android:textColor="#94a3b8"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp"
+                        android:letterSpacing="0.1"/>
+
+                    <TextView
+                        android:id="@+id/tvInwardDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12 Oct 2023"
+                        android:textColor="#334155"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <!-- Chassis -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="CHASSIS NO"
+                        android:textColor="#94a3b8"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp"
+                        android:letterSpacing="0.1"/>
+
+                    <TextView
+                        android:id="@+id/tvChassisNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ME10203JKA93"
+                        android:textColor="#475569"
+                        android:textSize="12sp"
+                        android:fontFamily="monospace"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- Engine -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ENGINE NO"
+                        android:textColor="#94a3b8"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp"
+                        android:letterSpacing="0.1"/>
+
+                    <TextView
+                        android:id="@+id/tvEngineNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="G3J8E-092837"
+                        android:textColor="#475569"
+                        android:textSize="12sp"
+                        android:fontFamily="monospace"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Footer: Customer (If Any) -->
+        <LinearLayout
+            android:id="@+id/layoutCustomer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="16dp"
+            android:background="#00F8FAFC" 
+            android:paddingHorizontal="4dp"
+            android:paddingBottom="4dp">
+            <!-- Used transparent bg hack or margin neg logic from HTML not exactly replicable without complex view/drawable hierarchy -->
+            <!-- Simplified: Just standard layout below -->
+            
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CUSTOMER"
+                    android:textColor="#94a3b8"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"/>
+
+                <TextView
+                    android:id="@+id/tvCustomerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rajesh Kumar"
+                    android:textColor="#1e293b"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/tvDateLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DELIVERED ON"
+                    android:textColor="#94a3b8"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.1"/>
+
+                <TextView
+                    android:id="@+id/tvDeliveryDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="15 Oct 2023"
+                    android:textColor="#1e293b"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
-
-    <!-- Engine No -->
-    <TextView
-        android:id="@+id/tvEngineNo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.5"
-        android:text="E987654321"
-        android:textColor="@color/gray_600"
-        android:textSize="12sp"
-        android:fontFamily="monospace"
-        android:ellipsize="middle"
-        android:singleLine="true" />
-
-    <!-- Chassis No -->
-    <TextView
-        android:id="@+id/tvChassisNo"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.5"
-        android:text="C123456789"
-        android:textColor="@color/gray_600"
-        android:textSize="12sp"
-        android:fontFamily="monospace"
-        android:ellipsize="middle"
-        android:singleLine="true" />
-
-    <!-- Stock Date -->
-    <TextView
-        android:id="@+id/tvStockDate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.2"
-        android:text="Oct 24, 2023"
-        android:textColor="@color/gray_600"
-        android:textSize="12sp" />
-
-    <!-- Status/Customer -->
-    <TextView
-        android:id="@+id/tvStatus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0"
-        android:text="Not Sold"
-        android:textColor="@color/gray_500"
-        android:textSize="12sp"
-        android:textStyle="italic" />
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>

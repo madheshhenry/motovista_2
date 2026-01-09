@@ -36,6 +36,9 @@ public class CustomerRequest {
     @SerializedName("bike_price")
     private String bike_price;
 
+    @SerializedName("created_at")
+    private String created_at; // Timestamp from DB
+
     public CustomerRequest(int customer_id, String customer_name, String customer_phone, String customer_profile, int bike_id, String bike_name, String bike_variant, String bike_color, String bike_price) {
         this.customer_id = customer_id;
         this.customer_name = customer_name;
@@ -58,4 +61,5 @@ public class CustomerRequest {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
     public String getBike_price() { return bike_price; }
+    public String getCreated_at() { return created_at; }
 }

@@ -340,27 +340,45 @@ public class AdminDashboardActivity extends AppCompatActivity {
         tvSettings.setTypeface(null, android.graphics.Typeface.NORMAL);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkActiveSession();
+    }
+
+    private void checkActiveSession() {
+        com.example.motovista_deep.helpers.OrderSessionManager sessionManager = 
+            new com.example.motovista_deep.helpers.OrderSessionManager(this);
+            
+        if (sessionManager.isSessionActive()) {
+            com.example.motovista_deep.helpers.OrderSessionManager.Step currentStep = sessionManager.getCurrentStep();
+            Intent intent = null;
+            
+            switch (currentStep) {
+                case PAYMENT_CONFIRMED:
+                    intent = new Intent(this, PaymentConfirmedActivity.class);
+                    break;
+                case DOCUMENTS:
+                    intent = new Intent(this, DocumentsActivity.class);
+                    break;
+                case COMPLETED:
+                    intent = new Intent(this, OrderCompletedActivity.class);
+                    break;
+            }
+            
+            if (intent != null) {
+                // Restore request ID if possible to pass as extra, though activities handle session restoration themselves now.
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish(); // Close Dashboard so user can't just back into it without clearing session
+            }
+        }
+    }
+
     @Override
     public void onBackPressed() {
         // Double press to exit
         Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
-
-        // You can implement double press to exit logic here:
-        /*
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show();
-
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
-        */
     }
 }

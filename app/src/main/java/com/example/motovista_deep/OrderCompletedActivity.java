@@ -16,12 +16,17 @@ public class OrderCompletedActivity extends AppCompatActivity {
     private CardView btnBack, btnEmiLedger, btnBackDashboard;
     private TextView tvCustomerName, tvBikeModel, tvPaymentType;
 
+    private com.example.motovista_deep.helpers.OrderSessionManager sessionManager;
     private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_completed);
+
+        sessionManager = new com.example.motovista_deep.helpers.OrderSessionManager(this);
+        // Persist Completed State
+        sessionManager.setStep(com.example.motovista_deep.helpers.OrderSessionManager.Step.COMPLETED);
 
         // Initialize views
         initializeViews();
@@ -35,6 +40,8 @@ public class OrderCompletedActivity extends AppCompatActivity {
         // Animate entrance
         animateEntrance();
     }
+
+    // ... (Views and Intent Data handling remains same) ...
 
     private void initializeViews() {
         // Header
@@ -57,28 +64,20 @@ public class OrderCompletedActivity extends AppCompatActivity {
     private void handleIntentData() {
         Intent intent = getIntent();
         if (intent != null) {
-            // Get data from AdminDocumentsActivity
             String customerName = intent.getStringExtra("customer_name");
             String vehicleModel = intent.getStringExtra("vehicle_model");
             String paymentType = intent.getStringExtra("payment_type");
 
-            // Update UI with received data
-            if (customerName != null && !customerName.isEmpty()) {
-                tvCustomerName.setText(customerName);
-            }
+            if (customerName != null) tvCustomerName.setText(customerName);
+            if (vehicleModel != null) tvBikeModel.setText(vehicleModel);
+            if (paymentType != null) tvPaymentType.setText(paymentType);
 
-            if (vehicleModel != null && !vehicleModel.isEmpty()) {
-                tvBikeModel.setText(vehicleModel);
-            }
-
-            if (paymentType != null && !paymentType.isEmpty()) {
-                tvPaymentType.setText(paymentType);
-            }
-
-            // You can add more data handling as needed
             int requestId = intent.getIntExtra("request_id", -1);
-            String orderType = intent.getStringExtra("order_type");
+            if (requestId == -1 && sessionManager.isSessionActive()) {
+                requestId = sessionManager.getRequestId();
+            }
             
+            String orderType = intent.getStringExtra("order_type");
             if (orderType != null && orderType.equals("Full Cash")) {
                 btnEmiLedger.setVisibility(View.GONE);
             }
@@ -95,100 +94,49 @@ public class OrderCompletedActivity extends AppCompatActivity {
         
         apiService.completeOrder(request).enqueue(new retrofit2.Callback<com.example.motovista_deep.models.GenericResponse>() {
             @Override
-            public void onResponse(retrofit2.Call<com.example.motovista_deep.models.GenericResponse> call, retrofit2.Response<com.example.motovista_deep.models.GenericResponse> response) {
-                // Done silently or show success?
-                // User didn't ask for feedback, just logic.
-            }
+            public void onResponse(retrofit2.Call<com.example.motovista_deep.models.GenericResponse> call, retrofit2.Response<com.example.motovista_deep.models.GenericResponse> response) {}
             @Override
-            public void onFailure(retrofit2.Call<com.example.motovista_deep.models.GenericResponse> call, Throwable t) {
-                // Ignore
-            }
+            public void onFailure(retrofit2.Call<com.example.motovista_deep.models.GenericResponse> call, Throwable t) {}
         });
     }
 
     private void setupClickListeners() {
-        // Back button
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
-        });
+        // Back button -> Dashboard & Clear Session
+        btnBack.setOnClickListener(v -> navigateToDashboard());
 
         // EMI Ledger Button
-        btnEmiLedger.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                animateButtonClick(btnEmiLedger);
-                showToast("Opening EMI Ledger...");
-
-                // TODO: Implement EMI Ledger functionality
-                // Intent intent = new Intent(OrderCompletedActivity.this, EmiLedgerActivity.class);
-                // startActivity(intent);
-            }
+        btnEmiLedger.setOnClickListener(v -> {
+            animateButtonClick(btnEmiLedger);
+            showToast("Opening EMI Ledger...");
+            // TODO: Implement Intent
         });
 
-        // Back to Dashboard Button
-        btnBackDashboard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                animateButtonClick(btnBackDashboard);
-
-                // Navigate back to Admin Dashboard
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(OrderCompletedActivity.this, AdminDashboardActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                        finish();
-                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    }
-                }, 150);
-            }
+        // Back to Dashboard Button -> Dashboard & Clear Session
+        btnBackDashboard.setOnClickListener(v -> {
+            animateButtonClick(btnBackDashboard);
+            navigateToDashboard();
         });
+    }
+
+    private void navigateToDashboard() {
+        // Clear the session as the order is fully done and user is leaving
+        sessionManager.clearSession();
+
+        Intent intent = new Intent(OrderCompletedActivity.this, AdminDashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     private void animateEntrance() {
-        // Animate buttons entrance with delay
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                btnEmiLedger.animate()
-                        .alpha(1f)
-                        .setDuration(400)
-                        .start();
-            }
-        }, 200);
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                btnBackDashboard.animate()
-                        .alpha(1f)
-                        .setDuration(400)
-                        .start();
-            }
-        }, 400);
+        handler.postDelayed(() -> btnEmiLedger.animate().alpha(1f).setDuration(400).start(), 200);
+        handler.postDelayed(() -> btnBackDashboard.animate().alpha(1f).setDuration(400).start(), 400);
     }
 
     private void animateButtonClick(CardView button) {
-        button.animate()
-                .scaleX(0.95f)
-                .scaleY(0.95f)
-                .setDuration(100)
-                .withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        button.animate()
-                                .scaleX(1f)
-                                .scaleY(1f)
-                                .setDuration(100)
-                                .start();
-                    }
-                })
-                .start();
+        button.animate().scaleX(0.95f).scaleY(0.95f).setDuration(100)
+                .withEndAction(() -> button.animate().scaleX(1f).scaleY(1f).setDuration(100).start()).start();
     }
 
     private void showToast(String message) {
@@ -197,8 +145,8 @@ public class OrderCompletedActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        // Phone Back -> Dashboard & Clear Session
+        navigateToDashboard();
     }
 
     @Override

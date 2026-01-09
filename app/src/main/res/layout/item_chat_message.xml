@@ -272,43 +272,9 @@
                                     android:layout_height="match_parent"
                                     android:background="@drawable/gradient_overlay" />
 
-                                <!-- Badge -->
-                                <androidx.cardview.widget.CardView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="12dp"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_alignParentEnd="true"
-                                    app:cardCornerRadius="12dp"
-                                    app:cardElevation="2dp"
-                                    app:cardBackgroundColor="#33FFFFFF">
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:paddingStart="12dp"
-                                        android:paddingEnd="12dp"
-                                        android:paddingTop="4dp"
-                                        android:paddingBottom="4dp"
-                                        android:text="Best Seller"
-                                        android:textColor="@color/white"
-                                        android:textSize="11sp"
-                                        android:textStyle="bold"
-                                        android:fontFamily="sans-serif" />
 
-                                </androidx.cardview.widget.CardView>
 
-                                <!-- Bike Class -->
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="12dp"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_alignParentStart="true"
-                                    android:text="Cruiser Class"
-                                    android:textColor="@color/white"
-                                    android:textSize="12sp"
-                                    android:fontFamily="sans-serif" />
 
                             </RelativeLayout>
 
@@ -463,43 +429,9 @@
                                     android:layout_height="match_parent"
                                     android:background="@drawable/gradient_overlay" />
 
-                                <!-- Badge -->
-                                <androidx.cardview.widget.CardView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="12dp"
-                                    android:layout_alignParentTop="true"
-                                    android:layout_alignParentEnd="true"
-                                    app:cardCornerRadius="12dp"
-                                    app:cardElevation="2dp"
-                                    app:cardBackgroundColor="@color/primary_color">
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:paddingStart="12dp"
-                                        android:paddingEnd="12dp"
-                                        android:paddingTop="4dp"
-                                        android:paddingBottom="4dp"
-                                        android:text="New Arrival"
-                                        android:textColor="@color/white"
-                                        android:textSize="11sp"
-                                        android:textStyle="bold"
-                                        android:fontFamily="sans-serif" />
 
-                                </androidx.cardview.widget.CardView>
 
-                                <!-- Bike Class -->
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="12dp"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_alignParentStart="true"
-                                    android:text="Sports Naked"
-                                    android:textColor="@color/white"
-                                    android:textSize="12sp"
-                                    android:fontFamily="sans-serif" />
 
                             </RelativeLayout>
 

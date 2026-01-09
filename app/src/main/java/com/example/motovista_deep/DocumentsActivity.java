@@ -34,6 +34,7 @@ public class DocumentsActivity extends AppCompatActivity {
     private CardView btnBack;
     private Button btnDownloadDeliveryNote, btnDownloadCashReceipt;
     private int requestId = -1;
+    private com.example.motovista_deep.helpers.OrderSessionManager sessionManager;
     
     // Data variables
     private String customerName = "";
@@ -51,14 +52,22 @@ public class DocumentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_documents);
 
+        sessionManager = new com.example.motovista_deep.helpers.OrderSessionManager(this);
+        // Persist that we are in Documents Step
+        sessionManager.setStep(com.example.motovista_deep.helpers.OrderSessionManager.Step.DOCUMENTS);
+
         initializeViews();
         handleIntentData();
         
         if (requestId != -1) {
             fetchOrderDetails(requestId);
         } else {
-            // Check if data came via direct intent extras (fallback)
-            if (getIntent().hasExtra("customer_name")) {
+            // Restore from session
+            if (sessionManager.isSessionActive()) {
+                requestId = sessionManager.getRequestId();
+                fetchOrderDetails(requestId);
+            } else if (getIntent().hasExtra("customer_name")) {
+                 // Check if data came via direct intent extras (fallback)
                  customerName = getIntent().getStringExtra("customer_name");
                  vehicleName = getIntent().getStringExtra("vehicle_model");
                  // We might miss price here if not passed, but let's see
@@ -83,21 +92,27 @@ public class DocumentsActivity extends AppCompatActivity {
         btnDownloadCashReceipt = findViewById(R.id.btnDownloadCashReceipt);
         // Initialize Next Button
         Button btnNext = findViewById(R.id.btnNext);
-        btnNext.setOnClickListener(v -> {
-            Intent intent = new Intent(DocumentsActivity.this, OrderCompletedActivity.class);
-            intent.putExtra("customer_name", customerName);
-            intent.putExtra("vehicle_model", vehicleName);
-            intent.putExtra("payment_type", paymentMode);
-            intent.putExtra("order_type", orderType);
-            intent.putExtra("request_id", requestId);
-            startActivity(intent);
-        });
+        btnNext.setOnClickListener(v -> navigateToOrderCompleted());
+    }
+
+    private void navigateToOrderCompleted() {
+        Intent intent = new Intent(DocumentsActivity.this, OrderCompletedActivity.class);
+        intent.putExtra("customer_name", customerName);
+        intent.putExtra("vehicle_model", vehicleName);
+        intent.putExtra("payment_type", paymentMode);
+        intent.putExtra("order_type", orderType);
+        intent.putExtra("request_id", requestId);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 
     private void handleIntentData() {
         Intent intent = getIntent();
         if (intent != null) {
-            requestId = intent.getIntExtra("request_id", -1);
+            if (intent.hasExtra("request_id")) {
+                requestId = intent.getIntExtra("request_id", -1);
+            }
             if (intent.hasExtra("payment_mode")) {
                 paymentMode = intent.getStringExtra("payment_mode");
             }
@@ -140,7 +155,8 @@ public class DocumentsActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        btnBack.setOnClickListener(v -> finish());
+        // Special requirement: Back button goes to Order Completed
+        btnBack.setOnClickListener(v -> navigateToOrderCompleted());
         
         btnDownloadDeliveryNote.setOnClickListener(v -> {
             if (checkPermission()) {
@@ -157,6 +173,11 @@ public class DocumentsActivity extends AppCompatActivity {
                 requestPermission();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigateToOrderCompleted();
     }
 
     private boolean checkPermission() {

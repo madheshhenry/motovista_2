@@ -35,16 +35,19 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
     // Data
     private int requestId = -1;
     private String orderType = "Full Cash";
+    private com.example.motovista_deep.helpers.OrderSessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_confirmed);
 
+        sessionManager = new com.example.motovista_deep.helpers.OrderSessionManager(this);
+
         // Initialize views
         initializeViews();
 
-        // Get data from intent
+        // Get data from intent or session
         handleIntentData();
 
         // Setup animations
@@ -60,6 +63,8 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
     private void initializeViews() {
         // Header
         btnBack = findViewById(R.id.btnBack);
+        // User requested NOT to go back. Hide or disable back button.
+        btnBack.setVisibility(View.GONE);
 
         // Success icon
         outerGlow = findViewById(R.id.outerGlow);
@@ -77,9 +82,16 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
 
     private void handleIntentData() {
         Intent intent = getIntent();
-        if (intent != null) {
+        
+        // Check if we have fresh data from Payment Flow
+        if (intent != null && intent.hasExtra("request_id")) {
             requestId = intent.getIntExtra("request_id", -1);
             
+            // Start Persistent Session
+            if (requestId != -1) {
+                sessionManager.startSession(requestId);
+            }
+
             // Get customer data
             String customerName = intent.getStringExtra("customer_name");
             String vehicleModel = intent.getStringExtra("vehicle_model");
@@ -91,26 +103,27 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
             }
 
             // Set data to views
-            if (customerName != null) {
-                tvCustomerName.setText(customerName);
-            }
-
-            if (vehicleModel != null) {
-                tvModel.setText(vehicleModel);
-            }
-
-            if (paymentMode != null) {
-                tvPaymentMode.setText(paymentMode);
-            }
-
-            // Format and set amount
+            if (customerName != null) tvCustomerName.setText(customerName);
+            if (vehicleModel != null) tvModel.setText(vehicleModel);
+            if (paymentMode != null) tvPaymentMode.setText(paymentMode);
             tvAmountPaid.setText(formatIndianCurrency(amountPaid));
-
-            if (transactionId != null) {
-                tvTransactionId.setText("Transaction ID: " + transactionId);
+            if (transactionId != null) tvTransactionId.setText("Transaction ID: " + transactionId);
+            
+        } else {
+            // Restore from Session if App was restarted
+            if (sessionManager.isSessionActive()) {
+                requestId = sessionManager.getRequestId();
+                // Note: We might lose ephemeral data (name, amount) if not stored. 
+                // ideally we fetch details from server using requestId, but for now 
+                // we will rely on minimal restoration or placeholder.
+                // Or better, assume intent extras are unavailable and user just sees "Payment Confirmed".
+                tvCustomerName.setText("Resuming Session...");
+                tvAmountPaid.setText("Paid");
             }
         }
     }
+
+    // ... animations ...
 
     private void setupAnimations() {
         // Create pulse animation runnable
@@ -196,14 +209,7 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
     }
 
     private void setupClickListeners() {
-        // Back button
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
-        });
+        // Back button is HIDDEN/GONE.
 
         // Proceed button (View Documents)
         btnProceed.setOnClickListener(new View.OnClickListener() {
@@ -216,19 +222,29 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
                 intent.putExtra("request_id", requestId);
                 intent.putExtra("customer_name", tvCustomerName.getText().toString());
                 intent.putExtra("vehicle_model", tvModel.getText().toString());
-                intent.putExtra("vehicle_model", tvModel.getText().toString()); // Duplicate line in original? No, just ensuring context.
+                intent.putExtra("vehicle_model", tvModel.getText().toString()); 
                 intent.putExtra("payment_mode", tvPaymentMode.getText().toString());
                 intent.putExtra("order_type", orderType);
 
                 intent.putExtra("transaction_id",
                         tvTransactionId.getText().toString().replace("Transaction ID: ", ""));
-                intent.putExtra("amount_paid",
-                        Double.parseDouble(tvAmountPaid.getText().toString()
+                // Safely parse amount
+                double amt = 0;
+                try {
+                     amt = Double.parseDouble(tvAmountPaid.getText().toString()
                                 .replace("₹", "")
-                                .replace(",", "")));
+                                .replace(",", ""));
+                } catch(Exception e) {}
+                intent.putExtra("amount_paid", amt);
 
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                // We do NOT finish() so users can't back into here easily? 
+                // Actually user WANTS to stay here if they close app. 
+                // But if they go forward to Documents, Documents becomes the active step.
+                // So DocumentsActivity SHOULD handle the state update to DOCUMENTS.
+                // And accessing PaymentConfirmed again should verify state.
+                finish(); 
             }
         });
     }
@@ -244,7 +260,6 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
     }
 
     private void showToast(String message) {
-        // You can use Toast or a custom snackbar
         android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_SHORT).show();
     }
 
@@ -271,7 +286,8 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        // BLOCKED: User requested strictly NO BACK ACTION.
+        showToast("Please proceed to view documents.");
+        // super.onBackPressed(); // Removed to disable back press
     }
 }

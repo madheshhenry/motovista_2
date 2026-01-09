@@ -14,7 +14,11 @@ public class InventoryBrand implements Serializable {
     @SerializedName("bikes")
     private List<InventoryBike> bikes;
 
+    @SerializedName("logo")
+    private String logo;
+
     public String getBrand() { return brand; }
     public int getCount() { return count; }
     public List<InventoryBike> getBikes() { return bikes; }
+    public String getLogo() { return logo; }
 }
