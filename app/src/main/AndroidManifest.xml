@@ -284,6 +284,9 @@
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
+            android:name=".AddStockBikeActivity"
+            android:exported="false" />
+        <activity
             android:name=".SaleDetailsActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />

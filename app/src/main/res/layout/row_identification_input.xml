@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="16dp">
+
+    <!-- Row Header with Number -->
+    <TextView
+        android:id="@+id/tvRowNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="01"
+        android:textColor="@color/gray_400"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <!-- Chassis Input -->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp">
+
+            <EditText
+                android:id="@+id/etChassisInput"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/bg_input"
+                android:hint="CH-XXXXXX"
+                android:paddingStart="12dp"
+                android:paddingEnd="40dp"
+                android:textSize="14sp"
+                android:inputType="textCapCharacters"
+                android:singleLine="true"/>
+
+            <ImageView
+                android:id="@+id/btnScanChassisRow"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_center_focus_weak"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                app:tint="@color/primary_color"/>
+        </RelativeLayout>
+
+        <!-- Engine Input -->
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/etEngineInput"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/bg_input"
+                android:hint="EN-XXXXXX"
+                android:paddingStart="12dp"
+                android:paddingEnd="40dp"
+                android:textSize="14sp"
+                android:inputType="textCapCharacters"
+                android:singleLine="true"/>
+
+            <ImageView
+                android:id="@+id/btnScanEngineRow"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_center_focus_weak"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                app:tint="@color/primary_color"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

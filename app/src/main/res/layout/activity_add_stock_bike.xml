@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".AddStockBikeActivity">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:background="@color/white"
+        android:elevation="1dp">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/gray_900"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Add Stock Bike"
+            android:textColor="@color/gray_900"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginEnd="40dp"/>
+            
+        <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Drafts"
+             android:textColor="@color/primary_color"
+             android:textStyle="bold"
+             android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_200"/>
+
+<androidx.core.widget.NestedScrollView
+        android:id="@+id/mainScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:paddingBottom="100dp">
+
+            <!-- Container for Saved Groups -->
+            <LinearLayout
+                android:id="@+id/containerSavedGroups"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+            <!-- Current Group Card (Active Form) -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardCurrentGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/white"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Card Header -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:background="@drawable/border_bottom_gray"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+                        
+                        <TextView
+                            android:id="@+id/tvGroupHeader"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Current Group Details"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/gray_900"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="In Progress"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/gray_600"
+                            android:background="@drawable/bg_gray_light"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- Bike Group Details Content -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="16dp">
+
+                                <!-- Brand -->
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical"
+                                    android:layout_marginEnd="8dp">
+                                    
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Brand"
+                                        android:textSize="12sp"
+                                        android:textColor="@color/gray_600"
+                                        android:layout_marginBottom="4dp"/>
+                                        
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+                                        <Spinner
+                                            android:id="@+id/spinnerBrand"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="45dp"
+                                            android:background="@drawable/bg_input"/>
+                                        <ImageView
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            android:src="@drawable/ic_arrow_drop_down"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginEnd="8dp"
+                                            app:tint="@color/gray_500"/>
+                                    </RelativeLayout>
+                                </LinearLayout>
+
+                                <!-- Model -->
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical"
+                                    android:layout_marginStart="8dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Model"
+                                        android:textSize="12sp"
+                                        android:textColor="@color/gray_600"
+                                        android:layout_marginBottom="4dp"/>
+
+                                    <EditText
+                                        android:id="@+id/etModel"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="45dp"
+                                        android:background="@drawable/bg_input"
+                                        android:hint="Name"
+                                        android:paddingHorizontal="12dp"
+                                        android:textSize="14sp"
+                                        android:singleLine="true"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                            
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="16dp">
+
+                                <!-- Variant -->
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical"
+                                    android:layout_marginEnd="8dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Variant"
+                                        android:textSize="12sp"
+                                        android:textColor="@color/gray_600"
+                                        android:layout_marginBottom="4dp"/>
+
+                                    <EditText
+                                        android:id="@+id/etVariant"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="45dp"
+                                        android:background="@drawable/bg_input"
+                                        android:hint="e.g. DLX"
+                                        android:paddingHorizontal="12dp"
+                                        android:textSize="14sp"
+                                        android:singleLine="true"/>
+                                </LinearLayout>
+
+                                <!-- Color -->
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical"
+                                    android:layout_marginStart="8dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Color"
+                                        android:textSize="12sp"
+                                        android:textColor="@color/gray_600"
+                                        android:layout_marginBottom="4dp"/>
+
+                                    <LinearLayout
+                                         android:id="@+id/btnSelectColor"
+                                         android:layout_width="match_parent"
+                                         android:layout_height="45dp"
+                                         android:background="@drawable/bg_input"
+                                         android:orientation="horizontal"
+                                         android:gravity="center_vertical"
+                                         android:paddingHorizontal="8dp">
+                                         
+                                         <View
+                                             android:id="@+id/viewSelectedColorCircle"
+                                             android:layout_width="20dp"
+                                             android:layout_height="20dp"
+                                             android:background="@drawable/bg_color_circle"
+                                             android:backgroundTint="@color/gray_400"
+                                             android:layout_marginEnd="8dp"/>
+                                         
+                                         <TextView
+                                             android:id="@+id/tvSelectedColorName"
+                                             android:layout_width="0dp"
+                                             android:layout_height="wrap_content"
+                                             android:layout_weight="1"
+                                             android:text="Select Color"
+                                             android:textSize="14sp"
+                                             android:textColor="@color/gray_900"
+                                             android:singleLine="true"/>
+                                             
+                                         <ImageView
+                                             android:layout_width="20dp"
+                                             android:layout_height="20dp"
+                                             android:src="@drawable/ic_arrow_drop_down"
+                                             app:tint="@color/gray_500"/>
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                            
+                            <!-- Date -->
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Inward Date"
+                                android:textSize="12sp"
+                                android:textColor="@color/gray_600"
+                                android:layout_marginBottom="4dp"/>
+
+                            <TextView
+                                android:id="@+id/tvInwardDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="45dp"
+                                android:background="@drawable/bg_input"
+                                android:paddingHorizontal="12dp"
+                                android:gravity="center_vertical"
+                                android:textSize="14sp"
+                                android:textColor="@color/gray_900"
+                                android:drawableEnd="@drawable/ic_calendar"
+                                android:drawableTint="@color/gray_500"/>
+                                
+                        </LinearLayout>
+
+                        <!-- Quantity Selector -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:background="@drawable/bg_gray_light"
+                            android:padding="16dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Number of Bikes"
+                                    android:textStyle="bold"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/gray_900"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Arrived in this batch"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/gray_500"/>
+                            </LinearLayout>
+                            
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+                                
+                                <ImageView
+                                    android:id="@+id/btnDecreaseQty"
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:src="@drawable/ic_remove"
+                                    app:tint="@color/primary_color"
+                                    android:background="@drawable/bg_white_circle"
+                                    android:padding="6dp"
+                                    android:elevation="1dp"/>
+                                    
+                                <TextView
+                                    android:id="@+id/tvQuantity"
+                                    android:layout_width="32dp"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="1"
+                                    android:textStyle="bold"
+                                    android:textSize="16sp"
+                                    android:textColor="@color/gray_900"/>
+                                    
+                                <ImageView
+                                    android:id="@+id/btnIncreaseQty"
+                                    android:layout_width="32dp"
+                                    android:layout_height="32dp"
+                                    android:src="@drawable/ic_add"
+                                    app:tint="@color/primary_color"
+                                    android:background="@drawable/bg_white_circle"
+                                    android:padding="6dp"
+                                    android:elevation="1dp"/>
+                            </LinearLayout>
+                            
+                        </LinearLayout>
+
+                        <!-- Identification Details List -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:orientation="vertical">
+                            
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="12dp"
+                                android:gravity="center_vertical">
+                                
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Vehicle Identifiers"
+                                    android:textStyle="bold"
+                                    android:textSize="14sp"
+                                    android:textColor="@color/gray_900"/>
+                                    
+                                <TextView
+                                    android:id="@+id/tvEntriesRequired"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="1 Entry Required"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/primary_color"
+                                    android:background="@drawable/bg_primary_light"
+                                    android:paddingHorizontal="8dp"
+                                    android:paddingVertical="4dp"/>
+                            </LinearLayout>
+                            
+                            <!-- Static Header for List -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/gray_50"
+                                android:padding="8dp">
+                                <TextView
+                                    android:layout_width="30dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="#"
+                                    android:textSize="11sp"
+                                    android:textColor="@color/gray_500"
+                                    android:gravity="center"/>
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Chassis No."
+                                    android:textSize="11sp"
+                                    android:textColor="@color/gray_500"
+                                    android:paddingStart="8dp"/>
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Engine No."
+                                    android:textSize="11sp"
+                                    android:textColor="@color/gray_500"
+                                    android:paddingStart="8dp"/>
+                            </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rvIdentification"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                tools:itemCount="3"
+                                tools:listitem="@layout/row_identification_input"/>
+                                
+                        </LinearLayout>
+                        
+                        <!-- Batch Summary Internal -->
+                        <TextView
+                            android:id="@+id/tvBatchSummary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/bg_primary_light_border"
+                            android:padding="12dp"
+                            android:text="Adding 1 unit..."
+                            android:textColor="@color/gray_600"
+                            android:textSize="12sp"
+                            android:gravity="center"
+                            android:textStyle="bold"/>
+
+                        <!-- Save Group Button -->
+                        <Button
+                            android:id="@+id/btnSaveGroup"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:text="Save Group"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:background="@drawable/btn_fill_primary"
+                            app:backgroundTint="@color/primary_color"
+                            android:paddingVertical="14dp"
+                            android:textAllCaps="false"
+                            android:textSize="16sp"/>
+
+                    </LinearLayout>
+                    
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Add Another Button -->
+            <LinearLayout
+                android:id="@+id/layoutAddAnother"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_dashed"
+                android:backgroundTint="@color/primary_light"
+                android:gravity="center"
+                android:paddingVertical="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="visible"> <!-- Logic will toggle this if needed, keeping visible for now as it's below current group -->
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_add_circle_outline"
+                    app:tint="@color/primary_color"
+                    android:layout_marginEnd="8dp"/>
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Another Bike Group"
+                    android:textColor="@color/primary_color"
+                    android:textStyle="bold"
+                    android:textSize="14sp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Footer Action -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="8dp"
+        android:orientation="vertical">
+        
+        <!-- Summary Strip -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_50"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="SESSION SUMMARY"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="@color/gray_600"
+                android:letterSpacing="0.05"/>
+                
+            <TextView
+                android:id="@+id/tvSessionTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total: 0 Bikes"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/gray_900"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+            
+            <Button
+                android:id="@+id/btnFinishSession"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Finish Stock Inward"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:background="@drawable/btn_fill_primary"
+                app:backgroundTint="@color/primary_color"
+                android:paddingVertical="14dp"
+                android:textAllCaps="false"
+                android:textSize="16sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

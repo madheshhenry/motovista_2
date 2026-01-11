@@ -41,6 +41,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 
 public interface ApiService {
 
@@ -283,5 +285,18 @@ public interface ApiService {
     Call<com.example.motovista_deep.models.BikeListResponse> getBikesByBrand(
             @Header("Authorization") String token,
             @Query("brand") String brand
+    );
+
+    @FormUrlEncoded
+    @POST("add_stock_bike.php")
+    Call<GenericResponse> addStockBike(
+            @Header("Authorization") String token,
+            @Field("brand") String brand,
+            @Field("model") String model,
+            @Field("variant") String variant,
+            @Field("colors") String colors,
+            @Field("engine_number") String engineNumber,
+            @Field("chassis_number") String chassisNumber,
+            @Field("date") String date
     );
 }

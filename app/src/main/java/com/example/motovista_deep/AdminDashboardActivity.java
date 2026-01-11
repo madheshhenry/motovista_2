@@ -95,24 +95,24 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void setupIconBackgrounds() {
-        // Set different background colors for each icon container
+        // Set different background tints for each icon container to preserve shape
         if (iconContainerEmi != null) {
-            iconContainerEmi.setBackgroundColor(ContextCompat.getColor(this, R.color.icon_bg_red));
+            iconContainerEmi.getBackground().setTint(ContextCompat.getColor(this, R.color.icon_bg_red));
         }
         if (iconContainerInsurance != null) {
-            iconContainerInsurance.setBackgroundColor(ContextCompat.getColor(this, R.color.icon_bg_yellow));
+            iconContainerInsurance.getBackground().setTint(ContextCompat.getColor(this, R.color.icon_bg_yellow));
         }
         if (iconContainerRegistration != null) {
-            iconContainerRegistration.setBackgroundColor(ContextCompat.getColor(this, R.color.icon_bg_blue));
+            iconContainerRegistration.getBackground().setTint(ContextCompat.getColor(this, R.color.icon_bg_blue));
         }
         if (iconContainerApplication != null) {
-            iconContainerApplication.setBackgroundColor(ContextCompat.getColor(this, R.color.icon_bg_green));
+            iconContainerApplication.getBackground().setTint(ContextCompat.getColor(this, R.color.icon_bg_green));
         }
         if (iconContainerSales != null) {
-            iconContainerSales.setBackgroundColor(ContextCompat.getColor(this, R.color.icon_bg_purple));
+            iconContainerSales.getBackground().setTint(ContextCompat.getColor(this, R.color.icon_bg_purple));
         }
         if (iconContainerRequestedCustomer != null) {
-            iconContainerRequestedCustomer.setBackgroundColor(ContextCompat.getColor(this, R.color.icon_bg_indigo));
+            iconContainerRequestedCustomer.getBackground().setTint(ContextCompat.getColor(this, R.color.icon_bg_indigo));
         }
     }
 
@@ -205,6 +205,15 @@ public class AdminDashboardActivity extends AppCompatActivity {
         });
 
         // Add bike buttons
+        Button btnAddStockBike = findViewById(R.id.btnAddStockBike);
+        if (btnAddStockBike != null) {
+            btnAddStockBike.setOnClickListener(v -> {
+                // Navigate to Add Stock Bike screen
+                Intent intent = new Intent(AdminDashboardActivity.this, AddStockBikeActivity.class);
+                startActivity(intent);
+            });
+        }
+
         btnAddNewBike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

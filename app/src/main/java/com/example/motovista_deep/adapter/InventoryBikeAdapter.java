@@ -81,19 +81,39 @@ public class InventoryBikeAdapter extends RecyclerView.Adapter<InventoryBikeAdap
         int colorHex = android.graphics.Color.GRAY;
         
         try {
-            // Simple robust check if it's a JSON or pipe separated
+            // Check if it's a JSON array
             String rawColors = bike.getColors();
             if (rawColors != null && !rawColors.isEmpty()) {
-                 if (rawColors.contains("|")) {
-                     String[] parts = rawColors.split("\\|");
+                String colorString = rawColors;
+                
+                // If it's a JSON array (starts with [), parse it validly
+                if (rawColors.trim().startsWith("[")) {
+                    try {
+                        // Use Gson to parse list of strings
+                        // or manual quick parse if Gson overhead unwanted in binding, 
+                        // but Gson is cleaner.
+                        // Assuming simple ["Name|Hex"] format.
+                        org.json.JSONArray jsonArray = new org.json.JSONArray(rawColors);
+                        if (jsonArray.length() > 0) {
+                            colorString = jsonArray.getString(0); // Get first color
+                        }
+                    } catch (Exception ex) {
+                        // Fallback if json fail, maybe treat as raw
+                    }
+                }
+
+                if (colorString.contains("|")) {
+                     String[] parts = colorString.split("\\|");
                      colorName = parts[0];
-                     if (parts.length > 1) colorHex = android.graphics.Color.parseColor(parts[1]);
-                 } else if (rawColors.startsWith("[")) {
-                     // Parse JSON if implemented, fallback to name extract
-                     // Just use Model/Variant default if complex
-                     colorName = "Standard"; 
+                     if (parts.length > 1 && !parts[1].isEmpty()) {
+                         try {
+                             colorHex = android.graphics.Color.parseColor(parts[1]);
+                         } catch (IllegalArgumentException e) {
+                             // invalid hex
+                         }
+                     }
                  } else {
-                     colorName = rawColors;
+                     colorName = colorString;
                  }
             }
         } catch (Exception e) {
