@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingVertical="4dp">
+
+    <TextView
+        android:id="@+id/tvFittingName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Fitting Name"
+        android:textColor="#374151"
+        android:textSize="13sp"
+        android:fontFamily="sans-serif"/>
+
+    <TextView
+        android:id="@+id/tvFittingPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="₹ 500"
+        android:textColor="#111718"
+        android:textSize="13sp"
+        android:fontFamily="sans-serif-medium"
+        android:textStyle="bold"/>
+</LinearLayout>

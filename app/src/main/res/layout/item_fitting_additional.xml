@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingVertical="8dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        
+        <CheckBox
+            android:id="@+id/cbFitting"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="12dp"
+            android:buttonTint="@color/primary_blue"/>
+
+        <TextView
+            android:id="@+id/tvFittingName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Side Box"
+            android:textColor="#111318"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvFreeBadge"
+        android:layout_width="60dp"
+        android:layout_height="32dp"
+        android:text="FREE"
+        android:textSize="12sp"
+        android:textColor="@color/primary_blue"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="@drawable/bg_free_badge"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <EditText
+        android:id="@+id/etFittingPrice"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:hint="0"
+        android:inputType="numberDecimal"
+        android:textSize="14sp"
+        android:paddingHorizontal="12dp"
+        android:gravity="center_vertical|end"
+        android:background="@drawable/bg_input_small_gray"
+        android:textColor="#111318" />
+
+</LinearLayout>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/bg_input_rounded"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:layout_marginBottom="8dp">
+
+    <View
+        android:id="@+id/viewColorCircle"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/bg_primary_circle"
+        android:layout_marginEnd="12dp"/>
+
+    <TextView
+        android:id="@+id/tvColorName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Racing Blue"
+        android:textColor="#111318"
+        android:textStyle="bold"
+        android:textSize="14sp"/>
+
+    <ImageView
+        android:id="@+id/btnRemoveColor"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_delete"
+        android:tint="@color/red_500"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:padding="4dp"/>
+
+</LinearLayout>
