@@ -10,6 +10,21 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.motovista_deep.api.ApiService;
+import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.models.InsuranceDetailResponse;
+import com.example.motovista_deep.utils.ImageUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class InsuranceDetailsActivity extends AppCompatActivity {
 
     // Header views
@@ -24,6 +39,7 @@ public class InsuranceDetailsActivity extends AppCompatActivity {
     // Renewal Summary
     private CardView cardRenewalSummary;
     private TextView tvRenewalLabel, tvPolicyType, tvDaysCount, tvDaysLabel, tvExpiryDate;
+    private View progressBarFill;
 
     // Coverage Plans
     private TextView tvCoverageHeader;
@@ -42,19 +58,27 @@ public class InsuranceDetailsActivity extends AppCompatActivity {
     private CardView btnUpdatePolicy;
     private TextView tvUpdateButton;
 
+    private int orderId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insurance_details);
 
+        orderId = getIntent().getIntExtra("order_id", -1);
+
         // Initialize all views
         initializeAllViews();
 
-        // Set all data
-        setAllData();
-
         // Setup click listeners
         setupClickListeners();
+
+        if (orderId != -1) {
+            fetchInsuranceDetails();
+        } else {
+            // Set dummy data if no order id (for safety)
+            setAllData();
+        }
     }
 
     private void initializeAllViews() {
@@ -77,6 +101,7 @@ public class InsuranceDetailsActivity extends AppCompatActivity {
         tvDaysCount = findViewById(R.id.tvDaysCount);
         tvDaysLabel = findViewById(R.id.tvDaysLabel);
         tvExpiryDate = findViewById(R.id.tvExpiryDate);
+        progressBarFill = findViewById(R.id.progressBarFill);
 
         // Coverage Header
         tvCoverageHeader = findViewById(R.id.tvCoverageHeader);
@@ -206,6 +231,110 @@ public class InsuranceDetailsActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void fetchInsuranceDetails() {
+        ApiService apiService = RetrofitClient.getApiService();
+        apiService.getInsuranceDetails(orderId).enqueue(new Callback<InsuranceDetailResponse>() {
+            @Override
+            public void onResponse(Call<InsuranceDetailResponse> call, Response<InsuranceDetailResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    updateUI(response.body().getData());
+                } else {
+                    Toast.makeText(InsuranceDetailsActivity.this, "Failed to load details", Toast.LENGTH_SHORT).show();
+                    setAllData(); // Fallback to dummy data
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InsuranceDetailResponse> call, Throwable t) {
+                Toast.makeText(InsuranceDetailsActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                setAllData();
+            }
+        });
+    }
+
+    private void updateUI(InsuranceDetailResponse.InsuranceDetailModel data) {
+        tvTitle.setText("Insurance Details");
+
+        // Customer Context
+        tvCustomerName.setText(data.getFullName() != null ? data.getFullName() : data.getCustomerName());
+        tvBikeModel.setText(data.getBikeName());
+        
+        if (data.getRegistrationDate() != null) {
+            tvRegDate.setText("Reg Date: " + formatDate(data.getRegistrationDate()));
+        }
+
+        // Profile Image using centralized ImageUtils
+        String profileImageUrl = ImageUtils.getFullImageUrl(data.getProfileImage(), ImageUtils.PATH_PROFILE_PICS);
+        if (!profileImageUrl.isEmpty()) {
+            Glide.with(this)
+                    .load(profileImageUrl)
+                    .placeholder(R.drawable.default_profile)
+                    .into(ivProfile);
+        }
+
+        // Renewal Summary
+        tvPolicyType.setText("Comprehensive");
+        
+        calculateAndSetExpiry(data.getFullInsuranceExpiry());
+
+        // Comprehensive plan (Own Damage)
+        tvPlan1Status.setText(data.getStatus());
+        tvPlan1StartDate.setText(formatDate(data.getRegistrationDate())); // Approximated
+        tvPlan1EndDate.setText(formatDate(data.getFullInsuranceExpiry()));
+        tvPlan1PolicyNumber.setText("Policy #" + data.getPolicyNumber());
+
+        // Third Party plan
+        tvPlan2EndDate.setText(formatDate(data.getThirdPartyExpiry()));
+        tvPlan2PolicyNumber.setText("Policy #TP-" + data.getPolicyNumber()); // Placeholder logic
+    }
+
+    private String formatDate(String dateStr) {
+        if (dateStr == null) return "";
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+            Date date = inputFormat.parse(dateStr);
+            return outputFormat.format(date);
+        } catch (Exception e) {
+            return dateStr;
+        }
+    }
+
+    private void calculateAndSetExpiry(String expiryDateStr) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date expiryDate = sdf.parse(expiryDateStr);
+            Date today = new Date();
+
+            long diffInMillis = expiryDate.getTime() - today.getTime();
+            long daysLeft = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+
+            if (daysLeft < 0) {
+                tvDaysCount.setText("0");
+                tvExpiryDate.setText("Policy expired on " + formatDate(expiryDateStr));
+                updateProgressBar(0);
+            } else {
+                tvDaysCount.setText(String.valueOf(daysLeft));
+                tvExpiryDate.setText("Policy expires on " + formatDate(expiryDateStr));
+                
+                // Progress bar logic: assume 1 year (365 days) total
+                float progress = (daysLeft / 365f) * 100;
+                updateProgressBar((int) progress);
+            }
+        } catch (Exception e) {
+            tvDaysCount.setText("-");
+        }
+    }
+
+    private void updateProgressBar(int percentage) {
+        if (progressBarFill != null) {
+            percentage = Math.max(0, Math.min(100, percentage));
+            android.widget.LinearLayout.LayoutParams params = (android.widget.LinearLayout.LayoutParams) progressBarFill.getLayoutParams();
+            params.weight = percentage;
+            progressBarFill.setLayoutParams(params);
+        }
     }
 
     @Override

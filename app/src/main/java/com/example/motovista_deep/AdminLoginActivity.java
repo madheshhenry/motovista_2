@@ -44,6 +44,11 @@ public class AdminLoginActivity extends AppCompatActivity {
         // Check if Admin is already logged in
         if (SharedPrefManager.getInstance(this).isLoggedIn() &&
                 "admin".equals(SharedPrefManager.getInstance(this).getRole())) {
+            
+            if (com.example.motovista_deep.managers.WorkflowManager.checkAndRedirect(this)) {
+                return; // Redirected and finished
+            }
+
             startActivity(new Intent(this, AdminDashboardActivity.class));
             finish();
             return;
@@ -168,6 +173,11 @@ public class AdminLoginActivity extends AppCompatActivity {
                             .saveAdminLogin(response.body().getData().getCustomer(), response.body().getData().getToken());
 
                     Toast.makeText(AdminLoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                    
+                    if (com.example.motovista_deep.managers.WorkflowManager.checkAndRedirect(AdminLoginActivity.this)) {
+                        return;
+                    }
+
                     startActivity(new Intent(AdminLoginActivity.this, AdminDashboardActivity.class));
                     finish();
                 } else {

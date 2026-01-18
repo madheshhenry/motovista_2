@@ -13,6 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import com.bumptech.glide.Glide;
+import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.utils.ImageUtils;
 
 public class BikeDetailsViewActivity extends AppCompatActivity {
 
@@ -21,12 +24,18 @@ public class BikeDetailsViewActivity extends AppCompatActivity {
     private LinearLayout layoutEngineNumber, layoutChassisNumber;
     private ImageView ivCopyEngine, ivCopyChassis;
     private ImageView ivBikeImage;
+    private View viewColorIndicator;
 
     // Text Views
-    private TextView tvBikeName, tvRegNumber, tvPurchaseDate;
+    private TextView tvBikeName, tvPurchaseDate;
     private TextView tvEngineNumber, tvChassisNumber, tvColor, tvVariant;
-    private TextView tvInsurer, tvPolicyNumber, tvInsuranceType, tvInsuranceStart, tvInsuranceEnd;
-    private TextView tvRegistrationStatus, tvRcBookStatus, tvNumberPlateStatus;
+    private TextView tvPolicyNumber, tvInsuranceEnd, tvExpiryDaysCountdown;
+    
+    // EMI Views
+    private CardView cardEmi;
+    private TextView tvEmiStatus, tvRemainingBalance, tvMonthlyEmi, tvPayProgressText, tvTotalLoanAmount;
+    private android.widget.ProgressBar emiProgressBar;
+    private android.widget.Button btnViewEmiDetails;
 
     // Handler for copy animation
     private Handler handler = new Handler();
@@ -54,8 +63,8 @@ public class BikeDetailsViewActivity extends AppCompatActivity {
         // Bike info
         ivBikeImage = findViewById(R.id.ivBikeImage);
         tvBikeName = findViewById(R.id.tvBikeName);
-        tvRegNumber = findViewById(R.id.tvRegNumber);
         tvPurchaseDate = findViewById(R.id.tvPurchaseDate);
+        viewColorIndicator = findViewById(R.id.viewColorIndicator);
 
         // Vehicle details
         layoutEngineNumber = findViewById(R.id.layoutEngineNumber);
@@ -68,16 +77,19 @@ public class BikeDetailsViewActivity extends AppCompatActivity {
         tvVariant = findViewById(R.id.tvVariant);
 
         // Insurance
-        tvInsurer = findViewById(R.id.tvInsurer);
         tvPolicyNumber = findViewById(R.id.tvPolicyNumber);
-        tvInsuranceType = findViewById(R.id.tvInsuranceType);
-        tvInsuranceStart = findViewById(R.id.tvInsuranceStart);
         tvInsuranceEnd = findViewById(R.id.tvInsuranceEnd);
+        tvExpiryDaysCountdown = findViewById(R.id.tvExpiryDaysCountdown);
 
-        // Registration
-        tvRegistrationStatus = findViewById(R.id.tvRegistrationStatus);
-        tvRcBookStatus = findViewById(R.id.tvRcBookStatus);
-        tvNumberPlateStatus = findViewById(R.id.tvNumberPlateStatus);
+        // EMI
+        cardEmi = findViewById(R.id.cardEmi);
+        tvEmiStatus = findViewById(R.id.tvEmiStatus);
+        tvRemainingBalance = findViewById(R.id.tvRemainingBalance);
+        tvMonthlyEmi = findViewById(R.id.tvMonthlyEmi);
+        tvPayProgressText = findViewById(R.id.tvPayProgressText);
+        tvTotalLoanAmount = findViewById(R.id.tvTotalLoanAmount);
+        emiProgressBar = findViewById(R.id.emiProgressBar);
+        btnViewEmiDetails = findViewById(R.id.btnViewEmiDetails);
 
         // Setup hover effects for copy icons
         setupHoverEffects();
@@ -143,6 +155,14 @@ public class BikeDetailsViewActivity extends AppCompatActivity {
             copyToClipboard(tvChassisNumber.getText().toString(), "Chassis Number");
             animateCopyIcon(ivCopyChassis);
         });
+
+        // EMI Details Button
+        btnViewEmiDetails.setOnClickListener(v -> {
+            Intent emiIntent = new Intent(this, EmiDetailsActivity.class);
+            emiIntent.putExtra("LEDGER_ID", getIntent().getIntExtra("LEDGER_ID", -1));
+            emiIntent.putExtra("IS_CUSTOMER_VIEW", true);
+            startActivity(emiIntent);
+        });
     }
 
     private void loadBikeData() {
@@ -151,7 +171,6 @@ public class BikeDetailsViewActivity extends AppCompatActivity {
         if (intent != null) {
             // Bike info
             String bikeName = intent.getStringExtra("BIKE_NAME");
-            String regNumber = intent.getStringExtra("REG_NUMBER");
             String purchaseDate = intent.getStringExtra("PURCHASE_DATE");
             String color = intent.getStringExtra("COLOR");
             String variant = intent.getStringExtra("VARIANT");
@@ -159,39 +178,81 @@ public class BikeDetailsViewActivity extends AppCompatActivity {
             String chassisNumber = intent.getStringExtra("CHASSIS_NUMBER");
 
             // Insurance info
-            String insurer = intent.getStringExtra("INSURER");
             String policyNumber = intent.getStringExtra("POLICY_NUMBER");
-            String insuranceType = intent.getStringExtra("INSURANCE_TYPE");
-            String insuranceStart = intent.getStringExtra("INSURANCE_START");
             String insuranceEnd = intent.getStringExtra("INSURANCE_END");
-
-            // Registration info
-            String registrationStatus = intent.getStringExtra("REGISTRATION_STATUS");
-            String rcBookStatus = intent.getStringExtra("RC_BOOK_STATUS");
-            String numberPlateStatus = intent.getStringExtra("NUMBER_PLATE_STATUS");
 
             // Set values if provided, otherwise use defaults
             if (bikeName != null) tvBikeName.setText(bikeName);
-            if (regNumber != null) tvRegNumber.setText(regNumber);
-            if (purchaseDate != null) tvPurchaseDate.setText("Purchased " + purchaseDate);
+            if (purchaseDate != null) tvPurchaseDate.setText("Purchase Date: " + purchaseDate);
             if (color != null) tvColor.setText(color);
             if (variant != null) tvVariant.setText(variant);
             if (engineNumber != null) tvEngineNumber.setText(engineNumber);
             if (chassisNumber != null) tvChassisNumber.setText(chassisNumber);
-            if (insurer != null) tvInsurer.setText(insurer);
             if (policyNumber != null) tvPolicyNumber.setText(policyNumber);
-            if (insuranceType != null) tvInsuranceType.setText(insuranceType);
-            if (insuranceStart != null) tvInsuranceStart.setText(insuranceStart);
             if (insuranceEnd != null) tvInsuranceEnd.setText(insuranceEnd);
-            if (registrationStatus != null) tvRegistrationStatus.setText(registrationStatus);
-            if (rcBookStatus != null) tvRcBookStatus.setText(rcBookStatus);
-            if (numberPlateStatus != null) tvNumberPlateStatus.setText(numberPlateStatus);
 
-            // You can also load image from URL if provided
-            // String imageUrl = intent.getStringExtra("IMAGE_URL");
-            // if (imageUrl != null) {
-            //     Glide.with(this).load(imageUrl).into(ivBikeImage);
-            // }
+            // Insurance Countdown
+            if (insuranceEnd != null && !insuranceEnd.equals("TBD")) {
+                calculateInsuranceCountdown(insuranceEnd);
+            } else {
+                tvExpiryDaysCountdown.setVisibility(View.GONE);
+            }
+
+            // EMI Section
+            double emiTotal = intent.getDoubleExtra("EMI_TOTAL", 0);
+            if (emiTotal > 0) {
+                cardEmi.setVisibility(View.VISIBLE);
+                double emiPaid = intent.getDoubleExtra("EMI_PAID", 0);
+                double emiMonthly = intent.getDoubleExtra("EMI_MONTHLY", 0);
+                int emiDuration = intent.getIntExtra("EMI_DURATION", 0);
+                String emiStatus = intent.getStringExtra("EMI_STATUS");
+                double emiRemaining = intent.getDoubleExtra("EMI_REMAINING", 0);
+
+                if (emiStatus != null) tvEmiStatus.setText(emiStatus.toUpperCase());
+                tvRemainingBalance.setText("₹" + String.format("%,.0f", emiRemaining));
+                tvMonthlyEmi.setText("₹" + String.format("%,.0f", emiMonthly));
+                tvTotalLoanAmount.setText("Total Loan Amount: ₹" + String.format("%,.0f", emiTotal));
+
+                // Calculation for progress
+                int paidMonths = 0;
+                if (emiMonthly > 0) {
+                    paidMonths = (int) Math.floor(emiPaid / emiMonthly);
+                }
+                tvPayProgressText.setText(paidMonths + " of " + emiDuration + " Months Paid");
+                
+                int progress = 0;
+                if (emiTotal > 0) {
+                    progress = (int) ((emiPaid / emiTotal) * 100);
+                }
+                emiProgressBar.setProgress(progress);
+            } else {
+                cardEmi.setVisibility(View.GONE);
+            }
+ 
+            // Color indicator
+            String colorHex = intent.getStringExtra("COLOR_HEX");
+            if (colorHex != null && !colorHex.isEmpty()) {
+                try {
+                    android.graphics.drawable.Drawable background = viewColorIndicator.getBackground();
+                    if (background instanceof android.graphics.drawable.GradientDrawable) {
+                        ((android.graphics.drawable.GradientDrawable) background).setColor(android.graphics.Color.parseColor(colorHex));
+                    } else {
+                        viewColorIndicator.setBackgroundColor(android.graphics.Color.parseColor(colorHex));
+                    }
+                } catch (Exception e) {
+                    viewColorIndicator.setBackgroundColor(android.graphics.Color.GRAY);
+                }
+            }
+
+            // Load bike image with Glide using centralized ImageUtils
+            String bikeImage = intent.getStringExtra("BIKE_IMAGE");
+            String imageUrl = ImageUtils.getFullImageUrl(bikeImage);
+ 
+            Glide.with(this)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.placeholder_bike)
+                    .error(R.drawable.placeholder_bike)
+                    .into(ivBikeImage);
         }
     }
 
@@ -216,13 +277,37 @@ public class BikeDetailsViewActivity extends AppCompatActivity {
                 .start();
     }
 
+    private void calculateInsuranceCountdown(String endDateStr) {
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.ENGLISH);
+            java.util.Date endDate = sdf.parse(endDateStr);
+            java.util.Date today = new java.util.Date();
+            
+            long diffInMillis = endDate.getTime() - today.getTime();
+            long diffInDays = diffInMillis / (24 * 60 * 60 * 1000);
+            
+            if (diffInDays > 0) {
+                tvExpiryDaysCountdown.setText("Expires in " + diffInDays + " days");
+                tvExpiryDaysCountdown.setVisibility(View.VISIBLE);
+                if (diffInDays < 30) {
+                    tvExpiryDaysCountdown.setTextColor(android.graphics.Color.RED);
+                }
+            } else {
+                tvExpiryDaysCountdown.setText("Policy Expired");
+                tvExpiryDaysCountdown.setTextColor(android.graphics.Color.RED);
+                tvExpiryDaysCountdown.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception e) {
+            tvExpiryDaysCountdown.setVisibility(View.GONE);
+        }
+    }
+
     private void shareBikeDetails() {
         String shareText = "Check out my bike details:\n\n" +
                 "Bike: " + tvBikeName.getText() + "\n" +
-                "Registration: " + tvRegNumber.getText() + "\n" +
                 "Color: " + tvColor.getText() + "\n" +
                 "Variant: " + tvVariant.getText() + "\n" +
-                "Insurance: " + tvInsurer.getText();
+                "Policy No: " + tvPolicyNumber.getText();
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");

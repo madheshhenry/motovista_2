@@ -35,6 +35,12 @@ public class InitialPaymentActivity extends AppCompatActivity {
     private double downPayment = 0;
     private String vehicleName = "";
     private String vehicleDetails = "";
+    private double monthlyEMI = 0;
+    private int durationMonths = 0;
+    private double interestRate = 0;
+    private double totalPayable = 0;
+    private int requestId = -1;
+    private String customerName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +95,12 @@ public class InitialPaymentActivity extends AppCompatActivity {
             downPayment = intent.getDoubleExtra("down_payment", 0);
             vehicleName = intent.getStringExtra("vehicle_name");
             vehicleDetails = intent.getStringExtra("vehicle_details");
+            monthlyEMI = intent.getDoubleExtra("monthly_emi", 0);
+            durationMonths = intent.getIntExtra("duration_months", 0);
+            interestRate = intent.getDoubleExtra("interest_rate", 0);
+            totalPayable = intent.getDoubleExtra("total_payable", 0);
+            requestId = intent.getIntExtra("request_id", -1);
+            customerName = intent.getStringExtra("customer_name");
 
             // If no specific data, use defaults
             if (vehicleName == null || vehicleName.isEmpty()) {
@@ -267,20 +279,61 @@ public class InitialPaymentActivity extends AppCompatActivity {
             return;
         }
 
+        // Show loading state
+        btnConfirmPayment.setEnabled(false);
+        Toast.makeText(this, "Creating EMI Order...", Toast.LENGTH_SHORT).show();
+
+        // Create API Request
+        com.example.motovista_deep.models.CreateEmiOrderRequest request = 
+            new com.example.motovista_deep.models.CreateEmiOrderRequest(
+                requestId,
+                customerName != null ? customerName : "Unknown",
+                vehicleName,
+                totalPayable, // Total amount for ledger (Principal + Interest)
+                downPayment, // Paid amount
+                monthlyEMI,
+                durationMonths,
+                interestRate
+            );
+
+        // Call API
+        com.example.motovista_deep.api.ApiService apiService = com.example.motovista_deep.api.RetrofitClient.getApiService();
+        apiService.createEmiOrder(request).enqueue(new retrofit2.Callback<com.example.motovista_deep.models.CreateOrderResponse>() {
+            @Override
+            public void onResponse(retrofit2.Call<com.example.motovista_deep.models.CreateOrderResponse> call, retrofit2.Response<com.example.motovista_deep.models.CreateOrderResponse> response) {
+                btnConfirmPayment.setEnabled(true);
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    String ref = response.body().getData().getOrderReference();
+                    proceedToConfirmation(ref);
+                } else {
+                    Toast.makeText(InitialPaymentActivity.this, "Failed to create EMI Order: " + response.message(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<com.example.motovista_deep.models.CreateOrderResponse> call, Throwable t) {
+                btnConfirmPayment.setEnabled(true);
+                Toast.makeText(InitialPaymentActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void proceedToConfirmation(String transactionId) {
         // Navigate to Payment Confirmed screen
         Intent intent = new Intent(this, PaymentConfirmedActivity.class);
 
         // Pass all necessary data
-        intent.putExtra("customer_name", "Rahul Sharma"); // You can make this dynamic
+        intent.putExtra("customer_name", customerName);
         intent.putExtra("vehicle_model", vehicleName);
         intent.putExtra("payment_mode", selectedPaymentMode);
         intent.putExtra("amount_paid", downPayment);
-        intent.putExtra("transaction_id", "#TXN-" + System.currentTimeMillis());
+        intent.putExtra("transaction_id", transactionId);
         intent.putExtra("order_type", "EMI");
 
         // Pass additional data if needed
         intent.putExtra("vehicle_price", vehiclePrice);
         intent.putExtra("vehicle_details", vehicleDetails);
+        intent.putExtra("request_id", requestId); // Pass ID forward
 
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

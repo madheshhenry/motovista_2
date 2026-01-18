@@ -27,7 +27,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_arrow_back"
-            android:tint="@color/text_dark"
+            app:tint="@color/text_dark"
             android:padding="12dp"
             android:background="@drawable/circle_background_primary"
             android:contentDescription="Back" />
@@ -48,8 +48,8 @@
 
     </LinearLayout>
 
-    <!-- Main Scroll Content -->
-    <androidx.core.widget.NestedScrollView
+    <!-- Main Content Area -->
+    <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -63,533 +63,651 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/padding_medium"
-            android:paddingBottom="100dp">
+            android:gravity="center_horizontal"
+            android:padding="@dimen/padding_large">
 
-            <!-- Order Details Card -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardOrderDetails"
+            <!-- =========================
+                 STATE 1: INITIAL STATUS
+                 ========================= -->
+            <LinearLayout
+                android:id="@+id/layoutStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp"
-                app:cardUseCompatPadding="true"
-                android:background="@color/white">
+                android:orientation="vertical"
+                android:visibility="visible">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <!-- Dynamic Status Animation Container -->
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp">
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_gravity="center">
 
-                    <!-- Bike Image -->
-                    <ImageView
-                        android:id="@+id/ivBike"
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
-                        android:src="@drawable/bike_placeholder"
-                        android:scaleType="centerCrop"
-                        android:background="@drawable/rounded_corner_light"
-                        android:contentDescription="Royal Enfield Meteor 350" />
+                    <!-- Outer Ring (Color will change dynamically) -->
+                    <View
+                        android:id="@+id/outerRing"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/bg_pulsing_ring" />
 
-                    <!-- Order Info -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:paddingStart="16dp"
-                        android:paddingTop="4dp">
+                    <!-- Status Icon Container -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardStatusIcon"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_centerInParent="true"
+                        app:cardCornerRadius="40dp"
+                        app:cardElevation="6dp"
+                        app:cardBackgroundColor="@color/primary">
 
-                        <TextView
-                            android:id="@+id/tvBikeName"
+                        <ImageView
+                            android:id="@+id/ivStatusIcon"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Royal Enfield Meteor 350"
-                            android:textColor="@color/text_dark"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:fontFamily="sans-serif-medium"
-                            android:maxLines="2"
-                            android:ellipsize="end" />
-
-                        <TextView
-                            android:id="@+id/tvOrderId"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Order #4492-B"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:fontFamily="sans-serif"
-                            android:layout_marginTop="4dp" />
-
-                        <TextView
-                            android:id="@+id/tvOrderDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Placed on Oct 24, 2023"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp"
-                            android:fontFamily="sans-serif"
-                            android:layout_marginTop="2dp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <!-- Order Progress Card -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardOrderProgress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp"
-                app:cardUseCompatPadding="true"
-                android:background="@color/white">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <!-- Card Header -->
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Order Progress"
-                        android:textColor="@color/text_dark"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:fontFamily="sans-serif-medium"
-                        android:paddingHorizontal="20dp"
-                        android:paddingVertical="16dp" />
-
-                    <!-- Progress Timeline -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:paddingHorizontal="20dp"
-                        android:paddingBottom="24dp">
-
-                        <!-- Step 1: Order Confirmed -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="16dp">
-
-                            <!-- Timeline Indicator -->
-                            <RelativeLayout
-                                android:layout_width="32dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp">
-
-                                <!-- Green Circle with Check -->
-                                <LinearLayout
-                                    android:layout_width="24dp"
-                                    android:layout_height="24dp"
-                                    android:background="@drawable/circle_green"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="12dp"
-                                        android:layout_height="12dp"
-                                        android:src="@drawable/ic_check"
-                                        android:tint="@color/white"
-                                        android:contentDescription="Completed" />
-
-                                </LinearLayout>
-
-                                <!-- Vertical Line -->
-                                <View
-                                    android:layout_width="2dp"
-                                    android:layout_height="40dp"
-                                    android:background="@color/icon_green"
-                                    android:layout_marginTop="24dp"
-                                    android:layout_centerHorizontal="true" />
-
-                            </RelativeLayout>
-
-                            <!-- Step Details -->
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:paddingTop="2dp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Order Confirmed"
-                                    android:textColor="@color/text_dark"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Oct 24, 10:30 AM"
-                                    android:textColor="@color/text_secondary"
-                                    android:textSize="12sp"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="2dp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <!-- Step 2: Insurance Processed -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="16dp">
-
-                            <RelativeLayout
-                                android:layout_width="32dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp">
-
-                                <LinearLayout
-                                    android:layout_width="24dp"
-                                    android:layout_height="24dp"
-                                    android:background="@drawable/circle_green"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="12dp"
-                                        android:layout_height="12dp"
-                                        android:src="@drawable/ic_check"
-                                        android:tint="@color/white"
-                                        android:contentDescription="Completed" />
-
-                                </LinearLayout>
-
-                                <View
-                                    android:layout_width="2dp"
-                                    android:layout_height="40dp"
-                                    android:background="@color/icon_green"
-                                    android:layout_marginTop="24dp"
-                                    android:layout_centerHorizontal="true" />
-
-                            </RelativeLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:paddingTop="2dp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Insurance Processed"
-                                    android:textColor="@color/text_dark"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Oct 26, 02:15 PM"
-                                    android:textColor="@color/text_secondary"
-                                    android:textSize="12sp"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="2dp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <!-- Step 3: Registration Initiated -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="16dp">
-
-                            <RelativeLayout
-                                android:layout_width="32dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp">
-
-                                <LinearLayout
-                                    android:layout_width="24dp"
-                                    android:layout_height="24dp"
-                                    android:background="@drawable/circle_green"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="12dp"
-                                        android:layout_height="12dp"
-                                        android:src="@drawable/ic_check"
-                                        android:tint="@color/white"
-                                        android:contentDescription="Completed" />
-
-                                </LinearLayout>
-
-                                <View
-                                    android:layout_width="2dp"
-                                    android:layout_height="40dp"
-                                    android:background="@color/icon_green"
-                                    android:layout_marginTop="24dp"
-                                    android:layout_centerHorizontal="true" />
-
-                            </RelativeLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:paddingTop="2dp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Registration Initiated"
-                                    android:textColor="@color/text_dark"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Oct 28, 11:00 AM"
-                                    android:textColor="@color/text_secondary"
-                                    android:textSize="12sp"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="2dp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <!-- Step 4: RC Book Ready -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginBottom="16dp">
-
-                            <RelativeLayout
-                                android:layout_width="32dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp">
-
-                                <LinearLayout
-                                    android:layout_width="24dp"
-                                    android:layout_height="24dp"
-                                    android:background="@drawable/circle_green"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="12dp"
-                                        android:layout_height="12dp"
-                                        android:src="@drawable/ic_check"
-                                        android:tint="@color/white"
-                                        android:contentDescription="Completed" />
-
-                                </LinearLayout>
-
-                                <View
-                                    android:layout_width="2dp"
-                                    android:layout_height="40dp"
-                                    android:background="@color/icon_green"
-                                    android:layout_marginTop="24dp"
-                                    android:layout_centerHorizontal="true" />
-
-                            </RelativeLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:paddingTop="2dp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="RC Book Ready"
-                                    android:textColor="@color/text_dark"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Oct 30, 04:30 PM"
-                                    android:textColor="@color/text_secondary"
-                                    android:textSize="12sp"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="2dp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                        <!-- Step 5: Number Plate Issued (Last Step - No line) -->
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <RelativeLayout
-                                android:layout_width="32dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp">
-
-                                <LinearLayout
-                                    android:layout_width="24dp"
-                                    android:layout_height="24dp"
-                                    android:background="@drawable/circle_green"
-                                    android:gravity="center">
-
-                                    <ImageView
-                                        android:layout_width="12dp"
-                                        android:layout_height="12dp"
-                                        android:src="@drawable/ic_check"
-                                        android:tint="@color/white"
-                                        android:contentDescription="Completed" />
-
-                                </LinearLayout>
-
-                            </RelativeLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical"
-                                android:paddingTop="2dp">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Number Plate Issued"
-                                    android:textColor="@color/text_dark"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Nov 01, 09:15 AM"
-                                    android:textColor="@color/text_secondary"
-                                    android:textSize="12sp"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="2dp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <!-- Confirmation Card -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardConfirmation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp"
-                app:cardUseCompatPadding="true"
-                android:background="@color/white">
-
+                            android:layout_height="match_parent"
+                            android:padding="20dp"
+                            android:src="@drawable/ic_check_white"
+                            android:scaleType="fitCenter"
+                            android:contentDescription="Status" />
+
+                    </androidx.cardview.widget.CardView>
+                </RelativeLayout>
+
+                <!-- Status Message -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:gravity="center"
+                    android:paddingHorizontal="@dimen/padding_medium"
+                    android:layout_marginBottom="32dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/tvStatusTitle"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Confirmation"
+                        android:text="Processing Order"
                         android:textColor="@color/text_dark"
-                        android:textSize="16sp"
+                        android:textSize="22sp"
                         android:textStyle="bold"
+                        android:gravity="center"
                         android:fontFamily="sans-serif-medium"
                         android:layout_marginBottom="8dp" />
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:id="@+id/tvStatusMessage"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Please confirm after receiving all documents, including your RC Book, Insurance papers, and Number Plate installation."
-                        android:textColor="@color/text_secondary"
+                        android:text="We are reviewing your request."
+                        android:textColor="@color/text_gray"
                         android:textSize="14sp"
-                        android:fontFamily="sans-serif"
-                        android:lineSpacingExtra="4dp"
-                        android:layout_marginBottom="20dp" />
-
-                    <!-- Confirm Button -->
-                    <Button
-                        android:id="@+id/btnConfirmDocuments"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:text="All Documents Received"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:fontFamily="sans-serif-medium"
-                        android:background="@drawable/primary_button_background"
                         android:gravity="center"
-                        android:drawableStart="@drawable/ic_check_document"
-                        android:drawablePadding="8dp"
-                        android:paddingHorizontal="20dp" />
+                        android:fontFamily="sans-serif"
+                        android:lineSpacingExtra="4sp" />
 
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+                <!-- OLD DETAILS CARD (Moved Inside LayoutStatus) -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardOrderDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginBottom="24dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="3dp"
+                    app:cardBackgroundColor="@color/white">
 
-            <!-- Help Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_medium">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="ORDER DETAILS"
+                            android:textColor="@color/text_gray"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.1"
+                            android:fontFamily="sans-serif"
+                            android:paddingBottom="12dp" />
+
+                        <!-- Order ID -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingVertical="8dp">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Order ID"
+                                android:textColor="@color/text_gray"
+                                android:textSize="14sp" />
+                            <TextView
+                                android:id="@+id/tvOrderId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="..."
+                                android:textColor="@color/text_dark"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                         <!-- Bike Name -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingVertical="8dp">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Bike"
+                                android:textColor="@color/text_gray"
+                                android:textSize="14sp" />
+                            <TextView
+                                android:id="@+id/tvBikeName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="..."
+                                android:textColor="@color/text_dark"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:maxWidth="200dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:gravity="end"/>
+                        </LinearLayout>
+                         <!-- Variant -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingVertical="8dp">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Variant"
+                                android:textColor="@color/text_gray"
+                                android:textSize="14sp" />
+                            <TextView
+                                android:id="@+id/tvBikeVariant"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="..."
+                                android:textColor="@color/text_dark"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                         <!-- Price -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingVertical="8dp">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Price"
+                                android:textColor="@color/text_gray"
+                                android:textSize="14sp" />
+                            <TextView
+                                android:id="@+id/tvBikePrice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="..."
+                                android:textColor="@color/primary"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                         <!-- Color -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingVertical="8dp">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Color"
+                                android:textColor="@color/text_gray"
+                                android:textSize="14sp"
+                                android:fontFamily="sans-serif" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+                                <View
+                                    android:id="@+id/viewBikeColorDot"
+                                    android:layout_width="12dp"
+                                    android:layout_height="12dp"
+                                    android:background="@drawable/circle_dot"
+                                    android:layout_marginEnd="8dp"/>
+                                <TextView
+                                    android:id="@+id/tvBikeColor"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="..."
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif" />
+                            </LinearLayout>
+                        </LinearLayout>
+                         <!-- Date -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingVertical="8dp">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Request Date"
+                                android:textColor="@color/text_gray"
+                                android:textSize="14sp" />
+                            <TextView
+                                android:id="@+id/tvOrderDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="..."
+                                android:textColor="@color/text_dark"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+
+            <!-- =========================
+                 STATE 2: TRACKING VIEW (HTML Design)
+                 ========================= -->
             <LinearLayout
+                android:id="@+id/layoutTracking"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center"
-                android:paddingVertical="24dp">
+                android:visibility="gone"
+                android:layout_marginBottom="24dp">
 
-                <Button
-                    android:id="@+id/btnNeedHelp"
-                    android:layout_width="wrap_content"
+                <!-- Tracking Details Card -->
+                <!-- bg-white rounded-xl shadow-sm p-4 border border-slate-100 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Need help with this order?"
-                    android:textColor="@color/primary_color"
-                    android:textSize="14sp"
-                    android:fontFamily="sans-serif-medium"
-                    android:background="@android:color/transparent"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white"
+                    android:layout_marginBottom="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:gravity="center_vertical">
+                        
+                        <!-- Bike Image Placeholder -->
+                        <ImageView
+                            android:id="@+id/ivTrackBikeImage"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:src="@drawable/placeholder_bike"
+                            android:scaleType="centerCrop"
+                            android:background="@color/background_light"
+                            android:layout_marginEnd="16dp"/>
+                        
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            
+                            <!-- Bike Name -->
+                            <TextView
+                                android:id="@+id/tvTrackBikeName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Classic Cruiser 350"
+                                android:textColor="@color/text_dark"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:maxLines="1"
+                                android:ellipsize="end"/>
+                                
+                            <!-- Order # and Date -->
+                            <TextView
+                                android:id="@+id/tvTrackOrderId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Order #4492-B"
+                                android:textColor="@color/text_gray"
+                                android:textSize="14sp"
+                                android:layout_marginTop="4dp"/>
+                                
+                            <TextView
+                                android:id="@+id/tvTrackOrderDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Placed on Oct 24, 2023"
+                                android:textColor="@color/text_gray"
+                                android:textSize="12sp"
+                                android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Order Progress Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white"
+                    android:layout_marginBottom="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        
+                        <!-- Header -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Order Progress"
+                            android:textColor="@color/text_dark"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:padding="16dp"
+                            android:background="@drawable/bg_bottom_border"/>
+                            
+                         <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="20dp">
+                            
+                            <!-- ITEM 1: Order Confirmed -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal"
+                                    android:layout_marginEnd="16dp">
+                                    <ImageView
+                                        android:id="@+id/ivStep1Icon"
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_check_circle"
+                                        app:tint="@color/emi_success_green"/>
+                                    <View
+                                        android:id="@+id/viewStep1Line"
+                                        android:layout_width="2dp"
+                                        android:layout_height="40dp"
+                                        android:background="@color/emi_success_green"/>
+                                </LinearLayout>
+                                
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:paddingBottom="24dp">
+                                    <TextView
+                                        android:id="@+id/tvStep1Title"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Order Confirmed"
+                                        android:textColor="@color/text_dark"
+                                        android:textStyle="bold"
+                                        android:textSize="15sp"/>
+                                    <TextView
+                                        android:id="@+id/tvStep1Status"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Completed"
+                                        android:textColor="@color/gray_500"
+                                        android:textSize="13sp"/>
+                                </LinearLayout>
+                            </LinearLayout>
+                            
+                             <!-- ITEM 2: Document Verification -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal"
+                                    android:layout_marginEnd="16dp">
+                                    <ImageView
+                                        android:id="@+id/ivStep2Icon"
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_circle_outline"
+                                        app:tint="@color/gray_400"/>
+                                    <View
+                                        android:id="@+id/viewStep2Line"
+                                        android:layout_width="2dp"
+                                        android:layout_height="40dp"
+                                        android:background="@color/gray_300"/>
+                                </LinearLayout>
+                                
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:paddingBottom="24dp">
+                                    <TextView
+                                        android:id="@+id/tvStep2Title"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Insurance Process"
+                                        android:textColor="@color/gray_500"
+                                        android:textSize="15sp"/>
+                                    <TextView
+                                        android:id="@+id/tvStep2Status"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Pending"
+                                        android:textColor="@color/text_gray"
+                                        android:textSize="13sp"/>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                             <!-- ITEM 3: Tax Payment -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal"
+                                    android:layout_marginEnd="16dp">
+                                    <ImageView
+                                        android:id="@+id/ivStep3Icon"
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_circle_outline"
+                                        app:tint="@color/gray_400"/>
+                                    <View
+                                        android:id="@+id/viewStep3Line"
+                                        android:layout_width="2dp"
+                                        android:layout_height="40dp"
+                                        android:background="@color/gray_300"/>
+                                </LinearLayout>
+                                
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:paddingBottom="24dp">
+                                    <TextView
+                                        android:id="@+id/tvStep3Title"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Document Verification"
+                                        android:textColor="@color/gray_500"
+                                        android:textSize="15sp"/>
+                                    <TextView
+                                        android:id="@+id/tvStep3Status"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Locked"
+                                        android:textColor="@color/text_gray"
+                                        android:textSize="13sp"/>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                             <!-- ITEM 4: Number Plate Request -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal"
+                                    android:layout_marginEnd="16dp">
+                                    <ImageView
+                                        android:id="@+id/ivStep4Icon"
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_circle_outline"
+                                        app:tint="@color/gray_400"/>
+                                    <View
+                                        android:id="@+id/viewStep4Line"
+                                        android:layout_width="2dp"
+                                        android:layout_height="40dp"
+                                        android:background="@color/gray_300"/>
+                                </LinearLayout>
+                                
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:paddingBottom="24dp">
+                                    <TextView
+                                        android:id="@+id/tvStep4Title"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Tax Payment"
+                                        android:textColor="@color/gray_500"
+                                        android:textSize="15sp"/>
+                                    <TextView
+                                        android:id="@+id/tvStep4Status"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Locked"
+                                        android:textColor="@color/text_gray"
+                                        android:textSize="13sp"/>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                             <!-- ITEM 5: Registration Card Issue -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+                                
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical"
+                                    android:gravity="center_horizontal"
+                                    android:layout_marginEnd="16dp">
+                                    <ImageView
+                                        android:id="@+id/ivStep5Icon"
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:src="@drawable/ic_circle_outline"
+                                        app:tint="@color/gray_400"/>
+                                    <!-- No Low Line for last item -->
+                                </LinearLayout>
+                                
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:paddingBottom="0dp">
+                                    <TextView
+                                        android:id="@+id/tvStep5Title"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Registration &amp; RC"
+                                        android:textColor="@color/gray_500"
+                                        android:textSize="15sp"/>
+                                    <TextView
+                                        android:id="@+id/tvStep5Status"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Locked"
+                                        android:textColor="@color/text_gray"
+                                        android:textSize="13sp"/>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Support Button -->
+                <LinearLayout
+                    android:id="@+id/btnSupport"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:drawableStart="@drawable/ic_support"
-                    android:drawablePadding="8dp"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="12dp" />
+                    android:padding="12dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_ripple_rounded"
+                    android:clickable="true"
+                    android:focusable="true">
+                    
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Need help with this order?"
+                        android:textColor="@color/primary"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:drawablePadding="12dp"
+                        app:drawableStartCompat="@drawable/ic_chat"
+                        app:tint="@color/primary" />
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
-    <!-- Bottom Navigation (Same as CustomerHome) -->
+    <!-- Bottom Navigation (Keep existing) -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
@@ -619,7 +737,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home"
-                android:tint="@color/gray_400"
+                app:tint="@color/gray_400"
                 android:contentDescription="Home" />
 
             <TextView
@@ -650,7 +768,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_two_wheeler"
-                android:tint="@color/gray_400"
+                app:tint="@color/gray_400"
                 android:contentDescription="Bikes" />
 
             <TextView
@@ -681,7 +799,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_calculate"
-                android:tint="@color/gray_400"
+                app:tint="@color/gray_400"
                 android:contentDescription="EMI Calculator" />
 
             <TextView
@@ -712,7 +830,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_receipt_long_filled"
-                android:tint="@color/primary_color"
+                app:tint="@color/primary_color"
                 android:contentDescription="Orders" />
 
             <TextView
@@ -744,7 +862,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_person"
-                android:tint="@color/gray_400"
+                app:tint="@color/gray_400"
                 android:contentDescription="Profile" />
 
             <TextView

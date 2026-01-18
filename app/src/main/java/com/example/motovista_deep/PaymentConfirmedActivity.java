@@ -58,6 +58,14 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
 
         // Start animations
         startAnimations();
+
+        // Initialize OnBackPressedDispatcher
+        getOnBackPressedDispatcher().addCallback(this, new androidx.activity.OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                proceedToDocuments();
+            }
+        });
     }
 
     private void initializeViews() {
@@ -215,36 +223,7 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
         btnProceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Navigate to Documents screen
-                Intent intent = new Intent(PaymentConfirmedActivity.this, DocumentsActivity.class);
-
-                // Pass all necessary data including request_id
-                intent.putExtra("request_id", requestId);
-                intent.putExtra("customer_name", tvCustomerName.getText().toString());
-                intent.putExtra("vehicle_model", tvModel.getText().toString());
-                intent.putExtra("vehicle_model", tvModel.getText().toString()); 
-                intent.putExtra("payment_mode", tvPaymentMode.getText().toString());
-                intent.putExtra("order_type", orderType);
-
-                intent.putExtra("transaction_id",
-                        tvTransactionId.getText().toString().replace("Transaction ID: ", ""));
-                // Safely parse amount
-                double amt = 0;
-                try {
-                     amt = Double.parseDouble(tvAmountPaid.getText().toString()
-                                .replace("₹", "")
-                                .replace(",", ""));
-                } catch(Exception e) {}
-                intent.putExtra("amount_paid", amt);
-
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                // We do NOT finish() so users can't back into here easily? 
-                // Actually user WANTS to stay here if they close app. 
-                // But if they go forward to Documents, Documents becomes the active step.
-                // So DocumentsActivity SHOULD handle the state update to DOCUMENTS.
-                // And accessing PaymentConfirmed again should verify state.
-                finish(); 
+                proceedToDocuments();
             }
         });
     }
@@ -284,10 +263,39 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
         handler.removeCallbacksAndMessages(null);
     }
 
-    @Override
-    public void onBackPressed() {
-        // BLOCKED: User requested strictly NO BACK ACTION.
-        showToast("Please proceed to view documents.");
-        // super.onBackPressed(); // Removed to disable back press
+
+    private void proceedToDocuments() {
+        // Optimize: Navigate immediately for better UX
+        // Update server state in background
+        com.example.motovista_deep.managers.WorkflowManager.updateStage(this, "DOCUMENTS", requestId, new com.example.motovista_deep.managers.WorkflowManager.WorkflowCallback() {
+            @Override
+            public void onSuccess() {
+                // Background update success
+            }
+
+            @Override
+            public void onError(String message) {
+                // Background update failed - silent fail or log
+            }
+        });
+
+        Intent intent = new Intent(PaymentConfirmedActivity.this, DocumentsActivity.class);
+        intent.putExtra("request_id", requestId);
+        intent.putExtra("customer_name", tvCustomerName.getText().toString());
+        intent.putExtra("vehicle_model", tvModel.getText().toString());
+        intent.putExtra("payment_mode", tvPaymentMode.getText().toString());
+        intent.putExtra("order_type", orderType);
+        intent.putExtra("transaction_id", tvTransactionId.getText().toString().replace("Transaction ID: ", ""));
+        
+        double amt = 0;
+        try {
+                amt = Double.parseDouble(tvAmountPaid.getText().toString().replace("₹", "").replace(",", ""));
+        } catch(Exception e) {}
+        intent.putExtra("amount_paid", amt);
+        
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 }

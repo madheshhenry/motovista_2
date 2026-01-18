@@ -1,206 +1,130 @@
 package com.example.motovista_deep;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.motovista_deep.adapter.RegistrationLedgerAdapter;
+import com.example.motovista_deep.models.RegistrationLedgerItem;
+import com.example.motovista_deep.api.ApiService;
+import com.example.motovista_deep.api.RetrofitClient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegistrationLedgerActivity extends AppCompatActivity {
 
+    private RecyclerView rvLedger;
+    private RegistrationLedgerAdapter adapter;
+    private List<RegistrationLedgerItem> ledgerItems;
     private ImageView btnBack;
-    private EditText etSearch;
-    private CardView chipAll, chipPending, chipCompleted, chipVerification;
-    private CardView card1, card2, card3, card4;
+    private android.widget.EditText etSearch;
+    private android.widget.TextView filterAll, filterPending, filterCompleted, filterVerification;
+    private String currentStatusFilter = "All";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_ledger);
 
-        // Initialize views
-        initializeViews();
-
-        // Setup click listeners
-        setupClickListeners();
-
-        // Setup search functionality
-        setupSearch();
-
-        // Set initial active chip
-        setActiveChip(chipAll);
-    }
-
-    private void initializeViews() {
+        rvLedger = findViewById(R.id.rvLedger);
         btnBack = findViewById(R.id.btnBack);
         etSearch = findViewById(R.id.etSearch);
+        filterAll = findViewById(R.id.filterAll);
+        filterPending = findViewById(R.id.filterPending);
+        filterCompleted = findViewById(R.id.filterCompleted);
+        filterVerification = findViewById(R.id.filterVerification);
+        
+        rvLedger.setLayoutManager(new LinearLayoutManager(this));
+        ledgerItems = new ArrayList<>();
+        adapter = new RegistrationLedgerAdapter(this, ledgerItems);
+        rvLedger.setAdapter(adapter);
 
-        // Chips
-        chipAll = findViewById(R.id.chipAll);
-        chipPending = findViewById(R.id.chipPending);
-        chipCompleted = findViewById(R.id.chipCompleted);
-        chipVerification = findViewById(R.id.chipVerification);
+        btnBack.setOnClickListener(v -> finish());
 
-        // Cards
-        card1 = findViewById(R.id.card1);
-        card2 = findViewById(R.id.card2);
-        card3 = findViewById(R.id.card3);
-        card4 = findViewById(R.id.card4);
+        setupSearchAndFilters();
+        fetchLedgerData();
     }
 
-    private void setupClickListeners() {
-        // Back button
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
+    private void setupSearchAndFilters() {
+        etSearch.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(android.text.Editable s) {
+                adapter.filter(s.toString(), currentStatusFilter);
             }
         });
 
-        // Chip clicks
-        chipAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveChip(chipAll);
-                filterRegistrations("all");
-            }
-        });
+        View.OnClickListener filterClick = v -> {
+            updateFilterUI(v.getId());
+            adapter.filter(etSearch.getText().toString(), currentStatusFilter);
+        };
 
-        chipPending.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveChip(chipPending);
-                filterRegistrations("pending");
-            }
-        });
-
-        chipCompleted.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveChip(chipCompleted);
-                filterRegistrations("completed");
-            }
-        });
-
-        chipVerification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveChip(chipVerification);
-                filterRegistrations("verification");
-            }
-        });
-
-        // Card clicks
-        card1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openRegistrationDetails(1);
-            }
-        });
-
-        card2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openRegistrationDetails(2);
-            }
-        });
-
-        card3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openRegistrationDetails(3);
-            }
-        });
-
-        card4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openRegistrationDetails(4);
-            }
-        });
+        filterAll.setOnClickListener(filterClick);
+        filterPending.setOnClickListener(filterClick);
+        filterCompleted.setOnClickListener(filterClick);
+        filterVerification.setOnClickListener(filterClick);
     }
 
-    private void setupSearch() {
-        etSearch.addTextChangedListener(new TextWatcher() {
+    private void updateFilterUI(int selectedId) {
+        resetFilterChip(filterAll);
+        resetFilterChip(filterPending);
+        resetFilterChip(filterCompleted);
+        resetFilterChip(filterVerification);
+
+        android.widget.TextView selected = findViewById(selectedId);
+        selected.setBackgroundResource(R.drawable.pill_blue);
+        selected.setTextColor(android.graphics.Color.WHITE);
+        currentStatusFilter = selected.getText().toString();
+    }
+
+    private void resetFilterChip(android.widget.TextView textView) {
+        textView.setBackgroundResource(R.drawable.pill_inactive);
+        textView.setTextColor(android.graphics.Color.parseColor("#4b5563"));
+    }
+
+    private void fetchLedgerData() {
+        ApiService apiService = RetrofitClient.getApiService();
+        retrofit2.Call<com.example.motovista_deep.models.GetRegistrationLedgerResponse> call = apiService.getRegistrationLedger();
+
+        call.enqueue(new retrofit2.Callback<com.example.motovista_deep.models.GetRegistrationLedgerResponse>() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onResponse(retrofit2.Call<com.example.motovista_deep.models.GetRegistrationLedgerResponse> call, retrofit2.Response<com.example.motovista_deep.models.GetRegistrationLedgerResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().isSuccess()) {
+                        if (response.body().getData() != null && !response.body().getData().isEmpty()) {
+                            ledgerItems.clear();
+                            ledgerItems.addAll(response.body().getData());
+                            adapter.updateList(ledgerItems);
+                        } else {
+                            Toast.makeText(RegistrationLedgerActivity.this, "No records found", Toast.LENGTH_SHORT).show();
+                        }
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        String msg = response.body().getMessage() != null ? response.body().getMessage() : "No records found";
+                        Toast.makeText(RegistrationLedgerActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(RegistrationLedgerActivity.this, "Failed to load data", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Filter cards based on search text
-                filterBySearch(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
+            public void onFailure(retrofit2.Call<com.example.motovista_deep.models.GetRegistrationLedgerResponse> call, Throwable t) {
+                Toast.makeText(RegistrationLedgerActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-    private void setActiveChip(CardView activeChip) {
-        // Reset all chips
-        resetChips();
-
-        // Set active chip
-        if (activeChip == chipAll) {
-            chipAll.setCardBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
-            ((TextView) chipAll.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.white));
-        } else if (activeChip == chipPending) {
-            chipPending.setCardBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
-            ((TextView) chipPending.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.white));
-        } else if (activeChip == chipCompleted) {
-            chipCompleted.setCardBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
-            ((TextView) chipCompleted.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.white));
-        } else if (activeChip == chipVerification) {
-            chipVerification.setCardBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
-            ((TextView) chipVerification.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.white));
-        }
-    }
-
-    private void resetChips() {
-        chipAll.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white));
-        chipPending.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white));
-        chipCompleted.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white));
-        chipVerification.setCardBackgroundColor(ContextCompat.getColor(this, R.color.white));
-
-        ((TextView) chipAll.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.text_secondary_light));
-        ((TextView) chipPending.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.text_secondary_light));
-        ((TextView) chipCompleted.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.text_secondary_light));
-        ((TextView) chipVerification.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.text_secondary_light));
-    }
-
-    private void filterRegistrations(String filterType) {
-        // This will be implemented later with backend
-        Toast.makeText(this, "Filtering by: " + filterType, Toast.LENGTH_SHORT).show();
-    }
-
-    private void filterBySearch(String query) {
-        // This will be implemented later with backend
-        if (!query.isEmpty()) {
-            Toast.makeText(this, "Searching: " + query, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void openRegistrationDetails(int registrationId) {
-        // Navigate to registration details screen
-        Intent intent = new Intent(RegistrationLedgerActivity.this, RegistrationRecordActivity.class);
-        intent.putExtra("registration_id", registrationId);
-        startActivity(intent);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-    }
-
+    
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    protected void onResume() {
+        super.onResume();
+        // Refresh when coming back from detail view
+        fetchLedgerData(); 
     }
 }

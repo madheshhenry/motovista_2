@@ -61,6 +61,8 @@ public class OrderCompletedActivity extends AppCompatActivity {
         btnBackDashboard.setAlpha(0f);
     }
 
+    private int requestId = -1; // Promoted field
+
     private void handleIntentData() {
         Intent intent = getIntent();
         if (intent != null) {
@@ -72,7 +74,7 @@ public class OrderCompletedActivity extends AppCompatActivity {
             if (vehicleModel != null) tvBikeModel.setText(vehicleModel);
             if (paymentType != null) tvPaymentType.setText(paymentType);
 
-            int requestId = intent.getIntExtra("request_id", -1);
+            requestId = intent.getIntExtra("request_id", -1);
             if (requestId == -1 && sessionManager.isSessionActive()) {
                 requestId = sessionManager.getRequestId();
             }
@@ -122,6 +124,21 @@ public class OrderCompletedActivity extends AppCompatActivity {
         // Clear the session as the order is fully done and user is leaving
         sessionManager.clearSession();
 
+        // Update Backend Workflow (Clear it)
+        com.example.motovista_deep.managers.WorkflowManager.updateStage(this, "NULL", -1, new com.example.motovista_deep.managers.WorkflowManager.WorkflowCallback() {
+            @Override
+            public void onSuccess() {
+                proceedExit();
+            }
+            @Override
+            public void onError(String message) {
+                // If network fails, still exit? Maybe yes.
+                proceedExit(); 
+            }
+        });
+    }
+
+    private void proceedExit() {
         Intent intent = new Intent(OrderCompletedActivity.this, AdminDashboardActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

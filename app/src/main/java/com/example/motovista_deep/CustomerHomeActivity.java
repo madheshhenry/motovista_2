@@ -3,11 +3,13 @@ package com.example.motovista_deep;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,10 +17,20 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.example.motovista_deep.adapter.BikeAdapter;
 import com.example.motovista_deep.api.ApiService;
 import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.helpers.SharedPrefManager;
+import com.example.motovista_deep.models.BikeModel;
 import com.example.motovista_deep.models.GetProfileResponse;
+import com.example.motovista_deep.models.GetShuffledBikesResponse;
+import com.example.motovista_deep.utils.ImageUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,17 +38,14 @@ import retrofit2.Response;
 
 public class CustomerHomeActivity extends AppCompatActivity {
 
-    // Featured cards
-    private CardView cardFeatured1, cardFeatured2, cardFeatured3;
+    // Dynamic sections
+    private RecyclerView rvShuffledBikes;
+    private BikeAdapter shuffledAdapter;
+    private List<BikeModel> shuffledBikesList = new ArrayList<>();
+    private LinearLayout brandSectionsContainer;
 
     // Quick action cards
     private CardView cardTestRide, cardService, cardRequestBike;
-
-    // New arrivals cards
-    private CardView cardRaptor, cardCruiser, cardTrailBlazer;
-
-    // Buttons
-    private Button btnLearnMoreRaptor, btnLearnMoreCruiser, btnLearnMoreTrailBlazer;
     private CardView btnChatBot;
 
     // Bottom navigation
@@ -54,9 +63,11 @@ public class CustomerHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customer_home);
 
         initializeViews();
+        setupRecyclerViews();
         setupClickListeners();
         setActiveTab(tabHome);
         loadUserProfile();
+        loadShuffledBikes();
     }
 
     private void initializeViews() {
@@ -65,25 +76,14 @@ public class CustomerHomeActivity extends AppCompatActivity {
         tvWelcome = findViewById(R.id.tvWelcome);
         ivUserProfile = findViewById(R.id.ivUserProfile);
 
-        // Featured cards
-        cardFeatured1 = findViewById(R.id.cardFeatured1);
-        cardFeatured2 = findViewById(R.id.cardFeatured2);
-        cardFeatured3 = findViewById(R.id.cardFeatured3);
+        // RecyclerViews and containers
+        rvShuffledBikes = findViewById(R.id.rvShuffledBikes);
+        brandSectionsContainer = findViewById(R.id.brandSectionsContainer);
 
         // Quick action cards
         cardTestRide = findViewById(R.id.cardTestRide);
         cardService = findViewById(R.id.cardService);
         cardRequestBike = findViewById(R.id.cardRequestBike);
-
-        // New arrivals cards
-        cardRaptor = findViewById(R.id.cardRaptor);
-        cardCruiser = findViewById(R.id.cardCruiser);
-        cardTrailBlazer = findViewById(R.id.cardTrailBlazer);
-
-        // Learn More buttons
-        btnLearnMoreRaptor = findViewById(R.id.btnLearnMoreRaptor);
-        btnLearnMoreCruiser = findViewById(R.id.btnLearnMoreCruiser);
-        btnLearnMoreTrailBlazer = findViewById(R.id.btnLearnMoreTrailBlazer);
 
         // AI Chatbot button
         btnChatBot = findViewById(R.id.btnChatBot);
@@ -97,6 +97,101 @@ public class CustomerHomeActivity extends AppCompatActivity {
 
         // Initialize bottom navigation icons and text
         initializeBottomNavViews();
+    }
+
+    private void setupRecyclerViews() {
+        // Horizontal list for featured
+        rvShuffledBikes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        shuffledAdapter = new BikeAdapter(this, shuffledBikesList, R.layout.item_home_featured, bike -> {
+            Intent intent = new Intent(this, BikeDetailsCustomerActivity.class);
+            intent.putExtra("bike_id", bike.getId());
+            startActivity(intent);
+        });
+        rvShuffledBikes.setAdapter(shuffledAdapter);
+    }
+
+    private void loadShuffledBikes() {
+        ApiService apiService = RetrofitClient.getApiService();
+        Call<GetShuffledBikesResponse> call = apiService.getShuffledBikes();
+
+        call.enqueue(new Callback<GetShuffledBikesResponse>() {
+            @Override
+            public void onResponse(Call<GetShuffledBikesResponse> call, Response<GetShuffledBikesResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<BikeModel> allBikes = response.body().getData(); // Assuming getData() returns the list
+                    if (allBikes != null && !allBikes.isEmpty()) {
+                        // 1. Shuffled for global randomness
+                        Collections.shuffle(allBikes);
+
+                        // 2. Extract Featured (First 5)
+                        shuffledBikesList.clear();
+                        int featuredCount = Math.min(allBikes.size(), 5);
+                        shuffledBikesList.addAll(allBikes.subList(0, featuredCount));
+                        shuffledAdapter.notifyDataSetChanged();
+
+                        // 3. Group by Brand
+                        groupAndDisplayByBrand(allBikes);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GetShuffledBikesResponse> call, Throwable t) {
+                Toast.makeText(CustomerHomeActivity.this, "Failed to load fleet", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void groupAndDisplayByBrand(List<BikeModel> bikes) {
+        brandSectionsContainer.removeAllViews();
+
+        if (bikes == null || bikes.isEmpty()) return;
+
+        // Grouping logic
+        Map<String, List<BikeModel>> brandMap = new LinkedHashMap<>();
+        for (BikeModel bike : bikes) {
+            String brand = bike.getBrand() != null ? bike.getBrand() : "Other Brands";
+            if (!brandMap.containsKey(brand)) {
+                brandMap.put(brand, new ArrayList<>());
+            }
+            brandMap.get(brand).add(bike);
+        }
+
+        // Inflate sections for each brand
+        LayoutInflater inflater = LayoutInflater.from(this);
+        for (Map.Entry<String, List<BikeModel>> entry : brandMap.entrySet()) {
+            String brandName = entry.getKey();
+            List<BikeModel> brandBikes = entry.getValue();
+
+            View sectionView = inflater.inflate(R.layout.item_brand_section, brandSectionsContainer, false);
+            TextView tvBrandHeader = sectionView.findViewById(R.id.tvBrandName);
+            RecyclerView rvBrandBikes = sectionView.findViewById(R.id.rvBrandBikes);
+
+            tvBrandHeader.setText("Bikes by " + brandName);
+
+            View btnViewAll = sectionView.findViewById(R.id.btnViewAll);
+            if (btnViewAll != null) {
+                btnViewAll.setOnClickListener(v -> {
+                    Intent intent = new Intent(this, BikeCatalogActivity.class);
+                    intent.putExtra("BRAND_FILTER", brandName);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                });
+            }
+
+            // Horizontal Adapter for this brand
+            BikeAdapter brandAdapter = new BikeAdapter(this, brandBikes, R.layout.item_home_new_arrival, bike -> {
+                Intent intent = new Intent(this, BikeDetailsCustomerActivity.class);
+                intent.putExtra("bike_id", bike.getId());
+                startActivity(intent);
+            });
+
+            rvBrandBikes.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            rvBrandBikes.setAdapter(brandAdapter);
+            rvBrandBikes.setNestedScrollingEnabled(false); // Smooth scrolling inside NestedScrollView
+
+            brandSectionsContainer.addView(sectionView);
+        }
     }
 
     private void initializeBottomNavViews() {
@@ -128,31 +223,27 @@ public class CustomerHomeActivity extends AppCompatActivity {
         tabBikes.setOnClickListener(v -> {
             setActiveTab(tabBikes);
             startActivity(new Intent(this, BikeCatalogActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
         tabEmiCalculator.setOnClickListener(v -> {
             setActiveTab(tabEmiCalculator);
             startActivity(new Intent(this, EmiCalculatorActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
         tabOrders.setOnClickListener(v -> {
             setActiveTab(tabOrders);
-            startActivity(new Intent(this, OrderStatusActivity.class));
+            startActivity(new Intent(this, CustomerOrdersActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
         tabProfile.setOnClickListener(v -> {
             setActiveTab(tabProfile);
             startActivity(new Intent(this, CustomerProfileScreenActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
         // AI Chatbot
         btnChatBot.setOnClickListener(v ->
                 startActivity(new Intent(this, AIChatbotActivity.class)));
-
-        // Featured cards
-        cardFeatured1.setOnClickListener(v ->
-                Toast.makeText(this, "SB-X 2024 Featured", Toast.LENGTH_SHORT).show());
-        cardFeatured2.setOnClickListener(v ->
-                Toast.makeText(this, "Monsoon Service Offer", Toast.LENGTH_SHORT).show());
-        cardFeatured3.setOnClickListener(v ->
-                Toast.makeText(this, "Community Ride", Toast.LENGTH_SHORT).show());
 
         // Quick action cards
         cardTestRide.setOnClickListener(v ->
@@ -161,22 +252,6 @@ public class CustomerHomeActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MyBikesActivity.class)));
         cardRequestBike.setOnClickListener(v ->
                 startActivity(new Intent(this, RequestBikeActivity.class)));
-
-        // New arrivals Learn More buttons
-        btnLearnMoreRaptor.setOnClickListener(v ->
-                Toast.makeText(this, "SB-Raptor 500 Details", Toast.LENGTH_SHORT).show());
-        btnLearnMoreCruiser.setOnClickListener(v ->
-                Toast.makeText(this, "SB-Cruiser King Details", Toast.LENGTH_SHORT).show());
-        btnLearnMoreTrailBlazer.setOnClickListener(v ->
-                Toast.makeText(this, "SB-TrailBlazer Details", Toast.LENGTH_SHORT).show());
-
-        // New arrivals cards (optional - if you want the entire card clickable)
-        cardRaptor.setOnClickListener(v ->
-                Toast.makeText(this, "SB-Raptor 500", Toast.LENGTH_SHORT).show());
-        cardCruiser.setOnClickListener(v ->
-                Toast.makeText(this, "SB-Cruiser King", Toast.LENGTH_SHORT).show());
-        cardTrailBlazer.setOnClickListener(v ->
-                Toast.makeText(this, "SB-TrailBlazer", Toast.LENGTH_SHORT).show());
     }
 
     private void setActiveTab(LinearLayout activeTab) {
@@ -264,8 +339,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
 
                     // Load profile image
                     if (user.profile_image != null && !user.profile_image.isEmpty()) {
-                        String imageUrl = RetrofitClient.BASE_URL.replace("api/", "")
-                                + "uploads/profile_pics/" + user.profile_image;
+                        String imageUrl = ImageUtils.getFullImageUrl(user.profile_image, ImageUtils.PATH_PROFILE_PICS);
 
                         Glide.with(CustomerHomeActivity.this)
                                 .load(imageUrl)
@@ -305,6 +379,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
         super.onResume();
         // Refresh profile when returning to home
         loadUserProfile();
+        loadShuffledBikes();
     }
 
     @Override

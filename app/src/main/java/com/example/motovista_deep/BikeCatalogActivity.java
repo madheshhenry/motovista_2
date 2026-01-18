@@ -45,6 +45,7 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
     private RecyclerView rvBikes;
     private CustomerBikeAdapter bikeAdapter;
     private List<BikeModel> allBikesList = new ArrayList<>();
+    private String brandFilter;
 
     // Bottom navigation
     private LinearLayout tabHome, tabBikes, tabEmiCalculator, tabOrders, tabProfile;
@@ -72,6 +73,7 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
         setActiveChip(chipAll);
 
         // Fetch bikes from API
+        brandFilter = getIntent().getStringExtra("BRAND_FILTER");
         fetchBikes();
     }
 
@@ -137,7 +139,12 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
                     GetBikesResponse bikesResponse = response.body();
                     if ("success".equals(bikesResponse.getStatus()) && bikesResponse.getData() != null) {
                         allBikesList = bikesResponse.getData();
-                        bikeAdapter.updateList(allBikesList);
+                        if (brandFilter != null && !brandFilter.isEmpty()) {
+                            tvTitle.setText(brandFilter);
+                            filterBikesByBrand(brandFilter);
+                        } else {
+                            bikeAdapter.updateList(allBikesList);
+                        }
                         Log.d(TAG, "Fetched " + allBikesList.size() + " bikes");
                     } else {
                         Toast.makeText(BikeCatalogActivity.this, "No bikes found", Toast.LENGTH_SHORT).show();
@@ -154,6 +161,17 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
                 Log.e(TAG, "Network error", t);
             }
         });
+    }
+
+    private void filterBikesByBrand(String brand) {
+        if (allBikesList == null) return;
+        List<BikeModel> filteredList = new ArrayList<>();
+        for (BikeModel bike : allBikesList) {
+            if (brand.equalsIgnoreCase(bike.getBrand())) {
+                filteredList.add(bike);
+            }
+        }
+        bikeAdapter.updateList(filteredList);
     }
 
     private void filterBikes(String filterType) {
@@ -231,8 +249,8 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
 
         tabOrders.setOnClickListener(v -> {
             setActiveTab(tabOrders);
-            Toast.makeText(BikeCatalogActivity.this, "Orders", Toast.LENGTH_SHORT).show();
-            // Navigate to orders if implemented
+            startActivity(new Intent(BikeCatalogActivity.this, CustomerOrdersActivity.class));
+            finish();
         });
 
         tabProfile.setOnClickListener(v -> {
@@ -244,24 +262,11 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
 
     @Override
     public void onBikeClick(BikeModel bike) {
-        Intent intent = new Intent(BikeCatalogActivity.this, BikeDetailsScreenActivity.class);
-        intent.putExtra("BIKE_NAME", bike.getBrand() + " " + bike.getModel());
+        Intent intent = new Intent(BikeCatalogActivity.this, BikeDetailsCustomerActivity.class);
+        intent.putExtra("bike_id", bike.getId());
+        // Pass other details if BikeDetailsCustomerActivity is updated to use them
+        // intent.putExtra("BIKE_NAME", bike.getBrand() + " " + bike.getModel());
         
-        // Price logic - check onRoadPrice or price
-        String price = bike.getOnRoadPrice();
-        if (price == null || price.isEmpty()) price = bike.getPrice();
-        intent.putExtra("BIKE_PRICE", price != null ? "₹ " + price : "Price on Request");
-        
-        intent.putExtra("BIKE_VARIANT", bike.getVariant());
-        intent.putExtra("BIKE_YEAR", bike.getYear());
-        intent.putExtra("BIKE_BRAND", bike.getBrand());
-        intent.putExtra("BIKE_MODEL", bike.getModel());
-        // Pass ID if needed for deeper details fetching
-        intent.putExtra("BIKE_ID", bike.getId());
-        
-        // Pass image URL
-        intent.putExtra("BIKE_IMAGE", bike.getImageUrl());
-
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }

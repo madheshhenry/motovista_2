@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class RetrofitClient {
     // Corrected path to match your XAMPP folder structure
-    public static final String BASE_URL = "http://192.168.0.102/motovista_backend/api/";
+    public static final String BASE_URL = "http://192.168.0.100/motovista_backend/api/";
 
     private static ApiService apiService;
 

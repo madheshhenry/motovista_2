@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class AiRetrofitClient {
     // Emulator localhost for Python Flask (Updated to Physical Device IP)
-    public static final String BASE_URL = "http://192.168.0.102:5000/";
+    public static final String BASE_URL = "http://192.168.0.100:5000/";
 
     private static AiApiService apiService;
 

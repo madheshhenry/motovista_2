@@ -85,7 +85,8 @@ public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.
         url = url.replace("\"", "").replace("\\", "").trim();
 
         // If already a full URL, check if uploads/ is missing
-        if (url.startsWith("http://") || url.startsWith("https://")) {
+        if (url.startsWith("http://") || url.startsWith("https://") || 
+            url.startsWith("android.resource://") || url.startsWith("content://") || url.startsWith("file://")) {
             return url;
         }
 

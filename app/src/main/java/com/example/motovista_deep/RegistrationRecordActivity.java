@@ -1,272 +1,235 @@
 package com.example.motovista_deep;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
+import android.util.Log;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import com.example.motovista_deep.api.ApiService;
+import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.models.RegistrationLedgerItem;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegistrationRecordActivity extends AppCompatActivity {
 
+    private int ledgerId;
+    private TextView tvCustomerName, tvBikeName, tvCustomerPhone, tvEngineNumber, tvOrderId, tvCompletedCount;
     private ImageView btnBack;
-    private TextView tvTitle;
-    private TextView tvProgressCount;
 
-    private Button btnMarkRegistration;
-    private Button btnMarkRcBook;
-    private Button btnMarkNumberPlate;
-
-    private CardView cardRegistration;
-    private CardView cardRcBook;
-    private CardView cardNumberPlate;
-
-    private View ivPendingDot;
-    private TextView tvVerificationBadge;
-
-    private int completedSteps = 1;
-    private int totalSteps = 4;
-
-    // Animation handler
-    private Handler animationHandler = new Handler();
-    private Runnable dotAnimationRunnable;
-    private boolean isDotAnimating = false;
+    // Step Views
+    private View layoutStep1, layoutStep2, layoutStep3, layoutStep4;
+    private Button btnStep1, btnStep2, btnStep3, btnStep4;
+    private TextView tvStatus1, tvStatus2, tvStatus3, tvStatus4;
+    private ImageView iconStep1, iconStep2, iconStep3, iconStep4;
+    private TextView titleStep1, titleStep2, titleStep3, titleStep4;
+    private View active1, active2, active3, active4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration_record);
 
-        // Initialize views
+        ledgerId = getIntent().getIntExtra("ledger_id", -1);
+        String custName = getIntent().getStringExtra("customer_name");
+        String bikeName = getIntent().getStringExtra("bike_name");
+        String phone = getIntent().getStringExtra("phone");
+        String engine = getIntent().getStringExtra("engine_number");
+
+        if (ledgerId == -1) {
+            Toast.makeText(this, "Invalid Record ID", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         initializeViews();
+        tvCustomerName.setText(custName != null ? custName : "N/A");
+        tvBikeName.setText(bikeName != null ? bikeName : "N/A");
+        tvCustomerPhone.setText(phone != null ? phone : "N/A");
+        tvEngineNumber.setText(engine != null ? engine : "N/A");
+        tvOrderId.setText("ORD-" + ledgerId); // Placeholder for ORD ID
 
-        // Setup click listeners
-        setupClickListeners();
+        setupStepTitles();
 
-        // Start animations
-        startPendingDotAnimation();
+        btnBack.setOnClickListener(v -> finish());
+        
+        // Setup Button Listeners
+        btnStep1.setOnClickListener(v -> showConfirmationDialog(1, "Insurance Process"));
+        btnStep2.setOnClickListener(v -> showConfirmationDialog(2, "Document Verification"));
+        btnStep3.setOnClickListener(v -> showConfirmationDialog(3, "Tax Payment"));
+        btnStep4.setOnClickListener(v -> showConfirmationDialog(4, "Registration & RC"));
 
-        // Get data from intent
-        getIntentData();
+        fetchRecordDetails();
     }
 
     private void initializeViews() {
+        tvCustomerName = findViewById(R.id.tvCustomerName);
+        tvBikeName = findViewById(R.id.tvBikeName);
+        tvCustomerPhone = findViewById(R.id.tvCustomerPhone);
+        tvEngineNumber = findViewById(R.id.tvEngineNumber);
+        tvOrderId = findViewById(R.id.tvOrderId);
+        tvCompletedCount = findViewById(R.id.tvCompletedCount);
         btnBack = findViewById(R.id.btnBack);
-        tvTitle = findViewById(R.id.tvTitle);
-        tvProgressCount = findViewById(R.id.tvProgressCount);
 
-        btnMarkRegistration = findViewById(R.id.btnMarkRegistration);
-        btnMarkRcBook = findViewById(R.id.btnMarkRcBook);
-        btnMarkNumberPlate = findViewById(R.id.btnMarkNumberPlate);
+        layoutStep1 = findViewById(R.id.layoutStep1);
+        layoutStep2 = findViewById(R.id.layoutStep2);
+        layoutStep3 = findViewById(R.id.layoutStep3);
+        layoutStep4 = findViewById(R.id.layoutStep4);
 
-        cardRegistration = findViewById(R.id.cardRegistration);
-        cardRcBook = findViewById(R.id.cardRcBook);
-        cardNumberPlate = findViewById(R.id.cardNumberPlate);
+        // Map internal views
+        btnStep1 = layoutStep1.findViewById(R.id.btnMarkCompleted);
+        tvStatus1 = layoutStep1.findViewById(R.id.tvStepStatus);
+        iconStep1 = layoutStep1.findViewById(R.id.ivStepIcon);
+        titleStep1 = layoutStep1.findViewById(R.id.tvStepTitle);
+        active1 = layoutStep1.findViewById(R.id.activeIndicator);
 
-        ivPendingDot = findViewById(R.id.ivPendingDot);
-        tvVerificationBadge = findViewById(R.id.tvVerificationBadge);
+        btnStep2 = layoutStep2.findViewById(R.id.btnMarkCompleted);
+        tvStatus2 = layoutStep2.findViewById(R.id.tvStepStatus);
+        iconStep2 = layoutStep2.findViewById(R.id.ivStepIcon);
+        titleStep2 = layoutStep2.findViewById(R.id.tvStepTitle);
+        active2 = layoutStep2.findViewById(R.id.activeIndicator);
 
-        // Set initial progress
-        updateProgressCount();
+        btnStep3 = layoutStep3.findViewById(R.id.btnMarkCompleted);
+        tvStatus3 = layoutStep3.findViewById(R.id.tvStepStatus);
+        iconStep3 = layoutStep3.findViewById(R.id.ivStepIcon);
+        titleStep3 = layoutStep3.findViewById(R.id.tvStepTitle);
+        active3 = layoutStep3.findViewById(R.id.activeIndicator);
+
+        btnStep4 = layoutStep4.findViewById(R.id.btnMarkCompleted);
+        tvStatus4 = layoutStep4.findViewById(R.id.tvStepStatus);
+        iconStep4 = layoutStep4.findViewById(R.id.ivStepIcon);
+        titleStep4 = layoutStep4.findViewById(R.id.tvStepTitle);
+        active4 = layoutStep4.findViewById(R.id.activeIndicator);
     }
 
-    private void setupClickListeners() {
-        // Back button
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        // Mark Registration as Completed
-        btnMarkRegistration.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                markRegistrationCompleted();
-            }
-        });
-
-        // Disabled buttons (for demonstration)
-        btnMarkRcBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(RegistrationRecordActivity.this,
-                        "Complete vehicle registration first", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnMarkNumberPlate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(RegistrationRecordActivity.this,
-                        "Complete vehicle registration first", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void setupStepTitles() {
+        titleStep1.setText("Insurance Process");
+        titleStep2.setText("Document Verification");
+        titleStep3.setText("Tax Payment");
+        titleStep4.setText("Registration & RC");
     }
 
-    private void getIntentData() {
-        Intent intent = getIntent();
-        if (intent != null) {
-            String customerName = intent.getStringExtra("customer_name");
-            String customerPhone = intent.getStringExtra("customer_phone");
-            String bikeModel = intent.getStringExtra("bike_model");
-            String engineNumber = intent.getStringExtra("engine_number");
-            String orderId = intent.getStringExtra("order_id");
+    private void fetchRecordDetails() {
+        ApiService apiService = RetrofitClient.getApiService();
+        Call<com.example.motovista_deep.models.GetRegistrationLedgerResponse> call = apiService.getRegistrationLedger();
 
-            if (customerName != null) {
-                TextView tvCustomerName = findViewById(R.id.tvCustomerName);
-                tvCustomerName.setText(customerName);
-            }
-
-            if (customerPhone != null) {
-                TextView tvCustomerPhone = findViewById(R.id.tvCustomerPhone);
-                tvCustomerPhone.setText(customerPhone);
-            }
-
-            if (bikeModel != null) {
-                TextView tvBikeModel = findViewById(R.id.tvBikeModel);
-                tvBikeModel.setText(bikeModel);
-            }
-
-            if (engineNumber != null) {
-                TextView tvEngineNumber = findViewById(R.id.tvEngineNumber);
-                tvEngineNumber.setText(engineNumber);
-            }
-
-            if (orderId != null) {
-                TextView tvOrderId = findViewById(R.id.tvOrderId);
-                tvOrderId.setText(orderId);
-            }
-
-            // Update title with customer name
-            if (customerName != null) {
-                tvTitle.setText(customerName + "'s Record");
-            }
-        }
-    }
-
-    private void markRegistrationCompleted() {
-        // Stop the pending dot animation
-        stopPendingDotAnimation();
-
-        // Change card appearance
-        cardRegistration.setCardElevation(1f);
-        cardRegistration.setAlpha(0.8f);
-
-        // Find the status badge container
-        CardView statusBadge = cardRegistration.findViewById(R.id.statusBadgeRegistration);
-        if (statusBadge != null) {
-            // Change badge background color
-            statusBadge.setCardBackgroundColor(ContextCompat.getColor(this, R.color.icon_bg_green));
-
-            // Get the LinearLayout inside the CardView
-            LinearLayout badgeLayout = (LinearLayout) statusBadge.getChildAt(0);
-            if (badgeLayout != null) {
-                // Update the dot (first child)
-                View dot = badgeLayout.getChildAt(0);
-                if (dot != null) {
-                    dot.setBackgroundResource(R.drawable.circle_green);
-                }
-
-                // Update the status text (second child)
-                TextView statusText = (TextView) badgeLayout.getChildAt(1);
-                if (statusText != null) {
-                    statusText.setText("Done");
-                    statusText.setTextColor(ContextCompat.getColor(this, R.color.icon_green));
+        call.enqueue(new Callback<com.example.motovista_deep.models.GetRegistrationLedgerResponse>() {
+            @Override
+            public void onResponse(Call<com.example.motovista_deep.models.GetRegistrationLedgerResponse> call, Response<com.example.motovista_deep.models.GetRegistrationLedgerResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    if (response.body().isSuccess()) {
+                        for (RegistrationLedgerItem item : response.body().getData()) {
+                            if (item.getId() == ledgerId) {
+                                updateUI(item);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
-        }
 
-        // Change button to disabled
-        btnMarkRegistration.setEnabled(false);
-        btnMarkRegistration.setBackgroundResource(R.drawable.button_disabled_rounded);
-        btnMarkRegistration.setTextColor(ContextCompat.getColor(this, R.color.text_secondary_light));
-        btnMarkRegistration.setText("Completed");
-
-        // Enable next step (RC Book)
-        btnMarkRcBook.setEnabled(true);
-        btnMarkRcBook.setBackgroundResource(R.drawable.button_primary_rounded);
-        btnMarkRcBook.setTextColor(Color.WHITE);
-
-        // Update registration status text
-        TextView tvRegistrationStatus = findViewById(R.id.tvRegistrationStatus);
-        if (tvRegistrationStatus != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-            String currentDate = sdf.format(new Date());
-            tvRegistrationStatus.setText("Completed on " + currentDate);
-        }
-
-        // Update progress
-        completedSteps = 2;
-        updateProgressCount();
-
-        // Show success message
-        Toast.makeText(this, "Vehicle registration marked as completed", Toast.LENGTH_SHORT).show();
-
-        // Add subtle animation
-        AlphaAnimation fadeIn = new AlphaAnimation(0.7f, 1.0f);
-        fadeIn.setDuration(300);
-        cardRegistration.startAnimation(fadeIn);
-    }
-
-    private void updateProgressCount() {
-        tvProgressCount.setText(completedSteps + "/" + totalSteps + " Completed");
-    }
-
-    private void startPendingDotAnimation() {
-        isDotAnimating = true;
-
-        dotAnimationRunnable = new Runnable() {
             @Override
-            public void run() {
-                if (isDotAnimating && ivPendingDot != null) {
-                    // Create pulse animation
-                    AlphaAnimation pulse = new AlphaAnimation(0.3f, 1.0f);
-                    pulse.setDuration(1000);
-                    pulse.setRepeatCount(Animation.INFINITE);
-                    pulse.setRepeatMode(Animation.REVERSE);
-                    ivPendingDot.startAnimation(pulse);
+            public void onFailure(Call<com.example.motovista_deep.models.GetRegistrationLedgerResponse> call, Throwable t) {
+                Toast.makeText(RegistrationRecordActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void updateUI(RegistrationLedgerItem data) {
+        int completedCount = 0;
+        if ("completed".equalsIgnoreCase(data.getStep1Status())) completedCount++;
+        if ("completed".equalsIgnoreCase(data.getStep2Status())) completedCount++;
+        if ("completed".equalsIgnoreCase(data.getStep3Status())) completedCount++;
+        if ("completed".equalsIgnoreCase(data.getStep4Status())) completedCount++;
+        tvCompletedCount.setText(completedCount + "/4 Completed");
+
+        configureStep(data.getStep1Status(), btnStep1, tvStatus1, iconStep1, active1);
+        configureStep(data.getStep2Status(), btnStep2, tvStatus2, iconStep2, active2);
+        configureStep(data.getStep3Status(), btnStep3, tvStatus3, iconStep3, active3);
+        configureStep(data.getStep4Status(), btnStep4, tvStatus4, iconStep4, active4);
+    }
+
+    private void configureStep(String status, Button btn, TextView tvStatus, ImageView icon, View active) {
+        if ("completed".equalsIgnoreCase(status)) {
+            btn.setVisibility(View.GONE);
+            tvStatus.setText("COMPLETED");
+            tvStatus.setBackgroundResource(R.drawable.pill_inactive);
+            tvStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#f0fdf4")));
+            tvStatus.setTextColor(android.graphics.Color.parseColor("#16a34a"));
+            icon.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#f0fdf4")));
+            icon.setImageTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#16a34a")));
+            active.setVisibility(View.GONE);
+        } else if ("locked".equalsIgnoreCase(status)) {
+            btn.setVisibility(View.GONE);
+            tvStatus.setText("LOCKED");
+            tvStatus.setBackgroundResource(R.drawable.pill_inactive);
+            tvStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#f3f4f6")));
+            tvStatus.setTextColor(android.graphics.Color.parseColor("#9ca3af"));
+            icon.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#f3f4f6")));
+            icon.setImageTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#9ca3af")));
+            active.setVisibility(View.GONE);
+        } else { // pending (active step)
+            btn.setVisibility(View.VISIBLE);
+            tvStatus.setText("PENDING");
+            tvStatus.setBackgroundResource(R.drawable.pill_inactive);
+            tvStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#fff7ed")));
+            tvStatus.setTextColor(android.graphics.Color.parseColor("#ea580c"));
+            icon.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#eff6ff")));
+            icon.setImageTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#137fec")));
+            active.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void showConfirmationDialog(int step, String stepName) {
+        android.app.Dialog dialog = new android.app.Dialog(this);
+        dialog.setContentView(R.layout.dialog_confirm_completion);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        TextView tvMsg = dialog.findViewById(R.id.tvConfirmationMessage);
+        tvMsg.setText("Are you sure you want to mark " + stepName + " as Completed?");
+
+        TextView tvDate = dialog.findViewById(R.id.tvDateDisplay);
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault());
+        tvDate.setText(sdf.format(new java.util.Date()));
+
+        dialog.findViewById(R.id.btnCancel).setOnClickListener(v -> dialog.dismiss());
+        dialog.findViewById(R.id.btnConfirm).setOnClickListener(v -> {
+            updateStep(step);
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
+    private void updateStep(int step) {
+        ApiService apiService = RetrofitClient.getApiService();
+        com.example.motovista_deep.models.UpdateRegistrationStepRequest request = 
+            new com.example.motovista_deep.models.UpdateRegistrationStepRequest(ledgerId, step);
+
+        Call<com.example.motovista_deep.models.GenericResponse> call = apiService.updateRegistrationStep(request);
+        
+        call.enqueue(new retrofit2.Callback<com.example.motovista_deep.models.GenericResponse>() {
+            @Override
+            public void onResponse(Call<com.example.motovista_deep.models.GenericResponse> call, retrofit2.Response<com.example.motovista_deep.models.GenericResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    Toast.makeText(RegistrationRecordActivity.this, "Step Updated!", Toast.LENGTH_SHORT).show();
+                    fetchRecordDetails(); 
+                } else {
+                    Toast.makeText(RegistrationRecordActivity.this, "Failed to update", Toast.LENGTH_SHORT).show();
                 }
             }
-        };
 
-        animationHandler.post(dotAnimationRunnable);
-    }
-
-    private void stopPendingDotAnimation() {
-        isDotAnimating = false;
-        if (ivPendingDot != null) {
-            ivPendingDot.clearAnimation();
-        }
-        if (animationHandler != null && dotAnimationRunnable != null) {
-            animationHandler.removeCallbacks(dotAnimationRunnable);
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        stopPendingDotAnimation();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            @Override
+            public void onFailure(Call<com.example.motovista_deep.models.GenericResponse> call, Throwable t) {
+                Toast.makeText(RegistrationRecordActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

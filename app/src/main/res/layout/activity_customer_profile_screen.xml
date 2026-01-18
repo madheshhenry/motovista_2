@@ -431,6 +431,48 @@
 
                         </LinearLayout>
 
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/border_color"
+                            android:layout_marginStart="@dimen/padding_medium" />
+
+                        <!-- Requested Bikes -->
+                        <LinearLayout
+                            android:id="@+id/btnRequestedBikes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="@dimen/padding_medium"
+                            android:background="?attr/selectableItemBackground">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_two_wheeler"
+                                android:tint="@color/primary_color"
+                                android:contentDescription="Requested Bikes"
+                                android:layout_marginEnd="@dimen/padding_medium" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Requested Bikes"
+                                android:textColor="@color/text_dark"
+                                android:textSize="14sp"
+                                android:fontFamily="sans-serif-medium" />
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_chevron_right"
+                                android:tint="@color/gray_400"
+                                android:contentDescription="Arrow" />
+
+                        </LinearLayout>
+
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>

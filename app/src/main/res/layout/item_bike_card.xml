@@ -4,7 +4,7 @@
     android:id="@+id/cardBike"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
+    android:layout_marginBottom="8dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="2dp"
     app:cardUseCompatPadding="true"
@@ -12,49 +12,43 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="12dp">
 
         <!-- Bike Image -->
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivBike"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:scaleType="centerCrop"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="fitCenter"
+            android:padding="4dp"
             android:src="@drawable/placeholder_bike"
             android:contentDescription="Bike Image"
-            android:background="@color/white"
-            android:layout_margin="12dp"
+            android:background="#F8FAFC"
+            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvTag"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <!-- Tag (NEW BIKE / SH BIKES) -->
-        <!-- Poistioned at top-left, flush with card edges or slightly offset -->
         <TextView
             android:id="@+id/tvTag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="4dp"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="3dp"
             android:textColor="@color/white"
-            android:textSize="10sp"
+            android:textSize="9sp"
             android:textStyle="bold"
-            android:fontFamily="sans-serif"
             android:textAllCaps="true"
             android:includeFontPadding="false"
             android:letterSpacing="0.05"
             android:background="@drawable/tag_new_bike"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="12dp"
-            android:elevation="4dp"
-            />
-            <!-- In the design, it looks like a tag OVER the image or content area. 
-                 But based on the screenshot, the tag is actually above the image area or part of the layout flow.
-                 Wait, looking closely at "Royal Enfield Classic 350", the tag is top-left, and image is below it? 
-                 No, the tag is overlapping the top-left corner of the content card area.
-                 Let's place it top-left with a small marginTop to sit nicely. -->
+            app:layout_constraintStart_toStartOf="@+id/ivBike"
+            app:layout_constraintTop_toTopOf="@+id/ivBike"
+            android:layout_marginTop="-4dp"
+            android:layout_marginStart="-4dp"
+            android:elevation="4dp" />
 
         <!-- Bike Details Container -->
         <LinearLayout
@@ -62,52 +56,56 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="12dp"
             app:layout_constraintStart_toEndOf="@+id/ivBike"
             app:layout_constraintEnd_toStartOf="@+id/ivChevron"
-            app:layout_constraintTop_toTopOf="@+id/ivBike"
-            app:layout_constraintBottom_toBottomOf="@+id/ivBike">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <!-- Brand -->
             <TextView
                 android:id="@+id/tvBrand"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/gray_500"
+                android:text="Yamaha"
+                android:textColor="#64748b"
                 android:textSize="12sp"
-                android:fontFamily="sans-serif" />
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true"
+                android:letterSpacing="0.05"/>
 
             <!-- Model -->
             <TextView
                 android:id="@+id/tvModel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/text_dark"
-                android:textSize="16sp"
+                android:text="R15 V4"
+                android:textColor="#1e293b"
+                android:textSize="18sp"
                 android:textStyle="bold"
-                android:fontFamily="sans-serif"
+                android:fontFamily="sans-serif-black"
                 android:layout_marginTop="2dp" />
 
-            <!-- Price or Condition -->
+            <!-- Info (Only for SH - Condition, Hidden for Price) -->
             <TextView
                 android:id="@+id/tvInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif"
-                android:layout_marginTop="6dp" />
+                android:text="Excellent Condition"
+                android:textSize="13sp"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginTop="4dp"
+                android:visibility="gone" />
 
         </LinearLayout>
 
         <!-- Chevron Icon -->
         <ImageView
             android:id="@+id/ivChevron"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="16dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@drawable/ic_chevron_right"
-            app:tint="@color/gray_400"
+            app:tint="#CBD5E1"
             android:contentDescription="More"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

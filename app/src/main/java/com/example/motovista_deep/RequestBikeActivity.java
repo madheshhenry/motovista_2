@@ -16,6 +16,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.example.motovista_deep.helpers.SharedPrefManager;
+import com.example.motovista_deep.models.User;
+
 public class RequestBikeActivity extends AppCompatActivity {
 
     // Input fields
@@ -62,12 +65,20 @@ public class RequestBikeActivity extends AppCompatActivity {
     }
 
     private void loadUserData() {
-        // Load from SharedPreferences if you want to pre-fill
+        // First try to load from logged-in user profile
+        User user = SharedPrefManager.getInstance(this).getUser();
+        if (user != null) {
+            etFullName.setText(user.getFull_name());
+            etMobileNumber.setText(user.getPhone());
+            if (user.getEmail() != null) etEmail.setText(user.getEmail());
+            return;
+        }
+
+        // Fallback to local shared preferences
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         String name = prefs.getString("fullName", "");
         String mobile = prefs.getString("mobileNumber", "");
 
-        // Set hints or pre-filled values
         if (!name.isEmpty()) {
             etFullName.setText(name);
         }
@@ -175,29 +186,44 @@ public class RequestBikeActivity extends AppCompatActivity {
             etEmail.requestFocus();
             return;
         }
+        
+        // Show Loading
+        btnSubmit.setEnabled(false);
+        btnSubmit.setText("Submitting...");
 
-        // Save user data to SharedPreferences for future use
-        saveUserData(fullName, mobile);
+        // Get User ID if logged in
+        User user = SharedPrefManager.getInstance(this).getUser();
+        Integer userId = (user != null) ? user.getId() : null;
 
-        // Show success message
-        Toast.makeText(this, "✓ Request submitted successfully!", Toast.LENGTH_LONG).show();
+        // Create Request Object
+        com.example.motovista_deep.models.BikeRequest request = 
+            new com.example.motovista_deep.models.BikeRequest(brand, model, features, fullName, mobile, email, userId);
 
-        // For demo: Show submitted data
-        String message = "Submitted Details:\n" +
-                "Name: " + fullName + "\n" +
-                "Mobile: " + mobile + "\n" +
-                "Brand: " + brand + "\n" +
-                "Model: " + model + "\n" +
-                "Features: " + (features.isEmpty() ? "None" : features) + "\n" +
-                "Email: " + (email.isEmpty() ? "Not provided" : email);
+        // API Call
+        com.example.motovista_deep.api.RetrofitClient.getApiService().addBikeRequest(request).enqueue(new retrofit2.Callback<com.example.motovista_deep.models.GenericResponse>() {
+            @Override
+            public void onResponse(retrofit2.Call<com.example.motovista_deep.models.GenericResponse> call, retrofit2.Response<com.example.motovista_deep.models.GenericResponse> response) {
+                btnSubmit.setEnabled(true);
+                btnSubmit.setText("Submit Request");
+                
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    Toast.makeText(RequestBikeActivity.this, "✓ Request submitted successfully!", Toast.LENGTH_LONG).show();
+                    saveUserData(fullName, mobile);
+                    clearForm();
+                    new android.os.Handler().postDelayed(() -> finish(), 1500);
+                } else {
+                    String msg = (response.body() != null) ? response.body().getMessage() : "Submission failed";
+                    Toast.makeText(RequestBikeActivity.this, msg, Toast.LENGTH_SHORT).show();
+                }
+            }
 
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-
-        // Clear form
-        clearForm();
-
-        // Go back after delay
-        btnSubmit.postDelayed(this::finish, 2000);
+            @Override
+            public void onFailure(retrofit2.Call<com.example.motovista_deep.models.GenericResponse> call, Throwable t) {
+                btnSubmit.setEnabled(true);
+                btnSubmit.setText("Submit Request");
+                Toast.makeText(RequestBikeActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void saveUserData(String fullName, String mobileNumber) {

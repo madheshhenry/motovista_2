@@ -56,6 +56,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation("com.android.volley:volley:1.2.1")
 
     // JSON parsing
     implementation("com.google.code.gson:gson:2.10.1")
@@ -86,6 +87,9 @@ dependencies {
 
     // Option 2: Use Android's native viewer (NO dependency needed)
     // (Use the PdfViewerHelper class I provided earlier)
+
+    // Image Cropping
+    implementation("com.github.CanHub:Android-Image-Cropper:4.5.0")
 
     // REMOVE ALL THESE PROBLEMATIC LINES:
     // implementation("com.github.barteksc:android-pdf-viewer:2.8.2")

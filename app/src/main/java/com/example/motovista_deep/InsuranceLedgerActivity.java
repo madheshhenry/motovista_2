@@ -3,6 +3,8 @@ package com.example.motovista_deep;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,182 +13,140 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.motovista_deep.adapter.InsuranceAdapter;
+import com.example.motovista_deep.api.ApiService;
+import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.models.InsuranceModel;
+import com.example.motovista_deep.models.InsuranceResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class InsuranceLedgerActivity extends AppCompatActivity {
 
-    // Header views
     private ImageButton btnBack;
     private TextView tvTitle;
-
-    // Filter chips
     private CardView chipAll, chipActive, chipExpiringSoon, chipExpired;
-
-    // Summary cards
-    private CardView cardTotalPolicies, cardActionNeeded;
     private TextView tvTotalPolicies, tvActionNeeded;
-
-    // Policy cards
-    private CardView cardPriyaSingh, cardRahulSharma, cardAmitVerma,
-            cardVikramMalhotra, cardSarahJenkins;
-
-    // Status text views
-    private TextView tvPriyaStatus, tvRahulStatus, tvAmitStatus,
-            tvVikramStatus, tvSarahStatus;
+    
+    private RecyclerView rvInsurance;
+    private InsuranceAdapter adapter;
+    private List<InsuranceModel> fullList = new ArrayList<>();
+    private List<InsuranceModel> filteredList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insurance_ledger);
 
-        // Initialize views
         initializeViews();
-
-        // Setup click listeners
+        setupRecyclerView();
         setupClickListeners();
-
-        // Set initial active filter (All)
+        
+        fetchInsuranceData();
         setActiveFilter(chipAll);
     }
 
     private void initializeViews() {
-        // Header views
         btnBack = findViewById(R.id.btnBack);
         tvTitle = findViewById(R.id.tvTitle);
-
-        // Filter chips
         chipAll = findViewById(R.id.chipAll);
         chipActive = findViewById(R.id.chipActive);
         chipExpiringSoon = findViewById(R.id.chipExpiringSoon);
         chipExpired = findViewById(R.id.chipExpired);
-
-        // Summary cards
-        cardTotalPolicies = findViewById(R.id.cardTotalPolicies);
-        cardActionNeeded = findViewById(R.id.cardActionNeeded);
         tvTotalPolicies = findViewById(R.id.tvTotalPolicies);
         tvActionNeeded = findViewById(R.id.tvActionNeeded);
+        rvInsurance = findViewById(R.id.rvInsurance);
+    }
 
-        // Policy cards
-        cardPriyaSingh = findViewById(R.id.cardPriyaSingh);
-        cardRahulSharma = findViewById(R.id.cardRahulSharma);
-        cardAmitVerma = findViewById(R.id.cardAmitVerma);
-        cardVikramMalhotra = findViewById(R.id.cardVikramMalhotra);
-        cardSarahJenkins = findViewById(R.id.cardSarahJenkins);
+    private void setupRecyclerView() {
+        rvInsurance.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new InsuranceAdapter(filteredList, item -> {
+            Intent intent = new Intent(InsuranceLedgerActivity.this, InsuranceDetailsActivity.class);
+            intent.putExtra("customer_name", item.getCustomerName());
+            intent.putExtra("order_id", item.getOrderId());
+            intent.putExtra("policy_number", item.getPolicyNumber());
+            intent.putExtra("status", item.getStatus());
+            intent.putExtra("end_date", item.getFullInsuranceExpiry());
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        });
+        rvInsurance.setAdapter(adapter);
+    }
 
-        // Status text views
-        tvPriyaStatus = findViewById(R.id.tvPriyaStatus);
-        tvRahulStatus = findViewById(R.id.tvRahulStatus);
-        tvAmitStatus = findViewById(R.id.tvAmitStatus);
-        tvVikramStatus = findViewById(R.id.tvVikramStatus);
-        tvSarahStatus = findViewById(R.id.tvSarahStatus);
+    private void fetchInsuranceData() {
+        ApiService apiService = RetrofitClient.getApiService();
+        apiService.getInsuranceLedger().enqueue(new Callback<InsuranceResponse>() {
+            @Override
+            public void onResponse(Call<InsuranceResponse> call, Response<InsuranceResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    fullList.clear();
+                    fullList.addAll(response.body().getData());
+                    tvTotalPolicies.setText(String.valueOf(fullList.size()));
+                    
+                    // Count action needed (Expired or Expiring Soon)
+                    long actionNeeded = 0;
+                    for (InsuranceModel m : fullList) {
+                        if (!"Active".equalsIgnoreCase(m.getStatus())) actionNeeded++;
+                    }
+                    tvActionNeeded.setText(String.valueOf(actionNeeded));
+                    
+                    applyFilter("All");
+                } else {
+                    Toast.makeText(InsuranceLedgerActivity.this, "Failed to load data", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<InsuranceResponse> call, Throwable t) {
+                Toast.makeText(InsuranceLedgerActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void applyFilter(String filter) {
+        filteredList.clear();
+        if ("All".equals(filter)) {
+            filteredList.addAll(fullList);
+        } else {
+            for (InsuranceModel item : fullList) {
+                if (filter.equalsIgnoreCase(item.getStatus())) {
+                    filteredList.add(item);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private void setupClickListeners() {
-        // Back button
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
+        btnBack.setOnClickListener(v -> onBackPressed());
+
+        chipAll.setOnClickListener(v -> {
+            setActiveFilter(chipAll);
+            applyFilter("All");
         });
 
-        // Filter chips
-        chipAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveFilter(chipAll);
-                Toast.makeText(InsuranceLedgerActivity.this, "Showing all policies", Toast.LENGTH_SHORT).show();
-                // Here you would filter the list to show all policies
-            }
+        chipActive.setOnClickListener(v -> {
+            setActiveFilter(chipActive);
+            applyFilter("Active");
         });
 
-        chipActive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveFilter(chipActive);
-                Toast.makeText(InsuranceLedgerActivity.this, "Showing active policies", Toast.LENGTH_SHORT).show();
-                // Here you would filter the list to show only active policies
-            }
+        chipExpiringSoon.setOnClickListener(v -> {
+            setActiveFilter(chipExpiringSoon);
+            applyFilter("Expiring Soon");
         });
 
-        chipExpiringSoon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveFilter(chipExpiringSoon);
-                Toast.makeText(InsuranceLedgerActivity.this, "Showing expiring soon policies", Toast.LENGTH_SHORT).show();
-                // Here you would filter the list to show only expiring soon policies
-            }
-        });
-
-        chipExpired.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveFilter(chipExpired);
-                Toast.makeText(InsuranceLedgerActivity.this, "Showing expired policies", Toast.LENGTH_SHORT).show();
-                // Here you would filter the list to show only expired policies
-            }
-        });
-
-        // Policy card clicks
-        cardPriyaSingh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPolicyDetails("Priya Singh", "YM-8832-X", "Expiring Soon", "Oct 24, 2025");
-            }
-        });
-
-        // In your card click listeners:
-        cardRahulSharma.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Navigate to InsuranceDetailsActivity
-                Intent intent = new Intent(InsuranceLedgerActivity.this, InsuranceDetailsActivity.class);
-                intent.putExtra("customer_name", "Rahul Sharma");
-                intent.putExtra("policy_number", "HC-2910-A");
-                intent.putExtra("status", "Active");
-                intent.putExtra("end_date", "Dec 12, 2025");
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            }
-        });
-
-        cardAmitVerma.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPolicyDetails("Amit Verma", "RE-1102-Z", "Expired", "Nov 05, 2023");
-            }
-        });
-
-        cardVikramMalhotra.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPolicyDetails("Vikram Malhotra", "KT-9912-Q", "Active", "Jan 15, 2026");
-            }
-        });
-
-        cardSarahJenkins.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPolicyDetails("Sarah Jenkins", "TS-4412-B", "Expiring Soon", "Nov 10, 2025");
-            }
-        });
-
-        // Summary cards (optional click listeners)
-        cardTotalPolicies.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(InsuranceLedgerActivity.this, "Total Policies: 1,248", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        cardActionNeeded.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(InsuranceLedgerActivity.this, "42 policies need action", Toast.LENGTH_SHORT).show();
-            }
+        chipExpired.setOnClickListener(v -> {
+            setActiveFilter(chipExpired);
+            applyFilter("Expired");
         });
     }
 
     private void setActiveFilter(CardView activeChip) {
-        // Reset all chips to inactive state
         chipAll.setCardBackgroundColor(ContextCompat.getColor(this, R.color.gray_200));
         chipActive.setCardBackgroundColor(ContextCompat.getColor(this, R.color.gray_200));
         chipExpiringSoon.setCardBackgroundColor(ContextCompat.getColor(this, R.color.gray_200));
@@ -197,24 +157,8 @@ public class InsuranceLedgerActivity extends AppCompatActivity {
         chipExpiringSoon.setCardElevation(0);
         chipExpired.setCardElevation(0);
 
-        // Set active chip
         activeChip.setCardBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
         activeChip.setCardElevation(2);
-
-        // Update text colors for better visibility
-        // Note: You might want to create separate TextView references for chip text
-    }
-
-    // In the showPolicyDetails method or card click listeners:
-    private void showPolicyDetails(String customerName, String policyNumber, String status, String endDate) {
-        // Navigate to InsuranceDetailsActivity
-        Intent intent = new Intent(InsuranceLedgerActivity.this, InsuranceDetailsActivity.class);
-        intent.putExtra("customer_name", customerName);
-        intent.putExtra("policy_number", policyNumber);
-        intent.putExtra("status", status);
-        intent.putExtra("end_date", endDate);
-        startActivity(intent);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override

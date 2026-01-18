@@ -106,12 +106,12 @@ public class EMISetupActivity extends AppCompatActivity {
             double price = intent.getDoubleExtra("vehicle_price", -1);
             if (price > 0) {
                 vehiclePrice = price;
-                etVehiclePrice.setText(formatIndianCurrency(vehiclePrice));
+                etVehiclePrice.setText(formatIndianCurrencyNoSymbol(vehiclePrice));
                 // Recalculate down payment based on passed price
                 minDownPayment = vehiclePrice * 0.20;
                 downPayment = minDownPayment; // Set default down payment to minimum
                 updateMinDownPaymentText();
-                etDownPayment.setText(formatIndianCurrency(downPayment));
+                etDownPayment.setText(formatIndianCurrencyNoSymbol(downPayment));
             }
         }
     }
@@ -142,13 +142,13 @@ public class EMISetupActivity extends AppCompatActivity {
                                 double price = Double.parseDouble(priceStr);
                                 if (price > 0) {
                                     vehiclePrice = price;
-                                    etVehiclePrice.setText(formatIndianCurrency(vehiclePrice));
+                                    etVehiclePrice.setText(formatIndianCurrencyNoSymbol(vehiclePrice));
                                     
                                     // Update derived values
                                     minDownPayment = vehiclePrice * 0.20;
                                     downPayment = minDownPayment;
                                     updateMinDownPaymentText();
-                                    etDownPayment.setText(formatIndianCurrency(downPayment));
+                                    etDownPayment.setText(formatIndianCurrencyNoSymbol(downPayment));
                                     
                                     // Recalculate EMI with new values
                                     calculateEMI();
@@ -211,12 +211,12 @@ public class EMISetupActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    String text = s.toString().replace(",", "");
+                    String text = s.toString().replace(",", "").replace("₹", "").trim();
                     if (!text.isEmpty()) {
                         downPayment = Double.parseDouble(text);
                         if (downPayment > vehiclePrice) {
                             downPayment = vehiclePrice;
-                            etDownPayment.setText(formatIndianCurrency(downPayment));
+                            etDownPayment.setText(formatIndianCurrencyNoSymbol(downPayment));
                             etDownPayment.setSelection(etDownPayment.getText().length());
                         }
                     } else {
@@ -299,7 +299,7 @@ public class EMISetupActivity extends AppCompatActivity {
     private void updateCalculatedValues(double principalAmount, double monthlyEMI,
                                         double totalInterest, double totalPayable) {
         // Format and set values
-        etMonthlyEMI.setText(formatIndianCurrency(monthlyEMI));
+        etMonthlyEMI.setText(formatIndianCurrencyNoSymbol(monthlyEMI));
         tvPrincipalAmount.setText(formatIndianCurrency(principalAmount));
         tvTotalInterest.setText("+ " + formatIndianCurrency(totalInterest));
         tvTotalPayable.setText(formatIndianCurrency(totalPayable));
@@ -328,6 +328,15 @@ public class EMISetupActivity extends AppCompatActivity {
             return formatted.replace(".00", "");
         } catch (Exception e) {
             return "₹0";
+        }
+    }
+    
+    private String formatIndianCurrencyNoSymbol(double amount) {
+         try {
+            // Use DecimalFormat for no symbol
+            return decimalFormat.format(amount);
+        } catch (Exception e) {
+            return "0.00";
         }
     }
 

@@ -42,6 +42,12 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                // Check for persistent Admin Workflow
+                if (com.example.motovista_deep.managers.WorkflowManager.checkAndRedirect(SplashActivity.this)) {
+                    finish(); // Close splash if redirected
+                    return;
+                }
+
                 Intent intent = new Intent(SplashActivity.this, RoleSelectionActivity.class);
                 startActivity(intent);
                 finish(); // Close splash activity

@@ -215,13 +215,11 @@ public class RequestSentActivity extends AppCompatActivity {
     }
 
     private void goToOrders() {
-        // Navigate to orders screen
-        // Intent ordersIntent = new Intent(this, OrdersActivity.class);
-        // startActivity(ordersIntent);
-        // finish();
-
-        // For now, just go back
-        onBackPressed();
+        Intent intent = new Intent(this, OrderStatusActivity.class);
+        intent.putExtra("ORDER_ID", orderId);
+        startActivity(intent);
+        // Do not finish() if we want back stack to remain, or finish() if we want to clear.
+        // Usually "Go to Orders" implies moving forward.
     }
 
     @Override

@@ -27,15 +27,25 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
     private Context context;
     private List<CustomerRequest> requests;
     private OnItemClickListener listener;
+    private OnLongItemClickListener longListener;
 
     public interface OnItemClickListener {
         void onItemClick(CustomerRequest request);
     }
 
+    public interface OnLongItemClickListener {
+        void onLongItemClick(CustomerRequest request);
+    }
+
     public ApplicationsAdapter(Context context, List<CustomerRequest> requests, OnItemClickListener listener) {
+        this(context, requests, listener, null);
+    }
+
+    public ApplicationsAdapter(Context context, List<CustomerRequest> requests, OnItemClickListener listener, OnLongItemClickListener longListener) {
         this.context = context;
         this.requests = requests;
         this.listener = listener;
+        this.longListener = longListener;
     }
     
     public void updateList(List<CustomerRequest> newRequests) {
@@ -91,6 +101,13 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
 
         // Click Listener
         holder.itemView.setOnClickListener(v -> listener.onItemClick(req));
+        holder.itemView.setOnLongClickListener(v -> {
+            if (longListener != null) {
+                longListener.onLongItemClick(req);
+                return true;
+            }
+            return false;
+        });
         holder.btnViewDetails.setOnClickListener(v -> listener.onItemClick(req));
     }
 
@@ -98,7 +115,12 @@ public class ApplicationsAdapter extends RecyclerView.Adapter<ApplicationsAdapte
         int bgColor, textColor, dotColor;
         String label;
 
-        if (status.equals("approved") || status.equals("accepted") || status.equals("completed")) {
+        if (status.equals("completed")) {
+            bgColor = Color.parseColor("#ecfdf5"); // Green-50
+            textColor = Color.parseColor("#047857"); // Green-700
+            dotColor = Color.parseColor("#10b981"); // Green-500
+            label = "COMPLETED";
+        } else if (status.equals("approved") || status.equals("accepted")) {
             bgColor = Color.parseColor("#ecfdf5"); // Green-50
             textColor = Color.parseColor("#047857"); // Green-700
             dotColor = Color.parseColor("#10b981"); // Green-500

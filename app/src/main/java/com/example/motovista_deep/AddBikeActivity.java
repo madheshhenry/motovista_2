@@ -1,13 +1,9 @@
 package com.example.motovista_deep;
 
-import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.DatePicker;
-import java.util.Calendar;
-import android.text.format.DateFormat;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,35 +14,35 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.app.AlertDialog;
+import android.graphics.Color;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.SeekBar;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.motovista_deep.api.ApiService;
 import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.helpers.PathCallback;
+import com.example.motovista_deep.helpers.RealPathUtil;
 import com.example.motovista_deep.helpers.SharedPrefManager;
-import com.example.motovista_deep.models.AddBikeRequest;
+import com.example.motovista_deep.models.AddBikeRequestV2;
+import com.example.motovista_deep.models.BikeParentModel;
+import com.example.motovista_deep.models.BikeVariantModel;
 import com.example.motovista_deep.models.GenericResponse;
-import com.example.motovista_deep.models.CustomFitting;
-import com.example.motovista_deep.models.UpdateBikeRequest;
 import com.example.motovista_deep.models.UploadBikeImageResponse;
-import com.example.motovista_deep.models.GetBikeByIdResponse;
-import com.google.gson.Gson;
 
-import java.io.ByteArrayOutputStream;
+import com.example.motovista_deep.models.CustomFitting;
+import com.google.android.material.button.MaterialButton;
+
 import java.io.File;
-import java.io.InputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -54,286 +50,586 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import android.database.Cursor;
 
 public class AddBikeActivity extends AppCompatActivity {
 
-    // UI Components
-    private EditText etBrand, etModel, etVariant, etEngineCC, etMileage;
-    private EditText etFuelTank, etKerbWeight, etSeatHeight, etGroundClearance;
-    private EditText etExShowroom, etInsurance, etRegistration, etLTRT, etTotalOnRoad;
-    private EditText etFreeServices, etRegistrationProof, etPriceDisclaimer;
-    // Add after existing EditText declarations
-    private EditText etDate, etEngineNumber, etChassisNumber;
+    private static final int PICK_IMAGE_REQUEST = 100;
 
-    private Spinner spinnerYear, spinnerFuelType, spinnerTransmission;
-    private Spinner spinnerBrakingType, spinnerWarranty;
+    // Parent Model UI
+    private EditText etBrand, etModelName, etYear, etEngineCC, etMileage, etFuelTank, etKerbWeight, etSeatHeight, etGroundClearance, etMaxTorque, etMaxPower;
+    private Spinner spFuelType, spTransmission;
+    private EditText etWarranty, etFreeServices;
+    private TextView etRegProof, etPriceDisclaimer;
+    private LinearLayout variantsContainer;
+    private MaterialButton btnAddVariant;
+    private View btnSaveBike, btnCancel;
+    private ImageButton btnBack;
 
-    private Button btnSaveBike, btnCancel, btnAddCustomFitting;
-    private ImageView btnBack, ivUploadIcon;
+    private BikeParentModel bikeParentModel = new BikeParentModel();
+    private List<BikeVariantModel> bikeVariants = new ArrayList<>();
+    private List<VariantViewHolder> variantViewHolders = new ArrayList<>();
 
-    private LinearLayout uploadContainer, imagePreviewContainer;
-    private LinearLayout mandatoryFittingsContainer, additionalFittingsContainer;
-    private TextView tvSelectedCount, tvTitle;
-    private ProgressDialog progressDialog;
+    // Variables for Image Upload state
+    private BikeVariantModel.VariantColor currentColorUploading = null;
+    private VariantViewHolder currentVariantHolder = null;
+    
+    // Fittings UI Elements
+    private CheckBox cbCrashBar, cbSareeGuard, cbMirror, cbNumberPlate, cbSideStand, cbFootRest;
+    private CheckBox cbSideBox, cbPetrolTankBag, cbGripCover, cbBagHook, cbHelmet, cbBodyCover, cbIndicatorBuzzer, cbSeatCover, cbLadiesHandle, cbEngineGuard, cbBumperSS;
+    private EditText etSideBoxPrice, etPetrolTankBagPrice, etGripCoverPrice, etBagHookPrice, etBodyCoverPrice, etIndicatorBuzzerPrice, etSeatCoverPrice, etLadiesHandlePrice, etEngineGuardPrice, etBumperSSPrice;
 
-    // Data holders
-    private ArrayList<Uri> imageUris = new ArrayList<>();
-    private Map<String, Double> mandatoryFittings = new HashMap<>();
-    private Map<String, Double> additionalFittings = new HashMap<>();
-    private List<CustomFitting> customFittings = new ArrayList<>();
+    private LinearLayout llAdditionalFittings; // Only for dynamic custom ones
+    private MaterialButton btnAddAdditional;
+    private List<View> additionalItemViews = new ArrayList<>();
 
-    private java.util.List<String> colorsList = new ArrayList<>();
-    private LinearLayout colorsContainer;
-    private LinearLayout btnAddColor;
-
+    // Edit Mode Flags
     private boolean isEditMode = false;
-    private int bikeId = 0;
-    private ArrayList<String> existingImagePaths = new ArrayList<>();
-
-    private static final int PICK_IMAGE_REQUEST = 1;
-
-    private String[] mandatoryItems = {
-            "Crash Bar", "Saree Guard", "Mirror Set",
-            "Front & Rear Number Plate", "Side Stand", "Foot Rest"
-    };
-
-    private String[] additionalItems = {
-            "Side Box (Fibre)", "Petrol Tank Bag", "Grip Cover", "Bag Hook",
-            "Helmet", "Body Cover (Full)", "Indicator Buzzer", "Seat Cover",
-            "Ladies Handle", "Engine Guard", "Bumper SS"
-    };
+    private int bikeId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_bike);
-
-        Intent intent = getIntent();
-        if (intent != null && intent.hasExtra("EDIT_MODE")) {
-            isEditMode = intent.getBooleanExtra("EDIT_MODE", false);
-            bikeId = intent.getIntExtra("BIKE_ID", 0);
-        }
+        setContentView(R.layout.activity_add_bike_redesign);
 
         initializeViews();
-        setupSpinners();
-        setupFittings();
-        setupClickListeners();
-        setupPriceCalculators();
+        setupListeners();
 
-        if (isEditMode && bikeId > 0) {
-            loadBikeData();
-            btnSaveBike.setText("Update Bike");
-            tvTitle.setText("Edit Bike");
+        initializeViews();
+        setupListeners();
+
+        // Check for Edit Mode
+        if (getIntent().hasExtra("bike_data") || getIntent().hasExtra("BIKE_MODEL")) {
+            com.example.motovista_deep.models.BikeModel bike = null;
+            if (getIntent().hasExtra("bike_data")) {
+                bike = getIntent().getParcelableExtra("bike_data");
+            } else {
+                bike = getIntent().getParcelableExtra("BIKE_MODEL");
+            }
+            
+            if (bike != null) {
+                setupEditMode(bike);
+            }
+        } else {
+            // Add one empty variant by default for new bikes
+            addVariant();
         }
     }
 
+    private void setupEditMode(com.example.motovista_deep.models.BikeModel bike) {
+        isEditMode = true;
+        bikeId = bike.getId();
+        TextView title = findViewById(R.id.tvTitle); // Assuming toolbar title exists
+        if (title != null) title.setText("Edit Bike");
+        ((Button)btnSaveBike).setText("Update Bike");
+
+        // Populate Parent Fields
+        etBrand.setText(bike.getBrand());
+        etModelName.setText(bike.getModel());
+        etYear.setText(bike.getYear());
+        etEngineCC.setText(bike.getEngineCC());
+        
+        // Spinners
+        setSpinnerSelection(spFuelType, bike.getFuel_type());
+        setSpinnerSelection(spTransmission, bike.getTransmission());
+        
+        etMileage.setText(bike.getMileage());
+        etFuelTank.setText(bike.getFuelTankCapacity());
+        etKerbWeight.setText(bike.getKerbWeight());
+        etSeatHeight.setText(bike.getSeatHeight());
+        etGroundClearance.setText(bike.getGroundClearance());
+        etMaxTorque.setText(bike.getMaxTorque());
+        etMaxPower.setText(bike.getMaxPower());
+        
+        etWarranty.setText(bike.getWarrantyPeriod());
+        etFreeServices.setText(bike.getFreeServicesCount());
+        
+        // Legal Notes (if available)
+        if (bike.getRegistrationProof() != null) etRegProof.setText(bike.getRegistrationProof());
+        if (bike.getPriceDisclaimer() != null) etPriceDisclaimer.setText(bike.getPriceDisclaimer());
+
+        // Pre-fill Fittings
+        prefillFittings(bike);
+
+        // Pre-fill Variants
+        if (bike.getVariants() != null && !bike.getVariants().isEmpty()) {
+            bikeVariants.clear();
+            variantsContainer.removeAllViews();
+            variantViewHolders.clear();
+            
+            for (BikeVariantModel v : bike.getVariants()) {
+                addVariant(v); 
+            }
+        } else {
+             addVariant(); // Fallback
+        }
+    }
+
+    private void setSpinnerSelection(Spinner spinner, String value) {
+        if (value == null) return;
+        ArrayAdapter adapter = (ArrayAdapter) spinner.getAdapter();
+        for (int i = 0; i < adapter.getCount(); i++) {
+            if (adapter.getItem(i).toString().equalsIgnoreCase(value)) {
+                spinner.setSelection(i);
+                break;
+            }
+        }
+    }
+
+    private void prefillFittings(com.example.motovista_deep.models.BikeModel bike) {
+        // Mandatory
+        if (bike.getMandatoryFittings() != null) {
+            for (CustomFitting f : bike.getMandatoryFittings()) {
+                if (f == null) continue;
+                checkMandatoryBox(f.getName());
+            }
+        }
+        
+        // Additional
+        if (bike.getAdditionalFittings() != null) {
+            for (CustomFitting f : bike.getAdditionalFittings()) {
+                if (f == null) continue;
+                if (!checkAdditionalBox(f.getName(), f.getPrice())) {
+                    // If not one of the checkboxes, add as dynamic row
+                    addFittingRow(llAdditionalFittings, additionalItemViews, f.getName(), f.getPrice());
+                }
+            }
+        }
+    }
+
+    private void checkMandatoryBox(String name) {
+        if (name == null) return;
+        if (name.contains("Crash Bar")) cbCrashBar.setChecked(true);
+        if (name.contains("Saree Guard")) cbSareeGuard.setChecked(true);
+        if (name.contains("Mirror")) cbMirror.setChecked(true);
+        if (name.contains("Number Plate")) cbNumberPlate.setChecked(true);
+        if (name.contains("Side Stand")) cbSideStand.setChecked(true);
+        if (name.contains("Foot Rest")) cbFootRest.setChecked(true);
+    }
+
+    private boolean checkAdditionalBox(String name, String price) {
+        if (name == null) return false;
+        if (name.contains("Side Box")) { cbSideBox.setChecked(true); etSideBoxPrice.setText(price); return true; }
+        if (name.contains("Petrol Tank Bag")) { cbPetrolTankBag.setChecked(true); etPetrolTankBagPrice.setText(price); return true; }
+        if (name.contains("Grip Cover")) { cbGripCover.setChecked(true); etGripCoverPrice.setText(price); return true; }
+        if (name.contains("Bag Hook")) { cbBagHook.setChecked(true); etBagHookPrice.setText(price); return true; }
+        if (name.contains("Helmet")) { cbHelmet.setChecked(true); return true; }
+        if (name.contains("Body Cover")) { cbBodyCover.setChecked(true); etBodyCoverPrice.setText(price); return true; }
+        if (name.contains("Indicator Buzzer")) { cbIndicatorBuzzer.setChecked(true); etIndicatorBuzzerPrice.setText(price); return true; }
+        if (name.contains("Seat Cover")) { cbSeatCover.setChecked(true); etSeatCoverPrice.setText(price); return true; }
+        if (name.contains("Ladies Handle")) { cbLadiesHandle.setChecked(true); etLadiesHandlePrice.setText(price); return true; }
+        if (name.contains("Engine Guard")) { cbEngineGuard.setChecked(true); etEngineGuardPrice.setText(price); return true; }
+        if (name.contains("Bumper SS")) { cbBumperSS.setChecked(true); etBumperSSPrice.setText(price); return true; }
+        return false;
+    }
+
+    private void addFittingRow(LinearLayout container, List<View> trackingList, String name, String price) {
+        View row = LayoutInflater.from(this).inflate(R.layout.item_dynamic_field, container, false);
+        container.addView(row);
+        trackingList.add(row);
+
+        EditText etName = row.findViewById(R.id.etFieldKey);
+        EditText etPrice = row.findViewById(R.id.etFieldValue);
+        
+        etName.setText(name);
+        etPrice.setText(price);
+        
+        etName.setHint("Fitting Name");
+        etPrice.setHint("Price");
+        etPrice.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+        row.setOnLongClickListener(v -> {
+             container.removeView(row);
+             trackingList.remove(row);
+             return true;
+        });
+    }
+
     private void initializeViews() {
-        // Existing EditText initializations
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        btnBack = findViewById(R.id.btnBack);
+        
+        // Parent fields
         etBrand = findViewById(R.id.etBrand);
-        etModel = findViewById(R.id.etModel);
-        etVariant = findViewById(R.id.etVariant);
+        etModelName = findViewById(R.id.etModelName);
+        etYear = findViewById(R.id.etYear);
         etEngineCC = findViewById(R.id.etEngineCC);
+        spFuelType = findViewById(R.id.spFuelType);
+        spTransmission = findViewById(R.id.spTransmission);
         etMileage = findViewById(R.id.etMileage);
         etFuelTank = findViewById(R.id.etFuelTank);
         etKerbWeight = findViewById(R.id.etKerbWeight);
         etSeatHeight = findViewById(R.id.etSeatHeight);
         etGroundClearance = findViewById(R.id.etGroundClearance);
-        etExShowroom = findViewById(R.id.etExShowroom);
-        etInsurance = findViewById(R.id.etInsurance);
-        etRegistration = findViewById(R.id.etRegistration);
-        etLTRT = findViewById(R.id.etLTRT);
-        etTotalOnRoad = findViewById(R.id.etTotalOnRoad);
+        etMaxTorque = findViewById(R.id.etMaxTorque);
+        etMaxPower = findViewById(R.id.etMaxPower);
+        
+        etWarranty = findViewById(R.id.etWarranty);
         etFreeServices = findViewById(R.id.etFreeServices);
-        etRegistrationProof = findViewById(R.id.etRegistrationProof);
+        etRegProof = findViewById(R.id.etRegProof);
         etPriceDisclaimer = findViewById(R.id.etPriceDisclaimer);
         
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setCancelable(false);
-
-        // Add these lines after other EditText initializations
-        etDate = findViewById(R.id.etDate);
-        etEngineNumber = findViewById(R.id.etEngineNumber);
-        etChassisNumber = findViewById(R.id.etChassisNumber);
-
-        spinnerYear = findViewById(R.id.spinnerYear);
-        spinnerFuelType = findViewById(R.id.spinnerFuelType);
-        spinnerTransmission = findViewById(R.id.spinnerTransmission);
-        spinnerBrakingType = findViewById(R.id.spinnerBrakingType);
-        spinnerWarranty = findViewById(R.id.spinnerWarranty);
-
+        // Default values are set in XML as Read-Only text.
+        
+        variantsContainer = findViewById(R.id.variantsContainer);
+        btnAddVariant = findViewById(R.id.btnAddVariant);
         btnSaveBike = findViewById(R.id.btnSaveBike);
         btnCancel = findViewById(R.id.btnCancel);
-        btnAddCustomFitting = findViewById(R.id.btnAddCustomFitting);
-        btnBack = findViewById(R.id.btnBack);
-        ivUploadIcon = findViewById(R.id.ivUploadIcon);
 
-        uploadContainer = findViewById(R.id.uploadContainer);
-        imagePreviewContainer = findViewById(R.id.imagePreviewContainer);
-        mandatoryFittingsContainer = findViewById(R.id.mandatoryFittingsContainer);
-        additionalFittingsContainer = findViewById(R.id.additionalFittingsContainer);
-        tvSelectedCount = findViewById(R.id.tvSelectedCount);
-        tvTitle = findViewById(R.id.tvTitle);
+        // Initialize Fittings Sections (Checkboxes)
+        cbCrashBar = findViewById(R.id.cbCrashBar);
+        cbSareeGuard = findViewById(R.id.cbSareeGuard);
+        cbMirror = findViewById(R.id.cbMirror);
+        cbNumberPlate = findViewById(R.id.cbNumberPlate);
+        cbSideStand = findViewById(R.id.cbSideStand);
+        cbFootRest = findViewById(R.id.cbFootRest);
+        
+        cbSideBox = findViewById(R.id.cbSideBox); etSideBoxPrice = findViewById(R.id.etSideBoxPrice);
+        cbPetrolTankBag = findViewById(R.id.cbPetrolTankBag); etPetrolTankBagPrice = findViewById(R.id.etPetrolTankBagPrice);
+        cbGripCover = findViewById(R.id.cbGripCover); etGripCoverPrice = findViewById(R.id.etGripCoverPrice);
+        cbBagHook = findViewById(R.id.cbBagHook); etBagHookPrice = findViewById(R.id.etBagHookPrice);
+        cbHelmet = findViewById(R.id.cbHelmet);
+        cbBodyCover = findViewById(R.id.cbBodyCover); etBodyCoverPrice = findViewById(R.id.etBodyCoverPrice);
+        cbIndicatorBuzzer = findViewById(R.id.cbIndicatorBuzzer); etIndicatorBuzzerPrice = findViewById(R.id.etIndicatorBuzzerPrice);
+        cbSeatCover = findViewById(R.id.cbSeatCover); etSeatCoverPrice = findViewById(R.id.etSeatCoverPrice);
+        cbLadiesHandle = findViewById(R.id.cbLadiesHandle); etLadiesHandlePrice = findViewById(R.id.etLadiesHandlePrice);
+        cbEngineGuard = findViewById(R.id.cbEngineGuard); etEngineGuardPrice = findViewById(R.id.etEngineGuardPrice);
+        cbBumperSS = findViewById(R.id.cbBumperSS); etBumperSSPrice = findViewById(R.id.etBumperSSPrice);
 
-        colorsContainer = findViewById(R.id.colorsContainer);
-        btnAddColor = findViewById(R.id.btnAddColor);
+        // Dynamic Additional Fittings
+        llAdditionalFittings = findViewById(R.id.llAdditionalFittings);
+        btnAddAdditional = findViewById(R.id.btnAddAdditionalFitting);
+        btnAddAdditional.setOnClickListener(v -> addFittingRow(llAdditionalFittings, additionalItemViews, "", ""));
 
-        for (String item : mandatoryItems) {
-            mandatoryFittings.put(item, 0.0);
-        }
-        for (String item : additionalItems) {
-            additionalFittings.put(item, 0.0);
-        }
+        // Spinners
+        setupSpinner(spFuelType, new String[]{"Petrol", "Electric", "Hybrid"});
+        setupSpinner(spTransmission, new String[]{"Manual", "Automatic", "CVT"});
     }
 
-    private void setupSpinners() {
-        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item,
-                new String[]{"Select", "2025", "2024", "2023", "2022"}
-        );
-        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerYear.setAdapter(yearAdapter);
-
-        ArrayAdapter<String> fuelAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item,
-                new String[]{"Select", "Petrol", "Electric"}
-        );
-        fuelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFuelType.setAdapter(fuelAdapter);
-
-        ArrayAdapter<String> transmissionAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item,
-                new String[]{"Select", "Manual", "Automatic"}
-        );
-        transmissionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerTransmission.setAdapter(transmissionAdapter);
-
-        ArrayAdapter<String> brakingAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item,
-                new String[]{"Select", "Drum", "Disc", "ABS"}
-        );
-        brakingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerBrakingType.setAdapter(brakingAdapter);
-
-        ArrayAdapter<String> warrantyAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item,
-                new String[]{"2 Years", "5 Years"}
-        );
-        warrantyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerWarranty.setAdapter(warrantyAdapter);
+    private void setupSpinner(Spinner spinner, String[] items) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
 
-    private void setupFittings() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-
-        for (String item : mandatoryItems) {
-            View fittingView = inflater.inflate(R.layout.item_fitting, mandatoryFittingsContainer, false);
-
-            CheckBox checkBox = fittingView.findViewById(R.id.cbFitting);
-            TextView tvName = fittingView.findViewById(R.id.tvFittingName);
-            EditText etPrice = fittingView.findViewById(R.id.etFittingPrice);
-
-            tvName.setText(item);
-            checkBox.setChecked(true);
-            checkBox.setEnabled(false);
-
-            etPrice.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    try {
-                        double price = s.toString().isEmpty() ? 0 : Double.parseDouble(s.toString());
-                        mandatoryFittings.put(item, price);
-                        calculateTotalPrice();
-                    } catch (NumberFormatException e) {
-                        mandatoryFittings.put(item, 0.0);
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {}
-            });
-
-            mandatoryFittingsContainer.addView(fittingView);
-        }
-
-        for (String item : additionalItems) {
-            View fittingView = inflater.inflate(R.layout.item_fitting, additionalFittingsContainer, false);
-
-            CheckBox checkBox = fittingView.findViewById(R.id.cbFitting);
-            TextView tvName = fittingView.findViewById(R.id.tvFittingName);
-            EditText etPrice = fittingView.findViewById(R.id.etFittingPrice);
-
-            tvName.setText(item);
-
-            if (item.equals("Helmet")) {
-                etPrice.setHint("FREE / 0");
-            }
-
-            checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (!isChecked) {
-                    etPrice.setText("");
-                    additionalFittings.put(item, 0.0);
-                    calculateTotalPrice();
-                }
-            });
-
-            etPrice.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (checkBox.isChecked()) {
-                        try {
-                            double price = s.toString().isEmpty() ? 0 : Double.parseDouble(s.toString());
-                            additionalFittings.put(item, price);
-                            calculateTotalPrice();
-                        } catch (NumberFormatException e) {
-                            additionalFittings.put(item, 0.0);
-                        }
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {}
-            });
-
-            additionalFittingsContainer.addView(fittingView);
-        }
-    }
-
-    private void setupClickListeners() {
+    private void setupListeners() {
         btnBack.setOnClickListener(v -> finish());
         btnCancel.setOnClickListener(v -> finish());
-        uploadContainer.setOnClickListener(v -> openImageChooser());
-        ivUploadIcon.setOnClickListener(v -> openImageChooser());
-        btnSaveBike.setOnClickListener(v -> saveBike());
-        btnAddCustomFitting.setOnClickListener(v -> addCustomFitting());
-        btnAddColor.setOnClickListener(v -> showAddColorDialog());
-        etDate.setOnClickListener(v -> showDatePickerDialog());
+        
+        btnAddVariant.setOnClickListener(v -> addVariant());
+        
+        btnSaveBike.setOnClickListener(v -> startSaveProcess());
     }
 
-    private void showDatePickerDialog() {
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                this,
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-                    // Format the date as yyyy-MM-dd
-                    String selectedDate = String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay);
-                    etDate.setText(selectedDate);
-                },
-                year, month, day);
-        datePickerDialog.show();
+    private void addVariant() {
+        addVariant(new BikeVariantModel());
     }
 
-    private void showAddColorDialog() {
+    private void addVariant(BikeVariantModel existingVariant) {
+        BikeVariantModel newVariant = existingVariant; // Use existing or new
+        bikeVariants.add(newVariant);
+
+        View variantView = LayoutInflater.from(this).inflate(R.layout.item_variant_builder, variantsContainer, false);
+        variantsContainer.addView(variantView);
+
+        VariantViewHolder holder = new VariantViewHolder(variantView, newVariant, this);
+        variantViewHolders.add(holder);
+    }
+
+    private void startSaveProcess() {
+        // 1. Sync UI to Models
+        syncUiToModels();
+
+        // 2. Validate
+        if (!validateData()) return;
+
+        // 3. Upload Images (Recursive chain)
+        uploadImagesAndSubmit();
+    }
+
+    private void syncUiToModels() {
+        // Parent
+        bikeParentModel.setBrand(etBrand.getText().toString().trim());
+        bikeParentModel.setModelName(etModelName.getText().toString().trim());
+        bikeParentModel.setModelYear(etYear.getText().toString().trim());
+        bikeParentModel.setEngineCC(etEngineCC.getText().toString().trim());
+        bikeParentModel.setFuelType(spFuelType.getSelectedItem().toString());
+        bikeParentModel.setTransmission(spTransmission.getSelectedItem().toString());
+        bikeParentModel.setMileage(etMileage.getText().toString().trim());
+        bikeParentModel.setFuelTankCapacity(etFuelTank.getText().toString().trim());
+        bikeParentModel.setKerbWeight(etKerbWeight.getText().toString().trim());
+        bikeParentModel.setSeatHeight(etSeatHeight.getText().toString().trim());
+        bikeParentModel.setGroundClearance(etGroundClearance.getText().toString().trim());
+        bikeParentModel.setMaxTorque(etMaxTorque.getText().toString().trim());
+        bikeParentModel.setMaxPower(etMaxPower.getText().toString().trim());
+        
+        bikeParentModel.setWarrantyPeriod(etWarranty.getText().toString().trim());
+        bikeParentModel.setFreeServices(etFreeServices.getText().toString().trim());
+        
+        // Fittings
+        bikeParentModel.setMandatoryFittings(gatherMandatoryFittings());
+        bikeParentModel.setAdditionalFittings(gatherAdditionalFittings());
+        
+        BikeParentModel.LegalNotes notes = new BikeParentModel.LegalNotes();
+        // Since these fields are now just TextViews (static legal notes), we don't really need to read them from UI if they are static.
+        // But if the user wants them in the DB, we can send default strings or read from textviews.
+        // Previous step made them static textviews, but I kept IDs etRegProof/etPriceDisclaimer on them possibly?
+        // Wait, I updated layout to use TextViews but kept the IDs.
+        // Let's grab the text from them just in case.
+        TextView tvRegProof = findViewById(R.id.etRegProof); // ID reused? Yes if I kept it
+        TextView tvPriceDisclaimer = findViewById(R.id.etPriceDisclaimer);
+        
+        if (tvRegProof != null) notes.regProof = tvRegProof.getText().toString();
+        if (tvPriceDisclaimer != null) notes.priceDisclaimer = tvPriceDisclaimer.getText().toString();
+        
+        bikeParentModel.setLegalNotes(notes);
+        
+        // Variants
+        for (VariantViewHolder holder : variantViewHolders) {
+            holder.syncData();
+        }
+    }
+
+    // --- Fittings UI Logic ---
+    // Mandatory are now just checkboxes, no dynamic list vars needed for them.
+
+    // Helper to add dynamic fittings (only for custom added ones)
+    // Combined into overloaded method above
+
+
+    private List<CustomFitting> extractFittings(List<View> views) {
+        List<CustomFitting> list = new ArrayList<>();
+        for (View v : views) {
+             EditText etName = v.findViewById(R.id.etFieldKey);
+             EditText etPrice = v.findViewById(R.id.etFieldValue);
+             String name = etName.getText().toString().trim();
+             String price = etPrice.getText().toString().trim();
+             if (!name.isEmpty()) {
+                 list.add(new CustomFitting(name, price));
+             }
+        }
+        return list;
+    }
+    
+    private List<CustomFitting> gatherMandatoryFittings() {
+        List<CustomFitting> list = new ArrayList<>();
+        if (cbCrashBar.isChecked()) list.add(new CustomFitting("Crash Bar", "Included"));
+        if (cbSareeGuard.isChecked()) list.add(new CustomFitting("Saree Guard", "Included"));
+        if (cbMirror.isChecked()) list.add(new CustomFitting("Mirror Set", "Included"));
+        if (cbNumberPlate.isChecked()) list.add(new CustomFitting("Front & Rear Number Plate", "Included"));
+        if (cbSideStand.isChecked()) list.add(new CustomFitting("Side Stand", "Included"));
+        if (cbFootRest.isChecked()) list.add(new CustomFitting("Foot Rest", "Included"));
+        return list;
+    }
+    
+    private List<CustomFitting> gatherAdditionalFittings() {
+        List<CustomFitting> list = new ArrayList<>();
+        
+        // Checklist Items
+        addIfChecked(list, cbSideBox, "Side Box (Fibre)", etSideBoxPrice);
+        addIfChecked(list, cbPetrolTankBag, "Petrol Tank Bag", etPetrolTankBagPrice);
+        addIfChecked(list, cbGripCover, "Grip Cover", etGripCoverPrice);
+        addIfChecked(list, cbBagHook, "Bag Hook", etBagHookPrice);
+        if(cbHelmet.isChecked()){
+             list.add(new CustomFitting("Helmet", "FREE"));
+        }
+        addIfChecked(list, cbBodyCover, "Body Cover (Full)", etBodyCoverPrice);
+        addIfChecked(list, cbIndicatorBuzzer, "Indicator Buzzer", etIndicatorBuzzerPrice);
+        addIfChecked(list, cbSeatCover, "Seat Cover", etSeatCoverPrice);
+        addIfChecked(list, cbLadiesHandle, "Ladies Handle", etLadiesHandlePrice);
+        addIfChecked(list, cbEngineGuard, "Engine Guard", etEngineGuardPrice);
+        addIfChecked(list, cbBumperSS, "Bumper SS", etBumperSSPrice);
+        
+        // Add Dynamic Custom Items
+        list.addAll(extractFittings(additionalItemViews));
+        
+        return list;
+    }
+    
+    private void addIfChecked(List<CustomFitting> list, CheckBox cb, String name, EditText priceInput) {
+        if(cb.isChecked()) {
+             String p = priceInput.getText().toString().trim();
+             if(p.isEmpty()) p = "0";
+             list.add(new CustomFitting(name, p));
+        }
+    }
+
+
+    
+    // --- ViewHolder Logic ---
+    // --- End of Image Upload Logic ---
+    // (Consolidated VariantViewHolder logic is already defined above)
+        
+    private boolean validateData() {
+        if (bikeVariants.isEmpty()) {
+            Toast.makeText(this, "Add at least one variant", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        for (BikeVariantModel v : bikeVariants) {
+            if (v.variantName == null || v.variantName.isEmpty()) {
+                Toast.makeText(this, "Variant Name Required", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+            // Check colors
+            if (v.colors.isEmpty()) {
+                Toast.makeText(this, "Variant " + v.variantName + " needs at least one color", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // --- Image Upload Logic ---
+    private List<ImageUploadTask> uploadQueue = new ArrayList<>();
+    private ProgressDialog progressDialog;
+
+    private void uploadImagesAndSubmit() {
+        uploadQueue.clear();
+        
+        for (BikeVariantModel variant : bikeVariants) {
+            for (BikeVariantModel.VariantColor color : variant.colors) {
+                if (color.tempImageUris != null) {
+                    for (String uri : color.tempImageUris) {
+                        uploadQueue.add(new ImageUploadTask(variant, color, uri));
+                    }
+                }
+            }
+        }
+
+        if (uploadQueue.isEmpty()) {
+            submitFinalData();
+        } else {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Uploading Images (0/" + uploadQueue.size() + ")...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+            processNextUpload(0);
+        }
+    }
+
+    private void processNextUpload(int index) {
+        if (index >= uploadQueue.size()) {
+            progressDialog.dismiss();
+            submitFinalData();
+            return;
+        }
+
+        progressDialog.setMessage("Uploading Images (" + (index + 1) + "/" + uploadQueue.size() + ")...");
+        ImageUploadTask task = uploadQueue.get(index);
+        
+        uploadImageToServer(task.uri, new PathCallback() {
+            @Override
+            public void onPathReceived(String serverPath) {
+                // Add to the color's imagePaths list
+                task.color.imagePaths.add(serverPath);
+                processNextUpload(index + 1);
+            }
+
+            @Override
+            public void onError(String error) {
+                progressDialog.dismiss();
+                Toast.makeText(AddBikeActivity.this, "Upload Failed: " + error, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void uploadImageToServer(String fileUri, PathCallback callback) {
+        try {
+            Uri uri = Uri.parse(fileUri);
+            File file = new File(RealPathUtil.getRealPath(this, uri));
+            
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("bike_images", file.getName(), requestFile);
+            
+            String token = SharedPrefManager.getInstance(this).getToken();
+            
+            RetrofitClient.getApiService().uploadBikeImage("Bearer " + token, body)
+                    .enqueue(new Callback<UploadBikeImageResponse>() {
+                        @Override
+                        public void onResponse(Call<UploadBikeImageResponse> call, Response<UploadBikeImageResponse> response) {
+                            if (response.isSuccessful() && response.body() != null && "success".equals(response.body().getStatus())) {
+                                String relativePath = response.body().getFirstImagePath(); // e.g. "uploads/bikes/..."
+                                callback.onPathReceived(relativePath);
+                            } else {
+                                callback.onError("Server Error");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<UploadBikeImageResponse> call, Throwable t) {
+                            callback.onError(t.getMessage());
+                        }
+                    });
+
+        } catch (Exception e) {
+            callback.onError(e.getMessage());
+        }
+    }
+
+    private void submitFinalData() {
+        ProgressDialog pd = new ProgressDialog(this);
+        pd.setMessage("Saving Bike Data...");
+        pd.show();
+
+        String token = SharedPrefManager.getInstance(this).getToken();
+
+        if (isEditMode) {
+            com.example.motovista_deep.models.UpdateBikeRequestV2 request = 
+                new com.example.motovista_deep.models.UpdateBikeRequestV2(bikeId, bikeParentModel, bikeVariants);
+            
+            RetrofitClient.getApiService().updateBikeV2("Bearer " + token, request)
+                .enqueue(new Callback<GenericResponse>() {
+                    @Override
+                    public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                        pd.dismiss();
+                        if (response.isSuccessful() && response.body() != null && "success".equalsIgnoreCase(response.body().getStatus())) {
+                            Toast.makeText(AddBikeActivity.this, "Bike Updated Successfully!", Toast.LENGTH_LONG).show();
+                            setResult(RESULT_OK); // Notify caller
+                            finish();
+                        } else {
+                            Toast.makeText(AddBikeActivity.this, "Error: " + (response.body()!=null?response.body().getMessage():"Unknown"), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<GenericResponse> call, Throwable t) {
+                        pd.dismiss();
+                        Toast.makeText(AddBikeActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        } else {
+            AddBikeRequestV2 request = new AddBikeRequestV2(bikeParentModel, bikeVariants);
+
+            RetrofitClient.getApiService().addBikeV2("Bearer " + token, request)
+                    .enqueue(new Callback<GenericResponse>() {
+                        @Override
+                        public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                            pd.dismiss();
+                            if (response.isSuccessful() && response.body() != null) {
+                                if (response.body().getStatus().equalsIgnoreCase("success")) {
+                                    Toast.makeText(AddBikeActivity.this, "Bike Added Successfully!", Toast.LENGTH_LONG).show();
+                                    finish();
+                                } else {
+                                    Toast.makeText(AddBikeActivity.this, "Error: " + response.body().getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Toast.makeText(AddBikeActivity.this, "Server Error: " + response.code(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<GenericResponse> call, Throwable t) {
+                            pd.dismiss();
+                            Toast.makeText(AddBikeActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }
+    }
+
+    private void showColorPickerDialog(BikeVariantModel.VariantColor colorModel, View vChip, TextView tvName) {
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_color, null);
         builder.setView(view);
@@ -341,11 +637,16 @@ public class AddBikeActivity extends AppCompatActivity {
         EditText etColorName = view.findViewById(R.id.etColorName);
         EditText etColorHex = view.findViewById(R.id.etColorHex);
         View viewColorPreview = view.findViewById(R.id.viewColorPreview);
-        Button btnAdd = view.findViewById(R.id.btnAdd);
+        Button btnAdd = view.findViewById(R.id.btnAdd); // "Apply Color"
+        com.example.motovista_deep.views.ColorPickerView colorPickerView = view.findViewById(R.id.colorPickerView);
 
-        // Custom Color Picker
-        com.example.motovista_deep.views.ColorPickerView colorPickerView = 
-                view.findViewById(R.id.colorPickerView);
+        // Pre-fill existing data
+        etColorName.setText(colorModel.colorName);
+        etColorHex.setText(colorModel.colorHex);
+        try {
+            int color = Color.parseColor(colorModel.colorHex);
+            viewColorPreview.setBackgroundTintList(android.content.res.ColorStateList.valueOf(color));
+        } catch (Exception e) {}
 
         android.app.AlertDialog dialog = builder.create();
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -355,33 +656,22 @@ public class AddBikeActivity extends AppCompatActivity {
             viewColorPreview.setBackgroundTintList(android.content.res.ColorStateList.valueOf(color));
         });
 
-        // Hex Text Watcher
         etColorHex.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
                     String hex = s.toString();
-                    if (!hex.startsWith("#")) {
-                        hex = "#" + hex;
-                    }
-                    if (hex.length() >= 7) { // #RRGGBB
-                        int color = android.graphics.Color.parseColor(hex);
+                    if (!hex.startsWith("#")) hex = "#" + hex;
+                    if (hex.length() >= 7) {
+                        int color = Color.parseColor(hex);
                         viewColorPreview.setBackgroundTintList(android.content.res.ColorStateList.valueOf(color));
-                        
-                        // Update Color Picker View selection
-                        // Note: Avoid loop if triggered by listener
-                        if (!etColorHex.hasFocus()) return; // Simple check or flag
                     }
-                } catch (Exception e) {
-                    // Invalid color
-                }
+                } catch (Exception e) {}
             }
-            @Override
-            public void afterTextChanged(Editable s) {}
+            @Override public void afterTextChanged(Editable s) {}
         });
 
+        btnAdd.setText("Apply Color");
         btnAdd.setOnClickListener(v -> {
             String name = etColorName.getText().toString().trim();
             String hex = etColorHex.getText().toString().trim();
@@ -390,1151 +680,391 @@ public class AddBikeActivity extends AppCompatActivity {
                 Toast.makeText(this, "Please enter name and hex code", Toast.LENGTH_SHORT).show();
                 return;
             }
-
-            if (!hex.startsWith("#")) {
-                hex = "#" + hex;
-            }
-
+            if (!hex.startsWith("#")) hex = "#" + hex;
             try {
-                android.graphics.Color.parseColor(hex); // Validate
-                addColorToLayout(name, hex);
-                colorsList.add(name + "|" + hex);
+                int colorCode = Color.parseColor(hex);
+                
+                // Update Model
+                colorModel.colorName = name;
+                colorModel.colorHex = hex;
+                
+                // Update UI
+                tvName.setText(name);
+                vChip.setBackgroundTintList(android.content.res.ColorStateList.valueOf(colorCode));
+                
                 dialog.dismiss();
             } catch (IllegalArgumentException e) {
                 etColorHex.setError("Invalid Hex Code");
             }
         });
-
-        // Init default black
-        etColorHex.setText("#000000");
-
+        
         dialog.show();
     }
 
-    private void addColorToLayout(String name, String hex) {
-        View colorView = LayoutInflater.from(this).inflate(R.layout.item_color_chip, colorsContainer, false);
-        
-        View circle = colorView.findViewById(R.id.viewColorCircle);
-        TextView tvName = colorView.findViewById(R.id.tvColorName);
-        ImageView remove = colorView.findViewById(R.id.btnRemoveColor);
+    private static class ImageUploadTask {
+        BikeVariantModel variant;
+        BikeVariantModel.VariantColor color;
+        String uri;
 
-        try {
-            circle.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor(hex)));
-        } catch (Exception e) {
-            circle.setBackgroundColor(android.graphics.Color.GRAY);
+        public ImageUploadTask(BikeVariantModel v, BikeVariantModel.VariantColor c, String u) {
+            this.variant = v;
+            this.color = c;
+            this.uri = u;
         }
+    }
+
+    // --- ViewHolder Logic ---
+    class VariantViewHolder {
+        View itemView;
+        BikeVariantModel model;
+        AddBikeActivity activity;
         
-        tvName.setText(name);
+        EditText etVariantName;
+        EditText etEx, etIns, etReg, etLtrt;
+        TextView tvTotal;
+        Spinner spFront, spRear, spSys, spWheel;
+        LinearLayout llColors, llDynamic;
+        ImageButton btnDelete;
+        TextView btnAddColor;
+        MaterialButton btnAddSection;
 
-        remove.setOnClickListener(v -> {
-            colorsContainer.removeView(colorView);
-            colorsList.remove(name + "|" + hex);
-        });
+        public VariantViewHolder(View view, BikeVariantModel model, AddBikeActivity activity) {
+            this.itemView = view;
+            this.model = model;
+            this.activity = activity;
+            bindViews();
+            setupInternalListeners();
+        }
 
-        colorsContainer.addView(colorView);
-    }
-
-    private void setupPriceCalculators() {
-        TextWatcher priceWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                calculateTotalPrice();
+        private void bindViews() {
+            etVariantName = itemView.findViewById(R.id.etVariantName);
+            btnDelete = itemView.findViewById(R.id.btnDeleteVariant);
+            
+            etEx = itemView.findViewById(R.id.etExShowroom);
+            etIns = itemView.findViewById(R.id.etInsurance);
+            etReg = itemView.findViewById(R.id.etRegistration);
+            etLtrt = itemView.findViewById(R.id.etLTRT);
+            tvTotal = itemView.findViewById(R.id.tvTotalOnRoad);
+            
+            spFront = itemView.findViewById(R.id.spFrontBrake);
+            spRear = itemView.findViewById(R.id.spRearBrake);
+            spSys = itemView.findViewById(R.id.spBrakingSystem);
+            spWheel = itemView.findViewById(R.id.spWheelType);
+            
+            llColors = itemView.findViewById(R.id.llColorsContainer);
+            btnAddColor = itemView.findViewById(R.id.btnAddColor);
+            
+            llDynamic = itemView.findViewById(R.id.llDynamicSectionsContainer);
+            btnAddSection = itemView.findViewById(R.id.btnAddSection);
+            
+            // Setup Spinners
+            activity.setupSpinner(spFront, new String[]{"Disc", "Drum"});
+            activity.setupSpinner(spRear, new String[]{"Disc", "Drum"});
+            activity.setupSpinner(spSys, new String[]{"Dual Channel ABS", "Single Channel ABS", "CBS", "IBS", "Standard"});
+            activity.setupSpinner(spWheel, new String[]{"Alloy", "Spoke"});
+            
+            // PRE-FILL DATA IF EDITING
+            if (model.variantName != null) etVariantName.setText(model.variantName);
+            if (model.priceDetails != null) {
+                etEx.setText(model.priceDetails.exShowroom);
+                etIns.setText(model.priceDetails.insurance);
+                etReg.setText(model.priceDetails.registration);
+                etLtrt.setText(model.priceDetails.ltrt);
+                calculateTotal();
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        };
-
-        etExShowroom.addTextChangedListener(priceWatcher);
-        etInsurance.addTextChangedListener(priceWatcher);
-        etRegistration.addTextChangedListener(priceWatcher);
-        etLTRT.addTextChangedListener(priceWatcher);
-    }
-
-    private void calculateTotalPrice() {
-        try {
-            double exShowroom = etExShowroom.getText().toString().isEmpty() ? 0 :
-                    Double.parseDouble(etExShowroom.getText().toString());
-            double insurance = etInsurance.getText().toString().isEmpty() ? 0 :
-                    Double.parseDouble(etInsurance.getText().toString());
-            double registration = etRegistration.getText().toString().isEmpty() ? 0 :
-                    Double.parseDouble(etRegistration.getText().toString());
-            double ltrt = etLTRT.getText().toString().isEmpty() ? 0 :
-                    Double.parseDouble(etLTRT.getText().toString());
-
-            double total = exShowroom + insurance + registration + ltrt;
-            Log.d("PRICE_CALC", "Base Total: " + total);
-
-            // Calculate Mandatory Fittings from UI directly
-            if (mandatoryFittingsContainer != null) {
-                for (int i = 0; i < mandatoryFittingsContainer.getChildCount(); i++) {
-                    View view = mandatoryFittingsContainer.getChildAt(i);
-                    EditText etPrice = view.findViewById(R.id.etFittingPrice);
-                    if (etPrice != null) {
-                        try {
-                            String p = etPrice.getText().toString();
-                            if (!p.isEmpty()) {
-                                total += Double.parseDouble(p);
-                            }
-                        } catch (NumberFormatException e) { }
-                    }
-                }
-            }
-
-            // Calculate Additional Fittings from UI directly (only checked ones)
-            if (additionalFittingsContainer != null) {
-                 for (int i = 0; i < additionalFittingsContainer.getChildCount(); i++) {
-                    View view = additionalFittingsContainer.getChildAt(i);
-                    CheckBox checkBox = view.findViewById(R.id.cbFitting);
-                    EditText etPrice = view.findViewById(R.id.etFittingPrice);
-                    
-                    if (checkBox != null && checkBox.isChecked() && etPrice != null) {
-                        try {
-                             String p = etPrice.getText().toString();
-                             if (!p.isEmpty()) {
-                                 total += Double.parseDouble(p);
-                             }
-                        } catch (NumberFormatException e) { }
-                    }
-                }
+            if (model.brakesWheels != null) {
+                activity.setSpinnerSelection(spFront, model.brakesWheels.frontBrake);
+                activity.setSpinnerSelection(spRear, model.brakesWheels.rearBrake);
+                activity.setSpinnerSelection(spSys, model.brakesWheels.brakingSystem);
+                activity.setSpinnerSelection(spWheel, model.brakesWheels.wheelType);
             }
             
-            // Custom fittings already updated in map/list
-            for (CustomFitting fitting : customFittings) {
-                total += fitting.getPrice();
+            // Colors and Custom Sections
+            if (model.colors != null) {
+                for (BikeVariantModel.VariantColor c : model.colors) {
+                    restoreColorSlot(c);
+                }
             }
+            if (model.customSections != null) {
+                for (BikeVariantModel.CustomSection s : model.customSections) {
+                    restoreCustomSection(s);
+                }
+            }
+        }
 
-            Log.d("PRICE_CALC", "Final Total: " + total);
-            etTotalOnRoad.setText(String.format("₹%.0f", total));
-        } catch (NumberFormatException e) {
-            etTotalOnRoad.setText("₹0");
+        private void setupInternalListeners() {
+            btnDelete.setOnClickListener(v -> {
+                activity.variantsContainer.removeView(itemView);
+                activity.bikeVariants.remove(model);
+                activity.variantViewHolders.remove(this);
+            });
+            
+            TextWatcher priceWatcher = new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) { calculateTotal(); }
+                @Override public void afterTextChanged(Editable s) {}
+            };
+            etEx.addTextChangedListener(priceWatcher);
+            etIns.addTextChangedListener(priceWatcher);
+            etReg.addTextChangedListener(priceWatcher);
+            etLtrt.addTextChangedListener(priceWatcher);
+
+            btnAddColor.setOnClickListener(v -> addColorSlot());
+            btnAddSection.setOnClickListener(v -> showAddSectionDialog());
+        }
+
+        private void calculateTotal() {
+            double ex = parseDouble(etEx.getText().toString());
+            double ins = parseDouble(etIns.getText().toString());
+            double reg = parseDouble(etReg.getText().toString());
+            double ltrt = parseDouble(etLtrt.getText().toString());
+            double total = ex + ins + reg + ltrt;
+            tvTotal.setText("₹ " + String.format("%.0f", total));
+            model.priceDetails.totalOnRoad = String.valueOf(total);
+        }
+
+        private double parseDouble(String s) {
+            try { return Double.parseDouble(s); } catch (Exception e) { return 0; }
+        }
+
+        private void restoreColorSlot(BikeVariantModel.VariantColor color) {
+             View colorView = LayoutInflater.from(activity).inflate(R.layout.item_variant_color, llColors, false);
+             llColors.addView(colorView);
+             setupColorViewEvents(colorView, color);
+        }
+
+        private void addColorSlot() {
+            BikeVariantModel.VariantColor color = new BikeVariantModel.VariantColor();
+            color.colorName = "Select Color";
+            color.colorHex = "#CCCCCC";
+            model.colors.add(color);
+            
+            View colorView = LayoutInflater.from(activity).inflate(R.layout.item_variant_color, llColors, false);
+            llColors.addView(colorView);
+            setupColorViewEvents(colorView, color);
+        }
+
+        private void setupColorViewEvents(View colorView, BikeVariantModel.VariantColor color) {
+             LinearLayout btnSelectColor = colorView.findViewById(R.id.btnSelectColor);
+            TextView tvColorName = colorView.findViewById(R.id.tvColorName);
+            View vColorChip = colorView.findViewById(R.id.vColorChip);
+            ImageButton btnRemove = colorView.findViewById(R.id.btnRemoveColor);
+            LinearLayout btnAddImage = colorView.findViewById(R.id.btnAddImage);
+            
+            tvColorName.setText(color.colorName);
+            try {
+                vColorChip.setBackgroundTintList(android.content.res.ColorStateList.valueOf(Color.parseColor(color.colorHex)));
+            } catch (Exception e) {}
+            
+            btnRemove.setOnClickListener(v -> {
+                llColors.removeView(colorView);
+                model.colors.remove(color);
+            });
+            
+            btnSelectColor.setOnClickListener(v -> activity.showColorPickerDialog(color, vColorChip, tvColorName));
+            
+            btnAddImage.setTag(color); 
+            btnAddImage.setOnClickListener(v -> {
+                activity.currentColorUploading = color;
+                activity.currentVariantHolder = this;
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                activity.startActivityForResult(Intent.createChooser(intent, "Select Pictures"), PICK_IMAGE_REQUEST);
+            });
+            
+            colorView.setTag(color); 
+            updateImageStatus(color, 0); // Refresh images
+        }
+
+        private void restoreCustomSection(BikeVariantModel.CustomSection section) {
+            View sectionView = LayoutInflater.from(activity).inflate(R.layout.item_dynamic_section, llDynamic, false);
+            llDynamic.addView(sectionView);
+            
+            TextView tvTitle = sectionView.findViewById(R.id.tvSectionTitle);
+            tvTitle.setText(section.sectionName);
+            
+            ImageButton btnDel = sectionView.findViewById(R.id.btnDeleteSection);
+            LinearLayout localFields = sectionView.findViewById(R.id.llFieldsContainer);
+            TextView btnAddField = sectionView.findViewById(R.id.btnAddField);
+            
+            btnDel.setOnClickListener(v -> {
+                llDynamic.removeView(sectionView);
+                model.customSections.remove(section);
+            });
+            
+            btnAddField.setOnClickListener(v -> {
+               addDynamicField(section, localFields, new BikeVariantModel.CustomField("", ""));
+            });
+
+            if (section.fields != null) {
+                for(BikeVariantModel.CustomField f : section.fields) {
+                    addDynamicField(section, localFields, f);
+                }
+            }
+        }
+
+        private void addDynamicField(BikeVariantModel.CustomSection section, LinearLayout localFields, BikeVariantModel.CustomField field) {
+            if (!section.fields.contains(field)) section.fields.add(field);
+            
+             View fieldView = LayoutInflater.from(activity).inflate(R.layout.item_dynamic_field, localFields, false);
+                localFields.addView(fieldView);
+                
+                EditText etKey = fieldView.findViewById(R.id.etFieldKey);
+                EditText etVal = fieldView.findViewById(R.id.etFieldValue);
+                etKey.setText(field.key);
+                etVal.setText(field.value);
+                
+                etKey.addTextChangedListener(new TextWatcher() {
+                    @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    @Override public void onTextChanged(CharSequence s, int start, int before, int count) { field.key = s.toString(); }
+                    @Override public void afterTextChanged(Editable s) {}
+                });
+                
+                etVal.addTextChangedListener(new TextWatcher() {
+                    @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    @Override public void onTextChanged(CharSequence s, int start, int before, int count) { field.value = s.toString(); }
+                    @Override public void afterTextChanged(Editable s) {}
+                });
+        }
+
+        
+        // This is called by Activity onActivityResult
+        public void updateImageStatus(BikeVariantModel.VariantColor color, int count) {
+             // Find the specific view for this color
+             for(int i=0; i<llColors.getChildCount(); i++) {
+                 View v = llColors.getChildAt(i);
+                 if (v.getTag() == color) {
+                     TextView tv = v.findViewById(R.id.tvImageStatus);
+                     int current = (color.imagePaths != null ? color.imagePaths.size() : 0) + (color.tempImageUris != null ? color.tempImageUris.size() : 0);
+                     tv.setText(current + " Images Selected");
+                     
+                     // Also add thumbnails
+                     LinearLayout llImages = v.findViewById(R.id.llImagesContainer);
+                     // Clear existing thumbnails (except add button at index 0)
+                     while(llImages.getChildCount() > 1) {
+                         llImages.removeViewAt(1);
+                     }
+                     
+                     // 1. Existing Server Images
+                     if (color.imagePaths != null) {
+                         for(String serverPath : color.imagePaths) {
+                             addThumbnail(llImages, serverPath, true);
+                         }
+                     }
+
+                     // 2. New Local Images
+                     if (color.tempImageUris != null) {
+                         for(String uriStr : color.tempImageUris) {
+                             addThumbnail(llImages, uriStr, false);
+                         }
+                     }
+                     break;
+                 }
+             }
+        }
+        
+        private void addThumbnail(LinearLayout container, String path, boolean isServer) {
+             android.widget.ImageView iv = new android.widget.ImageView(activity);
+             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(150, 150);
+             lp.setMargins(0, 0, 16, 0);
+             iv.setLayoutParams(lp);
+             iv.setScaleType(android.widget.ImageView.ScaleType.CENTER_CROP);
+             iv.setBackgroundResource(R.drawable.bg_rounded_gray_50);
+             
+             if (isServer) {
+                 String url = path;
+                 if (!url.startsWith("http")) {
+                     url = com.example.motovista_deep.api.RetrofitClient.BASE_URL + path;
+                 }
+                 com.bumptech.glide.Glide.with(activity).load(url).into(iv);
+             } else {
+                 iv.setImageURI(Uri.parse(path));
+             }
+             
+             container.addView(iv);
+        }
+
+        private void showAddSectionDialog() {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(activity);
+            builder.setTitle("Add Custom Section");
+            
+            final EditText input = new EditText(activity);
+            input.setHint("Section Name (e.g. Electronics)");
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+            input.setLayoutParams(lp);
+            builder.setView(input);
+
+            builder.setPositiveButton("Add", (dialog, which) -> {
+                String sectionName = input.getText().toString().trim();
+                if (!sectionName.isEmpty()) {
+                    addDynamicSection(sectionName);
+                }
+            });
+            builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+            builder.show();
+        }
+
+        private void addDynamicSection(String title) {
+            BikeVariantModel.CustomSection section = new BikeVariantModel.CustomSection(title);
+            model.customSections.add(section);
+            
+            View sectionView = LayoutInflater.from(activity).inflate(R.layout.item_dynamic_section, llDynamic, false);
+            llDynamic.addView(sectionView);
+            
+            TextView tvTitle = sectionView.findViewById(R.id.tvSectionTitle);
+            tvTitle.setText(title);
+            
+            ImageButton btnDel = sectionView.findViewById(R.id.btnDeleteSection);
+            LinearLayout localFields = sectionView.findViewById(R.id.llFieldsContainer);
+            TextView btnAddField = sectionView.findViewById(R.id.btnAddField);
+            
+            btnDel.setOnClickListener(v -> {
+                llDynamic.removeView(sectionView);
+                model.customSections.remove(section);
+            });
+            
+            btnAddField.setOnClickListener(v -> {
+                 addDynamicField(section, localFields, new BikeVariantModel.CustomField("", ""));
+            });
+        }
+
+        public void syncData() {
+            model.variantName = etVariantName.getText().toString().trim().toUpperCase();
+            
+            model.priceDetails.exShowroom = etEx.getText().toString();
+            model.priceDetails.insurance = etIns.getText().toString();
+            model.priceDetails.registration = etReg.getText().toString();
+            model.priceDetails.ltrt = etLtrt.getText().toString();
+            
+            model.brakesWheels.frontBrake = spFront.getSelectedItem().toString();
+            model.brakesWheels.rearBrake = spRear.getSelectedItem().toString();
+            model.brakesWheels.brakingSystem = spSys.getSelectedItem().toString();
+            model.brakesWheels.wheelType = spWheel.getSelectedItem().toString();
         }
     }
-
-    private void openImageChooser() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        startActivityForResult(Intent.createChooser(intent, "Select Pictures"), PICK_IMAGE_REQUEST);
-    }
-
+    
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            imageUris.clear();
-
+            int count = 0;
             if (data.getClipData() != null) {
-                int count = data.getClipData().getItemCount();
+                count = data.getClipData().getItemCount();
                 for (int i = 0; i < count; i++) {
                     Uri imageUri = data.getClipData().getItemAt(i).getUri();
-                    imageUris.add(imageUri);
+                    if (currentColorUploading != null) currentColorUploading.tempImageUris.add(imageUri.toString());
                 }
-                Toast.makeText(this, count + " image(s) selected", Toast.LENGTH_SHORT).show();
             } else if (data.getData() != null) {
-                imageUris.add(data.getData());
-                Toast.makeText(this, "1 image selected", Toast.LENGTH_SHORT).show();
+                Uri imageUri = data.getData();
+                if (currentColorUploading != null) currentColorUploading.tempImageUris.add(imageUri.toString());
+                count = 1;
             }
-
-            showImagePreviews();
-            calculateTotalPrice();
+            if (currentVariantHolder != null) currentVariantHolder.updateImageStatus(currentColorUploading, count);
         }
     }
-
-    private void showImagePreviews() {
-        if (imagePreviewContainer != null) {
-            imagePreviewContainer.removeAllViews();
-
-            if (!imageUris.isEmpty()) {
-                imagePreviewContainer.setVisibility(View.VISIBLE);
-                tvSelectedCount.setVisibility(View.VISIBLE);
-                tvSelectedCount.setText(imageUris.size() + " image(s) selected");
-
-                for (Uri uri : imageUris) {
-                    ImageView imageView = new ImageView(this);
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(80, 80);
-                    params.setMargins(0, 0, 8, 0);
-                    imageView.setLayoutParams(params);
-                    imageView.setImageURI(uri);
-                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    imageView.setBackgroundResource(R.drawable.image_preview_border);
-                    imagePreviewContainer.addView(imageView);
-                }
-            } else {
-                imagePreviewContainer.setVisibility(View.GONE);
-                tvSelectedCount.setVisibility(View.GONE);
-            }
-        }
-    }
-
-    private void addCustomFitting() {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_fitting, null);
-        builder.setView(view);
-
-        EditText etName = view.findViewById(R.id.etFittingName);
-        EditText etPriceInput = view.findViewById(R.id.etFittingPriceInput);
-        Button btnAdd = view.findViewById(R.id.btnAddFitting);
-        Button btnCancel = view.findViewById(R.id.btnCancelFitting);
-
-        android.app.AlertDialog dialog = builder.create();
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
-
-        btnAdd.setOnClickListener(v -> {
-            String name = etName.getText().toString().trim();
-            String priceStr = etPriceInput.getText().toString().trim();
-
-            if (name.isEmpty() || priceStr.isEmpty()) {
-                Toast.makeText(this, "Please enter details", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            double price = Double.parseDouble(priceStr);
-            addCustomFittingToLayout(name, price);
-            dialog.dismiss();
-        });
-
-        dialog.show();
-    }
-
-    private void addCustomFittingToLayout(String name, double initialPrice) {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View fittingView = inflater.inflate(R.layout.item_fitting, additionalFittingsContainer, false);
-
-        CheckBox checkBox = fittingView.findViewById(R.id.cbFitting);
-        TextView tvName = fittingView.findViewById(R.id.tvFittingName);
-        EditText etPrice = fittingView.findViewById(R.id.etFittingPrice);
-        
-        // Setup initial custom fitting
-        tvName.setText(name);
-        etPrice.setText(String.valueOf(initialPrice));
-        checkBox.setChecked(true);
-        checkBox.setEnabled(false); // Custom fittings are always active once added
-
-        CustomFitting customFitting = new CustomFitting(name, initialPrice);
-        customFittings.add(customFitting);
-
-        // Price change listener
-        etPrice.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                try {
-                    customFitting.setPrice(s.toString().isEmpty() ? 0 : Double.parseDouble(s.toString()));
-                    calculateTotalPrice();
-                } catch (NumberFormatException e) {
-                    customFitting.setPrice(0);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
-
-        // Add delete option for custom fitting
-        fittingView.setOnLongClickListener(v -> {
-            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-            builder.setTitle("Remove Custom Fitting")
-                    .setMessage("Do you want to remove " + name + "?")
-                    .setPositiveButton("Remove", (d, w) -> {
-                        additionalFittingsContainer.removeView(fittingView);
-                        customFittings.remove(customFitting);
-                        calculateTotalPrice();
-                    })
-                    .setNegativeButton("Cancel", null)
-                    .show();
-            return true;
-        });
-
-        additionalFittingsContainer.addView(fittingView);
-        calculateTotalPrice();
-    }
-
-    private void loadBikeData() {
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading bike data...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        String token = SharedPrefManager.getInstance(this).getToken();
-        if (token == null || token.isEmpty()) {
-            progressDialog.dismiss();
-            Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ApiService apiService = RetrofitClient.getApiService();
-        apiService.getBikeById("Bearer " + token, bikeId)
-                .enqueue(new Callback<GetBikeByIdResponse>() {
-                    @Override
-                    public void onResponse(Call<GetBikeByIdResponse> call, Response<GetBikeByIdResponse> response) {
-                        progressDialog.dismiss();
-
-                        if (response.isSuccessful() && response.body() != null) {
-                            GetBikeByIdResponse apiResponse = response.body();
-                            if ("success".equals(apiResponse.getStatus())) {
-                                populateForm(apiResponse.getData());
-                            } else {
-                                Toast.makeText(AddBikeActivity.this,
-                                        apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(AddBikeActivity.this,
-                                    "Failed to load bike data", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<GetBikeByIdResponse> call, Throwable t) {
-                        progressDialog.dismiss();
-                        Toast.makeText(AddBikeActivity.this,
-                                "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-    private void populateForm(com.example.motovista_deep.models.BikeModel bikeData) {
-        etBrand.setText(bikeData.getBrand());
-        etModel.setText(bikeData.getModel());
-        etEngineCC.setText(bikeData.getEngineCC());
-        etMileage.setText(bikeData.getMileage());
-
-        if (bikeData.getExShowroomPrice() != null) etExShowroom.setText(bikeData.getExShowroomPrice());
-        if (bikeData.getInsurance() != null) etInsurance.setText(bikeData.getInsurance());
-        if (bikeData.getRegistrationCharge() != null) etRegistration.setText(bikeData.getRegistrationCharge());
-        if (bikeData.getLtrt() != null) etLTRT.setText(bikeData.getLtrt());
-        if (bikeData.getOnRoadPrice() != null) etTotalOnRoad.setText(bikeData.getOnRoadPrice());
-
-        // Populate new fields if they exist
-        if (bikeData.getDate() != null) {
-            etDate.setText(bikeData.getDate());
-        }
-        if (bikeData.getEngine_number() != null) {
-            etEngineNumber.setText(bikeData.getEngine_number());
-        }
-        if (bikeData.getChassis_number() != null) {
-            etChassisNumber.setText(bikeData.getChassis_number());
-        }
-
-        setSpinnerSelection(spinnerBrakingType, bikeData.getBrakingType());
-        setSpinnerSelection(spinnerTransmission, bikeData.getType());
-        setSpinnerSelection(spinnerYear, bikeData.getYear());
-        setSpinnerSelection(spinnerFuelType, bikeData.getFuelType());
-        setSpinnerSelection(spinnerWarranty, bikeData.getWarrantyPeriod());
-        if (bikeData.getFreeServicesCount() != null) etFreeServices.setText(bikeData.getFreeServicesCount());
-        if (bikeData.getFuelTankCapacity() != null) etFuelTank.setText(bikeData.getFuelTankCapacity());
-        if (bikeData.getKerbWeight() != null) etKerbWeight.setText(bikeData.getKerbWeight());
-        if (bikeData.getSeatHeight() != null) etSeatHeight.setText(bikeData.getSeatHeight());
-        if (bikeData.getGroundClearance() != null) etGroundClearance.setText(bikeData.getGroundClearance());
-        if (bikeData.getRegistrationProof() != null) etRegistrationProof.setText(bikeData.getRegistrationProof());
-        if (bikeData.getPriceDisclaimer() != null) etPriceDisclaimer.setText(bikeData.getPriceDisclaimer());
-        if (bikeData.getVariant() != null) etVariant.setText(bikeData.getVariant());
-        
-        // Populate Colors
-        if (bikeData.getColors() != null) {
-            for (String colorData : bikeData.getColors()) {
-                // Expected format: "Name|#Hex"
-                String[] parts = colorData.split("\\|");
-                String name = parts.length > 0 ? parts[0] : colorData;
-                String hex = parts.length > 1 ? parts[1] : "#000000";
-                addColorToLayout(name, hex);
-            }
-        }
-
-        // Populate Custom Fittings
-        if (bikeData.getCustomFittings() != null) {
-            for (com.example.motovista_deep.models.CustomFitting fitting : bikeData.getCustomFittings()) {
-                addCustomFittingToLayout(fitting.getName(), fitting.getPrice());
-            }
-        }
-
-        // Populate Mandatory Fittings
-        if (bikeData.getMandatoryFittings() != null) {
-            for (com.example.motovista_deep.models.CustomFitting fitting : bikeData.getMandatoryFittings()) {
-                checkFitting(mandatoryFittingsContainer, fitting.getName(), fitting.getPrice());
-                // Crucial: Update the map so calculation works!
-                mandatoryFittings.put(fitting.getName(), fitting.getPrice());
-            }
-        }
-
-        // Populate Additional Fittings
-        if (bikeData.getAdditionalFittings() != null) {
-            for (com.example.motovista_deep.models.CustomFitting fitting : bikeData.getAdditionalFittings()) {
-                checkFitting(additionalFittingsContainer, fitting.getName(), fitting.getPrice());
-                // Crucial: Update the map so calculation works!
-                additionalFittings.put(fitting.getName(), fitting.getPrice());
-            }
-        }
-    }
-
-    private void setSpinnerSelection(Spinner spinner, String value) {
-        if (value == null || value.isEmpty()) return;
-
-        for (int i = 0; i < spinner.getCount(); i++) {
-            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(value)) {
-                spinner.setSelection(i);
-                break;
-            }
-        }
-    }
-
-    private void loadExistingImages(List<String> paths) {
-        try {
-            existingImagePaths.clear();
-            if (paths != null) {
-                for (String path : paths) {
-                    path = path.trim();
-                    // Clean path if it has cleanup chars
-                    path = path.replace("\"", "").replace("\\", "");
-                    if (!path.isEmpty()) {
-                        existingImagePaths.add(path);
-                    }
-                }
-            }
-
-            if (!existingImagePaths.isEmpty()) {
-                tvSelectedCount.setText(existingImagePaths.size() + " existing image(s)");
-                tvSelectedCount.setVisibility(View.VISIBLE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // ========================== MAIN FIX: SAVE BIKE METHOD ==========================
-    private void saveBike() {
-        if (!validateInputs()) {
-            return;
-        }
-
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(isEditMode ? "Updating bike..." : "Saving bike...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-
-        // First upload images if any
-        if (!imageUris.isEmpty()) {
-            uploadImagesThenSaveBike(progressDialog);
-        } else {
-            // Save bike without images or with existing images
-            String imagePaths = isEditMode && !existingImagePaths.isEmpty() ?
-                    formatImagePaths(existingImagePaths) : "[]";
-            saveBikeData(imagePaths, progressDialog);
-        }
-    }
-
-    private String formatImagePaths(List<String> paths) {
-        if (paths == null || paths.isEmpty()) return "[]";
-
-        StringBuilder sb = new StringBuilder("[");
-        for (int i = 0; i < paths.size(); i++) {
-            sb.append("\"").append(paths.get(i)).append("\"");
-            if (i < paths.size() - 1) {
-                sb.append(",");
-            }
-        }
-        sb.append("]");
-        return sb.toString();
-    }
-
-    private boolean validateInputs() {
-        if (etBrand.getText().toString().trim().isEmpty()) {
-            etBrand.setError("Brand is required");
-            etBrand.requestFocus();
-            return false;
-        }
-        if (etModel.getText().toString().trim().isEmpty()) {
-            etModel.setError("Model is required");
-            etModel.requestFocus();
-            return false;
-        }
-        if (spinnerYear.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Please select model year", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (etEngineCC.getText().toString().trim().isEmpty()) {
-            etEngineCC.setError("Engine CC is required");
-            etEngineCC.requestFocus();
-            return false;
-        }
-        if (spinnerFuelType.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Please select fuel type", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (spinnerTransmission.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Please select transmission", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (spinnerBrakingType.getSelectedItemPosition() == 0) {
-            Toast.makeText(this, "Please select braking type", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (etExShowroom.getText().toString().trim().isEmpty()) {
-            etExShowroom.setError("Ex-showroom price is required");
-            etExShowroom.requestFocus();
-            return false;
-        }
-        // Add after existing validations
-        if (etEngineNumber.getText().toString().trim().isEmpty()) {
-            etEngineNumber.setError("Engine number is required");
-            etEngineNumber.requestFocus();
-            return false;
-        }
-
-        if (etChassisNumber.getText().toString().trim().isEmpty()) {
-            etChassisNumber.setError("Chassis number is required");
-            etChassisNumber.requestFocus();
-            return false;
-        }
-        return true;
-    }
-
-    private void uploadImagesThenSaveBike(ProgressDialog progressDialog) {
-        try {
-            progressDialog.setMessage("Uploading images...");
-
-            List<MultipartBody.Part> imageParts = new ArrayList<>();
-            RequestBody bikeType = RequestBody.create(MediaType.parse("text/plain"), "new");
-
-            Log.d("IMAGE_UPLOAD", "Starting image upload. Count: " + imageUris.size());
-
-            // Compress images before uploading
-            for (int i = 0; i < imageUris.size(); i++) {
-                Uri uri = imageUris.get(i);
-                Log.d("IMAGE_UPLOAD", "Processing image " + (i + 1) + ": " + uri);
-
-                File imageFile = getCompressedImageFile(uri);
-                if (imageFile != null && imageFile.exists()) {
-                    long fileSize = imageFile.length();
-                    Log.d("IMAGE_UPLOAD", "File " + (i + 1) + " size: " + fileSize + " bytes");
-
-                    RequestBody requestFile = RequestBody.create(
-                            MediaType.parse("image/*"),
-                            imageFile
-                    );
-
-                    // Use unique filename with timestamp
-                    MultipartBody.Part imagePart = MultipartBody.Part.createFormData(
-                            "bike_images[]",
-                            "bike_" + System.currentTimeMillis() + "_" + i + ".jpg",
-                            requestFile
-                    );
-                    imageParts.add(imagePart);
-                    Log.d("IMAGE_UPLOAD", "Added image part " + (i + 1));
-                } else {
-                    Log.e("IMAGE_UPLOAD", "File " + (i + 1) + " is null or doesn't exist");
-                }
-            }
-
-            if (imageParts.isEmpty()) {
-                progressDialog.dismiss();
-                Toast.makeText(this, "No valid image files to upload", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            Log.d("IMAGE_UPLOAD", "Total image parts: " + imageParts.size());
-
-            String token = SharedPrefManager.getInstance(this).getToken();
-            if (token == null || token.isEmpty()) {
-                progressDialog.dismiss();
-                Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            Log.d("IMAGE_UPLOAD", "Making upload request...");
-
-            ApiService apiService = RetrofitClient.getApiService();
-            apiService.uploadBikeImages("Bearer " + token, bikeType, imageParts)
-                    .enqueue(new Callback<UploadBikeImageResponse>() {
-                        @Override
-                        public void onResponse(Call<UploadBikeImageResponse> call, Response<UploadBikeImageResponse> response) {
-                            Log.d("IMAGE_UPLOAD", "Response received. Code: " + response.code());
-
-                            if (response.isSuccessful() && response.body() != null) {
-                                UploadBikeImageResponse uploadResponse = response.body();
-                                String status = uploadResponse.getStatus();
-                                Log.d("IMAGE_UPLOAD", "Response status: " + status);
-
-                                if ("success".equals(status)) {
-                                    List<String> uploadedImages = uploadResponse.getData();
-                                    if (uploadedImages != null) {
-                                        for (int i = 0; i < uploadedImages.size(); i++) {
-                                            Log.d("IMAGE_UPLOAD", "Uploaded image " + i + ": " + uploadedImages.get(i));
-                                        }
-                                    }
-
-                                    String imagePaths = uploadResponse.getAllPathsAsJson();
-                                    Log.d("IMAGE_UPLOAD", "Upload successful. Image paths JSON: " + imagePaths);
-                                    Log.d("IMAGE_UPLOAD", "Image paths raw data: " + uploadResponse.getData());
-
-                                    // In edit mode, combine with existing images
-                                    if (isEditMode && !existingImagePaths.isEmpty()) {
-                                        List<String> allImages = new ArrayList<>(existingImagePaths);
-                                        List<String> newImages = uploadResponse.getData();
-                                        if (newImages != null) {
-                                            allImages.addAll(newImages);
-                                            Log.d("IMAGE_UPLOAD", "Merged images. Total: " + allImages.size());
-                                        }
-                                        saveBikeData(formatImagePaths(allImages), progressDialog);
-                                    } else {
-                                        saveBikeData(imagePaths, progressDialog);
-                                    }
-                                } else {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(AddBikeActivity.this,
-                                            "Upload failed: " + uploadResponse.getMessage(),
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                progressDialog.dismiss();
-                                Toast.makeText(AddBikeActivity.this,
-                                        "Upload failed with code: " + response.code(),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<UploadBikeImageResponse> call, Throwable t) {
-                            progressDialog.dismiss();
-                            Log.e("IMAGE_UPLOAD", "Network error: " + t.getMessage());
-                            Toast.makeText(AddBikeActivity.this,
-                                    "Network error: " + t.getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } catch (Exception e) {
-            progressDialog.dismiss();
-            Log.e("IMAGE_UPLOAD", "Exception: " + e.getMessage());
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private File getCompressedImageFile(Uri uri) {
-        try {
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-            if (inputStream == null) return null;
-
-            // Decode with bounds only
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(inputStream, null, options);
-            inputStream.close();
-
-            // Calculate inSampleSize
-            options.inSampleSize = calculateInSampleSize(options, 1024, 1024);
-            options.inJustDecodeBounds = false;
-
-            // Decode bitmap with sample size
-            inputStream = getContentResolver().openInputStream(uri);
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, options);
-            inputStream.close();
-
-            if (bitmap == null) return null;
-
-            // Compress to JPEG
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos); // 80% quality
-
-            // Save to temp file
-            File tempFile = File.createTempFile("bike_img_", ".jpg", getCacheDir());
-            FileOutputStream fos = new FileOutputStream(tempFile);
-            fos.write(baos.toByteArray());
-            fos.flush();
-            fos.close();
-
-            // Recycle bitmap
-            bitmap.recycle();
-
-            return tempFile;
-        } catch (Exception e) {
-            Log.e("IMAGE_COMPRESS", "Error compressing image: " + e.getMessage());
-            return getFileFromUri(uri); // Fallback to original method
-        }
-    }
-
-    private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-
-        if (height > reqHeight || width > reqWidth) {
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-
-            while ((halfHeight / inSampleSize) >= reqHeight &&
-                    (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-
-        return inSampleSize;
-    }
-
-    private File getFileFromUri(Uri uri) {
-        try {
-            String realPath = getRealPathFromUri(uri);
-            if (realPath != null) {
-                File file = new File(realPath);
-                if (file.exists()) return file;
-            }
-
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-            if (inputStream == null) return null;
-
-            File tempFile = File.createTempFile("bike_img_", ".jpg", getCacheDir());
-            FileOutputStream outputStream = new FileOutputStream(tempFile);
-
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-
-            inputStream.close();
-            outputStream.close();
-            return tempFile;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private String getRealPathFromUri(Uri uri) {
-        Cursor cursor = null;
-        try {
-            String[] projection = { MediaStore.Images.Media.DATA };
-            cursor = getContentResolver().query(uri, projection, null, null, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                return cursor.getString(columnIndex);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (cursor != null) cursor.close();
-        }
-        return null;
-    }
-
-    // ========================== FIXED SAVE BIKE DATA METHOD ==========================
-    private void saveBikeData(String imagePaths, ProgressDialog progressDialog) {
-        Log.d("BIKE_SAVE", "=== SAVE BIKE START ===");
-        Log.d("BIKE_SAVE", "Edit Mode: " + isEditMode);
-        Log.d("BIKE_SAVE", "Image Paths: " + imagePaths);
-
-        // ✅ FIX: Ensure imagePaths is proper JSON
-        if (imagePaths == null || imagePaths.isEmpty()) {
-            imagePaths = "[]";
-        } else if (!imagePaths.trim().startsWith("[")) {
-            // If it's not JSON, wrap it as JSON array
-            imagePaths = "[\"" + imagePaths + "\"]";
-        }
-
-        Log.d("BIKE_SAVE", "Final Image Paths: " + imagePaths);
-
-        // Calculate total price
-        double totalPrice = 0;
-        try {
-            double exShowroom = etExShowroom.getText().toString().isEmpty() ? 0 :
-                    Double.parseDouble(etExShowroom.getText().toString());
-            double insurance = etInsurance.getText().toString().isEmpty() ? 0 :
-                    Double.parseDouble(etInsurance.getText().toString());
-            double registration = etRegistration.getText().toString().isEmpty() ? 0 :
-                    Double.parseDouble(etRegistration.getText().toString());
-            double ltrt = etLTRT.getText().toString().isEmpty() ? 0 :
-                    Double.parseDouble(etLTRT.getText().toString());
-
-            totalPrice = exShowroom + insurance + registration + ltrt;
-            Log.d("BIKE_SAVE", "Total Price: " + totalPrice);
-        } catch (NumberFormatException e) {
-            totalPrice = 0;
-            Log.e("BIKE_SAVE", "Price error: " + e.getMessage());
-        }
-
-        // Get form values
-        String brand = etBrand.getText().toString().trim();
-        String model = etModel.getText().toString().trim();
-        String variant = etVariant.getText().toString().trim();
-        String year = spinnerYear.getSelectedItem().toString();
-        String engineCC = etEngineCC.getText().toString().trim();
-        String fuelType = spinnerFuelType.getSelectedItem().toString();
-        String transmission = spinnerTransmission.getSelectedItem().toString();
-        String brakingType = spinnerBrakingType.getSelectedItem().toString();
-        String mileage = etMileage.getText().toString().trim();
-        String fuelTank = etFuelTank.getText().toString().trim();
-        String kerbWeight = etKerbWeight.getText().toString().trim();
-        String seatHeight = etSeatHeight.getText().toString().trim();
-        String groundClearance = etGroundClearance.getText().toString().trim();
-        String warranty = spinnerWarranty.getSelectedItem().toString();
-        String freeServices = etFreeServices.getText().toString().trim();
-        String registrationProof = etRegistrationProof.getText().toString().trim();
-        String priceDisclaimer = etPriceDisclaimer.getText().toString().trim();
-        String insurance = etInsurance.getText().toString().trim();
-        String exShowroom = etExShowroom.getText().toString().trim(); // Added
-        String registrationCharge = etRegistration.getText().toString().trim();
-        String ltrt = etLTRT.getText().toString().trim();
-        // Add these lines after other form value retrievals
-        String date = etDate.getText().toString().trim();
-        String engineNumber = etEngineNumber.getText().toString().trim();
-        String chassisNumber = etChassisNumber.getText().toString().trim();
-
-        // Build features string
-        StringBuilder featuresBuilder = new StringBuilder();
-        if (!mileage.isEmpty()) {
-            featuresBuilder.append("Mileage: ").append(mileage).append(" km/l");
-        }
-        if (!fuelTank.isEmpty()) {
-            if (featuresBuilder.length() > 0) featuresBuilder.append(", ");
-            featuresBuilder.append("Fuel Tank: ").append(fuelTank).append(" L");
-        }
-        if (!kerbWeight.isEmpty()) {
-            if (featuresBuilder.length() > 0) featuresBuilder.append(", ");
-            featuresBuilder.append("Kerb Weight: ").append(kerbWeight).append(" kg");
-        }
-        if (!seatHeight.isEmpty()) {
-            if (featuresBuilder.length() > 0) featuresBuilder.append(", ");
-            featuresBuilder.append("Seat Height: ").append(seatHeight).append(" mm");
-        }
-        if (!groundClearance.isEmpty()) {
-            if (featuresBuilder.length() > 0) featuresBuilder.append(", ");
-            featuresBuilder.append("Ground Clearance: ").append(groundClearance).append(" mm");
-        }
-
-        String features = featuresBuilder.toString();
-        Log.d("BIKE_SAVE", "Features: " + features);
-
-        String token = SharedPrefManager.getInstance(this).getToken();
-        if (token == null || token.isEmpty()) {
-            progressDialog.dismiss();
-            Toast.makeText(this, "Please login again", Toast.LENGTH_SHORT).show();
-            Log.e("BIKE_SAVE", "Token is null");
-            return;
-        }
-
-        Log.d("BIKE_SAVE", "Token length: " + token.length());
-        ApiService apiService = RetrofitClient.getApiService();
-        String initialImagePaths = new Gson().toJson(existingImagePaths);
-
-        if (isEditMode) {
-            // UPDATE BIKE
-            Log.d("BIKE_SAVE", "Updating bike ID: " + bikeId);
-
-            // Prepare fitting lists for update
-            List<CustomFitting> mandatoryList = getMandatoryFittingsFromUI();
-            List<CustomFitting> additionalList = getAdditionalFittingsFromUI();
-
-
-            UpdateBikeRequest request = new UpdateBikeRequest(
-                    bikeId,
-                    brand, model, variant, year,
-                    engineCC, fuelType, transmission,
-                    brakingType,
-                    String.valueOf(totalPrice),  // on_road_price
-                    exShowroom, // Added ex_showroom_price
-                    insurance, registrationCharge, ltrt,
-                    mileage, fuelTank, kerbWeight, seatHeight, groundClearance,
-                    warranty, freeServices, registrationProof, priceDisclaimer,
-                    "NEW", features, imagePaths,
-                    date, engineNumber, chassisNumber, colorsList, customFittings,
-                    mandatoryList, additionalList
-            );
-
-            Log.d("BIKE_SAVE", "Update request created");
-
-            apiService.updateBike("Bearer " + token, request)
-                    .enqueue(new Callback<GenericResponse>() {
-                        @Override
-                        public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                            Log.d("BIKE_SAVE", "Update response code: " + response.code());
-                            progressDialog.dismiss();
-
-                            if (response.isSuccessful() && response.body() != null) {
-                                GenericResponse apiResponse = response.body();
-                                Log.d("BIKE_SAVE", "Update status: " + apiResponse.getStatus());
-
-                                if ("success".equals(apiResponse.getStatus())) {
-                                    Toast.makeText(AddBikeActivity.this,
-                                            "Bike updated successfully",
-                                            Toast.LENGTH_SHORT).show();
-                                    setResult(RESULT_OK);
-                                    finish();
-                                } else {
-                                    Toast.makeText(AddBikeActivity.this,
-                                            "Update failed: " + apiResponse.getMessage(),
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                String errorBody = "";
-                                try {
-                                    if (response.errorBody() != null) {
-                                        errorBody = response.errorBody().string();
-                                    }
-                                } catch (java.io.IOException e) {
-                                    e.printStackTrace();
-                                }
-                                Log.e("BIKE_SAVE", "Server error body: " + errorBody);
-                                Toast.makeText(AddBikeActivity.this,
-                                        "Server error: " + response.code() + " " + errorBody,
-                                        Toast.LENGTH_LONG).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<GenericResponse> call, Throwable t) {
-                            progressDialog.dismiss();
-                            Log.e("BIKE_SAVE", "Update failure: " + t.getMessage());
-                            Toast.makeText(AddBikeActivity.this,
-                                    "Network error: " + t.getMessage(),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } else {
-            // ADD NEW BIKE
-            Log.d("BIKE_SAVE", "Adding new bike");
-
-            // Collect Fittings using helper methods
-            List<CustomFitting> mandatoryList = getMandatoryFittingsFromUI();
-            List<CustomFitting> additionalList = getAdditionalFittingsFromUI();
-
-            AddBikeRequest request = new AddBikeRequest(
-                    brand, model, variant, year,
-                    engineCC, fuelType, transmission,
-                    brakingType,
-                    String.valueOf(totalPrice),  // on_road_price
-                    exShowroom, // Added ex_showroom_price
-                    insurance, registrationCharge, ltrt,
-                    mileage, fuelTank, kerbWeight, seatHeight, groundClearance,
-                    warranty, freeServices, registrationProof, priceDisclaimer,
-                    "NEW", features, initialImagePaths,
-                    date, engineNumber, chassisNumber, colorsList, customFittings,
-                    mandatoryList, additionalList
-            );
-
-            if (!imageUris.isEmpty()) {
-                progressDialog.setMessage("Uploading images...");
-                List<MultipartBody.Part> parts = new ArrayList<>();
-                for (Uri uri : imageUris) {
-                    MultipartBody.Part part = prepareFilePart("bike_images[]", uri);
-                    if (part != null) parts.add(part);
-                }
-
-                if (parts.isEmpty()) {
-                    sendAddBikeRequest(token, request);
-                    return;
-                }
-
-                RequestBody typeBody = RequestBody.create(MediaType.parse("text/plain"), "NEW");
-                apiService.uploadBikeImages("Bearer " + token, typeBody, parts).enqueue(new Callback<UploadBikeImageResponse>() {
-                    @Override
-                    public void onResponse(Call<UploadBikeImageResponse> call, Response<UploadBikeImageResponse> response) {
-                        // Check status
-                        if (response.isSuccessful() && response.body() != null && "success".equals(response.body().getStatus())) {
-                             if (response.body().getData() != null) {
-                                 existingImagePaths.addAll(response.body().getData());
-                             }
-                             // Update request with new paths
-                             request.setImage_paths(new Gson().toJson(existingImagePaths));
-                             sendAddBikeRequest(token, request);
-                        } else {
-                             progressDialog.dismiss();
-                             String msg = response.body() != null ? response.body().getMessage() : "Unknown error";
-                             Toast.makeText(AddBikeActivity.this, "Image upload failed: " + msg, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<UploadBikeImageResponse> call, Throwable t) {
-                        progressDialog.dismiss();
-                        Toast.makeText(AddBikeActivity.this, "Image upload error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                sendAddBikeRequest(token, request);
-            }
-        }
-    }
-
-    private void clearForm() {
-        etBrand.setText("");
-        etModel.setText("");
-        etVariant.setText("");
-        etEngineCC.setText("");
-        etMileage.setText("");
-        etFuelTank.setText("");
-        etKerbWeight.setText("");
-        etSeatHeight.setText("");
-        etGroundClearance.setText("");
-        etExShowroom.setText("");
-        etInsurance.setText("");
-        etRegistration.setText("");
-        etLTRT.setText("");
-        etTotalOnRoad.setText("");
-        etFreeServices.setText("");
-        // etRegistrationProof and etPriceDisclaimer are now static
-        etDate.setText("");
-        etEngineNumber.setText("");
-        etChassisNumber.setText("");
-
-        spinnerYear.setSelection(0);
-        spinnerFuelType.setSelection(0);
-        spinnerTransmission.setSelection(0);
-        spinnerBrakingType.setSelection(0);
-        spinnerWarranty.setSelection(0);
-
-        imageUris.clear();
-        existingImagePaths.clear();
-        if (imagePreviewContainer != null) {
-            imagePreviewContainer.removeAllViews();
-            imagePreviewContainer.setVisibility(View.GONE);
-        }
-        tvSelectedCount.setVisibility(View.GONE);
-
-        for (String item : mandatoryItems) {
-            mandatoryFittings.put(item, 0.0);
-        }
-        // Fix: Don't pre-populate additional fittings with 0.0. Let them be added only when checked.
-        additionalFittings.clear(); 
-        
-        customFittings.clear();
-
-        colorsList.clear();
-        colorsContainer.removeAllViews();
-
-        ivUploadIcon.setImageResource(R.drawable.ic_upload);
-        ivUploadIcon.setColorFilter(getResources().getColor(R.color.gray_500));
-    }
-
-    private MultipartBody.Part prepareFilePart(String partName, Uri fileUri) {
-        try {
-            File file = new File(getCacheDir(), "upload_" + System.currentTimeMillis() + ".jpg");
-            InputStream inputStream = getContentResolver().openInputStream(fileUri);
-            FileOutputStream outputStream = new FileOutputStream(file);
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, length);
-            }
-            outputStream.close();
-            inputStream.close();
-
-            RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
-            return MultipartBody.Part.createFormData(partName, file.getName(), requestBody);
-        } catch (Exception e) {
-            Log.e("FILE_UPLOAD", "Error preparing file: " + e.getMessage());
-            return null;
-        }
-    }
-
-    private void sendAddBikeRequest(String token, AddBikeRequest request) {
-        progressDialog.setMessage("Saving bike details...");
-        RetrofitClient.getApiService().addBike("Bearer " + token, request).enqueue(new Callback<GenericResponse>() {
-            @Override
-            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                progressDialog.dismiss();
-                if (response.isSuccessful() && response.body() != null) {
-                    GenericResponse apiResponse = response.body();
-                    if ("success".equals(apiResponse.getStatus())) {
-                        Toast.makeText(AddBikeActivity.this, "Bike saved successfully", Toast.LENGTH_SHORT).show();
-                        clearForm();
-                        setResult(RESULT_OK);
-                        finish();
-                    } else {
-                        Toast.makeText(AddBikeActivity.this, "Save failed: " + apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(AddBikeActivity.this, "Server error: " + response.code(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GenericResponse> call, Throwable t) {
-                progressDialog.dismiss();
-                Toast.makeText(AddBikeActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-
-
-    // Helper Methods to Extract Fittings from UI
-    private List<CustomFitting> getMandatoryFittingsFromUI() {
-        List<CustomFitting> list = new ArrayList<>();
-        if (mandatoryFittingsContainer == null) return list;
-
-        for (int i = 0; i < mandatoryFittingsContainer.getChildCount(); i++) {
-            View view = mandatoryFittingsContainer.getChildAt(i);
-            TextView tvName = view.findViewById(R.id.tvFittingName);
-            EditText etPrice = view.findViewById(R.id.etFittingPrice);
-            if (tvName != null) {
-                String name = tvName.getText().toString();
-                String priceStr = etPrice.getText().toString();
-                double price = priceStr.isEmpty() ? 0 : Double.parseDouble(priceStr);
-                list.add(new CustomFitting(name, price));
-            }
-        }
-        return list;
-    }
-
-    private List<CustomFitting> getAdditionalFittingsFromUI() {
-        List<CustomFitting> list = new ArrayList<>();
-        if (additionalFittingsContainer == null) return list;
-
-        for (int i = 0; i < additionalFittingsContainer.getChildCount(); i++) {
-            View view = additionalFittingsContainer.getChildAt(i);
-            CheckBox checkBox = view.findViewById(R.id.cbFitting);
-            TextView tvName = view.findViewById(R.id.tvFittingName);
-            EditText etPrice = view.findViewById(R.id.etFittingPrice);
-
-            // Only add if checked!
-            if (checkBox != null && checkBox.isChecked() && tvName != null) {
-                String name = tvName.getText().toString();
-                boolean isPredefined = false;
-                for (String item : additionalItems) {
-                    if (item.equalsIgnoreCase(name)) {
-                        isPredefined = true;
-                        break;
-                    }
-                }
-
-                double price = 0;
-                try {
-                    String p = etPrice.getText().toString();
-                    if (!p.isEmpty()) price = Double.parseDouble(p);
-                } catch (Exception e) {}
-
-                if (isPredefined) {
-                    list.add(new CustomFitting(name, price));
-                }
-            }
-        }
-        return list;
-    }
-
-    // Helper to check fitting checkboxes
-    private void checkFitting(LinearLayout container, String name, double price) {
-        for (int i = 0; i < container.getChildCount(); i++) {
-            View view = container.getChildAt(i);
-            TextView tvName = view.findViewById(R.id.tvFittingName);
-            CheckBox checkBox = view.findViewById(R.id.cbFitting);
-            EditText etPrice = view.findViewById(R.id.etFittingPrice);
-            
-            if (tvName != null && tvName.getText().toString().equalsIgnoreCase(name)) {
-                checkBox.setChecked(true);
-                if (etPrice != null) {
-                    etPrice.setText(String.valueOf(price));
-                }
-                return; 
-            }
-        }
-    }
-
 }

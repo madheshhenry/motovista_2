@@ -63,7 +63,19 @@ public class User {
     @SerializedName("is_profile_completed")
     private boolean is_profile_completed;
 
+    @SerializedName("workflow_stage")
+    private String workflow_stage;
+
+    @SerializedName("active_order_id")
+    private Integer active_order_id; // Using Integer to allow null
+
     // Getters and Setters
+    public String getWorkflow_stage() { return workflow_stage; }
+    public void setWorkflow_stage(String workflow_stage) { this.workflow_stage = workflow_stage; }
+
+    public Integer getActive_order_id() { return active_order_id; }
+    public void setActive_order_id(Integer active_order_id) { this.active_order_id = active_order_id; }
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

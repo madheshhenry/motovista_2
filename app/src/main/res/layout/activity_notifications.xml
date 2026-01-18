@@ -1,136 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
-    android:fitsSystemWindows="true">
+    android:orientation="vertical"
+    android:background="@color/background_light">
 
-    <!-- Header Section -->
+    <!-- Header -->
     <LinearLayout
-        android:id="@+id/headerLayout"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/padding_medium"
-        android:paddingVertical="12dp"
-        android:background="@color/background_light"
         android:gravity="center_vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:padding="16dp"
+        android:background="@color/white">
 
-        <!-- Back Button -->
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_arrow_back"
-            android:tint="@color/gray_800"
-            android:padding="12dp"
-            android:contentDescription="Back"
-            android:clickable="true"
-            android:focusable="true" />
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_arrow_back_ios"
+            app:tint="@color/gray_800"
+            android:padding="6dp"/>
 
-        <!-- Title -->
         <TextView
-            android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Notifications"
-            android:textColor="@color/text_dark"
-            android:textSize="18sp"
+            android:textColor="@color/gray_900"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:gravity="center"
-            android:fontFamily="sans-serif-medium" />
-
-        <!-- Empty Spacer to balance the layout -->
-        <View
-            android:layout_width="48dp"
-            android:layout_height="48dp" />
-
+            android:layout_marginStart="12dp"/>
     </LinearLayout>
 
-    <!-- Divider Line -->
-    <View
-        android:id="@+id/divider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:background="@color/gray_300"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerLayout" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvNotifications"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:padding="16dp"/>
 
-    <!-- Main Content Area -->
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:padding="@dimen/padding_large"
-            android:minHeight="600dp">
-
-            <!-- Notification Icon Container -->
-            <LinearLayout
-                android:id="@+id/iconContainer"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
-                android:background="@drawable/notification_icon_bg"
-                android:gravity="center"
-                android:layout_marginTop="100dp"
-                android:layout_marginBottom="@dimen/spacing_large">
-
-                <ImageView
-                    android:id="@+id/ivNotificationIcon"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:src="@drawable/ic_notifications_off"
-                    android:tint="@color/gray_400"
-                    android:contentDescription="No notifications" />
-
-            </LinearLayout>
-
-            <!-- Title Text -->
-            <TextView
-                android:id="@+id/tvEmptyTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="No notifications yet"
-                android:textColor="@color/text_dark"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium"
-                android:layout_marginBottom="@dimen/spacing_small" />
-
-            <!-- Description Text -->
-            <TextView
-                android:id="@+id/tvEmptyDescription"
-                android:layout_width="280dp"
-                android:layout_height="wrap_content"
-                android:text="You have no new notifications. We'll let you know when updates arrive."
-                android:textColor="@color/gray_600"
-                android:textSize="16sp"
-                android:gravity="center"
-                android:lineSpacingExtra="4dp"
-                android:fontFamily="sans-serif"
-                android:paddingHorizontal="@dimen/padding_small" />
-
-        </LinearLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

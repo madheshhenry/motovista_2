@@ -36,10 +36,13 @@ public class CustomerRequest {
     @SerializedName("bike_price")
     private String bike_price;
 
+    @SerializedName("selected_fittings")
+    private String selected_fittings; // JSON string
+
     @SerializedName("created_at")
     private String created_at; // Timestamp from DB
 
-    public CustomerRequest(int customer_id, String customer_name, String customer_phone, String customer_profile, int bike_id, String bike_name, String bike_variant, String bike_color, String bike_price) {
+    public CustomerRequest(int customer_id, String customer_name, String customer_phone, String customer_profile, int bike_id, String bike_name, String bike_variant, String bike_color, String bike_price, String selected_fittings) {
         this.customer_id = customer_id;
         this.customer_name = customer_name;
         this.customer_phone = customer_phone;
@@ -49,6 +52,7 @@ public class CustomerRequest {
         this.bike_variant = bike_variant;
         this.bike_color = bike_color;
         this.bike_price = bike_price;
+        this.selected_fittings = selected_fittings;
     }
     
     // Getters needed for Admin UI
@@ -61,5 +65,6 @@ public class CustomerRequest {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
     public String getBike_price() { return bike_price; }
+    public String getSelected_fittings() { return selected_fittings; }
     public String getCreated_at() { return created_at; }
 }

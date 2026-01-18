@@ -25,9 +25,19 @@ public class OrderSummaryData {
     @SerializedName("image_paths") private String imagePaths; // New
     @SerializedName("bike_color") private String bikeColor;
     @SerializedName("colors") private String colors;
+    @SerializedName("selected_fittings") private String selectedFittings;
+    @SerializedName("created_at") private String createdAt;
+    
+    // Stock Info
+    @SerializedName("stock_count") private int stockCount;
+    @SerializedName("is_in_stock") private boolean isInStock;
+
+    // Registration Progress
+    @SerializedName("registration_progress") private java.util.Map<String, String> registrationProgress;
 
     // Getters
     public int getRequestId() { return requestId; }
+    public String getCreatedAt() { return createdAt; }
     public String getCustomerName() { return customerName; }
     public String getCustomerPhone() { return customerPhone; }
     public String getCustomerProfile() { return customerProfile; } // New
@@ -48,5 +58,10 @@ public class OrderSummaryData {
     public String getChassisNumber() { return chassisNumber; }
     public String getImagePaths() { return imagePaths; }
     public String getBikeColor() { return bikeColor; }
+    public String getSelectedFittings() { return selectedFittings; }
     public String getColors() { return colors; }
+    
+    public int getStockCount() { return stockCount; }
+    public boolean isInStock() { return isInStock; }
+    public java.util.Map<String, String> getRegistrationProgress() { return registrationProgress; }
 }

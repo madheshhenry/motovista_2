@@ -96,15 +96,26 @@ public class DocumentsActivity extends AppCompatActivity {
     }
 
     private void navigateToOrderCompleted() {
-        Intent intent = new Intent(DocumentsActivity.this, OrderCompletedActivity.class);
-        intent.putExtra("customer_name", customerName);
-        intent.putExtra("vehicle_model", vehicleName);
-        intent.putExtra("payment_type", paymentMode);
-        intent.putExtra("order_type", orderType);
-        intent.putExtra("request_id", requestId);
-        startActivity(intent);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        finish();
+        com.example.motovista_deep.managers.WorkflowManager.updateStage(this, "ORDER_COMPLETED", requestId, new com.example.motovista_deep.managers.WorkflowManager.WorkflowCallback() {
+            @Override
+            public void onSuccess() {
+                Intent intent = new Intent(DocumentsActivity.this, OrderCompletedActivity.class);
+                intent.putExtra("customer_name", customerName);
+                intent.putExtra("vehicle_model", vehicleName);
+                intent.putExtra("payment_type", paymentMode);
+                intent.putExtra("order_type", orderType);
+                intent.putExtra("request_id", requestId);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
+            }
+
+            @Override
+            public void onError(String message) {
+                Toast.makeText(DocumentsActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void handleIntentData() {

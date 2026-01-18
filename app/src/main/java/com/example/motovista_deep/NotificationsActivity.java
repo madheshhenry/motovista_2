@@ -1,56 +1,72 @@
 package com.example.motovista_deep;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import com.example.motovista_deep.adapter.AdminNotificationsAdapter;
+import com.example.motovista_deep.api.ApiService;
+import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.models.AdminVerification;
+import com.example.motovista_deep.models.AdminVerificationResponse;
+import java.util.List;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class NotificationsActivity extends AppCompatActivity {
+public class NotificationsActivity extends AppCompatActivity implements AdminNotificationsAdapter.OnNotificationClickListener {
 
+    private RecyclerView rvNotifications;
     private ImageView btnBack;
-    private TextView tvTitle, tvEmptyTitle, tvEmptyDescription;
+    private AdminNotificationsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
 
-        // Initialize views
-        initializeViews();
-
-        // Setup click listeners
-        setupClickListeners();
-    }
-
-    private void initializeViews() {
+        rvNotifications = findViewById(R.id.rvNotifications);
         btnBack = findViewById(R.id.btnBack);
-        tvTitle = findViewById(R.id.tvTitle);
-        tvEmptyTitle = findViewById(R.id.tvEmptyTitle);
-        tvEmptyDescription = findViewById(R.id.tvEmptyDescription);
 
-        // Set initial text
-        tvTitle.setText("Notifications");
-        tvEmptyTitle.setText("No notifications yet");
-        tvEmptyDescription.setText("You have no new notifications. We'll let you know when updates arrive.");
+        rvNotifications.setLayoutManager(new LinearLayoutManager(this));
+        btnBack.setOnClickListener(v -> onBackPressed());
+
+        fetchVerifications();
     }
 
-    private void setupClickListeners() {
-        // Back button click
-        btnBack.setOnClickListener(new View.OnClickListener() {
+    private void fetchVerifications() {
+        ApiService apiService = RetrofitClient.getApiService();
+        apiService.getPendingVerifications().enqueue(new Callback<AdminVerificationResponse>() {
             @Override
-            public void onClick(View v) {
-                onBackPressed();
+            public void onResponse(Call<AdminVerificationResponse> call, Response<AdminVerificationResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    setupAdapter(response.body().getData());
+                } else {
+                    Toast.makeText(NotificationsActivity.this, "Failed to fetch notifications", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AdminVerificationResponse> call, Throwable t) {
+                Toast.makeText(NotificationsActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    private void setupAdapter(List<AdminVerification> verifications) {
+        adapter = new AdminNotificationsAdapter(verifications, this);
+        rvNotifications.setAdapter(adapter);
+    }
+
     @Override
-    public void onBackPressed() {
-        // Navigate back to Admin Dashboard
-        super.onBackPressed();
-        finish();
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    public void onVerificationClick(AdminVerification verification) {
+        // Navigate to EmiDetailsActivity for approval
+        Intent intent = new Intent(this, EmiDetailsActivity.class);
+        intent.putExtra("LEDGER_ID", verification.getLedgerId());
+        intent.putExtra("IS_CUSTOMER_VIEW", false);
+        startActivity(intent);
     }
 }

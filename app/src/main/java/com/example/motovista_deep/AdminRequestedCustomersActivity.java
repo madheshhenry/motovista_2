@@ -88,6 +88,11 @@ public class AdminRequestedCustomersActivity extends AppCompatActivity {
             public void onItemClick(CustomerRequest request) {
                  navigateToDetails(request);
             }
+        }, new ApplicationsAdapter.OnLongItemClickListener() {
+            @Override
+            public void onLongItemClick(CustomerRequest request) {
+                showDeleteConfirmationDialog(request);
+            }
         });
         rvRequests.setAdapter(adapter);
     }
@@ -235,5 +240,38 @@ public class AdminRequestedCustomersActivity extends AppCompatActivity {
         intent.putExtra("status", req.getStatus());
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    private void showDeleteConfirmationDialog(CustomerRequest request) {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Delete Order")
+                .setMessage("Are you sure you want to delete this order for " + request.getCustomer_name() + "? This will remove all associated Registration and EMI records.")
+                .setPositiveButton("Delete", (dialog, which) -> deleteOrder(request))
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void deleteOrder(CustomerRequest request) {
+        progressBar.setVisibility(View.VISIBLE);
+        ApiService apiService = RetrofitClient.getApiService();
+        apiService.deleteOrder(new com.example.motovista_deep.models.DeleteRequestRequest(request.getId())).enqueue(new Callback<com.example.motovista_deep.models.GenericResponse>() {
+            @Override
+            public void onResponse(Call<com.example.motovista_deep.models.GenericResponse> call, Response<com.example.motovista_deep.models.GenericResponse> response) {
+                progressBar.setVisibility(View.GONE);
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    Toast.makeText(AdminRequestedCustomersActivity.this, "Order Deleted", Toast.LENGTH_SHORT).show();
+                    fetchCustomerRequests(); // Refresh list
+                } else {
+                    String msg = (response.body() != null) ? response.body().getMessage() : "Deletion failed";
+                    Toast.makeText(AdminRequestedCustomersActivity.this, msg, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<com.example.motovista_deep.models.GenericResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(AdminRequestedCustomersActivity.this, "Network Error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

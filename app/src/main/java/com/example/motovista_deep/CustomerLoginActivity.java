@@ -90,6 +90,9 @@ public class CustomerLoginActivity extends AppCompatActivity {
         tvSignUp.setOnClickListener(v ->
                 startActivity(new Intent(this, CustomerSignUpActivity.class))
         );
+        tvForgotPassword.setOnClickListener(v ->
+                startActivity(new Intent(this, ForgotPasswordActivity.class))
+        );
     }
 
     private void togglePasswordVisibility() {

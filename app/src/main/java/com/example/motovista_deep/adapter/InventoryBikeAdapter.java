@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.example.motovista_deep.R;
 import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.models.InventoryBike;
+import com.example.motovista_deep.utils.ImageUtils;
 
 import java.util.List;
 
@@ -22,14 +23,26 @@ public class InventoryBikeAdapter extends RecyclerView.Adapter<InventoryBikeAdap
     private List<InventoryBike> bikeList;
     private String baseUrl;
 
-    public InventoryBikeAdapter(Context context, List<InventoryBike> bikeList) {
+    private OnBikeLongClickListener longClickListener;
+
+    public interface OnBikeLongClickListener {
+        void onBikeLongClick(InventoryBike bike, int position);
+    }
+
+    public InventoryBikeAdapter(Context context, List<InventoryBike> bikeList, OnBikeLongClickListener longClickListener) {
         this.context = context;
         this.bikeList = bikeList;
+        this.longClickListener = longClickListener;
         this.baseUrl = RetrofitClient.BASE_URL;
         
         if (this.baseUrl != null && !this.baseUrl.endsWith("/")) {
             this.baseUrl += "/";
         }
+    }
+    
+    // BACKWARD COMPATIBILITY CONSTRUCTOR
+    public InventoryBikeAdapter(Context context, List<InventoryBike> bikeList) {
+        this(context, bikeList, null);
     }
 
     @NonNull
@@ -54,15 +67,15 @@ public class InventoryBikeAdapter extends RecyclerView.Adapter<InventoryBikeAdap
         // Status Logic
         String status = bike.getStatus();
         if ("Delivered".equalsIgnoreCase(status) || "Sold".equalsIgnoreCase(status)) {
-            holder.tvStatusBadge.setText("DELIVERED");
+            holder.tvStatusBadge.setText("SOLD");
             holder.tvStatusBadge.setTextColor(android.graphics.Color.parseColor("#15803d")); // Green 700
             holder.tvStatusBadge.setBackgroundResource(R.drawable.badge_green_bg);
             
             // Customer Info
             holder.layoutCustomer.setVisibility(View.VISIBLE);
             holder.tvCustomerName.setText(bike.getCustomerName() != null ? bike.getCustomerName() : "Unknown");
-            holder.tvDateLabel.setText("DELIVERED ON");
-            holder.tvDeliveryDate.setText(bike.getDeliveryDate() != null ? bike.getDeliveryDate() : "-");
+            holder.tvDateLabel.setText("SOLD ON");
+            holder.tvDeliveryDate.setText(bike.getSoldDate() != null ? bike.getSoldDate() : "-");
             
         } else {
             holder.tvStatusBadge.setText("IN STOCK");
@@ -74,32 +87,21 @@ public class InventoryBikeAdapter extends RecyclerView.Adapter<InventoryBikeAdap
         }
 
         // Color Logic
-        // Assuming colors string is like "Metallic Black|#000000" or just name? 
-        // Or JSON [{"name":"Black", "hex":"#000"}]
-        // Let's safe handle.
         String colorName = "Unknown";
         int colorHex = android.graphics.Color.GRAY;
         
         try {
-            // Check if it's a JSON array
             String rawColors = bike.getColors();
             if (rawColors != null && !rawColors.isEmpty()) {
                 String colorString = rawColors;
                 
-                // If it's a JSON array (starts with [), parse it validly
                 if (rawColors.trim().startsWith("[")) {
                     try {
-                        // Use Gson to parse list of strings
-                        // or manual quick parse if Gson overhead unwanted in binding, 
-                        // but Gson is cleaner.
-                        // Assuming simple ["Name|Hex"] format.
                         org.json.JSONArray jsonArray = new org.json.JSONArray(rawColors);
                         if (jsonArray.length() > 0) {
-                            colorString = jsonArray.getString(0); // Get first color
+                            colorString = jsonArray.getString(0); 
                         }
-                    } catch (Exception ex) {
-                        // Fallback if json fail, maybe treat as raw
-                    }
+                    } catch (Exception ex) { }
                 }
 
                 if (colorString.contains("|")) {
@@ -108,29 +110,40 @@ public class InventoryBikeAdapter extends RecyclerView.Adapter<InventoryBikeAdap
                      if (parts.length > 1 && !parts[1].isEmpty()) {
                          try {
                              colorHex = android.graphics.Color.parseColor(parts[1]);
-                         } catch (IllegalArgumentException e) {
-                             // invalid hex
-                         }
+                         } catch (IllegalArgumentException e) { }
                      }
                  } else {
                      colorName = colorString;
                  }
             }
-        } catch (Exception e) {
-            // Fallback
-        }
+        } catch (Exception e) { }
         
         holder.tvColorName.setText(colorName);
         holder.viewColorDot.getBackground().setTint(colorHex);
-    }
-    
-    // cleanImageUrl unused in this layout? 
-    // New layout does not show bike image thumbnail, only color dot.
-    // So distinct from previous.
 
-    private String cleanImageUrl(String url) {
-        // ... (keep if might be used later or remove)
-        return url; 
+        // Load Image using centralized ImageUtils
+        String imageUrl = ImageUtils.getFullImageUrl(bike.getThumbnail());
+        if (!imageUrl.isEmpty()) {
+             Glide.with(context)
+                 .load(imageUrl)
+                 .placeholder(R.drawable.placeholder_bike)
+                 .error(R.drawable.placeholder_bike)
+                 .centerCrop()
+                 .into(holder.ivBikeImage);
+        } else {
+             holder.ivBikeImage.setImageResource(R.drawable.placeholder_bike);
+        }
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (longClickListener != null) {
+                int pos = holder.getAdapterPosition();
+                if (pos != RecyclerView.NO_POSITION) {
+                    longClickListener.onBikeLongClick(bike, pos);
+                }
+                return true;
+            }
+            return false;
+        });
     }
 
     @Override
@@ -138,10 +151,19 @@ public class InventoryBikeAdapter extends RecyclerView.Adapter<InventoryBikeAdap
         return bikeList != null ? bikeList.size() : 0;
     }
 
+    public void removeAt(int position) {
+        if (bikeList != null && position >= 0 && position < bikeList.size()) {
+            bikeList.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, bikeList.size());
+        }
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvModel, tvVariant, tvEngineNo, tvChassisNo, tvInwardDate, tvStatusBadge;
         TextView tvColorName, tvCustomerName, tvDateLabel, tvDeliveryDate;
         View viewColorDot, layoutCustomer;
+        ImageView ivBikeImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -159,6 +181,8 @@ public class InventoryBikeAdapter extends RecyclerView.Adapter<InventoryBikeAdap
             tvCustomerName = itemView.findViewById(R.id.tvCustomerName);
             tvDateLabel = itemView.findViewById(R.id.tvDateLabel);
             tvDeliveryDate = itemView.findViewById(R.id.tvDeliveryDate);
+            
+            ivBikeImage = itemView.findViewById(R.id.ivBikeImage);
         }
     }
 }

@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.motovista_deep.BrandBikesActivity;
 import com.example.motovista_deep.R;
 import com.example.motovista_deep.models.InventoryBrand;
+import com.example.motovista_deep.utils.ImageUtils;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -106,25 +107,8 @@ public class InventoryBrandAdapter extends RecyclerView.Adapter<InventoryBrandAd
         holder.tvBrandName.setText(brand.getBrand());
         holder.tvBrandName.setTextColor(Color.parseColor("#0f172a"));
 
-        String logoUrl = brand.getLogo(); // Use backend URL first
-
-        // Construct full URL if it's a relative path from backend
-        if (logoUrl != null && !logoUrl.startsWith("http")) {
-            // Assuming RetrofitClient.BASE_URL is "http://192.168.0.102/motovista_backend/api/"
-            // We need to go up one level from 'api/' to root if uploads is in root.
-            // My add_brand.php saved to '../uploads/brands/'.
-            // So the stored path is 'uploads/brands/file.jpg'.
-            // The BASE_URL usually points to 'api/'.
-            // So we need to strip 'api/' or construct manually.
-            
-            // Let's rely on a helper or just string manipulation for now.
-            // RetrofitClient.BASE_URL usually ends with /.
-            String baseUrl = com.example.motovista_deep.api.RetrofitClient.BASE_URL; // e.g., http://.../api/
-            if (baseUrl.endsWith("api/")) {
-                baseUrl = baseUrl.substring(0, baseUrl.length() - 4); // remove 'api/'
-            }
-            logoUrl = baseUrl + logoUrl;
-        }
+        // Use centralized ImageUtils for backend logo URL
+        String logoUrl = ImageUtils.getFullImageUrl(brand.getLogo(), ImageUtils.PATH_BRANDS);
         
         // Fallback to map if null or empty
         if (brand.getLogo() == null || brand.getLogo().isEmpty()) {

@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="12dp"
-                    android:text="Hello, Santhosh"
+                    android:text="Hello, Customer"
                     android:textColor="@color/text_dark"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -80,205 +80,38 @@
 
             </LinearLayout>
 
-            <!-- Featured Cards Horizontal Scroll -->
-            <HorizontalScrollView
+            <!-- Dynamic Featured Section Header -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:paddingHorizontal="@dimen/padding_medium"
                 android:paddingTop="8dp"
-                android:scrollbars="none">
+                android:gravity="center_vertical">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:layout_weight="1"
+                    android:text="Explore Our Fleet"
+                    android:textColor="@color/text_dark"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif" />
 
-                    <!-- Featured Card 1: SB-X 2024 -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardFeatured1"
-                        android:layout_width="300dp"
-                        android:layout_height="200dp"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="2dp"
-                        app:cardUseCompatPadding="true">
+            </LinearLayout>
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <!-- Background Image -->
-                            <ImageView
-                                android:id="@+id/ivFeatured1"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/featured_bike_1"
-                                android:contentDescription="SB-X 2024 Bike" />
-
-                            <!-- Gradient Overlay -->
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/gradient_overlay" />
-
-                            <!-- Text Content -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:orientation="vertical"
-                                android:padding="16dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="The All-New SB-X 2024"
-                                    android:textColor="@color/white"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Unleash the Beast"
-                                    android:textColor="@color/white"
-                                    android:textSize="14sp"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="4dp" />
-
-                            </LinearLayout>
-
-                        </RelativeLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Featured Card 2: Monsoon Service -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardFeatured2"
-                        android:layout_width="300dp"
-                        android:layout_height="200dp"
-                        android:layout_marginEnd="12dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="2dp"
-                        app:cardUseCompatPadding="true">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <!-- Background Image -->
-                            <ImageView
-                                android:id="@+id/ivFeatured2"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/featured_service"
-                                android:contentDescription="Monsoon Service" />
-
-                            <!-- Gradient Overlay -->
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/gradient_overlay" />
-
-                            <!-- Text Content -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:orientation="vertical"
-                                android:padding="16dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Monsoon Service Offer"
-                                    android:textColor="@color/white"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Get 20% off on all services"
-                                    android:textColor="@color/white"
-                                    android:textSize="14sp"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="4dp" />
-
-                            </LinearLayout>
-
-                        </RelativeLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Featured Card 3: Community Ride -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardFeatured3"
-                        android:layout_width="300dp"
-                        android:layout_height="200dp"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="2dp"
-                        app:cardUseCompatPadding="true">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <!-- Background Image -->
-                            <ImageView
-                                android:id="@+id/ivFeatured3"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/featured_community"
-                                android:contentDescription="Community Ride" />
-
-                            <!-- Gradient Overlay -->
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:background="@drawable/gradient_overlay" />
-
-                            <!-- Text Content -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:orientation="vertical"
-                                android:padding="16dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Community Ride Out"
-                                    android:textColor="@color/white"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Join us this Sunday!"
-                                    android:textColor="@color/white"
-                                    android:textSize="14sp"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="4dp" />
-
-                            </LinearLayout>
-
-                        </RelativeLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-
-            </HorizontalScrollView>
+            <!-- Shuffled Bikes RecyclerView (Horizontal) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvShuffledBikes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:paddingHorizontal="12dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_bike_card" />
 
             <!-- Quick Actions Grid -->
             <LinearLayout
@@ -286,8 +119,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingHorizontal="@dimen/padding_medium"
-                android:paddingTop="24dp"
-                android:paddingBottom="8dp"
+                android:paddingVertical="24dp"
                 android:gravity="center">
 
                 <!-- Test Ride Card -->
@@ -299,8 +131,7 @@
                     android:layout_marginEnd="8dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="1dp"
-                    app:cardUseCompatPadding="true"
-                    android:background="@color/card_bg">
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -326,15 +157,6 @@
                             android:fontFamily="sans-serif"
                             android:layout_marginTop="12dp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Book a slot"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp"
-                            android:fontFamily="sans-serif"
-                            android:layout_marginTop="4dp" />
-
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -348,8 +170,7 @@
                     android:layout_marginEnd="8dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="1dp"
-                    app:cardUseCompatPadding="true"
-                    android:background="@color/card_bg">
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -361,9 +182,9 @@
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
-                            android:src="@drawable/ic_build"
+                            android:src="@drawable/ic_two_wheeler"
                             android:tint="@color/text_dark"
-                            android:contentDescription="Service" />
+                            android:contentDescription="My Bikes" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -374,15 +195,6 @@
                             android:textStyle="bold"
                             android:fontFamily="sans-serif"
                             android:layout_marginTop="12dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Find a center"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp"
-                            android:fontFamily="sans-serif"
-                            android:layout_marginTop="4dp" />
 
                     </LinearLayout>
 
@@ -396,8 +208,7 @@
                     android:layout_weight="1"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="1dp"
-                    app:cardUseCompatPadding="true"
-                    android:background="@color/card_bg">
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -416,21 +227,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Request a Bike"
+                            android:text="Inquiry"
                             android:textColor="@color/text_dark"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:fontFamily="sans-serif"
                             android:layout_marginTop="12dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Submit an inquiry"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="12sp"
-                            android:fontFamily="sans-serif"
-                            android:layout_marginTop="4dp" />
 
                     </LinearLayout>
 
@@ -438,254 +240,13 @@
 
             </LinearLayout>
 
-            <!-- New Arrivals Section -->
-            <TextView
-                android:id="@+id/tvNewArrivals"
+            <!-- Dynamic Brand Sections (Amazon Style) -->
+            <LinearLayout
+                android:id="@+id/brandSectionsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="New Arrivals"
-                android:textColor="@color/text_dark"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif"
-                android:paddingHorizontal="@dimen/padding_medium"
-                android:paddingTop="32dp"
-                android:paddingBottom="12dp" />
-
-            <!-- New Arrivals Horizontal Scroll -->
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/padding_medium"
-                android:scrollbars="none">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <!-- SB-Raptor 500 Card -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardRaptor"
-                        android:layout_width="160dp"
-                        android:layout_height="240dp"
-                        android:layout_marginEnd="16dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="2dp"
-                        app:cardUseCompatPadding="true"
-                        android:background="@color/card_bg">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <!-- Bike Image -->
-                            <ImageView
-                                android:id="@+id/ivRaptor"
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/bike_raptor"
-                                android:contentDescription="SB-Raptor 500" />
-
-                            <!-- Details -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:padding="12dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="SB-Raptor 500"
-                                    android:textColor="@color/text_dark"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Starting at $5,500"
-                                    android:textColor="@color/text_secondary"
-                                    android:textSize="12sp"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="4dp" />
-
-                                <!-- Learn More Button -->
-                                <Button
-                                    android:id="@+id/btnLearnMoreRaptor"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="32dp"
-                                    android:layout_marginTop="12dp"
-                                    android:text="Learn More"
-                                    android:textColor="@color/primary"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif"
-                                    android:background="@drawable/primary_outline_button"
-                                    android:paddingHorizontal="16dp"
-                                    android:minWidth="0dp"
-                                    android:minHeight="0dp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- SB-Cruiser King Card -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardCruiser"
-                        android:layout_width="160dp"
-                        android:layout_height="240dp"
-                        android:layout_marginEnd="16dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="2dp"
-                        app:cardUseCompatPadding="true"
-                        android:background="@color/card_bg">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <!-- Bike Image -->
-                            <ImageView
-                                android:id="@+id/ivCruiser"
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/bike_cruiser"
-                                android:contentDescription="SB-Cruiser King" />
-
-                            <!-- Details -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:padding="12dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="SB-Cruiser King"
-                                    android:textColor="@color/text_dark"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Starting at $7,200"
-                                    android:textColor="@color/text_secondary"
-                                    android:textSize="12sp"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="4dp" />
-
-                                <!-- Learn More Button -->
-                                <Button
-                                    android:id="@+id/btnLearnMoreCruiser"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="32dp"
-                                    android:layout_marginTop="12dp"
-                                    android:text="Learn More"
-                                    android:textColor="@color/primary"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif"
-                                    android:background="@drawable/primary_outline_button"
-                                    android:paddingHorizontal="16dp"
-                                    android:minWidth="0dp"
-                                    android:minHeight="0dp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- SB-TrailBlazer Card -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardTrailBlazer"
-                        android:layout_width="160dp"
-                        android:layout_height="240dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="2dp"
-                        app:cardUseCompatPadding="true"
-                        android:background="@color/card_bg">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <!-- Bike Image -->
-                            <ImageView
-                                android:id="@+id/ivTrailBlazer"
-                                android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
-                                android:scaleType="centerCrop"
-                                android:src="@drawable/bike_trailblazer"
-                                android:contentDescription="SB-TrailBlazer" />
-
-                            <!-- Details -->
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:padding="12dp">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="SB-TrailBlazer"
-                                    android:textColor="@color/text_dark"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif-medium" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Starting at $8,000"
-                                    android:textColor="@color/text_secondary"
-                                    android:textSize="12sp"
-                                    android:fontFamily="sans-serif"
-                                    android:layout_marginTop="4dp" />
-
-                                <!-- Learn More Button -->
-                                <Button
-                                    android:id="@+id/btnLearnMoreTrailBlazer"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="32dp"
-                                    android:layout_marginTop="12dp"
-                                    android:text="Learn More"
-                                    android:textColor="@color/primary"
-                                    android:textSize="12sp"
-                                    android:textStyle="bold"
-                                    android:fontFamily="sans-serif"
-                                    android:background="@drawable/primary_outline_button"
-                                    android:paddingHorizontal="16dp"
-                                    android:minWidth="0dp"
-                                    android:minHeight="0dp" />
-
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-
-            </HorizontalScrollView>
+                android:orientation="vertical"
+                android:paddingBottom="24dp" />
 
             <!-- Padding for bottom navigation -->
             <View
@@ -813,13 +374,13 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_calculate"
                 android:tint="@color/gray_400"
-                android:contentDescription="EMI Calculator" />
+                android:contentDescription="EMI" />
 
             <TextView
                 android:id="@+id/tvEmiCalculator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EMI Calculator"
+                android:text="EMI"
                 android:textColor="@color/gray_400"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif"

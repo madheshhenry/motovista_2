@@ -223,13 +223,9 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
 
                 // Handle images
                 if (apiBike.getAllImages() != null && !apiBike.getAllImages().isEmpty()) {
-                    Log.d("BIKE_INVENTORY", "Bike has " + apiBike.getAllImages().size() + " images");
                     bike.setAllImages(apiBike.getAllImages());
                 } else if (apiBike.getImageUrl() != null && !apiBike.getImageUrl().isEmpty()) {
-                    Log.d("BIKE_INVENTORY", "Bike has single image URL: " + apiBike.getImageUrl());
                     bike.setImageUrl(apiBike.getImageUrl());
-                } else {
-                    Log.d("BIKE_INVENTORY", "Bike has no images");
                 }
 
                 // Set other details based on type
@@ -254,18 +250,7 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
                 }
 
                 bikeList.add(bike);
-
-                // Debug log for images
-                if (bike.hasImages()) {
-                    ArrayList<String> images = bike.getAllImages();
-                    Log.d("BIKE_INVENTORY", "Final bike has " + images.size() + " images");
-                    for (int i = 0; i < images.size(); i++) {
-                        Log.d("BIKE_INVENTORY", "Image " + i + ": " + images.get(i));
-                    }
-                }
             }
-        } else {
-            Log.d("BIKE_INVENTORY", "No bikes received from API");
         }
 
         filteredList.clear();

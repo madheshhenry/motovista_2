@@ -8,16 +8,25 @@ public class CustomFitting implements Parcelable {
     private String name;
     
     @com.google.gson.annotations.SerializedName("price")
-    private double price;
+    private String price;
 
-    public CustomFitting(String name, double price) {
+    @com.google.gson.annotations.SerializedName("is_mandatory")
+    private boolean isMandatory;
+
+    public CustomFitting(String name, String price, boolean isMandatory) {
         this.name = name;
         this.price = price;
+        this.isMandatory = isMandatory;
+    }
+
+    public CustomFitting(String name, String price) {
+        this(name, price, false);
     }
 
     protected CustomFitting(Parcel in) {
         name = in.readString();
-        price = in.readDouble();
+        price = in.readString();
+        isMandatory = in.readByte() != 0;
     }
 
     public static final Creator<CustomFitting> CREATOR = new Creator<CustomFitting>() {
@@ -40,7 +49,8 @@ public class CustomFitting implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeDouble(price);
+        dest.writeString(price);
+        dest.writeByte((byte) (isMandatory ? 1 : 0));
     }
 
     public String getName() {
@@ -51,11 +61,19 @@ public class CustomFitting implements Parcelable {
         this.name = name;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(String price) {
         this.price = price;
+    }
+
+    public boolean isMandatory() {
+        return isMandatory;
+    }
+
+    public void setMandatory(boolean mandatory) {
+        isMandatory = mandatory;
     }
 }

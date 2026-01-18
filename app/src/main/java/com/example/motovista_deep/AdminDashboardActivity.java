@@ -13,6 +13,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.motovista_deep.api.ApiService;
+import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.models.AdminNotificationResponse;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AdminDashboardActivity extends AppCompatActivity {
 
     private CardView cardEmiLedger, cardInsuranceLedger, cardRegistrationLedger,
@@ -22,7 +30,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private LinearLayout iconContainerEmi, iconContainerInsurance, iconContainerRegistration,
             iconContainerApplication, iconContainerSales, iconContainerRequestedCustomer;
     private ImageView btnMenu, btnNotifications;
-    private TextView tvWelcome;
+    private TextView tvWelcome, tvNotificationBadge;
 
     // Add these ImageViews for bottom navigation icons
     private ImageView ivDashboard, ivInventory, ivBikes, ivCustomers, ivSettings;
@@ -71,6 +79,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         btnMenu = findViewById(R.id.btnMenu);
         btnNotifications = findViewById(R.id.btnNotifications);
         tvWelcome = findViewById(R.id.tvWelcome);
+        tvNotificationBadge = findViewById(R.id.tvNotificationBadge);
 
         // Initialize icon containers
         iconContainerEmi = findViewById(R.id.iconContainerEmi);
@@ -354,9 +363,38 @@ public class AdminDashboardActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         checkActiveSession();
+        fetchNotificationCounts();
+    }
+
+    private void fetchNotificationCounts() {
+        ApiService apiService = RetrofitClient.getApiService();
+        apiService.getAdminNotifications().enqueue(new Callback<AdminNotificationResponse>() {
+            @Override
+            public void onResponse(Call<AdminNotificationResponse> call, Response<AdminNotificationResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    int total = response.body().getCounts().get("total");
+                    if (total > 0) {
+                        tvNotificationBadge.setVisibility(View.VISIBLE);
+                        tvNotificationBadge.setText(String.valueOf(total));
+                    } else {
+                        tvNotificationBadge.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AdminNotificationResponse> call, Throwable t) {}
+        });
     }
 
     private void checkActiveSession() {
+        // Use WorkflowManager to check for server-synced state first
+        if (com.example.motovista_deep.managers.WorkflowManager.checkAndRedirect(this)) {
+            finish(); // Redirected
+            return;
+        }
+
+        // Legacy/Fallback check
         com.example.motovista_deep.helpers.OrderSessionManager sessionManager = 
             new com.example.motovista_deep.helpers.OrderSessionManager(this);
             
@@ -377,10 +415,9 @@ public class AdminDashboardActivity extends AppCompatActivity {
             }
             
             if (intent != null) {
-                // Restore request ID if possible to pass as extra, though activities handle session restoration themselves now.
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish(); // Close Dashboard so user can't just back into it without clearing session
+                finish();
             }
         }
     }

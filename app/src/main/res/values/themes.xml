@@ -50,4 +50,12 @@
 
 
 
+    <style name="CropperTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">#2563EB</item>
+        <item name="colorPrimaryDark">#1D4ED8</item>
+        <item name="colorAccent">#2563EB</item>
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+    </style>
+
 </resources>

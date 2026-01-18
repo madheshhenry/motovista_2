@@ -23,11 +23,13 @@ import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.models.GenericResponse;
 import com.example.motovista_deep.models.DeleteBikeRequest;
 import com.example.motovista_deep.models.GetBikeByIdResponse;
+import com.example.motovista_deep.utils.ImageUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import java.util.ArrayList;
+import java.util.List;
 
 public class BikeDetailsActivity extends AppCompatActivity {
 
@@ -88,33 +90,7 @@ public class BikeDetailsActivity extends AppCompatActivity {
     }
 
     private String getCleanImageUrl(String url) {
-        if (url == null || url.isEmpty()) {
-            return "";
-        }
-
-        // Remove all quotes and backslashes
-        url = url.replace("\\", "").replace("\"", "");
-
-        // If it's already a full URL, return it
-        if (url.startsWith("http://") || url.startsWith("https://")) {
-            return url;
-        }
-
-        // If it's a relative path, add base URL
-        String baseUrl = RetrofitClient.BASE_URL;
-        if (baseUrl != null && baseUrl.endsWith("api/")) {
-            baseUrl = baseUrl.replace("api/", "");
-        }
-        if (!baseUrl.endsWith("/")) {
-            baseUrl += "/";
-        }
-
-        // Remove leading slash if present
-        if (url.startsWith("/")) {
-            url = url.substring(1);
-        }
-
-        return baseUrl + url;
+        return ImageUtils.getFullImageUrl(url);
     }
 
     private void initializeViews() {
@@ -177,7 +153,8 @@ public class BikeDetailsActivity extends AppCompatActivity {
 
         if (imageUrls.isEmpty()) {
             // Use a placeholder
-            imageUrls.add("https://via.placeholder.com/600x400?text=No+Image");
+            // imageUrls.add("https://via.placeholder.com/600x400?text=No+Image");
+            imageUrls.add("android.resource://" + getPackageName() + "/" + R.drawable.placeholder_bike);
             Log.d("BIKE_DETAILS", "No images found, using placeholder");
         }
 
@@ -268,63 +245,117 @@ public class BikeDetailsActivity extends AppCompatActivity {
             Log.d("BIKE_DETAILS_API", "Fetching bike details for ID: " + bikeId);
             Log.d("BIKE_DETAILS_API", "Token present: " + (token != null));
 
-            Call<GetBikeByIdResponse> call = apiService.getBikeById("Bearer " + token, bikeId);
+            Call<com.example.motovista_deep.models.GetBikeByIdResponseV2> call = apiService.getBikeByIdV2("Bearer " + token, bikeId);
 
-            call.enqueue(new Callback<GetBikeByIdResponse>() {
+            call.enqueue(new Callback<com.example.motovista_deep.models.GetBikeByIdResponseV2>() {
                 @Override
-                public void onResponse(Call<GetBikeByIdResponse> call, Response<GetBikeByIdResponse> response) {
+                public void onResponse(Call<com.example.motovista_deep.models.GetBikeByIdResponseV2> call, Response<com.example.motovista_deep.models.GetBikeByIdResponseV2> response) {
                     progressDialog.dismiss();
 
-                    Log.d("BIKE_DETAILS_API", "Response code: " + response.code());
-                    Log.d("BIKE_DETAILS_API", "Response is successful: " + response.isSuccessful());
-
                     if (response.isSuccessful() && response.body() != null) {
-                        GetBikeByIdResponse apiResponse = response.body();
-                        Log.d("BIKE_DETAILS_API", "Response status: " + apiResponse.getStatus());
-                        Log.d("BIKE_DETAILS_API", "Response message: " + apiResponse.getMessage());
+                        com.example.motovista_deep.models.GetBikeByIdResponseV2 apiResponse = response.body();
 
-                        if ("success".equalsIgnoreCase(apiResponse.getStatus()) || "true".equalsIgnoreCase(apiResponse.getStatus())) {
-                                com.example.motovista_deep.models.BikeModel bikeData = apiResponse.getData();
-                                if (bikeData != null) {
-                                Log.d("BIKE_DETAILS_API", "Bike data received:");
-                                Log.d("BIKE_DETAILS_API", "Date: " + bikeData.getDate());
-                                
-                                // Update bike model with fresh data from API
-                                updateBikeModelWithApiData(bikeData);
-                                logBikeDetails("After API Fetch");
-                                loadBikeData();
-                                isDataLoaded = true;
-                            } else {
+                        if ("success".equalsIgnoreCase(apiResponse.status) || "true".equalsIgnoreCase(apiResponse.status)) {
+                                if (apiResponse.data != null && apiResponse.data.model != null) {
+                                    
+                                    // MAP V2 TO V1
+                                    com.example.motovista_deep.models.BikeParentModel v2Model = apiResponse.data.model;
+                                    List<com.example.motovista_deep.models.BikeVariantModel> v2Variants = apiResponse.data.variants;
+                                    
+                                    com.example.motovista_deep.models.BikeModel bikeData = new com.example.motovista_deep.models.BikeModel();
+                                    
+                                    // Basic Map
+                                    bikeData.setBrand(v2Model.getBrand());
+                                    // bikeData.setModel(v2Model.getModelName()); // existing code uses setModel
+                                    // Warning: BikeModel.model is "model" field. BikeParentModel has "modelName".
+                                    bikeData.setModel(v2Model.getModelName());
+                                    
+                                    bikeData.setYear(v2Model.getModelYear());
+                                    bikeData.setEngineCC(v2Model.getEngineCC());
+                                    bikeData.setFuelType(v2Model.getFuelType());
+                                    bikeData.setTransmission(v2Model.getTransmission());
+                                    bikeData.setMileage(v2Model.getMileage());
+                                    bikeData.setFuelTankCapacity(v2Model.getFuelTankCapacity() != null ? v2Model.getFuelTankCapacity() : ""); // Fix getter name check
+                                    bikeData.setKerbWeight(v2Model.getKerbWeight() != null ? v2Model.getKerbWeight() : "");
+                                    bikeData.setSeatHeight(v2Model.getSeatHeight() != null ? v2Model.getSeatHeight() : "");
+                                    bikeData.setGroundClearance(v2Model.getGroundClearance() != null ? v2Model.getGroundClearance() : "");
+                                    bikeData.setMaxTorque(v2Model.getMaxTorque());
+                                    bikeData.setWarrantyPeriod(v2Model.getWarrantyPeriod()); // check method
+                                    bikeData.setFreeServicesCount(v2Model.getFreeServices() != null ? v2Model.getFreeServices() : ""); // check method
+                                    
+                                    if (v2Model.getMandatoryFittings() != null) bikeData.setMandatoryFittings(v2Model.getMandatoryFittings());
+                                    if (v2Model.getAdditionalFittings() != null) bikeData.setAdditionalFittings(v2Model.getAdditionalFittings());
+                                    
+                                    // Set Variants
+                                    if (v2Variants != null) {
+                                        bikeData.setVariants(v2Variants);
+                                    }
+
+                                    // Variant Map (Use first variant)
+                                    if (v2Variants != null && !v2Variants.isEmpty()) {
+                                        com.example.motovista_deep.models.BikeVariantModel v2Variant = v2Variants.get(0);
+                                        bikeData.setVariant(v2Variant.variantName);
+                                        
+                                        if (v2Variant.brakesWheels != null) {
+                                            bikeData.setBrakingType(v2Variant.brakesWheels.brakingSystem);
+                                            bikeData.setFrontBrake(v2Variant.brakesWheels.frontBrake);
+                                            bikeData.setRearBrake(v2Variant.brakesWheels.rearBrake);
+                                            bikeData.setWheelType(v2Variant.brakesWheels.wheelType);
+                                        }
+
+                                        // Map Prices
+                                        if (v2Variant.priceDetails != null) {
+                                            bikeData.setExShowroomPrice(v2Variant.priceDetails.exShowroom);
+                                            bikeData.setInsurance(v2Variant.priceDetails.insurance);
+                                            bikeData.setRegistrationCharge(v2Variant.priceDetails.registration);
+                                            bikeData.setLtrt(v2Variant.priceDetails.ltrt);
+                                            bikeData.setOnRoadPrice(v2Variant.priceDetails.totalOnRoad);
+                                        }
+                                        
+                                        // Map Images
+                                        ArrayList<String> images = new ArrayList<>();
+                                        ArrayList<String> colorNames = new ArrayList<>();
+                                        if (v2Variant.colors != null) {
+                                            for(com.example.motovista_deep.models.BikeVariantModel.VariantColor c : v2Variant.colors) {
+                                                String colorEntry = c.colorName;
+                                                if (c.colorHex != null && !c.colorHex.isEmpty()) {
+                                                    colorEntry += "|" + c.colorHex;
+                                                }
+                                                if(colorEntry != null) colorNames.add(colorEntry);
+                                                
+                                                if (c.imagePaths != null) images.addAll(c.imagePaths);
+                                            }
+                                        }
+                                        bikeData.setColors(colorNames);
+                                        bikeData.setAllImages(images); 
+                                    }
+                                    
+                                    updateBikeModelWithApiData(bikeData);
+                                    loadBikeData();
+                                    isDataLoaded = true;
+                                } else {
                                 Log.e("BIKE_DETAILS_API", "BikeData is null in response");
                                 Toast.makeText(BikeDetailsActivity.this,
                                         "No bike data found", Toast.LENGTH_SHORT).show();
                                 loadBikeDataWithExistingData();
                             }
                         } else {
-                            String msg = apiResponse.getMessage() != null ? apiResponse.getMessage() : "Unknown error";
+                            String msg = apiResponse.status != null ? apiResponse.status : "Unknown error";
                             Log.e("BIKE_DETAILS_API", "API returned error: " + msg);
                             Toast.makeText(BikeDetailsActivity.this,
                                     msg, Toast.LENGTH_SHORT).show();
                             loadBikeDataWithExistingData();
                         }
                     } else {
-                        String errorBody = "Unknown error";
-                        try {
-                            if (response.errorBody() != null) {
-                                errorBody = response.errorBody().string();
-                            }
-                        } catch (Exception e) {
-                            errorBody = e.getMessage();
-                        }
-                        Log.e("BIKE_DETAILS_API", "Response not successful. Error: " + errorBody);
+                        Log.e("BIKE_DETAILS_API", "Response not successful. Code: " + response.code());
                         Toast.makeText(BikeDetailsActivity.this,
-                                "Failed to fetch bike details. Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                                "Failed to fetch bike details", Toast.LENGTH_SHORT).show();
                         loadBikeDataWithExistingData();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<GetBikeByIdResponse> call, Throwable t) {
+                public void onFailure(Call<com.example.motovista_deep.models.GetBikeByIdResponseV2> call, Throwable t) {
                     progressDialog.dismiss();
                     Log.e("BIKE_DETAILS_API", "API call failed: " + t.getMessage(), t);
                     Toast.makeText(BikeDetailsActivity.this,
@@ -342,8 +373,9 @@ public class BikeDetailsActivity extends AppCompatActivity {
         if (bikeData != null && bike != null) {
             // Update the bike object with fresh data from API
             bike.setDate(bikeData.getDate());
-            bike.setEngine_number(bikeData.getEngine_number());
-            bike.setChassis_number(bikeData.getChassis_number());
+            // bike.setEngine_number(bikeData.getEngine_number());
+            // bike.setChassis_number(bikeData.getChassis_number());
+            bike.setMaxTorque(bikeData.getMaxTorque());
 
             // Also update other fields that might be missing
             bike.setVariant(bikeData.getVariant());
@@ -374,11 +406,14 @@ public class BikeDetailsActivity extends AppCompatActivity {
             Log.d("BIKE_DETAILS_API", "Custom Fittings size: " + (bikeData.getCustomFittings() != null ? bikeData.getCustomFittings().size() : "null"));
             Log.d("BIKE_DETAILS_API", "Mandatory Fittings size: " + (bikeData.getMandatoryFittings() != null ? bikeData.getMandatoryFittings().size() : "null"));
             Log.d("BIKE_DETAILS_API", "Additional Fittings size: " + (bikeData.getAdditionalFittings() != null ? bikeData.getAdditionalFittings().size() : "null"));
+            Log.d("BIKE_DETAILS_API", "Images: " + (bikeData.getAllImages() != null ? bikeData.getAllImages().size() : "null"));
 
             bike.setColors(bikeData.getColors());
             bike.setCustomFittings(bikeData.getCustomFittings());
             bike.setMandatoryFittings(bikeData.getMandatoryFittings());
             bike.setAdditionalFittings(bikeData.getAdditionalFittings());
+            bike.setVariants(bikeData.getVariants()); // Added
+            bike.setAllImages(bikeData.getAllImages()); // Added copy images
 
             // Set the price for display
             if (bikeData.getOnRoadPrice() != null && !bikeData.getOnRoadPrice().isEmpty()) {
@@ -389,6 +424,9 @@ public class BikeDetailsActivity extends AppCompatActivity {
                     // Keep existing price
                 }
             }
+            
+            // Refresh Image Slider
+            setupImageSlider();
         }
     }
 
@@ -423,12 +461,30 @@ public class BikeDetailsActivity extends AppCompatActivity {
         // Basic Details
         TextView tvBrand = view.findViewById(R.id.tvBrand);
         TextView tvModel = view.findViewById(R.id.tvModel);
-        TextView tvVariant = view.findViewById(R.id.tvVariant);
+        // TextView tvVariant = view.findViewById(R.id.tvVariant); // Removed
         TextView tvYear = view.findViewById(R.id.tvYear);
         TextView tvEngineCC = view.findViewById(R.id.tvEngineCC);
         TextView tvFuelType = view.findViewById(R.id.tvFuelType);
         TextView tvTransmission = view.findViewById(R.id.tvTransmission);
-        TextView tvBrakingType = view.findViewById(R.id.tvBrakingType);
+
+        // Setup Variant RecyclerView
+        androidx.recyclerview.widget.RecyclerView rvVariants = view.findViewById(R.id.rvVariants);
+        rvVariants.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false));
+
+        if (bike.getVariants() != null && !bike.getVariants().isEmpty()) {
+            com.example.motovista_deep.adapter.VariantAdapter adapter = new com.example.motovista_deep.adapter.VariantAdapter(this, bike.getVariants(), (variant, position) -> {
+                updateBikeDetailsForVariant(view, variant);
+            });
+            rvVariants.setAdapter(adapter);
+
+            // Set initial selection
+            if (adapter.getItemCount() > 0) {
+                 // Trigger update for first item
+                 updateBikeDetailsForVariant(view, bike.getVariants().get(0));
+            }
+        }
+        // Braking Type removed from layout
+        // TextView tvBrakingType = view.findViewById(R.id.tvBrakingType);
 
         // Colors
         LinearLayout llColorsSection = view.findViewById(R.id.llColorsSection);
@@ -445,16 +501,15 @@ public class BikeDetailsActivity extends AppCompatActivity {
             if (llColorsSection != null) llColorsSection.setVisibility(View.GONE);
         }
 
-        // NEW FIELDS: Add TextViews for date, engine number, chassis number
+        // NEW FIELDS: Add TextViews for date and max torque
         TextView tvDate = view.findViewById(R.id.tvDate);
-        TextView tvEngineNumber = view.findViewById(R.id.tvEngineNumber);
-        TextView tvChassisNumber = view.findViewById(R.id.tvChassisNumber);
+        TextView tvMaxTorque = view.findViewById(R.id.tvMaxTorque);
+        // Removed Engine/Chassis bindings
 
         // Set values with proper null checks
         tvBrand.setText(bike.getBrand() != null ? bike.getBrand() : "N/A");
         tvModel.setText(bike.getModel() != null ? bike.getModel() : "N/A");
-        tvVariant.setText(bike.getVariant() != null && !bike.getVariant().isEmpty() ?
-                bike.getVariant() : "Standard");
+        // tvVariant removed
         tvYear.setText(bike.getYear() != null && !bike.getYear().isEmpty() ?
                 bike.getYear() : "2024");
         tvEngineCC.setText(bike.getEngineCC() != null && !bike.getEngineCC().isEmpty() ?
@@ -463,23 +518,18 @@ public class BikeDetailsActivity extends AppCompatActivity {
                 bike.getFuel_type() : "Petrol");
         tvTransmission.setText(bike.getTransmission() != null && !bike.getTransmission().isEmpty() ?
                 bike.getTransmission() : "Manual");
-        tvBrakingType.setText(bike.getBrakingType() != null && !bike.getBrakingType().isEmpty() ?
-                bike.getBrakingType() : "N/A");
+        // tvBrakingType.setText(bike.getBrakingType() != null && !bike.getBrakingType().isEmpty() ?
+        //        bike.getBrakingType() : "N/A");
 
-        // SET NEW FIELDS - These should now have data from API
+        // SET NEW FIELDS
         String date = bike.getDate();
-        String engineNumber = bike.getEngine_number();
-        String chassisNumber = bike.getChassis_number();
+        String maxTorque = bike.getMaxTorque();
 
         Log.d("BIKE_DETAILS_UI", "Date: " + date);
-        Log.d("BIKE_DETAILS_UI", "Engine Number: " + engineNumber);
-        Log.d("BIKE_DETAILS_UI", "Chassis Number: " + chassisNumber);
+        Log.d("BIKE_DETAILS_UI", "Max Torque: " + maxTorque);
 
         tvDate.setText(date != null && !date.isEmpty() ? date : "Not specified");
-        tvEngineNumber.setText(engineNumber != null && !engineNumber.isEmpty() ?
-                engineNumber : "Not specified");
-        tvChassisNumber.setText(chassisNumber != null && !chassisNumber.isEmpty() ?
-                chassisNumber : "Not specified");
+        tvMaxTorque.setText(maxTorque != null && !maxTorque.isEmpty() ? maxTorque : "N/A");
 
         // Price Configuration
         TextView tvExShowroom = view.findViewById(R.id.tvExShowroom);
@@ -492,26 +542,26 @@ public class BikeDetailsActivity extends AppCompatActivity {
         if (bike.getExShowroomPrice() != null && !bike.getExShowroomPrice().isEmpty()) {
             tvExShowroom.setText("₹ " + bike.getExShowroomPrice());
         } else {
-             // Fallback logic if needed, or set default
-             tvExShowroom.setText("₹ " + formatPrice(Double.parseDouble(bike.getOnRoadPrice().replace(",","")) * 0.87));
+            // Fallback logic
+            tvExShowroom.setText("₹ " + formatPrice(getSafeOnRoadPrice(bike) * 0.87));
         }
 
         if (bike.getInsurance() != null && !bike.getInsurance().isEmpty()) {
             tvInsurance.setText("₹ " + bike.getInsurance());
         } else {
-             tvInsurance.setText("₹ " + formatPrice(Double.parseDouble(bike.getOnRoadPrice().replace(",","")) * 0.06));
+             tvInsurance.setText("₹ " + formatPrice(getSafeOnRoadPrice(bike) * 0.06));
         }
 
         if (bike.getRegistrationCharge() != null && !bike.getRegistrationCharge().isEmpty()) {
             tvRegistration.setText("₹ " + bike.getRegistrationCharge());
         } else {
-             tvRegistration.setText("₹ " + formatPrice(Double.parseDouble(bike.getOnRoadPrice().replace(",","")) * 0.05));
+             tvRegistration.setText("₹ " + formatPrice(getSafeOnRoadPrice(bike) * 0.05));
         }
 
         if (bike.getLtrt() != null && !bike.getLtrt().isEmpty()) {
             tvLTRT.setText("₹ " + bike.getLtrt());
         } else {
-             tvLTRT.setText("₹ " + formatPrice(Double.parseDouble(bike.getOnRoadPrice().replace(",","")) * 0.02));
+             tvLTRT.setText("₹ " + formatPrice(getSafeOnRoadPrice(bike) * 0.02));
         }
         
         // Total Price
@@ -560,12 +610,176 @@ public class BikeDetailsActivity extends AppCompatActivity {
         TextView tvAccountName = view.findViewById(R.id.tvAccountName);
         TextView tvAccountNumber = view.findViewById(R.id.tvAccountNumber);
         TextView tvIFSC = view.findViewById(R.id.tvIFSC);
-        tvAccountName.setText("SANTHOSH BIKES");
-        tvAccountNumber.setText("75010200000585");
-        tvIFSC.setText("BARBOVJAVAD");
+        // Using layout values which match AddBikeActivity
+        // tvAccountName.setText("SANTHOSH BIKES");
+        // tvAccountNumber.setText("75010200000585");
+        // tvIFSC.setText("BARBOVJAVAD");
 
         // Setup fittings
         setupFittings(view);
+    }
+
+    private void updateBikeDetailsForVariant(View view, com.example.motovista_deep.models.BikeVariantModel variant) {
+         // Update Colors
+        LinearLayout llColorsSection = view.findViewById(R.id.llColorsSection);
+        LinearLayout colorsContainer = view.findViewById(R.id.colorsContainer);
+        
+        java.util.List<String> colorNames = new java.util.ArrayList<>();
+         if (variant.colors != null) {
+            for(com.example.motovista_deep.models.BikeVariantModel.VariantColor c : variant.colors) {
+                String colorEntry = c.colorName;
+                if (c.colorHex != null && !c.colorHex.isEmpty()) {
+                    colorEntry += "|" + c.colorHex;
+                }
+                if(colorEntry != null) colorNames.add(colorEntry);
+            }
+        }
+        
+        if (!colorNames.isEmpty()) {
+            llColorsSection.setVisibility(View.VISIBLE);
+            if (colorsContainer != null) {
+                colorsContainer.removeAllViews();
+                for (String color : colorNames) {
+                    addColorItem(colorsContainer, color);
+                }
+            }
+        } else {
+             if (llColorsSection != null) llColorsSection.setVisibility(View.GONE);
+        }
+        
+        // Update Price
+        if (variant.priceDetails != null) {
+             updatePriceDisplay(view, 
+                variant.priceDetails.exShowroom, 
+                variant.priceDetails.insurance, 
+                variant.priceDetails.registration, 
+                variant.priceDetails.ltrt, 
+                variant.priceDetails.totalOnRoad);
+        }
+
+        // Update Images
+        java.util.ArrayList<String> newImages = new java.util.ArrayList<>();
+        if (variant.colors != null) {
+            for(com.example.motovista_deep.models.BikeVariantModel.VariantColor c : variant.colors) {
+                if (c.imagePaths != null) newImages.addAll(c.imagePaths);
+            }
+        }
+        if (!newImages.isEmpty()) {
+            bike.setAllImages(newImages);
+            bike.setImageUrls(newImages); // Ensure compatibility
+            setupImageSlider();
+        }
+
+        // Update Brakes & Wheels
+        TextView tvFrontBrake = view.findViewById(R.id.tvFrontBrake);
+        TextView tvRearBrake = view.findViewById(R.id.tvRearBrake);
+        TextView tvBrakingSystem = view.findViewById(R.id.tvBrakingSystem);
+        TextView tvWheelType = view.findViewById(R.id.tvWheelType);
+
+        if (variant.brakesWheels != null) {
+            tvFrontBrake.setText(variant.brakesWheels.frontBrake != null ? variant.brakesWheels.frontBrake : "N/A");
+            tvRearBrake.setText(variant.brakesWheels.rearBrake != null ? variant.brakesWheels.rearBrake : "N/A");
+            tvBrakingSystem.setText(variant.brakesWheels.brakingSystem != null ? variant.brakesWheels.brakingSystem : "N/A");
+            tvWheelType.setText(variant.brakesWheels.wheelType != null ? variant.brakesWheels.wheelType : "N/A");
+        }
+
+        // Update Custom Sections
+        LinearLayout llCustomSections = view.findViewById(R.id.llCustomSectionsContainer);
+        if (llCustomSections != null) {
+            llCustomSections.removeAllViews();
+            if (variant.customSections != null) {
+                for (com.example.motovista_deep.models.BikeVariantModel.CustomSection section : variant.customSections) {
+                    addCustomSectionToView(llCustomSections, section);
+                }
+            }
+        }
+    }
+
+    private void addCustomSectionToView(LinearLayout container, com.example.motovista_deep.models.BikeVariantModel.CustomSection section) {
+        // Section Container
+        LinearLayout sectionLayout = new LinearLayout(this);
+        sectionLayout.setOrientation(LinearLayout.VERTICAL);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        lp.bottomMargin = 24; // dp conversion ideally needed
+        sectionLayout.setLayoutParams(lp);
+
+        // Title
+        TextView tvTitle = new TextView(this);
+        tvTitle.setText(section.sectionName);
+        tvTitle.setTextSize(12); // sp
+        tvTitle.setTextColor(getResources().getColor(R.color.gray_500));
+        tvTitle.setTypeface(null, android.graphics.Typeface.BOLD);
+        LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        titleParams.bottomMargin = 16;
+        tvTitle.setLayoutParams(titleParams);
+        sectionLayout.addView(tvTitle);
+
+        // Grid (Using GridLayout for 2 columns)
+        android.widget.GridLayout grid = new android.widget.GridLayout(this);
+        grid.setColumnCount(2);
+        grid.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        
+        if (section.fields != null) {
+            for (com.example.motovista_deep.models.BikeVariantModel.CustomField field : section.fields) {
+                // Key View (Left Column)
+                TextView tvKey = new TextView(this);
+                tvKey.setText(field.key);
+                tvKey.setTextSize(14);
+                tvKey.setTextColor(android.graphics.Color.parseColor("#111318"));
+                tvKey.setTypeface(null, android.graphics.Typeface.BOLD);
+                tvKey.setBackgroundResource(R.drawable.bg_input_new);
+                tvKey.setPadding(24, 24, 24, 24); // px
+                
+                android.widget.GridLayout.LayoutParams keyParams = new android.widget.GridLayout.LayoutParams();
+                keyParams.width = 0;
+                keyParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                keyParams.columnSpec = android.widget.GridLayout.spec(android.widget.GridLayout.UNDEFINED, 1f);
+                keyParams.bottomMargin = 24;
+                keyParams.rightMargin = 12; // Gap
+                tvKey.setLayoutParams(keyParams);
+                
+                grid.addView(tvKey);
+
+                // Value View (Right Column)
+                TextView tvValue = new TextView(this);
+                tvValue.setText(field.value);
+                tvValue.setTextSize(14);
+                tvValue.setTextColor(android.graphics.Color.parseColor("#111318"));
+                tvValue.setTypeface(null, android.graphics.Typeface.BOLD);
+                tvValue.setBackgroundResource(R.drawable.bg_input_new);
+                tvValue.setPadding(24, 24, 24, 24); // px
+
+                android.widget.GridLayout.LayoutParams valueParams = new android.widget.GridLayout.LayoutParams();
+                valueParams.width = 0;
+                valueParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                valueParams.columnSpec = android.widget.GridLayout.spec(android.widget.GridLayout.UNDEFINED, 1f);
+                valueParams.bottomMargin = 24;
+                valueParams.leftMargin = 12; // Gap
+                tvValue.setLayoutParams(valueParams);
+
+                grid.addView(tvValue);
+            }
+        }
+
+        sectionLayout.addView(grid);
+        container.addView(sectionLayout);
+    }
+    
+    private void updatePriceDisplay(View view, String ex, String ins, String reg, String ltrt, String total) {
+        TextView tvExShowroom = view.findViewById(R.id.tvExShowroom);
+        TextView tvInsurance = view.findViewById(R.id.tvInsurance);
+        TextView tvRegistration = view.findViewById(R.id.tvRegistration);
+        TextView tvLTRT = view.findViewById(R.id.tvLTRT);
+        TextView tvTotalPrice = view.findViewById(R.id.tvTotalPrice);
+        
+        tvExShowroom.setText("₹ " + (ex != null ? ex : "0.00"));
+        tvInsurance.setText("₹ " + (ins != null ? ins : "0.00"));
+        tvRegistration.setText("₹ " + (reg != null ? reg : "0.00"));
+        tvLTRT.setText("₹ " + (ltrt != null ? ltrt : "0.00"));
+        tvTotalPrice.setText("₹ " + (total != null ? total : "0.00"));
     }
 
     private void setDefaultPriceValues(TextView tvExShowroom, TextView tvInsurance,
@@ -652,7 +866,7 @@ public class BikeDetailsActivity extends AppCompatActivity {
             mandatoryContainer.removeAllViews();
             if (bike.getMandatoryFittings() != null) {
                 for (com.example.motovista_deep.models.CustomFitting fitting : bike.getMandatoryFittings()) {
-                    addFittingItem(mandatoryContainer, fitting.getName(), "₹ " + fitting.getPrice());
+                    addFittingCheckboxItem(mandatoryContainer, fitting.getName(), false);
                 }
             }
         }
@@ -660,18 +874,25 @@ public class BikeDetailsActivity extends AppCompatActivity {
         if (additionalContainer != null) {
             additionalContainer.removeAllViews();
             
-            // Standard Additional Fittings
-            if (bike.getAdditionalFittings() != null) {
-                for (com.example.motovista_deep.models.CustomFitting fitting : bike.getAdditionalFittings()) {
-                    addFittingItem(additionalContainer, fitting.getName(), "₹ " + fitting.getPrice());
+            boolean helmetFound = false;
+
+            // Combine standard additional and custom fittings
+            List<com.example.motovista_deep.models.CustomFitting> allAdditional = new ArrayList<>();
+            if (bike.getAdditionalFittings() != null) allAdditional.addAll(bike.getAdditionalFittings());
+            if (bike.getCustomFittings() != null) allAdditional.addAll(bike.getCustomFittings());
+
+            for (com.example.motovista_deep.models.CustomFitting fitting : allAdditional) {
+                if (fitting.getName().equalsIgnoreCase("Helmet")) {
+                    helmetFound = true;
+                    addFittingCheckboxItem(additionalContainer, fitting.getName(), true);
+                } else {
+                    addFittingCheckboxItem(additionalContainer, fitting.getName(), false);
                 }
             }
-            
-            // Custom Fittings added by user
-            if (bike.getCustomFittings() != null) {
-                for (com.example.motovista_deep.models.CustomFitting fitting : bike.getCustomFittings()) {
-                    addFittingItem(additionalContainer, fitting.getName(), "₹ " + fitting.getPrice());
-                }
+
+            // Force "Helmet" display if not present (per user request "always helmet varanum")
+            if (!helmetFound) {
+                 addFittingCheckboxItem(additionalContainer, "Helmet", true);
             }
         }
     }
@@ -731,14 +952,20 @@ public class BikeDetailsActivity extends AppCompatActivity {
         container.addView(itemLayout);
     }
 
-    private void addFittingItem(LinearLayout container, String name, String price) {
-        View itemView = LayoutInflater.from(this).inflate(R.layout.item_fitting_detail, container, false);
+    private void addFittingCheckboxItem(LinearLayout container, String name, boolean isFree) {
+        View itemView = LayoutInflater.from(this).inflate(R.layout.item_fitting_checkbox, container, false);
 
         TextView tvName = itemView.findViewById(R.id.tvFittingName);
-        TextView tvPrice = itemView.findViewById(R.id.tvFittingPrice);
-
+        TextView tvBadge = itemView.findViewById(R.id.tvFittingBadge);
+        
         tvName.setText(name);
-        tvPrice.setText(price);
+        
+        if (isFree || name.equalsIgnoreCase("Helmet")) {
+            tvBadge.setVisibility(View.VISIBLE);
+            tvBadge.setText("FREE");
+        } else {
+            tvBadge.setVisibility(View.GONE);
+        }
 
         container.addView(itemView);
     }
@@ -879,6 +1106,16 @@ public class BikeDetailsActivity extends AppCompatActivity {
         fetchFreshBikeData();
         if (imageUrls.size() > 1 && sliderRunnable != null) {
             sliderHandler.postDelayed(sliderRunnable, 3000);
+        }
+    }
+    private double getSafeOnRoadPrice(com.example.motovista_deep.models.BikeModel bike) {
+        if (bike.getOnRoadPrice() == null || bike.getOnRoadPrice().isEmpty()) {
+            return 0.0;
+        }
+        try {
+            return Double.parseDouble(bike.getOnRoadPrice().replace(",", ""));
+        } catch (NumberFormatException e) {
+            return 0.0;
         }
     }
 }

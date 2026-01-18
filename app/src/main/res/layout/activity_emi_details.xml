@@ -1,845 +1,335 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
+    android:background="@color/emi_background_light"
     android:fitsSystemWindows="true">
 
-    <!-- Header -->
-    <LinearLayout
-        android:id="@+id/headerLayout"
-        android:layout_width="0dp"
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
-        android:gravity="center_vertical"
-        android:background="@color/card_background"
-        android:elevation="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="@color/white"
+        app:elevation="0dp">
 
-        <!-- Back Button -->
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_arrow_back"
-            android:tint="@color/text_primary_light"
-            android:padding="12dp"
-            android:contentDescription="Back" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="0dp">
 
-        <!-- Title -->
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="EMI Details"
-            android:textColor="@color/text_primary_light"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:fontFamily="sans-serif-medium" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp">
 
-        <!-- Placeholder for alignment -->
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_arrow_back_ios"
+                    app:tint="@color/text_dark" />
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="EMI Details"
+                    android:textColor="@color/text_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+
         <View
-            android:layout_width="48dp"
-            android:layout_height="48dp" />
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_100" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-    </LinearLayout>
-
-    <!-- Main Scroll View -->
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="24dp"
-        android:paddingBottom="80dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerLayout">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal">
+            android:paddingBottom="40dp">
 
-            <!-- EMI Progress Card -->
+            <!-- Active Loan Card -->
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardEmiProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="16dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:cardUseCompatPadding="true"
-                android:background="@color/card_background"
-                android:layout_marginBottom="24dp">
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal"
-                    android:padding="20dp">
+                    android:orientation="vertical">
 
-                    <!-- Progress Header -->
-                    <LinearLayout
+                    <ImageView
+                        android:id="@+id/ivBikeImage"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="16dp">
+                        android:layout_height="200dp"
+                        android:scaleType="fitCenter"
+                        android:padding="8dp"
+                        android:src="@drawable/bike_placeholder" />
 
-                        <!-- Icon and Title -->
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_donut_large"
-                                android:tint="@color/primary_color"
-                                android:contentDescription="Progress" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="EMI Progress"
-                                android:textColor="@color/text_primary_light"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:layout_marginStart="8dp"
-                                android:fontFamily="sans-serif" />
-
-                        </LinearLayout>
-
-                        <!-- Active Loan Badge -->
-                        <TextView
-                            android:id="@+id/tvLoanStatus"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Active Loan"
-                            android:textColor="@color/primary_color"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:background="@drawable/active_loan_bg"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="4dp" />
-
-                    </LinearLayout>
-
-                    <!-- Progress Bar Section -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:gravity="center_horizontal"
-                        android:layout_marginBottom="16dp">
+                        android:padding="20dp">
 
-                        <!-- Paid Count and Percentage -->
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:layout_marginBottom="8dp">
+                            android:layout_marginBottom="16dp">
 
-                            <TextView
-                                android:id="@+id/tvPaidEmis"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Paid: 7 / 12 EMIs"
-                                android:textColor="@color/text_light_gray"
-                                android:textSize="14sp"
-                                android:fontFamily="sans-serif"
-                                android:gravity="start" />
-
-                            <TextView
-                                android:id="@+id/tvProgressPercentage"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="58%"
-                                android:textColor="@color/text_primary_light"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:fontFamily="sans-serif"
-                                android:gravity="end" />
+                                android:layout_alignParentStart="true"
+                                android:layout_toStartOf="@+id/tvStatusBadge"
+                                android:orientation="vertical">
 
-                        </LinearLayout>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="ACTIVE LOAN"
+                                    android:textColor="@color/emi_primary"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold"
+                                    android:letterSpacing="0.05" />
 
-                        <!-- Progress Bar with weights -->
+                                <TextView
+                                    android:id="@+id/tvBikeName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Yamaha YZF R15 V4"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="4dp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/tvStatusBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:background="@drawable/bg_badge_active"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp"
+                                android:text="ACTIVE"
+                                android:textColor="@color/green_800"
+                                android:textSize="10sp"
+                                android:textStyle="bold" />
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/gray_50" />
+
+                        <GridLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:columnCount="2"
+                            android:rowCount="2"
+                            android:layout_marginVertical="16dp">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="TOTAL LOAN"
+                                    android:textColor="@color/gray_500"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+                                <TextView
+                                    android:id="@+id/tvTotalLoanValue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="₹1,50,000"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="1"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="MONTHLY EMI"
+                                    android:textColor="@color/gray_500"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+                                <TextView
+                                    android:id="@+id/tvMonthlyEmi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="₹5,400"
+                                    android:textColor="@color/emi_primary"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_columnWeight="2"
+                                android:layout_marginTop="16dp"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="REMAINING BALANCE"
+                                    android:textColor="@color/gray_500"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold" />
+                                <TextView
+                                    android:id="@+id/tvRemainingBalance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="₹84,000"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+                        </GridLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/gray_50"
+                            android:layout_marginBottom="16dp"/>
+
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="12dp"
-                            android:background="@drawable/progress_bar_bg"
-                            android:orientation="horizontal"
-                            android:padding="2dp">
-
-                            <View
-                                android:id="@+id/progressFill"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="58"
-                                android:background="@drawable/progress_fill" />
-
-                            <View
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="42"
-                                android:background="@android:color/transparent" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <!-- Divider -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/border_color"
-                        android:layout_marginBottom="16dp" />
-
-                    <!-- Total Loan and Pending Duration -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <!-- Total Loan Value -->
-                        <LinearLayout
-                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:orientation="vertical">
+                            
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="EMIs Paid"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+                                <TextView
+                                    android:id="@+id/tvPaidProgressText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:text="8 of 12"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+                            </RelativeLayout>
+
+                            <ProgressBar
+                                android:id="@+id/emiProgressBar"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="10dp"
+                                android:progress="66"
+                                android:progressDrawable="@drawable/bg_progress_bar_custom"/>
 
                             <TextView
+                                android:id="@+id/tvProgressDesc"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Total Loan Value"
-                                android:textColor="@color/text_light_gray"
-                                android:textSize="12sp"
-                                android:fontFamily="sans-serif"
-                                android:gravity="start" />
-
-                            <TextView
-                                android:id="@+id/tvTotalLoanValue"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="$14,400"
-                                android:textColor="@color/text_primary_light"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:layout_marginTop="2dp"
-                                android:fontFamily="sans-serif"
-                                android:gravity="start" />
-
-                        </LinearLayout>
-
-                        <!-- Pending Duration -->
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:gravity="end">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Pending Duration"
-                                android:textColor="@color/text_light_gray"
-                                android:textSize="12sp"
-                                android:fontFamily="sans-serif"
-                                android:gravity="end" />
-
-                            <TextView
-                                android:id="@+id/tvPendingDuration"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="5 Months"
-                                android:textColor="@color/text_primary_light"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:layout_marginTop="2dp"
-                                android:fontFamily="sans-serif"
-                                android:gravity="end" />
-
+                                android:layout_marginTop="8dp"
+                                android:text="66% of your loan is completed"
+                                android:textColor="@color/gray_500"
+                                android:textSize="12sp" />
                         </LinearLayout>
 
                     </LinearLayout>
-
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
 
-            <!-- Quick Stats Grid -->
-            <LinearLayout
+            <!-- Payment Schedule -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="Payment Schedule"
+                android:textColor="@color/text_dark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPaymentSchedule"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginBottom="24dp">
+                android:paddingHorizontal="16dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_payment_schedule"/>
 
-                <!-- Next Due Card -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardNextDue"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="1dp"
-                    app:cardUseCompatPadding="true"
-                    android:background="@color/card_background"
-                    android:layout_marginEnd="6dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="16dp">
-
-                        <!-- Icon -->
-                        <LinearLayout
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/blue_circle_bg"
-                            android:gravity="center"
-                            android:layout_marginBottom="8dp">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/ic_calendar"
-                                android:tint="@color/icon_blue"
-                                android:contentDescription="Calendar" />
-
-                        </LinearLayout>
-
-                        <!-- Label and Value -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="NEXT DUE"
-                            android:textColor="@color/text_light_gray"
-                            android:textSize="10sp"
-                            android:textStyle="bold"
-                            android:letterSpacing="0.05"
-                            android:textAllCaps="true"
-                            android:fontFamily="sans-serif-medium"
-                            android:gravity="center" />
-
-                        <TextView
-                            android:id="@+id/tvNextDue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Oct 15"
-                            android:textColor="@color/text_primary_light"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="sans-serif"
-                            android:gravity="center" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- Monthly EMI Card -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardMonthlyEmi"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="1dp"
-                    app:cardUseCompatPadding="true"
-                    android:background="@color/card_background"
-                    android:layout_marginHorizontal="6dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="16dp">
-
-                        <!-- Icon -->
-                        <LinearLayout
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/green_circle_bg"
-                            android:gravity="center"
-                            android:layout_marginBottom="8dp">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/ic_payments"
-                                android:tint="@color/icon_green"
-                                android:contentDescription="Payments" />
-
-                        </LinearLayout>
-
-                        <!-- Label and Value -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="MONTHLY"
-                            android:textColor="@color/text_light_gray"
-                            android:textSize="10sp"
-                            android:textStyle="bold"
-                            android:letterSpacing="0.05"
-                            android:textAllCaps="true"
-                            android:fontFamily="sans-serif-medium"
-                            android:gravity="center" />
-
-                        <TextView
-                            android:id="@+id/tvMonthlyEmi"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="$1,200"
-                            android:textColor="@color/text_primary_light"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="sans-serif"
-                            android:gravity="center" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- Pending Amount Card -->
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardPendingAmount"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="1dp"
-                    app:cardUseCompatPadding="true"
-                    android:background="@color/card_background"
-                    android:layout_marginStart="6dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="16dp">
-
-                        <!-- Icon -->
-                        <LinearLayout
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/orange_circle_bg"
-                            android:gravity="center"
-                            android:layout_marginBottom="8dp">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/ic_wallet"
-                                android:tint="@color/icon_yellow"
-                                android:contentDescription="Wallet" />
-
-                        </LinearLayout>
-
-                        <!-- Label and Value -->
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="PENDING"
-                            android:textColor="@color/text_light_gray"
-                            android:textSize="10sp"
-                            android:textStyle="bold"
-                            android:letterSpacing="0.05"
-                            android:textAllCaps="true"
-                            android:fontFamily="sans-serif-medium"
-                            android:gravity="center" />
-
-                        <TextView
-                            android:id="@+id/tvPendingAmount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="$6,000"
-                            android:textColor="@color/text_primary_light"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="sans-serif"
-                            android:gravity="center" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
-
-            <!-- EMI Schedule Section -->
-            <LinearLayout
+            <!-- Info Box -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:layout_margin="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/emi_accent_blue">
 
-                <!-- Section Header -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginBottom="16dp">
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_info"
+                        app:tint="@color/emi_primary" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="EMI Schedule"
-                        android:textColor="@color/text_primary_light"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:fontFamily="sans-serif" />
-
-                    <!-- Year Badge -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="2023-2024"
-                        android:textColor="@color/text_light_gray"
-                        android:textSize="12sp"
-                        android:background="@drawable/year_badge_bg"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="4dp"
-                        android:layout_marginStart="8dp"
-                        android:fontFamily="sans-serif" />
-
-                </LinearLayout>
-
-                <!-- Timeline Container - CENTERED -->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal">
-
-                    <!-- Timeline Line - CENTERED -->
-                    <View
-                        android:id="@+id/timelineLine"
-                        android:layout_width="2dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/border_color"
-                        android:layout_centerHorizontal="true" />
-
-                    <!-- EMI Items Container - CENTERED -->
-                    <LinearLayout
-                        android:id="@+id/emiItemsContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal"
-                        android:paddingHorizontal="16dp">
-
-                        <!-- Current EMI (October) - CENTERED -->
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/cardCurrentEmi"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:cardCornerRadius="12dp"
-                            app:cardElevation="4dp"
-                            app:cardUseCompatPadding="true"
-                            android:background="@drawable/current_emi_bg"
-                            android:layout_marginBottom="12dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:gravity="center_horizontal"
-                                android:padding="16dp">
-
-                                <!-- EMI Header -->
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:gravity="center_vertical"
-                                    android:layout_marginBottom="12dp">
-
-                                    <!-- Month Badge and Details -->
-                                    <LinearLayout
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:orientation="horizontal"
-                                        android:gravity="center_vertical">
-
-                                        <!-- Month Badge -->
-                                        <RelativeLayout
-                                            android:layout_width="40dp"
-                                            android:layout_height="40dp"
-                                            android:background="@drawable/current_month_badge"
-                                            android:gravity="center">
-
-                                            <TextView
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:text="08"
-                                                android:textColor="@color/primary_color"
-                                                android:textSize="14sp"
-                                                android:textStyle="bold"
-                                                android:layout_centerInParent="true" />
-
-                                        </RelativeLayout>
-
-                                        <!-- EMI Details -->
-                                        <LinearLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:orientation="vertical"
-                                            android:gravity="center_vertical"
-                                            android:layout_marginStart="12dp">
-
-                                            <TextView
-                                                android:id="@+id/tvCurrentEmiTitle"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:text="October EMI"
-                                                android:textColor="@color/text_primary_light"
-                                                android:textSize="16sp"
-                                                android:textStyle="bold"
-                                                android:fontFamily="sans-serif" />
-
-                                            <TextView
-                                                android:id="@+id/tvCurrentEmiDue"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:text="Due: Oct 15, 2023"
-                                                android:textColor="@color/text_light_gray"
-                                                android:textSize="12sp"
-                                                android:layout_marginTop="2dp"
-                                                android:fontFamily="sans-serif" />
-
-                                        </LinearLayout>
-
-                                    </LinearLayout>
-
-                                    <!-- Amount and Status -->
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="vertical"
-                                        android:gravity="center">
-
-                                        <TextView
-                                            android:id="@+id/tvCurrentEmiAmount"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="$1,200"
-                                            android:textColor="@color/text_primary_light"
-                                            android:textSize="16sp"
-                                            android:textStyle="bold"
-                                            android:fontFamily="sans-serif"
-                                            android:gravity="center" />
-
-                                        <!-- Pending Status -->
-                                        <LinearLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:orientation="horizontal"
-                                            android:gravity="center"
-                                            android:background="@drawable/pending_status_bg"
-                                            android:paddingHorizontal="8dp"
-                                            android:paddingVertical="4dp"
-                                            android:layout_marginTop="4dp">
-
-                                            <View
-                                                android:layout_width="6dp"
-                                                android:layout_height="6dp"
-                                                android:background="@drawable/circle_orange"
-                                                android:layout_marginEnd="4dp" />
-
-                                            <TextView
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:text="PENDING"
-                                                android:textColor="@color/icon_yellow"
-                                                android:textSize="10sp"
-                                                android:textStyle="bold"
-                                                android:fontFamily="sans-serif" />
-
-                                        </LinearLayout>
-
-                                    </LinearLayout>
-
-                                </LinearLayout>
-
-                                <!-- Divider -->
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:background="@drawable/dashed_divider"
-                                    android:layout_marginVertical="8dp" />
-
-                                <!-- Pay Button -->
-                                <Button
-                                    android:id="@+id/btnMarkAsPaid"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="48dp"
-                                    android:text="Mark as Paid"
-                                    android:textColor="@color/white"
-                                    android:textSize="14sp"
-                                    android:textStyle="bold"
-                                    android:background="@drawable/primary_button"
-                                    android:gravity="center"
-                                    android:drawableStart="@drawable/ic_check_circle"
-                                    android:drawablePadding="8dp"
-                                    android:paddingHorizontal="16dp"
-                                    android:fontFamily="sans-serif" />
-
-                            </LinearLayout>
-
-                        </androidx.cardview.widget.CardView>
-
-                        <!-- Upcoming EMI (November) - CENTERED -->
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/cardUpcomingEmi"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:cardCornerRadius="12dp"
-                            app:cardElevation="1dp"
-                            app:cardUseCompatPadding="true"
-                            android:background="@color/card_background"
-                            android:alpha="0.7"
-                            android:layout_marginBottom="12dp">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:gravity="center_vertical"
-                                android:padding="16dp">
-
-                                <!-- Month Badge -->
-                                <RelativeLayout
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
-                                    android:background="@drawable/upcoming_month_badge"
-                                    android:layout_marginEnd="12dp"
-                                    android:gravity="center">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="09"
-                                        android:textColor="@color/text_light_gray"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:layout_centerInParent="true" />
-
-                                </RelativeLayout>
-
-                                <!-- EMI Details -->
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical"
-                                    android:gravity="center_vertical">
-
-                                    <TextView
-                                        android:id="@+id/tvUpcomingEmiTitle"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="November EMI"
-                                        android:textColor="@color/text_light_gray"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:fontFamily="sans-serif" />
-
-                                    <TextView
-                                        android:id="@+id/tvUpcomingEmiDue"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Due: Nov 15, 2023"
-                                        android:textColor="@color/text_light_gray"
-                                        android:textSize="12sp"
-                                        android:layout_marginTop="2dp"
-                                        android:fontFamily="sans-serif" />
-
-                                </LinearLayout>
-
-                                <!-- Amount and Status -->
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:gravity="center">
-
-                                    <TextView
-                                        android:id="@+id/tvUpcomingEmiAmount"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="$1,200"
-                                        android:textColor="@color/text_light_gray"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold"
-                                        android:fontFamily="sans-serif"
-                                        android:gravity="center" />
-
-                                    <!-- Upcoming Status -->
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="UPCOMING"
-                                        android:textColor="@color/text_light_gray"
-                                        android:textSize="10sp"
-                                        android:background="@drawable/upcoming_status_bg"
-                                        android:paddingHorizontal="8dp"
-                                        android:paddingVertical="4dp"
-                                        android:layout_marginTop="4dp"
-                                        android:fontFamily="sans-serif"
-                                        android:gravity="center" />
-
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                        </androidx.cardview.widget.CardView>
-
-                        <!-- Paid EMI Container - CENTERED -->
-                        <LinearLayout
-                            android:id="@+id/paidEmiContainer"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:gravity="center_horizontal">
-
-                            <!-- Paid EMI items will be added dynamically -->
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-            </LinearLayout>
+                        android:layout_marginStart="12dp"
+                        android:text="EMI payments are collected directly at the showroom or via authorized UPI IDs.\nAfter clicking 'I Have Paid', our admin will verify the transaction and update your status within 24-48 hours."
+                        android:textColor="@color/text_dark"
+                        android:textSize="12sp"
+                        android:lineSpacingExtra="2dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

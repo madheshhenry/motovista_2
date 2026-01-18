@@ -9,10 +9,11 @@
     <color name="white">#FFFFFFFF</color>
 
     <!-- Our Custom Colors -->
-    <color name="primary_color">#13c8ec</color>
-    <color name="primary_light">#2013c8ec</color>
-    <color name="background_light">#f6f8f8</color>
-    <color name="text_dark">#111718</color>
+    <!-- Our Custom Colors -->
+    <color name="primary_color">#13a4ec</color>
+    <color name="primary_light">#2013a4ec</color>
+    <color name="background_light">#f6f7f8</color>
+    <color name="text_dark">#111618</color>
     <color name="text_gray">#555555</color>
     <color name="text_light_gray">#888888</color>
     <color name="border_color">#FFDBE4E6</color>
@@ -119,4 +120,25 @@
     <color name="green_100">#DCFCE7</color>
     <color name="green_200">#BBF7D0</color>
 
+    <color name="primary_blue">#13a4ec</color>
+    <color name="primary_blue_alpha_30">#4D13A4EC</color>
+
+    <color name="divider">#E0E0E0</color>
+
+    <!-- EMI Details Screen Colors -->
+    <color name="emi_primary_blue">#007AFF</color>
+    <color name="emi_racing_blue">#0054B4</color>
+    <color name="emi_soft_grey">#F2F2F7</color>
+    <color name="emi_border_grey">#E5E5EA</color>
+    <color name="emi_text_main">#1C1C1E</color>
+    <color name="emi_text_muted">#8E8E93</color>
+    <color name="emi_success_green">#34C759</color>
+    <color name="emi_warning_amber">#FF9500</color>
+    <color name="emi_primary">#137fec</color>
+    <color name="emi_accent_green">#E9F7EF</color>
+    <color name="emi_background_light">#f6f7f8</color>
+    <color name="emi_background_dark">#101922</color>
+    <color name="emi_accent_blue">#E7F2FD</color>
+    <color name="emi_accent_yellow">#FFF9E6</color>
+    <color name="emi_accent_red">#FEECEB</color>
 </resources>

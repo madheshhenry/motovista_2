@@ -22,22 +22,28 @@ import com.example.motovista_deep.models.CustomerRequest;
 import com.example.motovista_deep.models.GetOrderSummaryResponse;
 import com.example.motovista_deep.models.OrderSummaryData;
 import com.example.motovista_deep.models.GenericResponse;
+import com.example.motovista_deep.utils.ImageUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class OrderSummaryActivity extends AppCompatActivity {
 
     // Views
     private ImageView btnBack;
     private TextView tvStatus, tvDate;
+    private CardView cardOutOfStock; // New
     private TextView tvCustomerName, tvCustomerPhone;
     private ImageView ivCustomerProfile, btnCallCustomer, btnChatCustomer;
     
     private TextView tvBrand, tvBikeName, tvEdition, tvBikeColorName;
     private ImageView ivBikeImage;
-    private LinearLayout statusBadgeContainer;
+    private LinearLayout statusBadgeContainer, llFittingsContainer;
+    private CardView cardFittings;
     
     // Bottom Bar
     private LinearLayout layoutActionButtons;
@@ -56,17 +62,26 @@ public class OrderSummaryActivity extends AppCompatActivity {
         handleIntentData();
         setupClickListeners();
         
-        if (requestId != -1) {
-            fetchOrderDetails(requestId);
-        } else {
+        if (requestId == -1) {
             Toast.makeText(this, "Invalid Request ID", Toast.LENGTH_SHORT).show();
             finish();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (requestId != -1) {
+            fetchOrderDetails(requestId);
         }
     }
 
     private void initializeViews() {
         btnBack = findViewById(R.id.btnBack);
         
+        // Stock Warning
+        cardOutOfStock = findViewById(R.id.cardOutOfStock);
+
         // Status Card
         tvStatus = findViewById(R.id.tvStatus);
         statusBadgeContainer = findViewById(R.id.statusBadgeContainer);
@@ -91,6 +106,10 @@ public class OrderSummaryActivity extends AppCompatActivity {
         btnAccept = findViewById(R.id.btnAccept);
         btnReject = findViewById(R.id.btnReject);
         btnNext = findViewById(R.id.btnNext);
+        
+        // Fittings
+        cardFittings = findViewById(R.id.cardFittings);
+        llFittingsContainer = findViewById(R.id.llFittingsContainer);
     }
     
     private void handleIntentData() {
@@ -158,8 +177,41 @@ public class OrderSummaryActivity extends AppCompatActivity {
         // Bike Image
         loadBikeImage(data.getImagePaths());
         
-        // Date (if available in model/intent - currently using dummy placeholder if not in OrderSummaryData)
-        // If OrderSummaryData has created_at, use it. Otherwise rely on Intent or Today.
+        // Bike Image
+        loadBikeImage(data.getImagePaths());
+        
+        // Date
+        setDate(data.getCreatedAt());
+        
+        // Fittings
+        displaySelectedFittings(data.getSelectedFittings());
+        
+        // Stock Check Warning
+        if (!data.isInStock() && "pending".equalsIgnoreCase(data.getStatus())) {
+             cardOutOfStock.setVisibility(View.VISIBLE);
+             // Optional: Disable Accept button?
+             // btnAccept.setEnabled(false);
+             // btnAccept.setAlpha(0.5f);
+        } else {
+             cardOutOfStock.setVisibility(View.GONE);
+             // btnAccept.setEnabled(true);
+             // btnAccept.setAlpha(1.0f);
+        }
+    }
+
+    private void setDate(String dateString) {
+        if (dateString == null) return;
+        try {
+            // Input: "2026-01-14 10:30:00" (SQL Format)
+            SimpleDateFormat input = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            Date date = input.parse(dateString);
+            
+            // Output: "Received on 14 Jan 2026"
+            SimpleDateFormat output = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+            tvDate.setText("Received on " + output.format(date));
+        } catch (Exception e) {
+             tvDate.setText("Received on " + dateString);
+        }
     }
     
     private void updateColorUI(String colorName) {
@@ -177,22 +229,34 @@ public class OrderSummaryActivity extends AppCompatActivity {
         }
         
         tvBikeColorName.setText(displayName);
+        
         try {
-            tvBikeColorName.setBackgroundColor(Color.parseColor(hexCode));
-            
-            // Adjust Text Color based on background brightness
             int color = Color.parseColor(hexCode);
-            double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
-            if (darkness < 0.5) {
-                tvBikeColorName.setTextColor(Color.BLACK); // Light background
+            
+            GradientDrawable drawable = new GradientDrawable();
+            drawable.setShape(GradientDrawable.RECTANGLE);
+            drawable.setCornerRadius(100f); // Fully rounded pill shape
+            drawable.setColor(color);
+            
+            // Add border for light colors to make them visible against white
+            if (isColorLight(color)) {
+                drawable.setStroke(2, Color.parseColor("#E5E7EB")); // Light gray border
+                tvBikeColorName.setTextColor(Color.BLACK);
             } else {
-                tvBikeColorName.setTextColor(Color.WHITE); // Dark background
+                tvBikeColorName.setTextColor(Color.WHITE);
             }
+            
+            tvBikeColorName.setBackground(drawable);
             
         } catch (Exception e) {
             tvBikeColorName.setBackgroundColor(Color.BLACK);
             tvBikeColorName.setTextColor(Color.WHITE);
         }
+    }
+
+    private boolean isColorLight(int color) {
+        double darkness = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
+        return darkness < 0.5;
     }
     
     private void updateRequestStatus(String newStatus) {
@@ -228,7 +292,16 @@ public class OrderSummaryActivity extends AppCompatActivity {
         int bgColor, textColor;
         String label;
         
-        if (status.equals("approved") || status.equals("accepted") || status.equals("completed")) {
+        if (status.equals("completed")) {
+            bgColor = Color.parseColor("#ecfdf5"); // Green-50
+            textColor = Color.parseColor("#047857"); // Green-700
+            label = "COMPLETED";
+            
+            // Hide All Buttons
+            layoutActionButtons.setVisibility(View.GONE);
+            btnNext.setVisibility(View.GONE);
+            
+        } else if (status.equals("approved") || status.equals("accepted")) {
             bgColor = Color.parseColor("#ecfdf5"); // Green-50
             textColor = Color.parseColor("#047857"); // Green-700
             label = "ACCEPTED";
@@ -267,53 +340,63 @@ public class OrderSummaryActivity extends AppCompatActivity {
         tvStatus.setTextColor(textColor);
     }
 
-    // Helper to load images (Simplified for brevity, similar to previous implementation)
+    private void displaySelectedFittings(String json) {
+        if (json == null || json.isEmpty() || json.equals("[]")) {
+            cardFittings.setVisibility(View.GONE);
+            return;
+        }
+
+        try {
+            cardFittings.setVisibility(View.VISIBLE);
+            llFittingsContainer.removeAllViews();
+
+            com.google.gson.Gson gson = new com.google.gson.Gson();
+            java.lang.reflect.Type listType = new com.google.gson.reflect.TypeToken<java.util.List<com.example.motovista_deep.models.CustomFitting>>() {}.getType();
+            java.util.List<com.example.motovista_deep.models.CustomFitting> fittings = gson.fromJson(json, listType);
+
+            if (fittings == null || fittings.isEmpty()) {
+                cardFittings.setVisibility(View.GONE);
+                return;
+            }
+
+            for (com.example.motovista_deep.models.CustomFitting fitting : fittings) {
+                View itemView = getLayoutInflater().inflate(R.layout.item_fitting_summary, llFittingsContainer, false);
+                TextView tvName = itemView.findViewById(R.id.tvFittingName);
+                TextView tvPrice = itemView.findViewById(R.id.tvFittingPrice);
+
+                tvName.setText(fitting.getName());
+                
+                if (fitting.isMandatory()) {
+                    tvName.setText(fitting.getName() + " (Mandatory)");
+                    tvPrice.setText("Included");
+                    tvPrice.setTextColor(Color.parseColor("#16a34a")); // Green
+                } else {
+                    tvPrice.setText("₹ " + fitting.getPrice());
+                    tvPrice.setTextColor(Color.parseColor("#111718"));
+                }
+
+                llFittingsContainer.addView(itemView);
+            }
+        } catch (Exception e) {
+            cardFittings.setVisibility(View.GONE);
+        }
+    }
+
+    // Helper to load images using centralized ImageUtils
     private void loadProfileImage(String path) {
-        if (path == null || path.isEmpty()) return;
-        Glide.with(this).load(constructUrl(path)).placeholder(R.drawable.sample_profile).into(ivCustomerProfile);
+        String imageUrl = ImageUtils.getFullImageUrl(path, ImageUtils.PATH_PROFILE_PICS);
+        if (!imageUrl.isEmpty()) {
+            Glide.with(this).load(imageUrl).placeholder(R.drawable.sample_profile).into(ivCustomerProfile);
+        }
     }
     
     private void loadBikeImage(String paths) {
         if (paths == null || paths.isEmpty()) return;
         String path = paths.split(",")[0]; // First image
-        Glide.with(this).load(constructUrl(path)).placeholder(R.drawable.featured_bike_1).into(ivBikeImage);
+        String imageUrl = ImageUtils.getFullImageUrl(path, ImageUtils.PATH_BIKES);
+        if (!imageUrl.isEmpty()) {
+            Glide.with(this).load(imageUrl).placeholder(R.drawable.featured_bike_1).into(ivBikeImage);
+        }
     }
     
-    private String constructUrl(String itemPath) {
-        if (itemPath == null || itemPath.isEmpty()) return "";
-
-        // Clean path (remove JSON artifacts if any)
-        itemPath = itemPath.replace("\"", "").replace("\\", "").replace("[", "").replace("]", "").trim();
-
-        // If full URL, return as is
-        if (itemPath.startsWith("http")) return itemPath;
-
-        // Base logic
-        // Current Base URL for API is likely http://192.168.0.102/motovista_backend/api/
-        // We need http://192.168.0.102/motovista_backend/
-        String baseUrl = RetrofitClient.BASE_URL; // e.g., .../api/
-        String serverBase = baseUrl;
-        if (serverBase.endsWith("api/")) {
-            serverBase = serverBase.replace("api/", "");
-        }
-
-        // Ensure path starts with uploads/ if not present and not absolute
-        if (!itemPath.startsWith("uploads/") && !itemPath.startsWith("/")) {
-             // Heuristic/Default? Or just append?
-             // Assuming paths might be just filename or relative
-        }
-
-        // Avoid double slashes or missing slashes
-        if (serverBase.endsWith("/") && itemPath.startsWith("/")) {
-            itemPath = itemPath.substring(1);
-        } else if (!serverBase.endsWith("/") && !itemPath.startsWith("/")) {
-            serverBase += "/";
-        }
-        
-        // Handle "uploads/" duplication if path already has it
-        // If path is "uploads/foo.jpg" and logic adds "uploads/", check first
-        // But here we are just concatenating serverBase + itemPath
-        
-        return serverBase + itemPath;
-    }
 }

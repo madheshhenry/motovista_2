@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -23,6 +24,18 @@
         android:textSize="14sp"
         android:fontFamily="sans-serif-medium" />
 
+    <TextView
+        android:id="@+id/tvFreeBadge"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:text="FREE"
+        android:textColor="@color/primary_blue"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="@drawable/bg_free_badge"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
     <EditText
         android:id="@+id/etFittingPrice"
         android:layout_width="100dp"
@@ -30,9 +43,9 @@
         android:hint="0"
         android:inputType="numberDecimal"
         android:textSize="14sp"
-        android:paddingHorizontal="8dp"
-        android:gravity="end"
-        android:background="@drawable/edittext_background_small"
-        android:textColor="@color/text_dark" />
+        android:paddingHorizontal="12dp"
+        android:gravity="center_vertical|end"
+        android:background="@drawable/bg_input_new"
+        android:textColor="#111318" />
 
 </LinearLayout>

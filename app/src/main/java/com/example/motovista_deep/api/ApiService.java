@@ -27,7 +27,12 @@ import com.example.motovista_deep.models.SecondHandBikeRequest;
 import com.example.motovista_deep.models.GetBikesResponse;
 import com.example.motovista_deep.ai.AiChatRequest;
 import com.example.motovista_deep.ai.AiChatResponse;
+import com.example.motovista_deep.models.InsuranceResponse;
 import com.example.motovista_deep.models.OtpRequest;
+import com.example.motovista_deep.models.ForgotPasswordRequest;
+import com.example.motovista_deep.models.ResetPasswordRequest;
+import com.example.motovista_deep.models.AdminNotificationResponse;
+import com.example.motovista_deep.models.AdminVerificationResponse;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -101,6 +106,12 @@ public interface ApiService {
     );
 
 
+    @POST("add_bike.php") // Will reuse add_bike.php but with V2 logic
+    Call<GenericResponse> addBikeV2(
+            @Header("Authorization") String token,
+            @Body com.example.motovista_deep.models.AddBikeRequestV2 request
+    );
+
     @POST("add_second_hand_bike.php")
     Call<GenericResponse> addSecondHandBike(
             @Header("Authorization") String token,
@@ -113,6 +124,13 @@ public interface ApiService {
             @Header("Authorization") String token,
             @Part("bike_type") RequestBody bikeType,
             @Part List<MultipartBody.Part> bike_images
+    );
+
+    @Multipart
+    @POST("upload_bike_image.php")
+    Call<UploadBikeImageResponse> uploadBikeImage(
+            @Header("Authorization") String token,
+            @Part MultipartBody.Part image
     );
 
     @GET("get_bikes.php")
@@ -151,6 +169,12 @@ public interface ApiService {
             @Body UpdateBikeRequest request
     );
 
+    @POST("update_bike_v2.php")
+    Call<GenericResponse> updateBikeV2(
+            @Header("Authorization") String token,
+            @Body com.example.motovista_deep.models.UpdateBikeRequestV2 request
+    );
+
     @POST("update_second_hand_bike.php")
     Call<GenericResponse> updateSecondHandBike(
             @Header("Authorization") String token,
@@ -169,11 +193,26 @@ public interface ApiService {
             @Query("bike_id") int bikeId
     );
 
+    @GET("get_bike_details.php")
+    Call<com.example.motovista_deep.models.GetBikeByIdResponseV2> getBikeByIdV2(
+            @Header("Authorization") String token,
+            @Query("id") int bikeId
+    );
+
     @POST("login.php")
     Call<LoginResponse> login(@Body LoginRequest request);
 
     @POST("register.php")
     Call<RegisterResponse> register(@Body RegisterRequest request);
+
+    @POST("customer_forgot_password.php")
+    Call<GenericResponse> customerForgotPassword(@Body ForgotPasswordRequest request);
+
+    @POST("customer_verify_otp.php")
+    Call<GenericResponse> customerVerifyOtp(@Body OtpRequest request);
+
+    @POST("customer_reset_password.php")
+    Call<GenericResponse> customerResetPassword(@Body ResetPasswordRequest request);
 
     // This matches our update_profile.php script
     @Multipart
@@ -258,6 +297,9 @@ public interface ApiService {
     @GET("get_customer_requests.php")
     Call<GetCustomerRequestsResponse> getCustomerRequests();
 
+    @GET("get_customer_orders.php")
+    Call<GetCustomerRequestsResponse> getCustomerOrders(@Query("customer_id") int customerId);
+
     @POST("update_request_status.php")
     Call<GenericResponse> updateRequestStatus(@Body com.example.motovista_deep.models.UpdateRequestStatusRequest request);
 
@@ -284,7 +326,8 @@ public interface ApiService {
     @GET("get_brand_bikes.php")
     Call<com.example.motovista_deep.models.BikeListResponse> getBikesByBrand(
             @Header("Authorization") String token,
-            @Query("brand") String brand
+            @Query("brand") String brand,
+            @Query("timestamp") long timestamp
     );
 
     @FormUrlEncoded
@@ -299,4 +342,76 @@ public interface ApiService {
             @Field("chassis_number") String chassisNumber,
             @Field("date") String date
     );
+    @POST("delete_any_bike.php")
+    Call<GenericResponse> deleteAnyBike(
+            @Header("Authorization") String token,
+            @Body com.example.motovista_deep.models.DeleteAnyBikeRequest request
+    );
+    @POST("update_admin_workflow.php")
+    Call<GenericResponse> updateAdminWorkflow(
+            @Header("Authorization") String token,
+            @Body com.example.motovista_deep.models.UpdateWorkflowRequest request
+    );
+
+    @POST("create_emi_order.php")
+    retrofit2.Call<com.example.motovista_deep.models.CreateOrderResponse> createEmiOrder(@Body com.example.motovista_deep.models.CreateEmiOrderRequest request);
+
+    @GET("get_my_emi_ledgers.php")
+    Call<com.example.motovista_deep.models.GetEmiLedgersResponse> getMyEmiLedgers(@Header("Authorization") String token);
+
+    @GET("get_emi_ledgers.php")
+    Call<com.example.motovista_deep.models.GetEmiLedgersResponse> getEmiLedgers();
+
+
+    @GET("get_emi_details.php")
+    Call<com.example.motovista_deep.models.GetEmiDetailsResponse> getEmiDetails(
+            @Query("ledger_id") int ledgerId
+    );
+
+    @POST("pay_emi_installment.php")
+    Call<GenericResponse> payEmiInstallment(@Body com.example.motovista_deep.models.PayEmiRequest request);
+
+    @POST("notify_emi_payment.php")
+    Call<GenericResponse> notifyEmiPayment(@Body com.example.motovista_deep.models.NotifyPaymentRequest request);
+
+    @GET("get_admin_notifications.php")
+    Call<AdminNotificationResponse> getAdminNotifications();
+
+    @GET("get_pending_verifications.php")
+    Call<AdminVerificationResponse> getPendingVerifications();
+    // --- Custom Bike Requests ---
+    @POST("add_bike_request.php")
+    Call<GenericResponse> addBikeRequest(@Body com.example.motovista_deep.models.BikeRequest request);
+
+    @GET("get_bike_requests.php")
+    Call<com.example.motovista_deep.models.GetBikeRequestsResponse> getBikeRequests();
+
+    @POST("update_bike_request_status.php")
+    Call<GenericResponse> updateBikeRequestStatus(@Body com.example.motovista_deep.models.UpdateBikeRequestStatusRequest request);
+
+    @POST("get_my_bike_requests.php")
+    Call<com.example.motovista_deep.models.GetBikeRequestsResponse> getMyBikeRequests(@Body com.example.motovista_deep.models.GetMyRequestsRequest request);
+    @GET("get_registration_ledger.php")
+    Call<com.example.motovista_deep.models.GetRegistrationLedgerResponse> getRegistrationLedger();
+
+    @GET("get_insurance_ledger.php")
+    Call<InsuranceResponse> getInsuranceLedger();
+
+    @GET("get_insurance_details.php")
+    Call<com.example.motovista_deep.models.InsuranceDetailResponse> getInsuranceDetails(@Query("order_id") int orderId);
+
+    @GET("get_my_bikes.php")
+    Call<com.example.motovista_deep.models.MyBikesResponse> getMyBikes(@Query("customer_id") int customerId);
+
+    @POST("update_registration_step.php")
+    Call<GenericResponse> updateRegistrationStep(@Body com.example.motovista_deep.models.UpdateRegistrationStepRequest request);
+
+    @POST("delete_order.php")
+    Call<GenericResponse> deleteOrder(@Body com.example.motovista_deep.models.DeleteRequestRequest request);
+
+    @POST("delete_bike_request.php")
+    Call<GenericResponse> deleteBikeRequest(@Body com.example.motovista_deep.models.DeleteRequestRequest request);
+
+    @GET("get_shuffled_bikes.php")
+    Call<com.example.motovista_deep.models.GetShuffledBikesResponse> getShuffledBikes();
 }

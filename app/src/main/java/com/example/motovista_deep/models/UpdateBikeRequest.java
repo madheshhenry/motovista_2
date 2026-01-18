@@ -36,13 +36,77 @@ public class UpdateBikeRequest {
     private String date;
     private String engine_number;
     private String chassis_number;
+    @com.google.gson.annotations.SerializedName("max_torque")
+    private String max_torque;
+    @com.google.gson.annotations.SerializedName("front_brake")
+    private String front_brake;
+    @com.google.gson.annotations.SerializedName("rear_brake")
+    private String rear_brake;
+    @com.google.gson.annotations.SerializedName("abs_type")
+    private String abs_type;
+    @com.google.gson.annotations.SerializedName("wheel_type")
+    private String wheel_type;
 
+    @com.google.gson.annotations.SerializedName("colors")
     private java.util.List<String> colors;
+
+    @com.google.gson.annotations.SerializedName("color_images")
+    private java.util.Map<String, java.util.List<String>> color_images;
+
+    @com.google.gson.annotations.SerializedName("custom_fittings")
     private java.util.List<CustomFitting> custom_fittings;
+
+    @com.google.gson.annotations.SerializedName("mandatory_fittings")
     private java.util.List<CustomFitting> mandatory_fittings;
+
+    @com.google.gson.annotations.SerializedName("additional_fittings")
     private java.util.List<CustomFitting> additional_fittings;
 
-    // Constructor with all fields
+    // Constructor from AddBikeRequest
+    public UpdateBikeRequest(int bike_id, AddBikeRequest request) {
+        this.bike_id = bike_id;
+        this.brand = request.getBrand();
+        this.model = request.getModel();
+        this.variant = request.getVariant();
+        this.year = request.getYear();
+        this.engine_cc = request.getEngine_cc();
+        this.fuel_type = request.getFuel_type();
+        this.transmission = request.getTransmission();
+        this.braking_type = request.getBraking_type();
+        this.on_road_price = request.getOn_road_price();
+        this.ex_showroom_price = request.getEx_showroom_price();
+        this.insurance = request.getInsurance();
+        this.registration_charge = request.getRegistration_charge();
+        this.ltrt = request.getLtrt();
+        this.mileage = request.getMileage();
+        this.fuel_tank_capacity = request.getFuel_tank_capacity();
+        this.kerb_weight = request.getKerb_weight();
+        this.seat_height = request.getSeat_height();
+        this.ground_clearance = request.getGround_clearance();
+        this.warranty_period = request.getWarranty_period();
+        this.free_services_count = request.getFree_services_count();
+        this.registration_proof = request.getRegistration_proof();
+        this.price_disclaimer = request.getPrice_disclaimer();
+        this.type = request.getTransmission(); // Often type=transmission in old logic
+        this.features = ""; 
+        this.image_paths = "[]"; 
+        this.date = request.getDate();
+        this.engine_number = "";
+        this.chassis_number = "";
+        this.max_torque = request.getMaxTorque();
+        this.colors = request.getColors();
+        this.color_images = request.getColor_images();
+        this.custom_fittings = request.getCustom_fittings();
+        this.mandatory_fittings = request.getMandatory_fittings();
+        this.additional_fittings = request.getAdditional_fittings();
+
+        this.front_brake = request.getFrontBrake();
+        this.rear_brake = request.getRearBrake();
+        this.abs_type = request.getAbsType();
+        this.wheel_type = request.getWheelType();
+    }
+
+    // Original Constructor with all fields
     public UpdateBikeRequest(int bike_id,
                              String brand, String model, String variant, String year,
                              String engine_cc, String fuel_type, String transmission,
@@ -52,9 +116,11 @@ public class UpdateBikeRequest {
                              String ground_clearance, String warranty_period,
                              String free_services_count, String registration_proof,
                              String price_disclaimer, String type, String features,
-                             String image_paths, String date, String engine_number, String chassis_number,
-                             java.util.List<String> colors, java.util.List<CustomFitting> custom_fittings,
-                             java.util.List<CustomFitting> mandatory_fittings, java.util.List<CustomFitting> additional_fittings) {
+                             String image_paths, String date, String engine_number, String chassis_number, String max_torque,
+                             java.util.List<String> colors, java.util.Map<String, java.util.List<String>> color_images,
+                             java.util.List<CustomFitting> custom_fittings,
+                             java.util.List<CustomFitting> mandatory_fittings, java.util.List<CustomFitting> additional_fittings,
+                             String front_brake, String rear_brake, String abs_type, String wheel_type) {
         this.bike_id = bike_id;
         this.brand = brand;
         this.model = model;
@@ -84,11 +150,20 @@ public class UpdateBikeRequest {
         this.date = date;
         this.engine_number = engine_number;
         this.chassis_number = chassis_number;
+        this.max_torque = max_torque;
         this.colors = colors;
+        this.color_images = color_images;
         this.custom_fittings = custom_fittings;
         this.mandatory_fittings = mandatory_fittings;
         this.additional_fittings = additional_fittings;
+        this.front_brake = front_brake;
+        this.rear_brake = rear_brake;
+        this.abs_type = abs_type;
+        this.wheel_type = wheel_type;
     }
+
+    public java.util.Map<String, java.util.List<String>> getColor_images() { return color_images; }
+    public void setColor_images(java.util.Map<String, java.util.List<String>> color_images) { this.color_images = color_images; }
 
     // Getters and setters for all fields
     public int getBike_id() { return bike_id; }

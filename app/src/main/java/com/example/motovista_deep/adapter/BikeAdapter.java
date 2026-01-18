@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.motovista_deep.R;
 import com.example.motovista_deep.models.BikeModel;
 import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.utils.ImageUtils;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
     private Context context;
     private List<BikeModel> bikeList;
     private OnBikeClickListener listener;
+    private int layoutResId = R.layout.item_bike_card;
 
     public interface OnBikeClickListener {
         void onBikeClick(BikeModel bike);
@@ -39,10 +41,17 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
         this.listener = listener;
     }
 
+    public BikeAdapter(Context context, List<BikeModel> bikeList, int layoutResId, OnBikeClickListener listener) {
+        this.context = context;
+        this.bikeList = bikeList;
+        this.layoutResId = layoutResId;
+        this.listener = listener;
+    }
+
     @NonNull
     @Override
     public BikeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_bike_card, parent, false);
+        View view = LayoutInflater.from(context).inflate(layoutResId, parent, false);
         return new BikeViewHolder(view);
     }
 
@@ -69,45 +78,32 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
         bike.setBaseUrl(baseUrl);
 
         // 1. SET TEXT CONTENT
-        holder.tvBrand.setText(bike.getBrand() != null ? bike.getBrand() : "Brand");
-        holder.tvModel.setText(bike.getModel() != null ? bike.getModel() : "Model");
+        if (holder.tvBrand != null) {
+            holder.tvBrand.setText(bike.getBrand() != null ? bike.getBrand() : "Brand");
+        }
+        if (holder.tvModel != null) {
+            holder.tvModel.setText(bike.getModel() != null ? bike.getModel() : "Model");
+        }
 
         // 2. SET TAG & INFO BASED ON BIKE TYPE
-        if ("NEW".equalsIgnoreCase(bike.getType())) {
-            holder.tvTag.setText("NEW BIKE");
-            holder.tvTag.setBackground(
-                    ContextCompat.getDrawable(context, R.drawable.tag_new_bike)
-            );
-
-            String price = bike.getOnRoadPrice();
-            if (price == null || price.isEmpty()) {
-                price = bike.getPrice();
-            }
-            // For NEW bikes, show Price. Do NOT show Condition.
-            holder.tvInfo.setText(price != null && !price.isEmpty() ? "₹" + price : "Price on request");
-            holder.tvInfo.setTextColor(
-                    ContextCompat.getColor(context, R.color.primary_color)
-            );
-        } else {
-            // SECOND HAND
-            holder.tvTag.setText("SH BIKES");
-            holder.tvTag.setBackground(
-                    ContextCompat.getDrawable(context, R.drawable.tag_sh_bike)
-            );
-
-            // For USED bikes, show Condition.
-            String condition = bike.getCondition();
-            if (condition == null || condition.isEmpty()) {
-                condition = "Good";
-            }
-            holder.tvInfo.setText("Condition: " + condition);
-
-            if ("Excellent".equalsIgnoreCase(condition)) {
-                holder.tvInfo.setTextColor(ContextCompat.getColor(context, R.color.icon_green));
-            } else if ("Good".equalsIgnoreCase(condition)) {
-                holder.tvInfo.setTextColor(ContextCompat.getColor(context, R.color.icon_yellow));
+        if (holder.tvTag != null) {
+            if ("NEW".equalsIgnoreCase(bike.getType())) {
+                holder.tvTag.setText("NEW BIKE");
+                holder.tvTag.setBackground(
+                        ContextCompat.getDrawable(context, R.drawable.tag_new_bike)
+                );
+                if (holder.tvInfo != null) holder.tvInfo.setVisibility(View.GONE);
             } else {
-                holder.tvInfo.setTextColor(ContextCompat.getColor(context, R.color.icon_red));
+                holder.tvTag.setText("SH BIKES");
+                holder.tvTag.setBackground(
+                        ContextCompat.getDrawable(context, R.drawable.tag_sh_bike)
+                );
+                if (holder.tvInfo != null) {
+                    String condition = bike.getCondition();
+                    if (condition == null || condition.isEmpty()) condition = "Good";
+                    holder.tvInfo.setVisibility(View.VISIBLE);
+                    holder.tvInfo.setText("Condition: " + condition);
+                }
             }
         }
 
@@ -115,36 +111,70 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
         loadBikeImage(holder, bike, position, baseUrl);
 
         // 4. CLICK LISTENER
-        holder.cardBike.setOnClickListener(v -> {
+        View clickTarget = holder.cardBike != null ? holder.cardBike : holder.itemView;
+        clickTarget.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onBikeClick(bike);
             }
         });
 
         // 5. SET CHEVRON COLOR
-        holder.ivChevron.setColorFilter(ContextCompat.getColor(context, R.color.primary_color));
+        if (holder.ivChevron != null) {
+            holder.ivChevron.setColorFilter(ContextCompat.getColor(context, R.color.primary_color));
+        }
+
+        // Extra: Featured price/text
+        if (holder.tvPrice != null) {
+            if (layoutResId == R.layout.item_home_featured) {
+                holder.tvPrice.setText("Explore the performance");
+            } else {
+                String priceStr = bike.getOnRoadPrice();
+                if (priceStr == null || priceStr.isEmpty()) priceStr = bike.getPrice();
+                if (priceStr != null && !priceStr.isEmpty()) {
+                    holder.tvPrice.setText("₹ " + priceStr);
+                } else {
+                    holder.tvPrice.setText("View Details");
+                }
+            }
+        }
+        
+        // Featured background
+        if (holder.ivBikeBg != null) {
+            // holder.ivBikeBg is just a decoration, but we could put the bike image there too
+        }
     }
 
     private void loadBikeImage(BikeViewHolder holder, BikeModel bike, int position, String baseUrl) {
+        if (holder.ivBike == null) return;
+        
         // Get the image URL from bike
         String imageUrl = bike.getImageUrl();
 
-        // If no image URL, try to get from all images
-        if ((imageUrl == null || imageUrl.isEmpty()) && bike.getAllImages() != null && !bike.getAllImages().isEmpty()) {
-            imageUrl = bike.getAllImages().get(0);
+        // USER REQUEST: Fix images loading - "if variant also no problem any one image should come outer"
+        // If no image URL, try to get from all images (which might contain variant images)
+        if ((imageUrl == null || imageUrl.isEmpty() || "null".equalsIgnoreCase(imageUrl))) {
+            List<String> allImages = bike.getAllImages();
+            if (allImages != null && !allImages.isEmpty()) {
+                for (String img : allImages) {
+                    if (img != null && !img.isEmpty() && !"null".equalsIgnoreCase(img)) {
+                        imageUrl = img;
+                        break;
+                    }
+                }
+            }
         }
 
         // Create request options
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.placeholder_bike)
                 .error(R.drawable.placeholder_bike)
-                .centerCrop()
+                .fitCenter()
                 .skipMemoryCache(false)
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         // Clean the image URL
         final String finalImageUrl = cleanImageUrl(imageUrl, baseUrl);
-
+        
         if (finalImageUrl != null && !finalImageUrl.isEmpty()) {
             // Load with Glide
             Glide.with(context)
@@ -159,50 +189,7 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
 
     // Clean image URL
     private String cleanImageUrl(String url, String baseUrl) {
-        if (url == null || url.isEmpty()) {
-            return "";
-        }
-
-        // Remove quotes, backslashes and whitespace
-        url = url.replace("\"", "").replace("\\", "").trim();
-
-        // If already a full URL, return as is
-        if (url.startsWith("http://") || url.startsWith("https://")) {
-            return url;
-        }
-
-        // Handle paths that might come as "bikes/..." or "uploads/bikes/..."
-        // If it starts with [ or ", it might be a JSON failure string, try to clean it
-        if (url.startsWith("[") || url.startsWith("]")) {
-            url = url.replaceAll("[\\[\\]\"]", "");
-        }
-        
-        // Construct partial path
-        if (!url.contains("uploads/")) {
-             if (url.startsWith("bikes/") || url.startsWith("second_hand_bikes/")) {
-                 url = "uploads/" + url;
-             } else if (!url.startsWith("uploads/")) {
-                 // Default to uploads/bikes/ if pure filename
-                 url = "uploads/bikes/" + url;
-             }
-        }
-
-        // Add base URL
-        if (baseUrl != null && !baseUrl.isEmpty()) {
-            // IMPORTANT: The uploads folder is OUTSIDE the api folder.
-            // BASE_URL is .../motovista_backend/api/
-            // Images are at .../motovista_backend/uploads/
-            // So we need to remove "api/" from the base URL
-            
-            String serverBase = baseUrl;
-            if (serverBase.endsWith("api/")) {
-                serverBase = serverBase.replace("api/", "");
-            }
-            
-            return serverBase + url;
-        }
-
-        return url;
+        return ImageUtils.getFullImageUrl(url);
     }
 
     @Override
@@ -253,6 +240,10 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
         TextView tvModel;
         TextView tvInfo;
         ImageView ivChevron;
+        
+        // New views for featured/new arrival cards
+        TextView tvPrice;
+        ImageView ivBikeBg;
 
         public BikeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -263,6 +254,9 @@ public class BikeAdapter extends RecyclerView.Adapter<BikeAdapter.BikeViewHolder
             tvModel = itemView.findViewById(R.id.tvModel);
             tvInfo = itemView.findViewById(R.id.tvInfo);
             ivChevron = itemView.findViewById(R.id.ivChevron);
+            
+            tvPrice = itemView.findViewById(R.id.tvPrice);
+            ivBikeBg = itemView.findViewById(R.id.ivBikeBg);
         }
     }
 }

@@ -21,7 +21,7 @@ public class BikeModel implements Parcelable {
     @com.google.gson.annotations.SerializedName("condition_type")
     private String condition;
 
-    @com.google.gson.annotations.SerializedName("thumbnail") // Mapped from get_bikes.php
+    @com.google.gson.annotations.SerializedName(value="image_url", alternate={"thumbnail", "image_path", "image"})
     private String image_url;
 
     private ArrayList<String> imageUrls = new ArrayList<>();
@@ -107,8 +107,26 @@ public class BikeModel implements Parcelable {
     @com.google.gson.annotations.SerializedName("chassis_number")
     private String chassis_number;
 
+    @com.google.gson.annotations.SerializedName("max_torque")
+    private String max_torque;
+
+    @com.google.gson.annotations.SerializedName("max_power")
+    private String max_power;
+
     @com.google.gson.annotations.SerializedName("odometer")
     private String odometer;
+
+    @com.google.gson.annotations.SerializedName("color_name")
+    private String color_name;
+
+    @com.google.gson.annotations.SerializedName("color_hex")
+    private String color_hex;
+
+// ... (existing code)
+
+
+// ... (existing code)
+
 
     @com.google.gson.annotations.SerializedName("owner_details")
     private String owner_details;
@@ -122,8 +140,83 @@ public class BikeModel implements Parcelable {
     @com.google.gson.annotations.SerializedName("colors")
     private java.util.List<String> colors;
 
+    @com.google.gson.annotations.SerializedName("color_images")
+    private Object colorImagesRaw; // Can be String or Map inside JSON
+
+    private java.util.Map<String, java.util.List<String>> colorImagesMap = new java.util.HashMap<>();
+
     @com.google.gson.annotations.SerializedName("custom_fittings")
     private java.util.List<CustomFitting> custom_fittings;
+
+// ... (skipping to methods)
+
+// In Constructor
+
+
+    /* ========== GETTERS AND SETTERS ========== */
+
+    // ...
+
+    public java.util.Map<String, java.util.List<String>> getColorImages() {
+        if ((colorImagesMap == null || colorImagesMap.isEmpty()) && colorImagesRaw != null) {
+            colorImagesMap = new java.util.HashMap<>();
+            // Manually parse JSON string or Map
+            String jsonStr = "";
+            if (colorImagesRaw instanceof String) {
+                jsonStr = (String) colorImagesRaw;
+            } else if (colorImagesRaw instanceof com.google.gson.internal.LinkedTreeMap) {
+                try {
+                    com.google.gson.Gson gson = new com.google.gson.Gson();
+                    String temp = gson.toJson(colorImagesRaw);
+                    jsonStr = temp;
+                } catch(Exception e){}
+            }
+            
+            if (!jsonStr.isEmpty()) {
+                // Basic JSON parser
+                try {
+                     org.json.JSONObject jsonObj = new org.json.JSONObject(jsonStr);
+                     java.util.Iterator<String> keys = jsonObj.keys();
+                     while(keys.hasNext()) {
+                         String key = keys.next();
+                         org.json.JSONArray arr = jsonObj.optJSONArray(key);
+                         if (arr != null) {
+                             java.util.List<String> list = new java.util.ArrayList<>();
+                             for(int i=0; i<arr.length(); i++) {
+                                 list.add(arr.optString(i));
+                             }
+                             colorImagesMap.put(key, list);
+                         }
+                     }
+                } catch(Exception e) {
+                     // Retry logic
+                     if (jsonStr.startsWith("\"") && jsonStr.endsWith("\"")) {
+                        jsonStr = jsonStr.substring(1, jsonStr.length()-1).replace("\\\"", "\"");
+                        try {
+                             org.json.JSONObject jsonObj = new org.json.JSONObject(jsonStr);
+                             java.util.Iterator<String> keys = jsonObj.keys();
+                             while(keys.hasNext()) {
+                                 String key = keys.next();
+                                 org.json.JSONArray arr = jsonObj.optJSONArray(key);
+                                 if (arr != null) {
+                                     java.util.List<String> list = new java.util.ArrayList<>();
+                                     for(int i=0; i<arr.length(); i++) {
+                                         list.add(arr.optString(i));
+                                     }
+                                     colorImagesMap.put(key, list);
+                                 }
+                             }
+                        } catch(Exception ex) {}
+                    }
+                }
+            }
+        }
+        return colorImagesMap; 
+    }
+    
+    public void setColorImages(java.util.Map<String, java.util.List<String>> color_images) { this.colorImagesMap = color_images; }
+
+
 
     @com.google.gson.annotations.SerializedName("mandatory_fittings")
     private java.util.List<CustomFitting> mandatory_fittings;
@@ -132,6 +225,8 @@ public class BikeModel implements Parcelable {
     private java.util.List<CustomFitting> additional_fittings;
     
     @com.google.gson.annotations.SerializedName("image_paths") // Mapped from API
+    private Object imagePathsRaw; // Can be String or List inside JSON
+
     private ArrayList<String> all_images = new ArrayList<>();
 
     // Base URL - will be set from adapter
@@ -226,6 +321,36 @@ public class BikeModel implements Parcelable {
 
     // Get all images for slider
     public ArrayList<String> getAllImages() {
+        // 1. Lazy Parse imagePathsRaw
+        if ((all_images == null || all_images.isEmpty()) && imagePathsRaw != null) {
+             all_images = new ArrayList<>();
+             if (imagePathsRaw instanceof java.util.List) {
+                 java.util.List<?> list = (java.util.List<?>) imagePathsRaw;
+                 for (Object item : list) {
+                     if (item != null) all_images.add(item.toString());
+                 }
+             } else if (imagePathsRaw instanceof String) {
+                 String raw = (String) imagePathsRaw;
+                 setImagePath(raw); // helper
+             }
+        }
+
+        // 2. Fallback to color_images if empty
+        if ((all_images == null || all_images.isEmpty())) {
+             java.util.Map<String, java.util.List<String>> map = getColorImages();
+             if (map != null && !map.isEmpty()) {
+                 if (all_images == null) all_images = new ArrayList<>();
+                 for (java.util.List<String> paths : map.values()) {
+                     if (paths != null) {
+                         for (String p : paths) {
+                             String full = getFullImageUrl(p);
+                             if (!all_images.contains(full)) all_images.add(full);
+                         }
+                     }
+                 }
+             }
+        }
+
         if (all_images != null && !all_images.isEmpty()) {
             return all_images;
         }
@@ -284,19 +409,7 @@ public class BikeModel implements Parcelable {
 
     // Get first image for list view
     public String getImageUrl() {
-        if (image_url != null && !image_url.isEmpty()) {
-            return image_url;
-        }
-
-        if (imageUrls != null && !imageUrls.isEmpty()) {
-            return imageUrls.get(0);
-        }
-
-        if (all_images != null && !all_images.isEmpty()) {
-            return all_images.get(0);
-        }
-
-        return "";
+        return getAllImages().isEmpty() ? "" : getAllImages().get(0);
     }
 
     // Set raw image URL
@@ -327,11 +440,23 @@ public class BikeModel implements Parcelable {
         return getAllImages();
     }
 
+    // Set image URLs directly (Used for variant updates)
+    public void setImageUrls(java.util.List<String> newImages) {
+        if (newImages != null) {
+            this.imageUrls = new java.util.ArrayList<>(newImages);
+            this.all_images = new java.util.ArrayList<>(newImages);
+            if (!newImages.isEmpty()) {
+                this.image_url = newImages.get(0);
+            }
+        } else {
+             this.imageUrls = new java.util.ArrayList<>();
+             this.all_images = new java.util.ArrayList<>();
+        }
+    }
+
     // Check if image paths exist
     public boolean hasImages() {
-        return (all_images != null && !all_images.isEmpty()) ||
-                (imageUrls != null && !imageUrls.isEmpty()) ||
-                (image_url != null && !image_url.isEmpty());
+        return !getAllImages().isEmpty();
     }
 
     /* ========== GETTERS AND SETTERS ========== */
@@ -429,6 +554,14 @@ public class BikeModel implements Parcelable {
     public String getChassis_number() { return chassis_number != null ? chassis_number : ""; }
     public void setChassis_number(String chassis_number) { this.chassis_number = chassis_number; }
 
+    public String getMaxTorque() { return max_torque != null ? max_torque : ""; }
+    public void setMaxTorque(String max_torque) { this.max_torque = max_torque; }
+
+    public String getMaxPower() { return max_power != null ? max_power : ""; }
+    public void setMaxPower(String max_power) { this.max_power = max_power; }
+
+
+
     // Convenience getters for BikeDetailsActivity
     public String getFuel_type() { return fuel_type != null ? fuel_type : ""; }
 
@@ -460,8 +593,42 @@ public class BikeModel implements Parcelable {
     public String getOwnership() { return ownership != null ? ownership : ""; }
     public void setOwnership(String ownership) { this.ownership = ownership; }
 
+    public String getColor_name() { return color_name != null ? color_name : ""; }
+    public void setColor_name(String color_name) { this.color_name = color_name; }
+
+    public String getColor_hex() { return color_hex != null ? color_hex : ""; }
+    public void setColor_hex(String color_hex) { this.color_hex = color_hex; }
+
     public java.util.List<String> getColors() { return colors; }
     public void setColors(java.util.List<String> colors) { this.colors = colors; }
+
+
+
+    @com.google.gson.annotations.SerializedName("front_brake")
+    private String frontBrake;
+
+    @com.google.gson.annotations.SerializedName("rear_brake")
+    private String rearBrake;
+
+    @com.google.gson.annotations.SerializedName("abs_type")
+    private String absType;
+
+    @com.google.gson.annotations.SerializedName("wheel_type")
+    private String wheelType;
+
+
+
+    public String getFrontBrake() { return frontBrake != null ? frontBrake : ""; }
+    public void setFrontBrake(String frontBrake) { this.frontBrake = frontBrake; }
+
+    public String getRearBrake() { return rearBrake != null ? rearBrake : ""; }
+    public void setRearBrake(String rearBrake) { this.rearBrake = rearBrake; }
+
+    public String getAbsType() { return absType != null ? absType : ""; }
+    public void setAbsType(String absType) { this.absType = absType; }
+
+    public String getWheelType() { return wheelType != null ? wheelType : ""; }
+    public void setWheelType(String wheelType) { this.wheelType = wheelType; }
 
     public java.util.List<CustomFitting> getCustomFittings() { return custom_fittings; }
     public void setCustomFittings(java.util.List<CustomFitting> custom_fittings) { this.custom_fittings = custom_fittings; }
@@ -471,6 +638,11 @@ public class BikeModel implements Parcelable {
 
     public java.util.List<CustomFitting> getAdditionalFittings() { return additional_fittings; }
     public void setAdditionalFittings(java.util.List<CustomFitting> additional_fittings) { this.additional_fittings = additional_fittings; }
+
+    // Variants List Field
+    private java.util.List<BikeVariantModel> variants;
+    public java.util.List<BikeVariantModel> getVariants() { return variants; }
+    public void setVariants(java.util.List<BikeVariantModel> variants) { this.variants = variants; }
 
     /* ========== PARCELABLE ========== */
     protected BikeModel(Parcel in) {
@@ -490,6 +662,7 @@ public class BikeModel implements Parcelable {
         transmission = in.readString();
         braking_type = in.readString();
         on_road_price = in.readString();
+        ex_showroom_price = in.readString(); // Fix: Was missing
         insurance = in.readString();
         registration_charge = in.readString();
         ltrt = in.readString();
@@ -516,8 +689,11 @@ public class BikeModel implements Parcelable {
         custom_fittings = in.createTypedArrayList(CustomFitting.CREATOR);
         mandatory_fittings = in.createTypedArrayList(CustomFitting.CREATOR);
         additional_fittings = in.createTypedArrayList(CustomFitting.CREATOR);
+        variants = in.createTypedArrayList(BikeVariantModel.CREATOR); // Added
         all_images = in.createStringArrayList();
         baseUrl = in.readString();
+        max_torque = in.readString();
+        max_power = in.readString();
     }
 
     @Override
@@ -565,8 +741,11 @@ public class BikeModel implements Parcelable {
         dest.writeTypedList(custom_fittings);
         dest.writeTypedList(mandatory_fittings);
         dest.writeTypedList(additional_fittings);
+        dest.writeTypedList(variants); // Added
         dest.writeStringList(all_images);
         dest.writeString(baseUrl);
+        dest.writeString(max_torque);
+        dest.writeString(max_power);
     }
 
     @Override
@@ -577,49 +756,7 @@ public class BikeModel implements Parcelable {
     public static final Creator<BikeModel> CREATOR = new Creator<BikeModel>() {
         @Override
         public BikeModel createFromParcel(Parcel in) {
-            BikeModel bike = new BikeModel();
-            bike.id = in.readInt();
-            bike.brand = in.readString();
-            bike.model = in.readString();
-            bike.price = in.readString();
-            bike.condition = in.readString();
-            bike.image_url = in.readString();
-            bike.imageUrls = in.createStringArrayList();
-            bike.type = in.readString();
-            bike.is_featured = in.readInt();
-            bike.variant = in.readString();
-            bike.engine_cc = in.readString();
-            bike.year = in.readString();
-            bike.fuel_type = in.readString();
-            bike.transmission = in.readString();
-            bike.braking_type = in.readString();
-            bike.on_road_price = in.readString();
-            bike.ex_showroom_price = in.readString(); // Added
-            bike.insurance = in.readString();
-            bike.registration_charge = in.readString();
-            bike.ltrt = in.readString();
-            bike.mileage = in.readString();
-            bike.fuel_tank_capacity = in.readString();
-            bike.kerb_weight = in.readString();
-            bike.seat_height = in.readString();
-            bike.ground_clearance = in.readString();
-            bike.top_speed = in.readString();
-            bike.warranty_period = in.readString();
-            bike.free_services_count = in.readString();
-            bike.features = in.readString();
-            bike.price_disclaimer = in.readString();
-            bike.registration_proof = in.readString();
-            // Read new fields
-            bike.date = in.readString();
-            bike.engine_number = in.readString();
-            bike.chassis_number = in.readString();
-            bike.odometer = in.readString();
-            bike.owner_details = in.readString();
-            bike.condition_details = in.readString();
-            bike.ownership = in.readString();
-            bike.all_images = in.createStringArrayList();
-            bike.baseUrl = in.readString();
-            return bike;
+            return new BikeModel(in);
         }
 
         @Override

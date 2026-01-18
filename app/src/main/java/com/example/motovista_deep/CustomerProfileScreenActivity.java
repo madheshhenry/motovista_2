@@ -26,6 +26,7 @@ import com.example.motovista_deep.api.ApiService;
 import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.helpers.SharedPrefManager;
 import com.example.motovista_deep.models.GetProfileResponse;
+import com.example.motovista_deep.utils.ImageUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,7 +42,7 @@ public class CustomerProfileScreenActivity extends AppCompatActivity {
     private EditText etFullName, etEmail, etPhone;
 
     // Settings Section
-    private LinearLayout btnNotifications, btnDownloadedInvoice, btnPurchases;
+    private LinearLayout btnNotifications, btnDownloadedInvoice, btnPurchases, btnRequestedBikes;
 
     // Support Section
     private LinearLayout btnHelpSupport, btnFAQ;
@@ -89,6 +90,7 @@ public class CustomerProfileScreenActivity extends AppCompatActivity {
         btnNotifications = findViewById(R.id.btnNotifications);
         btnDownloadedInvoice = findViewById(R.id.btnDownloadedInvoice);
         btnPurchases = findViewById(R.id.btnPurchases);
+        btnRequestedBikes = findViewById(R.id.btnRequestedBikes);
 
         // Support Section
         btnHelpSupport = findViewById(R.id.btnHelpSupport);
@@ -198,10 +200,9 @@ public class CustomerProfileScreenActivity extends AppCompatActivity {
             etPhone.setText("Not provided");
         }
 
-        // Load profile image
+        // Load profile image using centralized ImageUtils
         if (!TextUtils.isEmpty(userData.profile_image)) {
-            String baseUrl = RetrofitClient.BASE_URL.replace("api/", "");
-            String imageUrl = baseUrl + "uploads/profile_pics/" + userData.profile_image;
+            String imageUrl = ImageUtils.getFullImageUrl(userData.profile_image, ImageUtils.PATH_PROFILE_PICS);
 
             Glide.with(this)
                     .load(imageUrl)
@@ -313,6 +314,12 @@ public class CustomerProfileScreenActivity extends AppCompatActivity {
                 // startActivity(new Intent(this, PurchasesActivity.class));
             });
         }
+        
+        if (btnRequestedBikes != null) {
+            btnRequestedBikes.setOnClickListener(v -> {
+                startActivity(new Intent(this, MyRequestedBikesActivity.class));
+            });
+        }
 
         // Support Section
         if (btnHelpSupport != null) {
@@ -357,7 +364,7 @@ public class CustomerProfileScreenActivity extends AppCompatActivity {
         });
 
         tabOrders.setOnClickListener(v -> {
-            startActivity(new Intent(this, OrderStatusActivity.class));
+            startActivity(new Intent(this, CustomerOrdersActivity.class));
             finish();
         });
 

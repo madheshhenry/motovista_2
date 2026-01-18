@@ -19,7 +19,8 @@
             android:id="@+id/ivBikeImage"
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
+            android:padding="12dp"
             android:src="@drawable/ic_two_wheeler"
             android:background="#F1F5F9" />
 

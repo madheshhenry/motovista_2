@@ -39,5 +39,14 @@ public class UploadBikeImageResponse {
         sb.append("]");
         return sb.toString();
     }
+    
+    // Compatibility methods for AddBikeActivity
+    public boolean getError() {
+        return !"success".equalsIgnoreCase(status);
+    }
+    
+    public String getUrl() {
+        return getFirstImagePath();
+    }
 
 }

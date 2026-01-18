@@ -1,1559 +1,398 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_light"
-    android:fitsSystemWindows="true">
+    tools:context=".AddBikeActivity">
 
-    <!-- Top Header -->
+    <!-- Sticky Header -->
     <LinearLayout
-        android:id="@+id/topHeader"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/white"
         android:gravity="center_vertical"
-        android:background="@color/background_light"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:paddingHorizontal="16dp"
+        android:elevation="2dp"
+        android:layout_alignParentTop="true">
 
-        <!-- Back Button -->
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
             android:src="@drawable/ic_arrow_back"
-            android:tint="@color/gray_800"
-            android:padding="12dp"
-            android:contentDescription="Back" />
+            app:tint="#111318"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
 
-        <!-- Title -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Add New Bike"
-            android:textColor="@color/gray_900"
+            android:layout_marginStart="8dp"
+            android:text="Add Bike &amp; Variants"
             android:textSize="18sp"
             android:textStyle="bold"
             android:gravity="center"
-            android:fontFamily="sans-serif-medium" />
-
-        <!-- Empty space for alignment -->
-        <View
-            android:layout_width="48dp"
-            android:layout_height="48dp" />
-
+            android:textColor="#111318"/>
+             <!-- Spacer to balance title -->
+         <View android:layout_width="40dp" android:layout_height="40dp"/>
     </LinearLayout>
 
-    <!-- Main Scroll View -->
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
+        android:layout_above="@id/bottomButtons"
         android:fillViewport="true"
-        android:fitsSystemWindows="true"
-        android:paddingTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomButtons"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topHeader">
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:paddingBottom="32dp">
 
-            <!-- Section 1: Basic Bike Details -->
+            <!-- Section 1: Master Model Details -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Master Model Details"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#111318"
+                android:layout_marginBottom="12dp"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_new"
                 android:orientation="vertical"
-                android:background="@drawable/card_background"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:elevation="2dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Basic Bike Details"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="12dp"
-                    android:drawableStart="@drawable/ic_motorcycle"
-                    android:drawablePadding="8dp"
-                    android:drawableTint="@color/primary_color" />
-
-                <!-- Brand and Model Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <!-- Brand -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Brand"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <EditText
-                            android:id="@+id/etBrand"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="e.g., Yamaha"
-                            android:inputType="text"
-                            android:paddingHorizontal="12dp"
-                            android:background="@drawable/edittext_background"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                    <!-- Model Name -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Model Name"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <EditText
-                            android:id="@+id/etModel"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="e.g., R15"
-                            android:inputType="text"
-                            android:paddingHorizontal="12dp"
-                            android:background="@drawable/edittext_background"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
+                android:layout_marginBottom="24dp">
+                
+                <!-- Brand -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginBottom="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Brand" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                    <EditText android:id="@+id/etBrand" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="Select or Type Brand" android:textColor="#111318"/>
+                </LinearLayout>
+                
+                <!-- Model Name -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginBottom="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Model Name" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                    <EditText android:id="@+id/etModel" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="e.g. Super Sport 600" android:textColor="#111318"/>
                 </LinearLayout>
 
-                <!-- Variant and Year Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <!-- Variant -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Variant"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <EditText
-                            android:id="@+id/etVariant"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="e.g., V4"
-                            android:inputType="text"
-                            android:paddingHorizontal="12dp"
-                            android:background="@drawable/edittext_background"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
+                <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:useDefaultMargins="false">
+                    <!-- Year -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginEnd="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Model Year" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <Spinner android:id="@+id/spinnerYear" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new"/>
                     </LinearLayout>
-
-                    <!-- Model Year -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Model Year"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <Spinner
-                            android:id="@+id/spinnerYear"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:background="@drawable/edittext_background"
-                            android:paddingHorizontal="12dp"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
+                    <!-- Engine -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginStart="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Engine CC" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                         <EditText android:id="@+id/etEngineCC" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="600" android:inputType="number" android:textColor="#111318"/>
                     </LinearLayout>
-
-                </LinearLayout>
-
-                <!-- Add these fields in the Basic Bike Details section -->
-                <!-- Date Field -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="12dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Date"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="14sp"
-                        android:layout_marginBottom="4dp" />
-
-                    <EditText
-                        android:id="@+id/etDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:hint="Select date"
-                        android:inputType="none"
-                        android:focusable="false"
-                        android:clickable="true"
-                        android:paddingHorizontal="12dp"
-                        android:background="@drawable/edittext_background"
-                        android:textColor="@color/text_dark"
-                        android:textSize="14sp"
-                        android:drawableEnd="@drawable/ic_calendar"
-                        android:drawablePadding="8dp" />
-
-                </LinearLayout>
-
-                <!-- Engine Number and Chassis Number Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <!-- Engine Number -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Engine Number"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <EditText
-                            android:id="@+id/etEngineNumber"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="e.g., ENG12345"
-                            android:inputType="text"
-                            android:paddingHorizontal="12dp"
-                            android:background="@drawable/edittext_background"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
+                    
+                    <!-- Fuel -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginEnd="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fuel Type" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <Spinner android:id="@+id/spinnerFuelType" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new"/>
                     </LinearLayout>
-
-                    <!-- Chassis Number -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Chassis Number"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <EditText
-                            android:id="@+id/etChassisNumber"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="e.g., CHS12345"
-                            android:inputType="text"
-                            android:paddingHorizontal="12dp"
-                            android:background="@drawable/edittext_background"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <!-- Engine CC and Fuel Type Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <!-- Engine CC -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Engine CC"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <EditText
-                            android:id="@+id/etEngineCC"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="155"
-                            android:inputType="number"
-                            android:paddingHorizontal="12dp"
-                            android:background="@drawable/edittext_background"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                    <!-- Fuel Type -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Fuel Type"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <Spinner
-                            android:id="@+id/spinnerFuelType"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:background="@drawable/edittext_background"
-                            android:paddingHorizontal="12dp"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <!-- Transmission and Braking Type Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
                     <!-- Transmission -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Transmission"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <Spinner
-                            android:id="@+id/spinnerTransmission"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:background="@drawable/edittext_background"
-                            android:paddingHorizontal="12dp"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginStart="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Transmission" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <Spinner android:id="@+id/spinnerTransmission" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new"/>
+                    </LinearLayout>
+                    
+                    <!-- Mileage -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginEnd="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mileage" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <EditText android:id="@+id/etMileage" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="kmpl" android:inputType="number" android:textColor="#111318"/>
+                    </LinearLayout>
+                    <!-- Tank -->
+                     <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginStart="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fuel Tank" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <EditText android:id="@+id/etFuelTank" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="Litres" android:inputType="number" android:textColor="#111318"/>
                     </LinearLayout>
 
-                    <!-- Braking Type -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Braking Type"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <Spinner
-                            android:id="@+id/spinnerBrakingType"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:background="@drawable/edittext_background"
-                            android:paddingHorizontal="12dp"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
+                     <!-- Kerb Weight -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginEnd="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kerb Weight" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <EditText android:id="@+id/etKerbWeight" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="kg" android:inputType="number" android:textColor="#111318"/>
+                    </LinearLayout>
+                     <!-- Seat Height -->
+                     <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginStart="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Seat Height" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <EditText android:id="@+id/etSeatHeight" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="mm" android:inputType="number" android:textColor="#111318"/>
                     </LinearLayout>
 
-                </LinearLayout>
-
+                    <!-- Max Torque -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginEnd="8dp" android:layout_marginBottom="0dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Max Torque" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <EditText android:id="@+id/etMaxTorque" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="e.g. 64 Nm" android:textColor="#111318"/>
+                    </LinearLayout>
+                     <!-- Ground Clearance -->
+                     <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginStart="8dp" android:layout_marginBottom="0dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ground Clearance" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <EditText android:id="@+id/etGroundClearance" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="mm" android:inputType="number" android:textColor="#111318"/>
+                    </LinearLayout>
+                </GridLayout>
             </LinearLayout>
 
-            <!-- Section 2: Bike Images -->
+            <!-- Section 2: Variants -->
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:orientation="horizontal"
+                 android:gravity="center_vertical"
+                 android:layout_marginBottom="12dp">
+                 <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Variants"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#111318"/>
+                 <TextView
+                     android:id="@+id/tvVariantCount"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="1 Variant Added"
+                     android:textStyle="bold"
+                     android:textSize="12sp"
+                     android:textColor="@color/primary_blue"
+                     android:background="@drawable/bg_badge_blue"
+                     android:paddingHorizontal="8dp"
+                     android:paddingVertical="4dp"
+                     android:textAllCaps="true"/>
+             </LinearLayout>
+            
             <LinearLayout
+                android:id="@+id/variantsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@drawable/card_background"
-                android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:elevation="2dp">
+                android:animateLayoutChanges="true"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Bike Images"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="12dp"
-                    android:drawableStart="@drawable/ic_image"
-                    android:drawablePadding="8dp"
-                    android:drawableTint="@color/primary_color" />
+             <Button
+                android:id="@+id/btnAddVariant"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Add Another Variant"
+                android:background="@drawable/bg_dashed_border_new"
+                android:textColor="@color/primary_blue"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_add_circle"
+                app:iconTint="@color/primary_blue"
+                app:iconGravity="textStart"
+                android:layout_marginBottom="32dp"/>
 
-                <!-- Upload Container -->
-                <LinearLayout
-                    android:id="@+id/uploadContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="@drawable/upload_background"
-                    android:layout_marginBottom="12dp"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:id="@+id/ivUploadIcon"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:src="@drawable/ic_upload"
-                        android:tint="@color/gray_500"
-                        android:layout_marginBottom="8dp"
-                        android:contentDescription="Upload" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Upload images or drag &amp; drop"
-                        android:textColor="@color/gray_600"
-                        android:textSize="14sp"
-                        android:layout_marginBottom="4dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Front, Side, Rear (Max 10MB)"
-                        android:textColor="@color/gray_400"
-                        android:textSize="12sp" />
-
-                    <TextView
-                        android:id="@+id/tvSelectedCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0 images selected"
-                        android:textColor="@color/primary_color"
-                        android:textSize="12sp"
-                        android:layout_marginTop="8dp"
-                        android:visibility="gone" />
-
-                </LinearLayout>
-
-                <!-- Image Preview Container -->
-                <LinearLayout
-                    android:id="@+id/imagePreviewContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="8dp"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Upload clear bike images for better visibility."
-                    android:textColor="@color/text_secondary"
-                    android:textSize="12sp"
-                    android:gravity="center" />
-
-            <!-- Section 2: Bike Images (End) -->
-            </LinearLayout>
-
-            <!-- Section 2.5: Bike Colors -->
+            <!-- Section 3: Warranty & Fittings -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_new"
                 android:orientation="vertical"
-                android:background="@drawable/card_background"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:elevation="2dp">
-
+                android:layout_marginBottom="24dp">
+                
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Bike Colors"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="12dp"
-                    android:drawableStart="@drawable/ic_upload" 
-                    android:drawablePadding="8dp"
-                    android:drawableTint="@color/primary_color" />
-                <!-- Reusing ic_upload as palette icon placeholder if needed, or stick to simple text -->
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Add available colors for this bike"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="12dp" />
-
-                <!-- Colors Container -->
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:scrollbars="none">
-
-                    <LinearLayout
-                        android:id="@+id/colorsContainer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical" />
-
-                </HorizontalScrollView>
-
-                <!-- Add Color Button -->
-                <LinearLayout
-                    android:id="@+id/btnAddColor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/button_secondary_background"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="8dp"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:text="Warranty &amp; Service"
+                    android:textStyle="bold"
+                    android:textColor="#111318"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="16dp"/>
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_upload"
-                        android:rotation="45"
-                        android:tint="@color/primary_color"
-                        android:layout_marginEnd="8dp" />
-                    <!-- Using rotated upload icon as generic plus if plus not explicitly found, or assume vector asset exists -->
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Add Color"
-                        android:textColor="@color/primary_color"
-                        android:textStyle="bold"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
+                 <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:useDefaultMargins="false">
+                     <!-- Warranty -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginEnd="8dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Warranty Period" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                         <Spinner android:id="@+id/spinnerWarranty" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new"/>
+                    </LinearLayout>
+                     <!-- Free Services -->
+                     <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginStart="8dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Free Services" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                         <EditText android:id="@+id/etFreeServices" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="3" android:inputType="number" android:textColor="#111318"/>
+                    </LinearLayout>
+                 </GridLayout>
+                 
+                  <!-- Date -->
+                  <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginTop="16dp">
+                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Date" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                         <EditText android:id="@+id/etDate" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="Select Date" android:focusable="false" android:textColor="#111318"/>
+                     </LinearLayout>
             </LinearLayout>
+
+            <!-- Mandatory Fittings -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_new"
                 android:orientation="vertical"
-                android:background="@drawable/card_background"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:elevation="2dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Price Configuration"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="12dp"
-                    android:drawableStart="@drawable/ic_currency_rupee"
-                    android:drawablePadding="8dp"
-                    android:drawableTint="@color/primary_color" />
-
-                <!-- Ex-Showroom Price and Insurance Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <!-- Ex-Showroom Price -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Ex-Showroom Price"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:orientation="horizontal"
-                            android:background="@drawable/edittext_background"
-                            android:gravity="center_vertical"
-                            android:paddingHorizontal="12dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="₹"
-                                android:textColor="@color/gray_600"
-                                android:textSize="14sp" />
-
-                            <EditText
-                                android:id="@+id/etExShowroom"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:hint="0"
-                                android:inputType="number"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
-                                android:background="@android:color/transparent"
-                                android:paddingStart="8dp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <!-- Insurance -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Insurance"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:orientation="horizontal"
-                            android:background="@drawable/edittext_background"
-                            android:gravity="center_vertical"
-                            android:paddingHorizontal="12dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="₹"
-                                android:textColor="@color/gray_600"
-                                android:textSize="14sp" />
-
-                            <EditText
-                                android:id="@+id/etInsurance"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:hint="0"
-                                android:inputType="number"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
-                                android:background="@android:color/transparent"
-                                android:paddingStart="8dp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
+                android:layout_marginBottom="24dp">
+                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_settings" app:tint="@color/primary_blue" android:layout_marginEnd="8dp"/>
+                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mandatory Fittings" android:textStyle="bold" android:textColor="#111318" android:textSize="16sp"/>
                 </LinearLayout>
 
-                <!-- Registration Charge and LTRT Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <!-- Registration Charge -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Registration Charge"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:orientation="horizontal"
-                            android:background="@drawable/edittext_background"
-                            android:gravity="center_vertical"
-                            android:paddingHorizontal="12dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="₹"
-                                android:textColor="@color/gray_600"
-                                android:textSize="14sp" />
-
-                            <EditText
-                                android:id="@+id/etRegistration"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:hint="0"
-                                android:inputType="number"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
-                                android:background="@android:color/transparent"
-                                android:paddingStart="8dp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <!-- LTRT -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="LTRT"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:orientation="horizontal"
-                            android:background="@drawable/edittext_background"
-                            android:gravity="center_vertical"
-                            android:paddingHorizontal="12dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="₹"
-                                android:textColor="@color/gray_600"
-                                android:textSize="14sp" />
-
-                            <EditText
-                                android:id="@+id/etLTRT"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_weight="1"
-                                android:hint="0"
-                                android:inputType="number"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
-                                android:background="@android:color/transparent"
-                                android:paddingStart="8dp" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <!-- Total On-Road Price -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="8dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Total On-Road Price"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="14sp"
-                        android:layout_marginBottom="4dp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:orientation="horizontal"
-                        android:background="@drawable/edittext_background_disabled"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="₹"
-                            android:textColor="@color/gray_600"
-                            android:textSize="14sp" />
-
-                        <EditText
-                            android:id="@+id/etTotalOnRoad"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:hint="Calculated Automatically"
-                            android:text=""
-                            android:inputType="none"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp"
-                            android:background="@android:color/transparent"
-                            android:paddingStart="8dp"
-                            android:focusable="false"
-                            android:clickable="false" />
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_lock"
-                            android:tint="@color/gray_400"
-                            android:layout_marginStart="8dp" />
-
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="This price is auto-calculated based on the fields above."
-                        android:textColor="@color/text_secondary"
-                        android:textSize="12sp"
-                        android:layout_marginTop="4dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <!-- Section 4: Specifications -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/card_background"
-                android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:elevation="2dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Specifications"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="12dp"
-                    android:drawableStart="@drawable/ic_settings"
-                    android:drawablePadding="8dp"
-                    android:drawableTint="@color/primary_color" />
-
-                <!-- Mileage and Fuel Tank Capacity Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <!-- Mileage -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Mileage (km/l)"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <EditText
-                            android:id="@+id/etMileage"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="e.g., 45"
-                            android:inputType="numberDecimal"
-                            android:paddingHorizontal="12dp"
-                            android:background="@drawable/edittext_background"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                    <!-- Fuel Tank Capacity -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Fuel Tank Capacity"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <EditText
-                            android:id="@+id/etFuelTank"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="e.g., 12L"
-                            android:inputType="text"
-                            android:paddingHorizontal="12dp"
-                            android:background="@drawable/edittext_background"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <!-- Kerb Weight and Seat Height Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <!-- Kerb Weight -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Kerb Weight"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <EditText
-                            android:id="@+id/etKerbWeight"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="e.g., 140kg"
-                            android:inputType="text"
-                            android:paddingHorizontal="12dp"
-                            android:background="@drawable/edittext_background"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                    <!-- Seat Height -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Seat Height"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <EditText
-                            android:id="@+id/etSeatHeight"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="e.g., 800mm"
-                            android:inputType="text"
-                            android:paddingHorizontal="12dp"
-                            android:background="@drawable/edittext_background"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <!-- Ground Clearance -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Ground Clearance"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="14sp"
-                        android:layout_marginBottom="4dp" />
-
-                    <EditText
-                        android:id="@+id/etGroundClearance"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:hint="e.g., 170mm"
-                        android:inputType="text"
-                        android:paddingHorizontal="12dp"
-                        android:background="@drawable/edittext_background"
-                        android:textColor="@color/text_dark"
-                        android:textSize="14sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <!-- Section 5: Warranty -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/card_background"
-                android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:elevation="2dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Warranty"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="12dp"
-                    android:drawableStart="@drawable/ic_verified"
-                    android:drawablePadding="8dp"
-                    android:drawableTint="@color/primary_color" />
-
-                <!-- Warranty Period and Free Services Row -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="12dp">
-
-                    <!-- Warranty Period -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Warranty Period"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <Spinner
-                            android:id="@+id/spinnerWarranty"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:background="@drawable/edittext_background"
-                            android:paddingHorizontal="12dp"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                    <!-- Free Services Count -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Free Services Count"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginBottom="4dp" />
-
-                        <EditText
-                            android:id="@+id/etFreeServices"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:hint="Count"
-                            android:inputType="number"
-                            android:paddingHorizontal="12dp"
-                            android:background="@drawable/edittext_background"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <!-- Section 6: Mandatory Fittings -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/card_background"
-                android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:elevation="2dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Mandatory Fittings"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="12dp"
-                    android:drawableStart="@drawable/ic_handyman"
-                    android:drawablePadding="8dp"
-                    android:drawableTint="@color/primary_color" />
-
-                <!-- Mandatory Fittings Items will be added dynamically -->
                 <LinearLayout
                     android:id="@+id/mandatoryFittingsContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="8dp" />
-
+                    android:orientation="vertical"/>
             </LinearLayout>
 
-            <!-- Section 7: Additional Fittings -->
+            <!-- Additional Fittings -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_new"
                 android:orientation="vertical"
-                android:background="@drawable/card_background"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:elevation="2dp">
+                android:layout_marginBottom="24dp">
+                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_grid_view" app:tint="@color/primary_blue" android:layout_marginEnd="8dp"/>
+                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Additional Fittings (Optional)" android:textStyle="bold" android:textColor="#111318" android:textSize="16sp"/>
+                </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Additional Fittings (Optional)"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="12dp"
-                    android:drawableStart="@drawable/ic_extension"
-                    android:drawablePadding="8dp"
-                    android:drawableTint="@color/primary_color" />
-
-                <!-- Additional Fittings Items will be added dynamically -->
                 <LinearLayout
                     android:id="@+id/additionalFittingsContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="12dp" />
+                    android:orientation="vertical"/>
 
-                <!-- Add Custom Fitting Button -->
-                <Button
+                 <Button
                     android:id="@+id/btnAddCustomFitting"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="56dp"
                     android:text="Add Custom Fitting"
-                    android:textColor="@color/primary_color"
-                    android:textSize="14sp"
-                    android:background="@drawable/outline_button_primary"
-                    android:drawableStart="@drawable/ic_add"
-                    android:drawablePadding="8dp"
-                    android:gravity="center" />
-
+                    android:textAllCaps="false"
+                    android:textColor="@color/primary_blue"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_dashed_border_new"
+                    app:icon="@drawable/ic_add"
+                    app:iconTint="@color/primary_blue"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
-            <!-- Section 8: Invoice Legal Notes -->
+            <!-- Invoice Legal Notes -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_new"
                 android:orientation="vertical"
-                android:background="@drawable/card_background"
                 android:padding="16dp"
-                android:layout_marginBottom="16dp"
-                android:elevation="2dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Invoice Legal Notes"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="12dp"
-                    android:drawableStart="@drawable/ic_gavel"
-                    android:drawablePadding="8dp"
-                    android:drawableTint="@color/primary_color" />
-
-                <!-- Registration & Address Proof -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginBottom="12dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Registration &amp; Address Proof"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="14sp"
-                        android:layout_marginBottom="4dp" />
-
-                    <EditText
-                        android:id="@+id/etRegistrationProof"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minLines="3"
-                        android:text="For registration purpose any one of the following is required:\n1. Aadhar Card\n2. Pan Card\n3. Address Proof"
-                        android:inputType="none"
-                        android:focusable="false"
-                        android:clickable="false"
-                        android:longClickable="false"
-                        android:padding="12dp"
-                        android:background="@drawable/edittext_background"
-                        android:textColor="@color/text_dark"
-                        android:textSize="14sp"
-                        android:gravity="top" />
-
+                android:layout_marginBottom="24dp">
+                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_description" app:tint="@color/primary_blue" android:layout_marginEnd="8dp"/>
+                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Invoice Legal Notes" android:textStyle="bold" android:textColor="#111318" android:textSize="16sp"/>
                 </LinearLayout>
 
-                <!-- Price Disclaimer -->
-                <LinearLayout
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Registration &amp; Address Proof" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                <EditText
+                    android:id="@+id/etRegistrationProof"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Price Disclaimer"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="14sp"
-                        android:layout_marginBottom="4dp" />
-
-                    <EditText
-                        android:id="@+id/etPriceDisclaimer"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minLines="2"
-                        android:text="Price &amp; taxes ruling at the time of delivery will be applicable."
-                        android:inputType="none"
-                        android:focusable="false"
-                        android:clickable="false"
-                        android:longClickable="false"
-                        android:padding="12dp"
-                        android:background="@drawable/edittext_background"
-                        android:textColor="@color/text_dark"
-                        android:textSize="14sp"
-                        android:gravity="top" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <!-- Section 9: Bank Details -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/card_background"
-                android:padding="16dp"
-                android:layout_marginBottom="80dp"
-                android:elevation="2dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Bank Details"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="12dp"
-                    android:drawableStart="@drawable/ic_account_balance"
-                    android:drawablePadding="8dp"
-                    android:drawableTint="@color/primary_color" />
-
-                <!-- Bank Details Card -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/bank_details_background"
+                    android:minLines="3"
+                    android:gravity="top|start"
+                    android:background="@drawable/bg_input_new"
                     android:padding="16dp"
-                    android:layout_marginBottom="8dp">
-
-                    <!-- Account Name -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Account Name:"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/tvAccountName"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="SANTHOSH BIKES"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:gravity="end" />
-
-                    </LinearLayout>
-
-                    <!-- Account Number -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="A/c No:"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/tvAccountNumber"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="75010200000585"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:gravity="end" />
-
-                    </LinearLayout>
-
-                    <!-- IFSC Code -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="12dp">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="IFSC Code:"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/tvIFSC"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="BARBOVJAVAD"
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:gravity="end" />
-
-                    </LinearLayout>
-
-                    <!-- Bank Name -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/gray_300"
-                        android:layout_marginBottom="8dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Bank of Baroda - Avadi Branch"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="12sp"
-                        android:gravity="center" />
-
-                </LinearLayout>
-
-                <TextView
+                    android:text="For registration purpose any one of the following is required in ORIGINAL &amp; XEROX for Address Proof: Aadhar Card, LIC Policy, Passport, GST, Voter ID, PAN Card"
+                    android:textSize="14sp"
+                    android:textColor="#111318"
+                    android:layout_marginBottom="16dp"/>
+                    
+                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Price Disclaimer" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                <EditText
+                    android:id="@+id/etPriceDisclaimer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Bank details are fixed and will be shown in invoice"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="12sp"
-                    android:gravity="center" />
+                    android:minLines="2"
+                    android:gravity="top|start"
+                    android:background="@drawable/bg_input_new"
+                    android:padding="16dp"
+                    android:text="Price &amp; taxes ruling at the time of delivery will be applicable."
+                    android:textSize="14sp"
+                    android:textColor="#111318"/>
+            </LinearLayout>
 
+            <!-- Bank Details -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_new"
+                android:orientation="vertical"
+                android:padding="16dp">
+                
+                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+                      <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Showroom Bank Details" android:textStyle="bold" android:textSize="16sp" android:textColor="#111318"/>
+                      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="READ ONLY" android:textSize="10sp" android:background="@drawable/bg_badge_gray" android:paddingHorizontal="6dp" android:paddingVertical="4dp" android:textColor="@color/gray_500" android:textStyle="bold" android:textAllCaps="true"/>
+                  </LinearLayout>
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:background="@drawable/bg_input_new"
+                      android:padding="16dp"
+                      android:orientation="vertical"
+                      android:backgroundTint="#F0F4F8">
+                      
+                      <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+                          <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Account Name:" android:textSize="12sp" android:textColor="@color/gray_500"/>
+                           <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="City Motors Private Limited" android:textSize="12sp" android:textStyle="bold" android:textColor="#111318"/>
+                      </LinearLayout>
+                       <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+                          <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Account Number:" android:textSize="12sp" android:textColor="@color/gray_500"/>
+                           <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="00429940003212" android:textSize="12sp" android:textStyle="bold" android:textColor="#111318"/>
+                      </LinearLayout>
+                       <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+                          <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="IFSC Code:" android:textSize="12sp" android:textColor="@color/gray_500"/>
+                           <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="HDFC0000042" android:textSize="12sp" android:textStyle="bold" android:textColor="#111318"/>
+                      </LinearLayout>
+                       <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+                          <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Bank &amp; Branch:" android:textSize="12sp" android:textColor="@color/gray_500"/>
+                           <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="HDFC Bank, Downtown Branch" android:textSize="12sp" android:textStyle="bold" android:textColor="#111318"/>
+                      </LinearLayout>
+                  </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Buttons -->
+     <!-- Footer -->
     <LinearLayout
         android:id="@+id/bottomButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
         android:background="@color/white"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
-        android:elevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:text="Cancel"
-            android:textColor="@color/text_secondary"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:background="@drawable/outline_button" />
+        android:padding="16dp"
+        android:elevation="16dp">
 
         <Button
             android:id="@+id/btnSaveBike"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:text="Save Bike"
+            android:text="Save Bike Model"
+            android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:backgroundTint="@color/primary_blue"
             android:textStyle="bold"
-            android:background="@drawable/primary_button" />
-
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_save"
+            app:iconGravity="textStart"
+            android:elevation="4dp"/>
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

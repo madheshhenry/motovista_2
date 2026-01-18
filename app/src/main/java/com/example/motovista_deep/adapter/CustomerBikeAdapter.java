@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.motovista_deep.R;
 import com.example.motovista_deep.models.BikeModel;
 import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.utils.ImageUtils;
 
 import java.util.List;
 
@@ -85,27 +86,13 @@ public class CustomerBikeAdapter extends RecyclerView.Adapter<CustomerBikeAdapte
         if ((imageUrl == null || imageUrl.isEmpty()) && bike.getAllImages() != null && !bike.getAllImages().isEmpty()) {
             imageUrl = bike.getAllImages().get(0);
         }
-
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-             // Robust Cleaning Logic repeated
-             imageUrl = imageUrl.replace("\"", "").replace("\\", "").trim();
-             if (imageUrl.startsWith("[") || imageUrl.startsWith("]")) {
-                imageUrl = imageUrl.replaceAll("[\\[\\]\"]", "");
-             }
-             
-             if (!imageUrl.startsWith("http")) {
-                 if (!imageUrl.contains("uploads/")) {
-                     if (imageUrl.startsWith("bikes/") || imageUrl.startsWith("second_hand_bikes/")) {
-                         imageUrl = "uploads/" + imageUrl;
-                     } else {
-                         imageUrl = "uploads/bikes/" + imageUrl;
-                     }
-                 }
-                 imageUrl = baseUrl + imageUrl;
-             }
-
+ 
+        // Use centralized ImageUtils
+        String finalImageUrl = ImageUtils.getFullImageUrl(imageUrl);
+ 
+        if (!finalImageUrl.isEmpty()) {
              Glide.with(context)
-                .load(imageUrl)
+                .load(finalImageUrl)
                 .placeholder(R.drawable.placeholder_bike)
                 .error(R.drawable.placeholder_bike)
                 .centerCrop()

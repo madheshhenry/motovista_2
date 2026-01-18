@@ -19,6 +19,7 @@ import com.example.motovista_deep.models.GetBikeByIdResponse;
 import com.example.motovista_deep.models.CustomerRequest;
 import com.example.motovista_deep.models.RequestResponse;
 import com.example.motovista_deep.models.User;
+import com.example.motovista_deep.utils.ImageUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -390,36 +391,16 @@ public class BikeDetailsScreenActivity extends AppCompatActivity {
     }
 
     private void loadImage(String imageUrl) {
-        // Construct full URL
-        String baseUrl = RetrofitClient.BASE_URL; // e.g. http://.../api/
-        if (baseUrl.endsWith("api/")) {
-            baseUrl = baseUrl.substring(0, baseUrl.length() - 4); // Remove "api/" -> http://.../
-        }
+        String finalImageUrl = ImageUtils.getFullImageUrl(imageUrl);
         
-        if (!imageUrl.startsWith("http")) {
-            // If path doesn't start with uploads/, prepend it
-            if (!imageUrl.startsWith("uploads/")) {
-                if (imageUrl.startsWith("bikes/") || imageUrl.startsWith("second_hand_bikes/")) {
-                   imageUrl = "uploads/" + imageUrl;
-                } else {
-                   imageUrl = "uploads/bikes/" + imageUrl;
-                }
-            }
-             // Ensure no double slash if baseUrl ends with / and imageUrl starts with /
-             if (baseUrl.endsWith("/") && imageUrl.startsWith("/")) {
-                 imageUrl = imageUrl.substring(1);
-             }
-             
-            imageUrl = baseUrl + imageUrl;
+        if (!finalImageUrl.isEmpty()) {
+            Glide.with(this)
+                    .load(finalImageUrl)
+                    .placeholder(R.drawable.placeholder_bike)
+                    .error(R.drawable.placeholder_bike)
+                    .centerCrop() 
+                    .into(ivBikeImage);
         }
-
-        Glide.with(this)
-                .load(imageUrl)
-                .placeholder(R.drawable.placeholder_bike)
-                .error(R.drawable.placeholder_bike)
-                // Use fitCenter or centerCrop based on preference, CenterCrop fills 4:3
-                .centerCrop() 
-                .into(ivBikeImage);
     }
 
     private void setupClickListeners() {
@@ -434,15 +415,17 @@ public class BikeDetailsScreenActivity extends AppCompatActivity {
     }
 
     private void viewInvoiceSample() {
-        // Safe check for title
-        String title = currentBike != null ? (currentBike.getBrand() + " " + currentBike.getModel()) : bikeName;
-        Toast.makeText(this, "Viewing invoice sample for " + title, Toast.LENGTH_SHORT).show();
-        // Intent invoiceIntent = new Intent(this, InvoiceSampleActivity.class);
-        // invoiceIntent.putExtra("BIKE_NAME", title);
-        // startActivity(invoiceIntent);
+        if (currentBike == null) {
+            Toast.makeText(this, "Loading data, please wait...", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        
+        Intent intent = new Intent(this, InvoiceSelectionActivity.class);
+        intent.putExtra("BIKE_DATA", currentBike);
+        intent.putExtra("SELECTED_COLOR", selectedColor != null ? selectedColor : "N/A");
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
-
-
 
     private void placeOrder() {
         if (selectedColor == null) {
@@ -450,90 +433,16 @@ public class BikeDetailsScreenActivity extends AppCompatActivity {
             return;
         }
 
-        // Check if user is logged in
-        if (!SharedPrefManager.getInstance(this).isLoggedIn()) {
-             Toast.makeText(this, "Please login to place an order", Toast.LENGTH_LONG).show();
-             startActivity(new Intent(this, CustomerLoginActivity.class));
-             return;
-        }
-        
-        User user = SharedPrefManager.getInstance(this).getCustomer();
-        if (user == null) {
-             Toast.makeText(this, "User data error. Please re-login.", Toast.LENGTH_SHORT).show();
-             return;
+        if (currentBike == null) {
+            Toast.makeText(this, "Loading data, please wait...", Toast.LENGTH_SHORT).show();
+            return;
         }
 
-        // Prepare Data
-        String name = currentBike != null ? (currentBike.getBrand() + " " + currentBike.getModel()) : bikeName;
-        String price = currentBike != null ? (currentBike.getOnRoadPrice() != null ? currentBike.getOnRoadPrice() : currentBike.getPrice()) : bikePrice;
-        String variant = currentBike != null ? currentBike.getVariant() : bikeVariant;
-        String brand = currentBike != null ? currentBike.getBrand() : bikeBrand;
-        String model = currentBike != null ? currentBike.getModel() : bikeModelName;
-        String year = currentBike != null ? currentBike.getYear() : bikeYear;
-        
-        // Disable button to prevent double clicks
-        btnOrderBike.setEnabled(false);
-        btnOrderBike.setText("Processing...");
-
-        // Create Request Object
-        CustomerRequest request = new CustomerRequest(
-            user.getId(),
-            user.getFull_name(),
-            user.getPhone(),
-            user.getProfile_image(), // Optional if backend supports it
-            bikeId != -1 ? bikeId : 0, // Fallback ID
-            name,
-            variant,
-            selectedColor,
-            price
-        );
-        
-        // Call API
-        ApiService apiService = RetrofitClient.getApiService();
-        Call<RequestResponse> call = apiService.addCustomerRequest(request);
-        
-        call.enqueue(new Callback<RequestResponse>() {
-            @Override
-            public void onResponse(Call<RequestResponse> call, Response<RequestResponse> response) {
-                btnOrderBike.setEnabled(true);
-                btnOrderBike.setText("ORDER NOW");
-
-                if (response.isSuccessful() && response.body() != null) {
-                    RequestResponse res = response.body();
-                    if (res.isSuccess()) {
-                         // Success - Go to Request Sent Screen
-                        Intent requestSentIntent = new Intent(BikeDetailsScreenActivity.this, RequestSentActivity.class);
-                        requestSentIntent.putExtra("BIKE_NAME", name);
-                        requestSentIntent.putExtra("BIKE_PRICE", price);
-                        requestSentIntent.putExtra("BIKE_VARIANT", variant);
-                        requestSentIntent.putExtra("BIKE_Color", selectedColor); 
-                        requestSentIntent.putExtra("BIKE_BRAND", brand);
-                        requestSentIntent.putExtra("BIKE_MODEL", model);
-                        requestSentIntent.putExtra("BIKE_YEAR", year);
-                        
-                        // Use Order ID from Backend if valid
-                        if (res.getOrderId() != null) {
-                            requestSentIntent.putExtra("ORDER_ID", res.getOrderId());
-                        }
-
-                        startActivity(requestSentIntent);
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                        finish(); // Optional: Close details screen? Maybe not.
-                    } else {
-                        Toast.makeText(BikeDetailsScreenActivity.this, "Failed: " + res.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(BikeDetailsScreenActivity.this, "Server Error: " + response.code(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RequestResponse> call, Throwable t) {
-                btnOrderBike.setEnabled(true);
-                btnOrderBike.setText("ORDER NOW");
-                Toast.makeText(BikeDetailsScreenActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        Intent intent = new Intent(this, InvoiceSelectionActivity.class);
+        intent.putExtra("BIKE_DATA", currentBike);
+        intent.putExtra("SELECTED_COLOR", selectedColor);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override

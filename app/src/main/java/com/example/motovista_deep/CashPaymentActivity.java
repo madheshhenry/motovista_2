@@ -193,16 +193,28 @@ public class CashPaymentActivity extends AppCompatActivity {
                     return;
                 }
 
-                Intent intent = new Intent(CashPaymentActivity.this, PaymentConfirmedActivity.class);
-                intent.putExtra("customer_name", customerName);
-                intent.putExtra("vehicle_model", tvVehicleModel.getText().toString());
-                intent.putExtra("payment_mode", selectedPaymentMode);
-                intent.putExtra("amount_paid", totalAmount);
-                intent.putExtra("request_id", requestId);
-                intent.putExtra("transaction_id", "#TXN-" + System.currentTimeMillis());
-                intent.putExtra("order_type", "Full Cash");
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                // Persist State
+                com.example.motovista_deep.managers.WorkflowManager.updateStage(CashPaymentActivity.this, "PAYMENT_CONFIRMED", requestId, new com.example.motovista_deep.managers.WorkflowManager.WorkflowCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Intent intent = new Intent(CashPaymentActivity.this, PaymentConfirmedActivity.class);
+                        intent.putExtra("customer_name", customerName);
+                        intent.putExtra("vehicle_model", tvVehicleModel.getText().toString());
+                        intent.putExtra("payment_mode", selectedPaymentMode);
+                        intent.putExtra("amount_paid", totalAmount);
+                        intent.putExtra("request_id", requestId);
+                        intent.putExtra("transaction_id", "#TXN-" + System.currentTimeMillis());
+                        intent.putExtra("order_type", "Full Cash");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                    }
+                    
+                    @Override
+                    public void onError(String message) {
+                        Toast.makeText(CashPaymentActivity.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                    }
+                });
             });
         }
 

@@ -19,7 +19,7 @@ public class InventoryBike implements Serializable {
     @SerializedName("chassis_number")
     private String chassisNumber;
 
-    @SerializedName("thumbnail")
+    @SerializedName("image_url")
     private String thumbnail;
 
     @SerializedName("stock_date")
@@ -31,11 +31,14 @@ public class InventoryBike implements Serializable {
     @SerializedName("customer_name")
     private String customerName;
 
-    @SerializedName("delivery_date")
-    private String deliveryDate;
+    @SerializedName("sold_date")
+    private String soldDate;
 
     @SerializedName("colors")
     private String colors; // Can be JSON string
+
+    @SerializedName("source_table")
+    private String sourceTable;
 
     public int getId() { return id; }
     public String getModel() { return model; }
@@ -46,6 +49,7 @@ public class InventoryBike implements Serializable {
     public String getStockDate() { return stockDate; }
     public String getStatus() { return status; }
     public String getCustomerName() { return customerName; }
-    public String getDeliveryDate() { return deliveryDate; }
+    public String getSoldDate() { return soldDate; }
     public String getColors() { return colors; }
+    public String getSourceTable() { return sourceTable; }
 }
