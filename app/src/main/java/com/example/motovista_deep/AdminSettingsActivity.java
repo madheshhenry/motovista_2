@@ -242,30 +242,27 @@ public class AdminSettingsActivity extends AppCompatActivity {
         tabInventory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setActiveTab(tabInventory);
-                Toast.makeText(AdminSettingsActivity.this, "Inventory selected", Toast.LENGTH_SHORT).show();
-                // Navigate to Inventory screen
-                // startActivity(new Intent(AdminSettingsActivity.this, InventoryActivity.class));
+                Intent intent = new Intent(AdminSettingsActivity.this, InventoryActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
         tabBikes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setActiveTab(tabBikes);
-                Toast.makeText(AdminSettingsActivity.this, "Bikes selected", Toast.LENGTH_SHORT).show();
-                // Navigate to Bikes screen
-                // startActivity(new Intent(AdminSettingsActivity.this, BikeInventoryActivity.class));
+                Intent intent = new Intent(AdminSettingsActivity.this, BikeInventoryActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
         tabCustomers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setActiveTab(tabCustomers);
-                Toast.makeText(AdminSettingsActivity.this, "Customers selected", Toast.LENGTH_SHORT).show();
-                // Navigate to Customers screen
-                // startActivity(new Intent(AdminSettingsActivity.this, CustomersActivity.class));
+                Intent intent = new Intent(AdminSettingsActivity.this, CustomersActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 

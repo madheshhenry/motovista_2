@@ -160,7 +160,7 @@ public class CustomerProfileScreenActivity extends AppCompatActivity {
             public void onResponse(Call<GetProfileResponse> call, Response<GetProfileResponse> response) {
                 showLoading(false);
 
-                if (response.isSuccessful() && response.body() != null && response.body().status) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     GetProfileResponse.Data userData = response.body().data;
                     updateUIWithUserData(userData);
 
@@ -301,9 +301,7 @@ public class CustomerProfileScreenActivity extends AppCompatActivity {
 
         if (btnDownloadedInvoice != null) {
             btnDownloadedInvoice.setOnClickListener(v -> {
-                Toast.makeText(this, "Downloaded Invoices", Toast.LENGTH_SHORT).show();
-                // Navigate to downloaded invoices
-                // startActivity(new Intent(this, DownloadedInvoicesActivity.class));
+                startActivity(new Intent(this, DownloadedInvoicesActivity.class));
             });
         }
 

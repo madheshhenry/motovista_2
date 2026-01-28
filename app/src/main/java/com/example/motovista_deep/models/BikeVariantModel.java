@@ -178,6 +178,24 @@ public class BikeVariantModel implements Parcelable, Serializable {
         @Override
         public int describeContents() { return 0; }
 
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            VariantColor that = (VariantColor) o;
+            if (colorName != null ? !colorName.equals(that.colorName) : that.colorName != null) return false;
+            if (colorHex != null ? !colorHex.equals(that.colorHex) : that.colorHex != null) return false;
+            return imagePaths != null ? imagePaths.equals(that.imagePaths) : that.imagePaths == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = colorName != null ? colorName.hashCode() : 0;
+            result = 31 * result + (colorHex != null ? colorHex.hashCode() : 0);
+            result = 31 * result + (imagePaths != null ? imagePaths.hashCode() : 0);
+            return result;
+        }
+
         public static final Creator<VariantColor> CREATOR = new Creator<VariantColor>() {
             @Override
             public VariantColor createFromParcel(Parcel in) { return new VariantColor(in); }

@@ -141,4 +141,45 @@
     <color name="emi_accent_blue">#E7F2FD</color>
     <color name="emi_accent_yellow">#FFF9E6</color>
     <color name="emi_accent_red">#FEECEB</color>
+
+    <!-- Missing resources for midnight/premium themes -->
+    <color name="badge_bg_midnight">#1E293B</color>
+    <color name="divider_line">#334155</color>
+    <color name="surface_card_highlight">#242B3D</color>
+    <color name="gradient_start">#13C8EC</color>
+    <color name="gradient_end">#007AFF</color>
+    <color name="theme_background">#1A1F2C</color>
+
+    <!-- Additional core colors -->
+    <color name="surface_variant">#E1E2EC</color>
+    <color name="secondary">#5F5E7D</color>
+    <color name="accent">#FFC72C</color>
+    <color name="on_surface_variant">#44474E</color>
+
+    <!-- Missing resources for Premium/Midnight/UI Palette -->
+    <color name="surface_card">#1E293B</color>
+    <color name="surface_light">#1E293B</color>
+    <color name="surface_divider">#334155</color>
+    <color name="brand_primary">#38BDF8</color>
+    <color name="brand_primary_light">#1A38BDF8</color>
+    <color name="primary_500">#0EA5E9</color>
+    <color name="primary_600">#38BDF8</color>
+    <color name="primary_20">#3338BDF8</color>
+    <color name="surface_variant_light">#334155</color>
+    <color name="brand_primary_variant">#0EA5E9</color>
+    <color name="surface_divider_dark">#334155</color>
+    <color name="surface_card_dark">#1E293B</color>
+
+    <!-- UI Palette Set (Restored for Drawables/Layouts) -->
+    <color name="primary_700">#7DD3FC</color>
+    <color name="primary_200">#075985</color>
+    <color name="text_primary">#111827</color>
+    <color name="primary_50">#082F49</color>
+    <color name="primary_100">#0C4A6E</color>
+    <color name="primary_300">#0369A1</color>
+    <color name="primary_400">#0284C7</color>
+    <color name="primary_800">#BAE6FD</color>
+    <color name="primary_900">#E0F2FE</color>
+
+
 </resources>

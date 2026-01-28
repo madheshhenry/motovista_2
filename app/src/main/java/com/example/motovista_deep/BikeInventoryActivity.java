@@ -105,19 +105,28 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
             finish();
         });
 
-        tabInventory.setOnClickListener(v ->
-                Toast.makeText(this, "Inventory screen coming soon", Toast.LENGTH_SHORT).show());
+        tabInventory.setOnClickListener(v -> {
+            Intent intent = new Intent(this, InventoryActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         tabBikes.setOnClickListener(v -> {
             setActiveTab(tabBikes);
             loadBikesFromAPI(); // Refresh when clicking bikes tab
         });
 
-        tabCustomers.setOnClickListener(v ->
-                Toast.makeText(this, "Customers screen coming soon", Toast.LENGTH_SHORT).show());
+        tabCustomers.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CustomersActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
-        tabSettings.setOnClickListener(v ->
-                Toast.makeText(this, "Settings screen coming soon", Toast.LENGTH_SHORT).show());
+        tabSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AdminSettingsActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void setupSearch() {
@@ -157,7 +166,7 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
                 if (response.isSuccessful() && response.body() != null) {
                     GetBikesResponse apiResponse = response.body();
 
-                    if ("success".equals(apiResponse.getStatus())) {
+                    if ("success".equals(apiResponse.getStatus()) || "true".equals(apiResponse.getStatus())) {
                         updateBikeList(apiResponse.getData());
 
                         int bikeCount = bikeList.size();
@@ -171,8 +180,12 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
                                     Toast.LENGTH_SHORT).show();
                         }
                     } else {
+                        String message = apiResponse.getMessage();
+                        if (message == null || message.isEmpty()) {
+                            message = "Failed to load bikes: Unknown error";
+                        }
                         Toast.makeText(BikeInventoryActivity.this,
-                                apiResponse.getMessage(),
+                                message,
                                 Toast.LENGTH_SHORT).show();
                         showEmptyState();
                     }
@@ -186,8 +199,10 @@ public class BikeInventoryActivity extends AppCompatActivity implements BikeAdap
 
             @Override
             public void onFailure(Call<GetBikesResponse> call, Throwable t) {
+                String errorMsg = t.getMessage();
+                if (errorMsg == null) errorMsg = "Unknown network error";
                 Toast.makeText(BikeInventoryActivity.this,
-                        "Network error: " + t.getMessage(),
+                        "Network error: " + errorMsg,
                         Toast.LENGTH_SHORT).show();
                 showEmptyState();
             }

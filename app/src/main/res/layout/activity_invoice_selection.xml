@@ -351,10 +351,29 @@
             </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnConfirmOrder"
-                android:layout_width="wrap_content"
+                android:id="@+id/btnDownloadInvoice"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="140dp"
                 android:layout_height="56dp"
-                android:paddingHorizontal="32dp"
+                android:layout_marginEnd="8dp"
+                android:paddingHorizontal="12dp"
+                android:text="Download"
+                android:textSize="14sp"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_download"
+                app:iconTint="@color/primary_color"
+                app:iconGravity="textStart"
+                app:strokeColor="@color/primary_color"
+                app:strokeWidth="1dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnConfirmOrder"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:paddingHorizontal="16dp"
                 android:text="CONFIRM ORDER"
                 android:textAllCaps="true"
                 android:textStyle="bold"

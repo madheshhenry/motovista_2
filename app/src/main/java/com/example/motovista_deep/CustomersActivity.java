@@ -170,21 +170,27 @@ public class CustomersActivity extends AppCompatActivity {
         tabBikes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(CustomersActivity.this, "Bikes screen coming soon", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(CustomersActivity.this, BikeInventoryActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
         tabInventory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(CustomersActivity.this, "Inventory screen coming soon", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(CustomersActivity.this, InventoryActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
         tabSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(CustomersActivity.this, "Settings screen coming soon", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(CustomersActivity.this, AdminSettingsActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }

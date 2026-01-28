@@ -49,6 +49,11 @@ public class InventoryActivity extends AppCompatActivity {
     private InventoryBrandAdapter adapter;
     private List<InventoryBrand> brandList = new ArrayList<>();
 
+    // Bottom Navigation
+    private android.widget.LinearLayout tabDashboard, tabInventory, tabBikes, tabCustomers, tabSettings;
+    private ImageView ivDashboard, ivInventory, ivBikes, ivCustomers, ivSettings;
+    private TextView tvDashboard, tvInventory, tvBikes, tvCustomers, tvSettings;
+
     // Image Upload
     private ActivityResultLauncher<Intent> imagePickerLauncher;
     private Uri selectedImageUri;
@@ -83,7 +88,111 @@ public class InventoryActivity extends AppCompatActivity {
 
         btnBack.setOnClickListener(v -> finish());
 
+        setupBottomNavigation();
         loadInventory();
+    }
+
+    private void setupBottomNavigation() {
+        tabDashboard = findViewById(R.id.tabDashboard);
+        tabInventory = findViewById(R.id.tabInventory);
+        tabBikes = findViewById(R.id.tabBikes);
+        tabCustomers = findViewById(R.id.tabCustomers);
+        tabSettings = findViewById(R.id.tabSettings);
+
+        ivDashboard = (ImageView) tabDashboard.getChildAt(0);
+        ivInventory = (ImageView) tabInventory.getChildAt(0);
+        ivBikes = (ImageView) tabBikes.getChildAt(0);
+        ivCustomers = (ImageView) tabCustomers.getChildAt(0);
+        ivSettings = (ImageView) tabSettings.getChildAt(0);
+
+        tvDashboard = (TextView) tabDashboard.getChildAt(1);
+        tvInventory = (TextView) tabInventory.getChildAt(1);
+        tvBikes = (TextView) tabBikes.getChildAt(1);
+        tvCustomers = (TextView) tabCustomers.getChildAt(1);
+        tvSettings = (TextView) tabSettings.getChildAt(1);
+
+        setActiveTab(tabInventory);
+
+        tabDashboard.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AdminDashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        });
+
+        tabInventory.setOnClickListener(v -> {
+            // Already here, maybe refresh
+            loadInventory();
+        });
+
+        tabBikes.setOnClickListener(v -> {
+            Intent intent = new Intent(this, BikeInventoryActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        tabCustomers.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CustomersActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        tabSettings.setOnClickListener(v -> {
+            Intent intent = new Intent(this, AdminSettingsActivity.class);
+            startActivity(intent);
+            finish();
+        });
+    }
+
+    private void setActiveTab(android.widget.LinearLayout activeTab) {
+        resetAllTabs();
+        int primaryColor = androidx.core.content.ContextCompat.getColor(this, R.color.primary_color);
+
+        if (activeTab == tabDashboard) {
+            ivDashboard.setColorFilter(primaryColor);
+            tvDashboard.setTextColor(primaryColor);
+            tvDashboard.setTypeface(tvDashboard.getTypeface(), android.graphics.Typeface.BOLD);
+        } else if (activeTab == tabInventory) {
+            ivInventory.setColorFilter(primaryColor);
+            tvInventory.setTextColor(primaryColor);
+            tvInventory.setTypeface(tvInventory.getTypeface(), android.graphics.Typeface.BOLD);
+        } else if (activeTab == tabBikes) {
+            ivBikes.setColorFilter(primaryColor);
+            tvBikes.setTextColor(primaryColor);
+            tvBikes.setTypeface(tvBikes.getTypeface(), android.graphics.Typeface.BOLD);
+        } else if (activeTab == tabCustomers) {
+            ivCustomers.setColorFilter(primaryColor);
+            tvCustomers.setTextColor(primaryColor);
+            tvCustomers.setTypeface(tvCustomers.getTypeface(), android.graphics.Typeface.BOLD);
+        } else if (activeTab == tabSettings) {
+            ivSettings.setColorFilter(primaryColor);
+            tvSettings.setTextColor(primaryColor);
+            tvSettings.setTypeface(tvSettings.getTypeface(), android.graphics.Typeface.BOLD);
+        }
+    }
+
+    private void resetAllTabs() {
+        int grayColor = androidx.core.content.ContextCompat.getColor(this, R.color.gray_400);
+
+        ivDashboard.setColorFilter(grayColor);
+        tvDashboard.setTextColor(grayColor);
+        tvDashboard.setTypeface(null, android.graphics.Typeface.NORMAL);
+
+        ivInventory.setColorFilter(grayColor);
+        tvInventory.setTextColor(grayColor);
+        tvInventory.setTypeface(null, android.graphics.Typeface.NORMAL);
+
+        ivBikes.setColorFilter(grayColor);
+        tvBikes.setTextColor(grayColor);
+        tvBikes.setTypeface(null, android.graphics.Typeface.NORMAL);
+
+        ivCustomers.setColorFilter(grayColor);
+        tvCustomers.setTextColor(grayColor);
+        tvCustomers.setTypeface(null, android.graphics.Typeface.NORMAL);
+
+        ivSettings.setColorFilter(grayColor);
+        tvSettings.setTextColor(grayColor);
+        tvSettings.setTypeface(null, android.graphics.Typeface.NORMAL);
     }
 
     private void showAddBrandDialog() {

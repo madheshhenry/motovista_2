@@ -36,4 +36,16 @@
 
     <!-- ADD THIS LINE -->
     <dimen name="padding_xlarge">32dp</dimen>
+
+    <!-- Missing core design dimensions -->
+    <dimen name="radius_medium">12dp</dimen>
+    <dimen name="radius_small">8dp</dimen>
+    <dimen name="button_radius">28dp</dimen>
+    <dimen name="card_radius_medium">16dp</dimen>
+    <dimen name="premium_card_radius">20dp</dimen>
+    <dimen name="input_radius">8dp</dimen>
+
+    <dimen name="spacing_standard">12dp</dimen>
+
+
 </resources>

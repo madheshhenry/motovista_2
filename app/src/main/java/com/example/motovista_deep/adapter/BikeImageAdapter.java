@@ -26,6 +26,9 @@ public class BikeImageAdapter extends RecyclerView.Adapter<BikeImageAdapter.Imag
     }
 
     public void updateImages(List<String> newPaths) {
+        if (this.imagePaths != null && this.imagePaths.equals(newPaths)) {
+            return;
+        }
         this.imagePaths = newPaths;
         notifyDataSetChanged();
     }

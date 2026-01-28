@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.motovista_deep.adapter.MyBikesAdapter;
@@ -29,12 +31,13 @@ import retrofit2.Response;
 
 public class MyBikesActivity extends AppCompatActivity {
 
-    private CardView btnBack;
+    private ImageView btnBack;
     private RecyclerView rvMyBikes;
     private MyBikesAdapter adapter;
     private List<MyBikeModel> bikeList = new ArrayList<>();
     private LinearLayout emptyStateLayout;
     private Button btnBrowseShowroom;
+    private ProgressBar progressBar;
     private ApiService apiService;
 
     @Override
@@ -55,6 +58,7 @@ public class MyBikesActivity extends AppCompatActivity {
         rvMyBikes = findViewById(R.id.rvMyBikes);
         emptyStateLayout = findViewById(R.id.emptyStateLayout);
         btnBrowseShowroom = findViewById(R.id.btnBrowseShowroom);
+        progressBar = findViewById(R.id.progressBar);
     }
 
     private void setupRecyclerView() {
@@ -78,9 +82,11 @@ public class MyBikesActivity extends AppCompatActivity {
             return;
         }
 
+        progressBar.setVisibility(View.VISIBLE);
         apiService.getMyBikes(user.getId()).enqueue(new Callback<MyBikesResponse>() {
             @Override
             public void onResponse(Call<MyBikesResponse> call, Response<MyBikesResponse> response) {
+                progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null) {
                     MyBikesResponse bikesResponse = response.body();
                     if (bikesResponse.isSuccess()) {
@@ -102,6 +108,7 @@ public class MyBikesActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<MyBikesResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(MyBikesActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

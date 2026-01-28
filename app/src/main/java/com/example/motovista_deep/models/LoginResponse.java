@@ -2,11 +2,17 @@ package com.example.motovista_deep.models;
 
 public class LoginResponse {
     private boolean success;
+    private String status; // For robustness
     private String message;
     private LoginData data;
 
-    public boolean isSuccess() { return success; }
+    public boolean isSuccess() { 
+        return success || "success".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status); 
+    }
+    
     public void setSuccess(boolean success) { this.success = success; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }

@@ -213,7 +213,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
     private void setupClickListeners() {
         // Top header
         btnNotifications.setOnClickListener(v ->
-                Toast.makeText(this, "Notifications", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(this, CustomerNotificationsActivity.class)));
 
         ivUserProfile.setOnClickListener(v ->
                 startActivity(new Intent(this, CustomerProfileScreenActivity.class)));
@@ -327,7 +327,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
         apiService.getProfile("Bearer " + token).enqueue(new Callback<GetProfileResponse>() {
             @Override
             public void onResponse(Call<GetProfileResponse> call, Response<GetProfileResponse> response) {
-                if (response.isSuccessful() && response.body() != null && response.body().status) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     GetProfileResponse.Data user = response.body().data;
 
                     // Update welcome text

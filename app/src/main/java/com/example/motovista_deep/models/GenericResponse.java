@@ -6,8 +6,8 @@ public class GenericResponse {
     private String message;
     private Object data;
     public String getStatus(){return status;}
-    public boolean isSuccess(){
-        return success || (status != null && status.equalsIgnoreCase("success"));
+    public boolean isSuccess() {
+        return success || "success".equalsIgnoreCase(status) || "true".equalsIgnoreCase(status) || "1".equals(status);
     }
     public String getMessage(){return message;}
     public Object getData(){return data;}

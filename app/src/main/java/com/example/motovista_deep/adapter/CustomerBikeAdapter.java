@@ -51,12 +51,58 @@ public class CustomerBikeAdapter extends RecyclerView.Adapter<CustomerBikeAdapte
         // Text Data
         holder.tvBikeName.setText(bike.getBrand() + " " + bike.getModel());
         
-        String price = bike.getOnRoadPrice();
-        if (price == null || price.isEmpty()) price = bike.getPrice();
-        holder.tvBikePrice.setText(price != null ? "₹ " + price : "Price on request");
+        // Calculate dynamic minimum price
+        String displayPrice = "Price on request";
+        long minPrice = Long.MAX_VALUE;
+        boolean foundVariantPrice = false;
 
-        holder.tvEngineCC.setText(bike.getEngineCC() != null ? bike.getEngineCC() : "N/A");
-        holder.tvMileage.setText(bike.getMileage() != null ? bike.getMileage() : "N/A");
+        if (bike.getVariants() != null && !bike.getVariants().isEmpty()) {
+            for (com.example.motovista_deep.models.BikeVariantModel variant : bike.getVariants()) {
+                if (variant.priceDetails != null && variant.priceDetails.totalOnRoad != null) {
+                    try {
+                        // Clean price string (remove ₹, commas, etc.)
+                        String cleanPrice = variant.priceDetails.totalOnRoad.replaceAll("[^0-9]", "");
+                        if (!cleanPrice.isEmpty()) {
+                            long p = Long.parseLong(cleanPrice);
+                            if (p < minPrice) {
+                                minPrice = p;
+                                foundVariantPrice = true;
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        if (foundVariantPrice) {
+            // Format number with commas
+            displayPrice = "₹ " + java.text.NumberFormat.getInstance().format(minPrice);
+        } else {
+            String price = bike.getOnRoadPrice();
+            if (price == null || price.isEmpty()) price = bike.getPrice();
+            if (price != null && !price.isEmpty()) {
+                displayPrice = price.startsWith("₹") ? price : "₹ " + price;
+            }
+        }
+
+        holder.tvBikePrice.setText(displayPrice);
+
+        // Badge Handling
+        if ("USED".equalsIgnoreCase(bike.getType())) {
+            holder.tvBadge.setText("Pre-owned");
+            holder.tvBadge.setBackgroundResource(R.drawable.badge_bg_midnight);
+            holder.tvBadge.setVisibility(View.VISIBLE);
+        } else if ("Electric".equalsIgnoreCase(bike.getFuelType())) {
+            holder.tvBadge.setText("Eco-Friendly");
+            holder.tvBadge.setBackgroundResource(R.drawable.badge_bg_green);
+            holder.tvBadge.setVisibility(View.VISIBLE);
+        } else {
+            holder.tvBadge.setText("Popular");
+            holder.tvBadge.setBackgroundResource(R.drawable.bg_new_badge);
+            holder.tvBadge.setVisibility(View.VISIBLE);
+        }
 
         // Image Loading Logic (Cleaned)
         String baseUrl = RetrofitClient.BASE_URL;
@@ -115,8 +161,7 @@ public class CustomerBikeAdapter extends RecyclerView.Adapter<CustomerBikeAdapte
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivBikeImage;
-        TextView tvBikeName, tvBikePrice;
-        TextView tvEngineCC, tvMileage;
+        TextView tvBikeName, tvBikePrice, tvBadge;
         TextView btnViewDetails;
 
         public ViewHolder(@NonNull View itemView) {
@@ -124,8 +169,7 @@ public class CustomerBikeAdapter extends RecyclerView.Adapter<CustomerBikeAdapte
             ivBikeImage = itemView.findViewById(R.id.ivBikeImage);
             tvBikeName = itemView.findViewById(R.id.tvBikeName);
             tvBikePrice = itemView.findViewById(R.id.tvBikePrice);
-            tvEngineCC = itemView.findViewById(R.id.tvEngineCC);
-            tvMileage = itemView.findViewById(R.id.tvMileage);
+            tvBadge = itemView.findViewById(R.id.tvBadge);
             btnViewDetails = itemView.findViewById(R.id.btnViewDetails);
         }
     }

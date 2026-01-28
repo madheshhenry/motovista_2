@@ -1,0 +1,2 @@
+Scanned 140 XML files.
+All files seem valid.

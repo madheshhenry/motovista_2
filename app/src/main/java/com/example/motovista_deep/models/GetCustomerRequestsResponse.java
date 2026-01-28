@@ -7,6 +7,9 @@ public class GetCustomerRequestsResponse {
     @SerializedName("success")
     private boolean success;
 
+    @SerializedName("status")
+    private Object status;
+
     @SerializedName("data")
     private List<CustomerRequest> data;
 
@@ -14,7 +17,12 @@ public class GetCustomerRequestsResponse {
     private String message;
 
     public boolean isSuccess() {
-        return success;
+        if (success) return true;
+        if (status instanceof Boolean) return (Boolean) status;
+        if (status instanceof String) {
+            return "true".equalsIgnoreCase((String) status) || "success".equalsIgnoreCase((String) status);
+        }
+        return false;
     }
 
     public List<CustomerRequest> getData() {

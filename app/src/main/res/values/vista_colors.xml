@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- VistaBloom Primary Palette -->
+    <color name="vista_background">#1A1F2C</color>
+    <color name="vista_surface">#242B3D</color>
+    <color name="vista_surface_bright">#2F374D</color>
+    
+    <!-- VistaBloom Accents -->
+    <color name="vista_violet">#8B5CF6</color>
+    <color name="vista_violet_muted">#4C1D95</color>
+    <color name="vista_cyan">#06B6D4</color>
+    <color name="vista_cyan_muted">#155E75</color>
+    
+    <!-- VistaBloom Text & Contents -->
+    <color name="vista_text_primary">#F8FAFC</color>
+    <color name="vista_text_secondary">#94A3B8</color>
+    <color name="vista_text_muted">#64748B</color>
+    
+    <!-- Status Colors -->
+    <color name="vista_success">#10B981</color>
+    <color name="vista_warning">#F59E0B</color>
+    <color name="vista_error">#EF4444</color>
+
+    <color name="vista_surface_dim">#1E293B</color>
+    <color name="vista_input_bg">#334155</color>
+    
+    <!-- Glassmorphism Helpers -->
+    <color name="glass_border">#33FFFFFF</color>
+    <color name="glass_white_10">#1AFFFFFF</color>
+    <color name="glass_white_20">#33FFFFFF</color>
+    
+    <!-- Core Neutrals -->
+    <color name="vista_white">#FFFFFF</color>
+    <color name="vista_black">#000000</color>
+</resources>

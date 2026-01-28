@@ -6,10 +6,14 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -22,6 +26,7 @@ import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.helpers.SharedPrefManager;
 import com.example.motovista_deep.models.BikeModel;
 import com.example.motovista_deep.models.GetBikesResponse;
+import com.example.motovista_deep.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +51,8 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
     private CustomerBikeAdapter bikeAdapter;
     private List<BikeModel> allBikesList = new ArrayList<>();
     private String brandFilter;
+    private String currentFilter = "ALL";
+    private EditText etSearch;
 
     // Bottom navigation
     private LinearLayout tabHome, tabBikes, tabEmiCalculator, tabOrders, tabProfile;
@@ -59,6 +66,16 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
 
         // Initialize views
         initializeViews();
+
+        // Update greeting
+        TextView tvGreeting = findViewById(R.id.tvGreeting);
+        if (tvGreeting != null) {
+            User user = SharedPrefManager.getInstance(this).getUser();
+            if (user != null && user.getFull_name() != null && !user.getFull_name().isEmpty()) {
+                String firstName = user.getFull_name().split(" ")[0];
+                tvGreeting.setText("Hey " + firstName + ", find your");
+            }
+        }
 
         // Setup RecyclerView
         setupRecyclerView();
@@ -87,6 +104,9 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
         chipPetrol = findViewById(R.id.chipPetrol);
         chipEBikes = findViewById(R.id.chipEBikes);
         chipSecondHand = findViewById(R.id.chipSecondHand);
+
+        // Search bar
+        etSearch = findViewById(R.id.etSearch);
 
         // RecyclerView
         rvBikes = findViewById(R.id.rvBikes);
@@ -137,7 +157,7 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
             public void onResponse(Call<GetBikesResponse> call, Response<GetBikesResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     GetBikesResponse bikesResponse = response.body();
-                    if ("success".equals(bikesResponse.getStatus()) && bikesResponse.getData() != null) {
+                    if (bikesResponse.isSuccess() && bikesResponse.getData() != null) {
                         allBikesList = bikesResponse.getData();
                         if (brandFilter != null && !brandFilter.isEmpty()) {
                             tvTitle.setText(brandFilter);
@@ -177,27 +197,44 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
     private void filterBikes(String filterType) {
         if (allBikesList == null || allBikesList.isEmpty()) return;
 
+        this.currentFilter = filterType;
+        executeFiltering();
+    }
+
+    private void executeFiltering() {
+        String query = etSearch.getText().toString().toLowerCase().trim();
         List<BikeModel> filteredList = new ArrayList<>();
+
         for (BikeModel bike : allBikesList) {
-            switch (filterType) {
+            // Check Category Filter
+            boolean matchesCategory = false;
+            switch (currentFilter) {
                 case "ALL":
-                    filteredList.add(bike);
+                    matchesCategory = true;
                     break;
                 case "PETROL":
-                    if ("Petrol".equalsIgnoreCase(bike.getFuelType())) {
-                        filteredList.add(bike);
-                    }
+                    if ("Petrol".equalsIgnoreCase(bike.getFuelType())) matchesCategory = true;
                     break;
                 case "ELECTRIC":
-                    if ("Electric".equalsIgnoreCase(bike.getFuelType())) {
-                        filteredList.add(bike);
-                    }
+                    if ("Electric".equalsIgnoreCase(bike.getFuelType())) matchesCategory = true;
                     break;
                 case "SECOND_HAND":
-                    if ("USED".equalsIgnoreCase(bike.getType())) {
-                        filteredList.add(bike);
-                    }
+                    if ("USED".equalsIgnoreCase(bike.getType())) matchesCategory = true;
                     break;
+            }
+
+            // Check Search Query
+            boolean matchesSearch = true;
+            if (!query.isEmpty()) {
+                String brand = bike.getBrand().toLowerCase();
+                String model = bike.getModel().toLowerCase();
+                if (!brand.contains(query) && !model.contains(query)) {
+                    matchesSearch = false;
+                }
+            }
+
+            if (matchesCategory && matchesSearch) {
+                filteredList.add(bike);
             }
         }
         bikeAdapter.updateList(filteredList);
@@ -206,6 +243,20 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
     private void setupClickListeners() {
         // Back button
         btnBack.setOnClickListener(v -> onBackPressed());
+
+        // Search Bar functionality
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                executeFiltering();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         // Filter chips
         chipAll.setOnClickListener(v -> {
@@ -332,21 +383,23 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
 
     private void setActiveChip(CardView activeChip) {
         // Reset all chips
-        chipAll.setCardBackgroundColor(ContextCompat.getColor(this, R.color.background_light));
-        ((TextView) chipAll.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.text_gray));
-
-        chipPetrol.setCardBackgroundColor(ContextCompat.getColor(this, R.color.background_light));
-        ((TextView) chipPetrol.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.text_gray));
-
-        chipEBikes.setCardBackgroundColor(ContextCompat.getColor(this, R.color.background_light));
-        ((TextView) chipEBikes.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.text_gray));
-
-        chipSecondHand.setCardBackgroundColor(ContextCompat.getColor(this, R.color.background_light));
-        ((TextView) chipSecondHand.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.text_gray));
+        resetChip(chipAll, "All Bikes");
+        resetChip(chipPetrol, "Petrol");
+        resetChip(chipEBikes, "Electric");
+        resetChip(chipSecondHand, "Pre-owned");
 
         // Set active chip
-        activeChip.setCardBackgroundColor(ContextCompat.getColor(this, R.color.primary_light));
-        ((TextView) activeChip.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.primary));
+        activeChip.setCardBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
+        ((TextView) activeChip.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.white));
+        ((TextView) activeChip.getChildAt(0)).setTypeface(null, android.graphics.Typeface.BOLD);
+    }
+
+    private void resetChip(CardView chip, String text) {
+        chip.setCardBackgroundColor(Color.parseColor("#F1F5F9"));
+        TextView tv = (TextView) chip.getChildAt(0);
+        tv.setText(text);
+        tv.setTextColor(Color.parseColor("#64748B"));
+        tv.setTypeface(null, android.graphics.Typeface.NORMAL);
     }
 
     @Override

@@ -1,10 +1,14 @@
     package com.example.motovista_deep.models;
 
     public class GetProfileResponse {
-        // This MUST be named 'status' to match your PHP and the error line
-        public boolean status;
+        public boolean success; // Preferred
+        public boolean status;  // Keep for backward compatibility
         public String message;
         public Data data;
+
+        public boolean isSuccess() {
+            return success || status;
+        }
 
         public class Data {
             public int id;

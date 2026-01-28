@@ -55,4 +55,35 @@
         <item name="android:background">@drawable/bg_rounded_gray_50</item>
     </style>
 
+    <!-- Custom Typography -->
+    <style name="TextAppearance.Motovista.Body.Large" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/vista_text_primary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.Motovista.Caption" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textColor">@color/vista_text_secondary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.Motovista.Headline.Small" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textColor">@color/primary</item>
+    </style>
+
+    <style name="TextAppearance.Motovista.Body.Small" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/on_surface_variant</item>
+    </style>
+
+    <style name="TextAppearance.Motovista.Body.Medium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/on_surface_variant</item>
+    </style>
+
+    <style name="Widget.Motovista.Card" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
+    </style>
+
 </resources>
+
+

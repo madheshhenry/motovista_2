@@ -33,6 +33,7 @@ import com.example.motovista_deep.models.ForgotPasswordRequest;
 import com.example.motovista_deep.models.ResetPasswordRequest;
 import com.example.motovista_deep.models.AdminNotificationResponse;
 import com.example.motovista_deep.models.AdminVerificationResponse;
+import com.example.motovista_deep.models.GetCustomerNotificationsResponse;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -414,4 +415,7 @@ public interface ApiService {
 
     @GET("get_shuffled_bikes.php")
     Call<com.example.motovista_deep.models.GetShuffledBikesResponse> getShuffledBikes();
+
+    @GET("get_customer_notifications.php")
+    Call<GetCustomerNotificationsResponse> getCustomerNotifications(@Query("user_id") int userId);
 }

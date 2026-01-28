@@ -66,6 +66,9 @@ public class BikeDetailsCustomerActivity extends AppCompatActivity {
     private BikeVariantModel selectedVariant;
     private VariantAdapter variantAdapter;
     private BikeImageAdapter imageAdapter;
+    private TabLayoutMediator imageMediator;
+    private List<String> currentImagePaths = new ArrayList<>();
+    private List<BikeVariantModel.VariantColor> currentColorList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -354,8 +357,16 @@ public class BikeDetailsCustomerActivity extends AppCompatActivity {
     }
     
     private void setupColors(BikeVariantModel variant) {
+        List<BikeVariantModel.VariantColor> newColors = variant.colors != null ? variant.colors : new ArrayList<>();
+        
+        // Skip re-creation if colors are exactly the same
+        if (currentColorList.equals(newColors)) {
+            return;
+        }
+        currentColorList = new ArrayList<>(newColors);
+
         colorsContainer.removeAllViews();
-        if (variant.colors == null || variant.colors.isEmpty()) {
+        if (newColors.isEmpty()) {
             llColorsSection.setVisibility(View.GONE);
             updateImages(null); // Show default images
             return;
@@ -427,19 +438,28 @@ public class BikeDetailsCustomerActivity extends AppCompatActivity {
     }
     
     private void updateImages(List<String> imagePaths) {
-         List<String> imagesToShow = new ArrayList<>();
-         if (imagePaths != null && !imagePaths.isEmpty()) {
-             imagesToShow.addAll(imagePaths);
-         } else {
-             // Fallback to parent images or all images?
-             // Parent model doesn't store images in V2 response current structure
-             // So we just leave it empty or maybe show a placeholder if needed
-         }
-         
-         imageAdapter = new BikeImageAdapter(this, imagesToShow);
-         vpBikeImages.setAdapter(imageAdapter);
-         
-         new TabLayoutMediator(tlImageIndicator, vpBikeImages, (tab, position) -> {}).attach();
+        List<String> imagesToShow = new ArrayList<>();
+        if (imagePaths != null && !imagePaths.isEmpty()) {
+            imagesToShow.addAll(imagePaths);
+        }
+
+        // Check for equality to prevent redundant refreshes (and flashes)
+        if (currentImagePaths.equals(imagesToShow) && imageAdapter != null) {
+            return;
+        }
+        currentImagePaths = new ArrayList<>(imagesToShow);
+
+        // Hide indicators if only 1 image or empty
+        tlImageIndicator.setVisibility(imagesToShow.size() <= 1 ? View.GONE : View.VISIBLE);
+
+        if (imageAdapter == null) {
+            imageAdapter = new BikeImageAdapter(this, imagesToShow);
+            vpBikeImages.setAdapter(imageAdapter);
+            imageMediator = new TabLayoutMediator(tlImageIndicator, vpBikeImages, (tab, position) -> {});
+            imageMediator.attach();
+        } else {
+            imageAdapter.updateImages(imagesToShow);
+        }
     }
     
     private void setupCustomSections(BikeVariantModel variant) {

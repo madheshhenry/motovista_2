@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import java.io.File;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
@@ -11,6 +12,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.webkit.MimeTypeMap;
+import androidx.core.content.FileProvider;
+import android.net.Uri;
+import com.example.motovista_deep.utils.PdfInvoiceHelper;
+import java.io.IOException;
+import java.io.OutputStream;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.content.ContentValues;
 
 import com.bumptech.glide.Glide;
 import com.example.motovista_deep.api.ApiService;
@@ -47,7 +57,7 @@ public class InvoiceSelectionActivity extends AppCompatActivity {
     private TextView tvBikeName, tvVariantColor, tvBasePrice, tvTotalPrice;
     private TextView tvWarranty, tvFreeServices, tvLegalNotes;
     private LinearLayout llMandatoryFittings, llAdditionalFittings;
-    private MaterialButton btnConfirmOrder;
+    private MaterialButton btnConfirmOrder, btnDownloadInvoice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +91,12 @@ public class InvoiceSelectionActivity extends AppCompatActivity {
         llMandatoryFittings = findViewById(R.id.llMandatoryFittings);
         llAdditionalFittings = findViewById(R.id.llAdditionalFittings);
         btnConfirmOrder = findViewById(R.id.btnConfirmOrder);
+        btnDownloadInvoice = findViewById(R.id.btnDownloadInvoice);
         cbSelectAllAdditional = findViewById(R.id.cbSelectAllAdditional);
 
         btnBack.setOnClickListener(v -> finish());
         btnConfirmOrder.setOnClickListener(v -> confirmOrder());
+        btnDownloadInvoice.setOnClickListener(v -> handleDownloadInvoice());
 
         cbSelectAllAdditional.setOnClickListener(v -> {
             boolean isChecked = cbSelectAllAdditional.isChecked();
@@ -269,5 +281,85 @@ public class InvoiceSelectionActivity extends AppCompatActivity {
                 Toast.makeText(InvoiceSelectionActivity.this, "Network error", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void handleDownloadInvoice() {
+        User user = SharedPrefManager.getInstance(this).getCustomer();
+        if (user == null) {
+            Toast.makeText(this, "Please login to download invoice", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String bikeName = bike.getModel() + "_" + bike.getVariant();
+        bikeName = bikeName.replaceAll("[^a-zA-Z0-9]", "_"); // Replace spaces and special chars
+        String filename = "Invoice_" + bikeName + "_" + System.currentTimeMillis() + ".pdf";
+
+        // Use MediaStore for Android 10+ compatibility (Like DocumentsActivity)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.MediaColumns.DISPLAY_NAME, filename);
+            values.put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf");
+            values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
+
+            Uri uri = getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+
+            try {
+                if (uri != null) {
+                    OutputStream outputStream = getContentResolver().openOutputStream(uri);
+                    if (outputStream != null) {
+                        PdfInvoiceHelper.generateInvoice(this, outputStream, bike, user, selectedAdditionalFittings, tvTotalPrice.getText().toString());
+                        outputStream.close();
+                        Toast.makeText(this, "Invoice saved to Downloads", Toast.LENGTH_LONG).show();
+                        openPdf(uri);
+                    }
+                }
+            } catch (IOException e) {
+                Log.e(TAG, "Error saving PDF via MediaStore", e);
+                Toast.makeText(this, "Error saving PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            // Legacy approach
+            File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            if (!directory.exists()) directory.mkdirs();
+            File file = new File(directory, filename);
+            try {
+                java.io.FileOutputStream fos = new java.io.FileOutputStream(file);
+                PdfInvoiceHelper.generateInvoice(this, fos, bike, user, selectedAdditionalFittings, tvTotalPrice.getText().toString());
+                fos.close();
+                Toast.makeText(this, "Invoice saved to Downloads: " + filename, Toast.LENGTH_LONG).show();
+                
+                Uri path = FileProvider.getUriForFile(this, getPackageName() + ".provider", file);
+                openPdf(path);
+            } catch (IOException e) {
+                Log.e(TAG, "Error saving PDF legacy", e);
+                Toast.makeText(this, "Error saving PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void openPdf(Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            Log.e(TAG, "No PDF viewer found, offering share instead", e);
+            sharePdf(uri);
+        }
+    }
+
+    private void sharePdf(Uri uri) {
+        try {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("application/pdf");
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivity(Intent.createChooser(shareIntent, "Share Invoice PDF"));
+        } catch (Exception e) {
+            Log.e(TAG, "Error sharing PDF", e);
+            Toast.makeText(this, "Could not open or share the PDF.", Toast.LENGTH_LONG).show();
+        }
     }
 }

@@ -73,13 +73,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <!-- Gradient Overlay (Bottom) -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@drawable/gradient_bottom_overlay" />
-
                 <!-- Indicators -->
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tlImageIndicator"
