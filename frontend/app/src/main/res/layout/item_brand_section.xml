@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingTop="16dp"
+    android:paddingBottom="8dp">
+
+    <!-- Brand Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:gravity="bottom">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvBrandName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bikes by Brand"
+                android:textColor="@color/text_dark"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-black" />
+            <View
+                android:layout_width="40dp"
+                android:layout_height="4dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_active_dot" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btnViewAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View All"
+            android:textColor="@color/primary_color"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp"
+            android:background="@drawable/bg_glass_pill"
+            android:backgroundTint="#0D38BDF8"
+            android:letterSpacing="0.05" />
+
+    </LinearLayout>
+
+    <!-- Horizontal RecyclerView for this brand -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBrandBikes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:paddingHorizontal="16dp"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_home_new_arrival" />
+
+</LinearLayout>

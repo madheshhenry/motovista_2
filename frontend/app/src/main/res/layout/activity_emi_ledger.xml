@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:fitsSystemWindows="true">
+
+    <!-- Header (Fixed at top) -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:gravity="center_vertical"
+        android:background="@color/card_background"
+        android:elevation="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Back Button -->
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/text_primary_light"
+            android:padding="12dp"
+            android:contentDescription="Back" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="EMI Ledger"
+            android:textColor="@color/text_primary_light"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:fontFamily="sans-serif-medium" />
+
+        <!-- Search Button -->
+        <ImageView
+            android:id="@+id/btnSearch"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_search"
+            app:tint="@color/text_primary_light"
+            android:padding="12dp"
+            android:contentDescription="Search" />
+
+    </LinearLayout>
+
+    <!-- Filter Chips Container -->
+    <HorizontalScrollView
+        android:id="@+id/filterChipsContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:scrollbars="none"
+        android:clipToPadding="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/headerLayout">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- All Filter Chip -->
+            <Button
+                android:id="@+id/chipAll"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="All"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:background="@drawable/primary_button"
+                android:paddingHorizontal="20dp"
+                android:layout_marginEnd="12dp" />
+
+            <!-- Running Filter Chip -->
+            <Button
+                android:id="@+id/chipRunning"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Running"
+                android:textColor="@color/text_primary_light"
+                android:textSize="14sp"
+                android:background="@drawable/outline_button"
+                android:paddingHorizontal="20dp"
+                android:layout_marginEnd="12dp" />
+
+            <!-- Completed Filter Chip -->
+            <Button
+                android:id="@+id/chipCompleted"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Completed"
+                android:textColor="@color/text_primary_light"
+                android:textSize="14sp"
+                android:background="@drawable/outline_button"
+                android:paddingHorizontal="20dp" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <!-- RecyclerView for EMI List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewEmiLedger"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingHorizontal="16dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterChipsContainer" />
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterChipsContainer" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

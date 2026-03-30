@@ -1,0 +1,108 @@
+[2026-01-12 18:16:34] Script started.
+[2026-01-12 18:16:34] Auth failed: No token
+[2026-01-12 18:16:34] EXCEPTION: Authorization token missing
+[2026-01-12 18:16:35] Script started.
+[2026-01-12 18:16:35] Auth failed: No token
+[2026-01-12 18:16:35] EXCEPTION: Authorization token missing
+[2026-01-12 18:22:57] Script started.
+[2026-01-12 18:22:57] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-12 18:22:57] Processing 1 file(s).
+[2026-01-12 18:22:57] File 0: Name=upload6273405855823090457.jpg, Tmp=C:\xampp\tmp\php2B71.tmp, Error=0
+[2026-01-12 18:22:57] SUCCESS: Moved to ../uploads/bikes/bike_69652df141c09.jpg
+[2026-01-12 18:22:57] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_69652df141c09.jpg"]}
+[2026-01-12 18:27:51] Script started.
+[2026-01-12 18:27:51] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-12 18:27:51] Processing 1 file(s).
+[2026-01-12 18:27:51] File 0: Name=upload3791025176964433001.jpg, Tmp=C:\xampp\tmp\phpAAD0.tmp, Error=0
+[2026-01-12 18:27:51] SUCCESS: Moved to ../uploads/bikes/bike_69652f176e2fb.jpg
+[2026-01-12 18:27:51] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_69652f176e2fb.jpg"]}
+[2026-01-12 18:27:51] Script started.
+[2026-01-12 18:27:51] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-12 18:27:51] Processing 1 file(s).
+[2026-01-12 18:27:51] File 0: Name=upload6453573456736448282.jpg, Tmp=C:\xampp\tmp\phpAB3F.tmp, Error=0
+[2026-01-12 18:27:51] SUCCESS: Moved to ../uploads/bikes/bike_69652f178180b.jpg
+[2026-01-12 18:27:51] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_69652f178180b.jpg"]}
+[2026-01-12 18:27:51] Script started.
+[2026-01-12 18:27:51] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-12 18:27:51] Processing 1 file(s).
+[2026-01-12 18:27:51] File 0: Name=upload4556194767944310820.jpg, Tmp=C:\xampp\tmp\phpABCC.tmp, Error=0
+[2026-01-12 18:27:51] SUCCESS: Moved to ../uploads/bikes/bike_69652f17a6ff5.jpg
+[2026-01-12 18:27:51] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_69652f17a6ff5.jpg"]}
+[2026-01-13 07:33:21] Script started.
+[2026-01-13 07:33:21] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-13 07:33:21] Processing 1 file(s).
+[2026-01-13 07:33:21] File 0: Name=1000091100.jpg, Tmp=C:\xampp\tmp\phpCDD3.tmp, Error=0
+[2026-01-13 07:33:21] SUCCESS: Moved to ../uploads/bikes/bike_6965e731515b2.jpg
+[2026-01-13 07:33:21] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_6965e731515b2.jpg"]}
+[2026-01-13 07:33:21] Script started.
+[2026-01-13 07:33:21] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-13 07:33:21] Processing 1 file(s).
+[2026-01-13 07:33:21] File 0: Name=1000091064.jpg, Tmp=C:\xampp\tmp\phpCE51.tmp, Error=0
+[2026-01-13 07:33:21] SUCCESS: Moved to ../uploads/bikes/bike_6965e73167b4b.jpg
+[2026-01-13 07:33:21] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_6965e73167b4b.jpg"]}
+[2026-01-13 07:33:21] Script started.
+[2026-01-13 07:33:21] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-13 07:33:21] Processing 1 file(s).
+[2026-01-13 07:33:21] File 0: Name=1000091045.jpg, Tmp=C:\xampp\tmp\phpCEB0.tmp, Error=0
+[2026-01-13 07:33:21] SUCCESS: Moved to ../uploads/bikes/bike_6965e7317db09.jpg
+[2026-01-13 07:33:21] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_6965e7317db09.jpg"]}
+[2026-01-13 07:33:21] Script started.
+[2026-01-13 07:33:21] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-13 07:33:21] Processing 1 file(s).
+[2026-01-13 07:33:21] File 0: Name=1000091016.jpg, Tmp=C:\xampp\tmp\phpCFBB.tmp, Error=0
+[2026-01-13 07:33:21] SUCCESS: Moved to ../uploads/bikes/bike_6965e731ebe90.jpg
+[2026-01-13 07:33:21] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_6965e731ebe90.jpg"]}
+[2026-01-13 07:33:22] Script started.
+[2026-01-13 07:33:22] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-13 07:33:22] Processing 1 file(s).
+[2026-01-13 07:33:22] File 0: Name=1000091015.jpg, Tmp=C:\xampp\tmp\phpD181.tmp, Error=0
+[2026-01-13 07:33:22] SUCCESS: Moved to ../uploads/bikes/bike_6965e73263141.jpg
+[2026-01-13 07:33:22] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_6965e73263141.jpg"]}
+[2026-01-13 07:47:35] Script started.
+[2026-01-13 07:47:35] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-13 07:47:35] Processing 1 file(s).
+[2026-01-13 07:47:35] File 0: Name=1000091100.jpg, Tmp=C:\xampp\tmp\phpD5D8.tmp, Error=0
+[2026-01-13 07:47:35] SUCCESS: Moved to ../uploads/bikes/bike_6965ea875912a.jpg
+[2026-01-13 07:47:35] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_6965ea875912a.jpg"]}
+[2026-01-13 07:47:35] Script started.
+[2026-01-13 07:47:35] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-13 07:47:35] Processing 1 file(s).
+[2026-01-13 07:47:35] File 0: Name=1000091064.jpg, Tmp=C:\xampp\tmp\phpD646.tmp, Error=0
+[2026-01-13 07:47:35] SUCCESS: Moved to ../uploads/bikes/bike_6965ea8767c21.jpg
+[2026-01-13 07:47:35] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_6965ea8767c21.jpg"]}
+[2026-01-13 07:47:35] Script started.
+[2026-01-13 07:47:35] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-13 07:47:35] Processing 1 file(s).
+[2026-01-13 07:47:35] File 0: Name=1000091045.jpg, Tmp=C:\xampp\tmp\phpD695.tmp, Error=0
+[2026-01-13 07:47:35] SUCCESS: Moved to ../uploads/bikes/bike_6965ea877ea69.jpg
+[2026-01-13 07:47:35] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_6965ea877ea69.jpg"]}
+[2026-01-13 09:22:27] Script started.
+[2026-01-13 09:22:27] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-13 09:22:27] Processing 1 file(s).
+[2026-01-13 09:22:27] File 0: Name=1000091173.jpg, Tmp=C:\xampp\tmp\phpB183.tmp, Error=0
+[2026-01-13 09:22:27] SUCCESS: Moved to ../uploads/bikes/bike_696600c3a9c97.jpg
+[2026-01-13 09:22:27] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_696600c3a9c97.jpg"]}
+[2026-01-13 09:22:27] Script started.
+[2026-01-13 09:22:27] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-13 09:22:27] Processing 1 file(s).
+[2026-01-13 09:22:27] File 0: Name=1000091119.jpg, Tmp=C:\xampp\tmp\phpB211.tmp, Error=0
+[2026-01-13 09:22:27] SUCCESS: Moved to ../uploads/bikes/bike_696600c3c5b3a.jpg
+[2026-01-13 09:22:27] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_696600c3c5b3a.jpg"]}
+[2026-01-13 09:22:27] Script started.
+[2026-01-13 09:22:27] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-13 09:22:27] Processing 1 file(s).
+[2026-01-13 09:22:27] File 0: Name=1000091112.jpg, Tmp=C:\xampp\tmp\phpB26F.tmp, Error=0
+[2026-01-13 09:22:27] SUCCESS: Moved to ../uploads/bikes/bike_696600c3d63b9.jpg
+[2026-01-13 09:22:27] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_696600c3d63b9.jpg"]}
+[2026-01-13 09:22:27] Script started.
+[2026-01-13 09:22:27] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-13 09:22:27] Processing 1 file(s).
+[2026-01-13 09:22:27] File 0: Name=1000091100.jpg, Tmp=C:\xampp\tmp\phpB2CE.tmp, Error=0
+[2026-01-13 09:22:28] SUCCESS: Moved to ../uploads/bikes/bike_696600c3f3fc5.jpg
+[2026-01-13 09:22:28] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_696600c3f3fc5.jpg"]}
+[2026-01-13 09:22:29] Script started.
+[2026-01-13 09:22:29] Target Directory: C:\xampp\htdocs\motovista_backend/uploads/bikes/
+[2026-01-13 09:22:29] Processing 1 file(s).
+[2026-01-13 09:22:29] File 0: Name=1000091029.jpg, Tmp=C:\xampp\tmp\phpB6E6.tmp, Error=0
+[2026-01-13 09:22:29] SUCCESS: Moved to ../uploads/bikes/bike_696600c57fe72.jpg
+[2026-01-13 09:22:29] Sending success response: {"status":"success","message":"Images uploaded successfully","data":["uploads\/bikes\/bike_696600c57fe72.jpg"]}

@@ -1,0 +1,17 @@
+CREATE TABLE `user_fcm_tokens` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `user_type` enum('customer','admin') DEFAULT 'customer',
+  `fcm_token` text NOT NULL,
+  `device_name` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_user_type_token` (`user_id`,`user_type`,`fcm_token`(255))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+
+Current Data Count: 0
+Array
+(
+)
+

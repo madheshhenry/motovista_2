@@ -1,0 +1,45 @@
+Tables: admin_notifications, admins, ai_chat_logs, bike_models, bike_requests, bike_variants, bikes, brands, customer_notifications, customer_requests, customers, emi_ledgers, emi_payments, insurance_ledger, registration_ledger, registration_status, stock_bikes, user_fcm_tokens, users
+
+Table users:
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `full_name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `verification_token` varchar(255) DEFAULT NULL,
+  `is_verified` tinyint(1) DEFAULT 0,
+  `is_profile_completed` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `dob` varchar(20) DEFAULT NULL,
+  `house_no` varchar(50) DEFAULT NULL,
+  `street` varchar(100) DEFAULT NULL,
+  `city` varchar(50) DEFAULT NULL,
+  `state` varchar(50) DEFAULT NULL,
+  `pincode` varchar(10) DEFAULT NULL,
+  `pan_no` varchar(20) DEFAULT NULL,
+  `profile_image` varchar(255) DEFAULT NULL,
+  `aadhar_front` varchar(255) DEFAULT NULL,
+  `aadhar_back` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+
+Table admins:
+CREATE TABLE `admins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `otp` varchar(6) DEFAULT NULL,
+  `otp_expiry` datetime DEFAULT NULL,
+  `workflow_stage` varchar(50) DEFAULT NULL,
+  `active_order_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+

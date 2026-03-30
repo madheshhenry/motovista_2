@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardPreventCornerOverlap="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header: Name, Date, Status Badge -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvCustomerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                    android:text="Sarah Jenkins"
+                    android:textColor="#111718"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvRequestDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Today, 09:41 AM"
+                    android:textColor="#6b7280"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Status Badge -->
+            <LinearLayout
+                android:id="@+id/statusBadgeContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/pill_blue_light"
+                android:gravity="center_vertical"
+                android:paddingStart="10dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="4dp">
+
+                <View
+                    android:id="@+id/statusDot"
+                    android:layout_width="6dp"
+                    android:layout_height="6dp"
+                    android:background="@drawable/circle_blue" />
+
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="sans-serif-medium"
+                android:textStyle="bold"
+                    android:text="NEW"
+                    android:textColor="#1d4ed8"
+                    android:textSize="10sp"
+                    android:letterSpacing="0.05"
+                    android:textAllCaps="true" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#f3f4f6" />
+
+        <!-- Body: Bike Details -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvBikeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="Royal Enfield Classic 350"
+                android:textColor="#111718"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvBikeVariant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Halcyon Series • Dual Channel"
+                android:fontFamily="sans-serif"
+                android:textColor="#6b7280"
+                android:textSize="12sp" />
+
+            <!-- Color Badge -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/layoutBikeColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/pill_gray_outline"
+                    android:gravity="center_vertical"
+                    android:paddingStart="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="4dp">
+
+                    <View
+                         android:id="@+id/ivColorDot"
+                         android:layout_width="14dp"
+                         android:layout_height="14dp"
+                         android:background="@drawable/circle_green"/>
+
+                    <TextView
+                        android:id="@+id/tvBikeColor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Halcyon Green"
+                        android:textColor="#374151"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Footer: View Details Button -->
+        <LinearLayout
+            android:id="@+id/btnViewDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f9fafb"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingStart="16dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="View Details"
+                android:textColor="#4b5563"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/ic_chevron_right"
+                app:tint="#4b5563" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

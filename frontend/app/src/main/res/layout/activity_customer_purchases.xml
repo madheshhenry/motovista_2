@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:fitsSystemWindows="true">
+
+    <!-- Header -->
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/padding_medium"
+        android:paddingVertical="16dp"
+        android:background="@color/white"
+        android:elevation="2dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Back Button -->
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_arrow_back"
+            android:tint="@color/text_dark"
+            android:contentDescription="Back"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="My Purchases"
+            android:textColor="@color/text_dark"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center" />
+
+        <!-- Spacer to balance the layout -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+
+    <!-- Main Content -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:padding="@dimen/padding_medium"
+        app:layout_constraintTop_toBottomOf="@+id/header"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="100dp">
+
+            <!-- Purchase Item 1 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardPurchase1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/padding_medium">
+
+                    <!-- Bike Image -->
+                    <RelativeLayout
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginEnd="@dimen/padding_medium">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_bike_placeholder"
+                            android:scaleType="centerCrop"
+                            android:background="@color/gray_200"
+                            android:contentDescription="Royal Enfield Classic 350"
+                            android:clipToOutline="true" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/rounded_corner_8dp" />
+
+                    </RelativeLayout>
+
+                    <!-- Bike Details -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <!-- Bike Name -->
+                        <TextView
+                            android:id="@+id/tvBikeName1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Royal Enfield Classic 350"
+                            android:textColor="@color/text_dark"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <!-- Purchase Date -->
+                        <TextView
+                            android:id="@+id/tvPurchaseDate1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Purchased: 15 Oct 2023"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif"
+                            android:layout_marginTop="2dp" />
+
+                        <!-- Price -->
+                        <TextView
+                            android:id="@+id/tvPrice1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="₹ 2,25,000"
+                            android:textColor="@color/primary_color"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginTop="4dp" />
+
+                    </LinearLayout>
+
+                    <!-- Arrow -->
+                    <ImageView
+                        android:id="@+id/btnViewDetails1"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:tint="@color/gray_400"
+                        android:contentDescription="View Details"
+                        android:padding="4dp"
+                        android:background="?attr/selectableItemBackgroundBorderless" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Purchase Item 2 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardPurchase2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                android:layout_marginBottom="@dimen/padding_medium"
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/padding_medium">
+
+                    <!-- Bike Image -->
+                    <RelativeLayout
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginEnd="@dimen/padding_medium">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_bike_placeholder"
+                            android:scaleType="centerCrop"
+                            android:background="@color/gray_200"
+                            android:contentDescription="Yamaha R15 V4"
+                            android:clipToOutline="true" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/rounded_corner_8dp" />
+
+                    </RelativeLayout>
+
+                    <!-- Bike Details -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <!-- Bike Name -->
+                        <TextView
+                            android:id="@+id/tvBikeName2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Yamaha R15 V4"
+                            android:textColor="@color/text_dark"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <!-- Purchase Date -->
+                        <TextView
+                            android:id="@+id/tvPurchaseDate2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Purchased: 22 May 2022"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif"
+                            android:layout_marginTop="2dp" />
+
+                        <!-- Price -->
+                        <TextView
+                            android:id="@+id/tvPrice2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="₹ 1,98,000"
+                            android:textColor="@color/primary_color"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginTop="4dp" />
+
+                    </LinearLayout>
+
+                    <!-- Arrow -->
+                    <ImageView
+                        android:id="@+id/btnViewDetails2"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:tint="@color/gray_400"
+                        android:contentDescription="View Details"
+                        android:padding="4dp"
+                        android:background="?attr/selectableItemBackgroundBorderless" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Purchase Item 3 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardPurchase3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                android:background="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/padding_medium">
+
+                    <!-- Bike Image -->
+                    <RelativeLayout
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginEnd="@dimen/padding_medium">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_bike_placeholder"
+                            android:scaleType="centerCrop"
+                            android:background="@color/gray_200"
+                            android:contentDescription="TVS Apache RTR 160"
+                            android:clipToOutline="true" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/rounded_corner_8dp" />
+
+                    </RelativeLayout>
+
+                    <!-- Bike Details -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <!-- Bike Name -->
+                        <TextView
+                            android:id="@+id/tvBikeName3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TVS Apache RTR 160"
+                            android:textColor="@color/text_dark"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <!-- Purchase Date -->
+                        <TextView
+                            android:id="@+id/tvPurchaseDate3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Purchased: 10 Jan 2021"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif"
+                            android:layout_marginTop="2dp" />
+
+                        <!-- Price -->
+                        <TextView
+                            android:id="@+id/tvPrice3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="₹ 1,35,000"
+                            android:textColor="@color/primary_color"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginTop="4dp" />
+
+                    </LinearLayout>
+
+                    <!-- Arrow -->
+                    <ImageView
+                        android:id="@+id/btnViewDetails3"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_chevron_right"
+                        android:tint="@color/gray_400"
+                        android:contentDescription="View Details"
+                        android:padding="4dp"
+                        android:background="?attr/selectableItemBackgroundBorderless" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Empty State (Visible when no purchases) -->
+            <LinearLayout
+                android:id="@+id/emptyState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="@dimen/padding_large"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:src="@drawable/ic_empty_cart"
+                    android:contentDescription="No Purchases"
+                    android:tint="@color/gray_400" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No Purchases Yet"
+                    android:textColor="@color/text_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginTop="@dimen/padding_medium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Your purchased bikes will appear here"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Navigation (same as other screens) -->
+    <LinearLayout
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:elevation="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Home Tab -->
+        <LinearLayout
+            android:id="@+id/tabHome"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/ivHome"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_home_filled"
+                android:tint="@color/gray_400"
+                android:contentDescription="Home" />
+
+            <TextView
+                android:id="@+id/tvHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="@color/gray_400"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- Bikes Tab -->
+        <LinearLayout
+            android:id="@+id/tabBikes"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/ivBikes"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_two_wheeler"
+                android:tint="@color/gray_400"
+                android:contentDescription="Bikes" />
+
+            <TextView
+                android:id="@+id/tvBikes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bikes"
+                android:textColor="@color/gray_400"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- EMI Calculator Tab -->
+        <LinearLayout
+            android:id="@+id/tabEmiCalculator"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/ivEmiCalculator"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_calculate"
+                android:tint="@color/gray_400"
+                android:contentDescription="EMI Calculator" />
+
+            <TextView
+                android:id="@+id/tvEmiCalculator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EMI Calculator"
+                android:textColor="@color/gray_400"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- Orders Tab -->
+        <LinearLayout
+            android:id="@+id/tabOrders"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/ivOrders"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_receipt_long"
+                android:tint="@color/gray_400"
+                android:contentDescription="Orders" />
+
+            <TextView
+                android:id="@+id/tvOrders"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Orders"
+                android:textColor="@color/gray_400"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- Profile Tab -->
+        <LinearLayout
+            android:id="@+id/tabProfile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_person"
+                android:tint="@color/gray_400"
+                android:contentDescription="Profile" />
+
+            <TextView
+                android:id="@+id/tvProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                android:textColor="@color/gray_400"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

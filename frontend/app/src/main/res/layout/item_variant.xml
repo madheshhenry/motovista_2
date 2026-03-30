@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/bg_card_new"
+    android:layout_marginBottom="16dp">
+
+    <!-- Variant Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingBottom="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_bottom_border">
+        
+        <TextView
+            android:id="@+id/tvVariantTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Variant #1"
+            android:textStyle="bold"
+            android:textColor="#111318"
+            android:textSize="16sp"/>
+
+        <LinearLayout
+            android:id="@+id/btnRemoveVariant"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_delete"
+                app:tint="@color/red_500"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remove"
+                android:textColor="@color/red_500"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginStart="4dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Variant Name -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Variant Name"
+            android:textSize="12sp"
+            android:textColor="@color/gray_500"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:layout_marginBottom="6dp"/>
+        <EditText
+            android:id="@+id/etVariantName"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_input_new"
+            android:paddingHorizontal="16dp"
+            android:textSize="14sp"
+            android:hint="Standard"
+            android:textColor="#111318"/>
+    </LinearLayout>
+
+    <!-- Pricing Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="8dp">
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_payments"
+                app:tint="@color/gray_500"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pricing (₹)"
+                android:textSize="12sp"
+                android:textColor="@color/gray_500"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:layout_marginStart="4dp"/>
+        </LinearLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:useDefaultMargins="false">
+
+            <EditText
+                android:id="@+id/etExShowroom"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_columnWeight="1"
+                android:background="@drawable/bg_input_new"
+                android:paddingHorizontal="16dp"
+                android:textSize="14sp"
+                android:hint="Ex-showroom"
+                android:inputType="number"
+                android:textColor="#111318"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="12dp"/>
+            
+            <EditText
+                android:id="@+id/etInsurance"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_columnWeight="1"
+                android:background="@drawable/bg_input_new"
+                android:paddingHorizontal="16dp"
+                android:textSize="14sp"
+                android:hint="Insurance"
+                android:inputType="number"
+                android:textColor="#111318"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="12dp"/>
+
+            <EditText
+                android:id="@+id/etRegistration"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_columnWeight="1"
+                android:background="@drawable/bg_input_new"
+                android:paddingHorizontal="16dp"
+                android:textSize="14sp"
+                android:hint="Registration"
+                android:inputType="number"
+                android:textColor="#111318"
+                android:layout_marginEnd="8dp"/>
+
+            <EditText
+                android:id="@+id/etLTRT"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_columnWeight="1"
+                android:background="@drawable/bg_input_new"
+                android:paddingHorizontal="16dp"
+                android:textSize="14sp"
+                android:hint="LTRT"
+                android:inputType="number"
+                android:textColor="#111318"
+                android:layout_marginStart="8dp"/>
+        </GridLayout>
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_primary_light"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:layout_marginTop="12dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total On-road Price"
+                android:textColor="@color/primary_blue"
+                android:textStyle="bold"
+                android:textSize="14sp"/>
+            <TextView
+                android:id="@+id/tvTotalOnRoad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹ 0.00"
+                android:textColor="@color/primary_blue"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Brake & Wheel -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Brake &amp; Wheel"
+            android:textSize="12sp"
+            android:textColor="@color/gray_500"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:layout_marginBottom="12dp"/>
+            
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:useDefaultMargins="false">
+
+            <Spinner
+                android:id="@+id/spinnerFrontBrake"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_columnWeight="1"
+                android:background="@drawable/bg_input_new"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="12dp"/>
+                
+            <Spinner
+                android:id="@+id/spinnerRearBrake"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_columnWeight="1"
+                android:background="@drawable/bg_input_new"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="12dp"/>
+
+            <Spinner
+                android:id="@+id/spinnerABS"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_columnWeight="1"
+                android:background="@drawable/bg_input_new"
+                android:layout_marginEnd="8dp"/>
+                
+            <Spinner
+                android:id="@+id/spinnerWheels"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_columnWeight="1"
+                android:background="@drawable/bg_input_new"
+                android:layout_marginStart="8dp"/>
+        </GridLayout>
+    </LinearLayout>
+
+    <!-- Colors & Media -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Colors &amp; Media"
+            android:textSize="12sp"
+            android:textColor="@color/gray_500"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:layout_marginBottom="12dp"/>
+        
+        <LinearLayout
+            android:id="@+id/variantColorsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+            
+        <Button
+            android:id="@+id/btnAddColor"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Add Another Color"
+            android:textColor="@color/primary_blue"
+            android:backgroundTint="@color/white"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            app:strokeColor="@color/primary_blue_alpha_30"
+            app:icon="@drawable/ic_palette"
+            app:iconTint="@color/primary_blue"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,16 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+synthetic_ocr_dataset/
+backend/ai/OCR_AI/venv/
+backend/ai/OCR_AI/venv_ocr/
+backend/ai/OCR_AI/ocr_training/checkpoints/
+backend/ai/OCR_AI/ocr_training/backups/
+backend/ai/OCR_AI/ocr_training/logs/
+node_modules/
+.DS_Store
+*.log

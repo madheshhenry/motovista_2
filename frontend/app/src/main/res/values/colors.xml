@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Our Custom Colors -->
+    <!-- Our Custom Colors -->
+    <color name="primary_color">#13a4ec</color>
+    <color name="primary_light">#2013a4ec</color>
+    <color name="background_light">#f6f7f8</color>
+    <color name="text_dark">#111618</color>
+    <color name="text_gray">#555555</color>
+    <color name="text_light_gray">#888888</color>
+    <color name="border_color">#FFDBE4E6</color>
+    <color name="text_admin">#FF618389</color>
+
+    <!-- ADD THESE MISSING COLORS -->
+    <color name="primary">#13C8EC</color>
+    <color name="content_light">#FFFFFF</color>
+
+    <!-- Premium Automotive Palette -->
+    <color name="charcoal_dark">#0F172A</color>
+    <color name="charcoal_light">#1E293B</color>
+    <color name="glow_blue">#3338BDF8</color>
+    <color name="glass_white">#1AFFFFFF</color>
+    <color name="hero_glow_start">#2638BDF8</color>
+    <color name="hero_glow_end">#00000000</color>
+
+    <color name="card_background">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="semi_transparent_black">#80000000</color>
+    <color name="semi_transparent_white">#80FFFFFF</color>
+    <color name="teal">#FF008080</color>
+    <color name="input_light">#FFF5F5F7</color>
+    <color name="placeholder_light">#FF8A8A8E</color>
+
+    <!-- Admin colors -->
+    <color name="admin_primary">#FF13C8EC</color>
+    <color name="admin_primary_light">#3313C8EC</color>
+    <color name="input_border">#FFDBE4E6</color>
+    <color name="input_border_dark">#FF374151</color>
+    <color name="text_secondary">#FF618389</color>
+    <color name="text_secondary_dark">#FF9CA3AF</color>
+    <color name="card_bg">#FFFFFFFF</color>
+    <color name="card_bg_dark">#FF1F2937</color>
+
+    <!-- Gray shades -->
+    <color name="gray_200">#E5E7EB</color>
+    <color name="gray_300">#D1D5DB</color>
+    <color name="gray_400">#9CA3AF</color>
+    <color name="gray_500">#6B7280</color>
+    <color name="gray_600">#4B5563</color>
+    <color name="gray_800">#1F2937</color>
+
+    <!-- Dark theme colors -->
+    <color name="background_dark">#101F22</color>
+    <color name="zinc_800">#27272A</color>
+    <color name="zinc_900">#18181B</color>
+
+    <!-- Icon background colors -->
+    <color name="icon_bg_red">#33EF4444</color>
+    <color name="icon_bg_yellow">#33F59E0B</color>
+    <color name="icon_bg_blue">#333B82F6</color>
+    <color name="icon_bg_green">#3322C55E</color>
+    <color name="icon_bg_purple">#338B5CF6</color>
+    <color name="icon_bg_indigo">#334F46E6</color>
+
+    <!-- Icon colors -->
+    <color name="icon_red">#EF4444</color>
+    <color name="icon_yellow">#F59E0B</color>
+    <color name="icon_blue">#3B82F6</color>
+    <color name="icon_green">#22C55E</color>
+    <color name="icon_purple">#8B5CF6</color>
+    <color name="icon_indigo">#4F46E5</color>
+
+    <!-- Text colors -->
+    <color name="text_primary_dark">#FFFFFF</color>
+    <color name="text_primary_light">#333333</color>
+    <color name="text_secondary_light">#8E8E93</color>
+    <!-- Add these to your existing colors.xml -->
+    <color name="gray_700">#374151</color>
+    <color name="border_gray">#D1D5DB</color>
+    <color name="gray_900">#111827</color>
+
+    <color name="icon_bg_red_light">#FFEF9A9A</color>
+    <color name="icon_bg_green_light">#FFA5D6A7</color>
+
+    <color name="gray_50">#FAFAFA</color>
+    <color name="gray_100">#F5F5F5</color>
+    <color name="primary_dark">#3700B3</color>
+
+    <color name="error">#B00020</color>
+    <color name="error_light">#FFCDD2</color>
+
+    <color name="accent_color">#FFC72C</color>
+
+    <color name="accent_orange">#ff9f43</color>
+    <color name="card_background_light">#FFFFFFFF</color>
+    <color name="card_background_dark">#FF1F2937</color>
+
+    <color name="light_blue_50">#E0F7FA</color>
+    <color name="light_blue_100">#B2EBF2</color>
+    <color name="light_gray_50">#F0F4F8</color>
+    <color name="light_gray_100">#DDE5ED</color>
+    <color name="green_50">#E8F5E9</color>
+
+    <color name="icon_orange">#F97316</color>
+
+    <color name="green_500">#22C55E</color>
+    <color name="red_100">#FEE2E2</color>
+    <color name="red_200">#FECACA</color>
+    <color name="red_500">#EF4444</color>
+    <color name="red_600">#DC2626</color>
+    <color name="red_800">#991B1B</color>
+
+    <color name="amber_100">#FEF3C7</color>
+    <color name="amber_200">#FDE68A</color>
+    <color name="amber_600">#D97706</color>
+    <color name="amber_800">#92400E</color>
+
+    <color name="green_800">#166534</color>
+
+    <color name="green_100">#DCFCE7</color>
+    <color name="green_200">#BBF7D0</color>
+
+    <color name="primary_blue">#13a4ec</color>
+    <color name="primary_blue_alpha_30">#4D13A4EC</color>
+
+    <color name="divider">#E0E0E0</color>
+
+    <!-- EMI Details Screen Colors -->
+    <color name="emi_primary_blue">#007AFF</color>
+    <color name="emi_racing_blue">#0054B4</color>
+    <color name="emi_soft_grey">#F2F2F7</color>
+    <color name="emi_border_grey">#E5E5EA</color>
+    <color name="emi_text_main">#1C1C1E</color>
+    <color name="emi_text_muted">#8E8E93</color>
+    <color name="emi_success_green">#34C759</color>
+    <color name="emi_warning_amber">#FF9500</color>
+    <color name="emi_primary">#137fec</color>
+    <color name="emi_accent_green">#E9F7EF</color>
+    <color name="emi_background_light">#f6f7f8</color>
+    <color name="emi_background_dark">#101922</color>
+    <color name="emi_accent_blue">#E7F2FD</color>
+    <color name="emi_accent_yellow">#FFF9E6</color>
+    <color name="emi_accent_red">#FEECEB</color>
+
+    <!-- Missing resources for midnight/premium themes -->
+    <color name="badge_bg_midnight">#1E293B</color>
+    <color name="divider_line">#334155</color>
+    <color name="surface_card_highlight">#242B3D</color>
+    <color name="gradient_start">#13C8EC</color>
+    <color name="gradient_end">#007AFF</color>
+    <color name="theme_background">#1A1F2C</color>
+
+    <!-- Additional core colors -->
+    <color name="surface_variant">#E1E2EC</color>
+    <color name="secondary">#5F5E7D</color>
+    <color name="accent">#FFC72C</color>
+    <color name="on_surface_variant">#44474E</color>
+
+    <!-- Missing resources for Premium/Midnight/UI Palette -->
+    <color name="surface_card">#1E293B</color>
+    <color name="surface_light">#1E293B</color>
+    <color name="surface_divider">#334155</color>
+    <color name="brand_primary">#38BDF8</color>
+    <color name="brand_primary_light">#1A38BDF8</color>
+    <color name="primary_500">#0EA5E9</color>
+    <color name="primary_600">#38BDF8</color>
+    <color name="primary_20">#3338BDF8</color>
+    <color name="surface_variant_light">#334155</color>
+    <color name="brand_primary_variant">#0EA5E9</color>
+    <color name="surface_divider_dark">#334155</color>
+    <color name="surface_card_dark">#1E293B</color>
+
+    <!-- UI Palette Set (Restored for Drawables/Layouts) -->
+    <color name="primary_700">#7DD3FC</color>
+    <color name="primary_200">#075985</color>
+    <color name="text_primary">#111827</color>
+    <color name="primary_50">#082F49</color>
+    <color name="primary_100">#0C4A6E</color>
+    <color name="primary_300">#0369A1</color>
+    <color name="primary_400">#0284C7</color>
+    <color name="primary_800">#BAE6FD</color>
+    <color name="primary_900">#E0F2FE</color>
+
+
+</resources>

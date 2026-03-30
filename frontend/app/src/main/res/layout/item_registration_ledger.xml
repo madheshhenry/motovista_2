@@ -1,0 +1,262 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="1dp"
+    app:cardBackgroundColor="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Left Status Accent Line -->
+        <View
+            android:id="@+id/statusAccent"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/mainContent"
+            android:layout_alignBottom="@id/mainContent"
+            android:background="#22c55e" /> <!-- Green for completed by default -->
+
+        <LinearLayout
+            android:id="@+id/mainContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/statusAccent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="top">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvCustomerName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Customer Name"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="#111418" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="4dp">
+
+                        <ImageView
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@drawable/ic_call"
+                            app:tint="#6b7280" />
+
+                        <TextView
+                            android:id="@+id/tvPhoneNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:text="+91 98765 43210"
+                            android:textSize="13sp"
+                            android:textColor="#6b7280"
+                            android:fontFamily="sans-serif-medium" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_chevron_right"
+                    app:tint="#D1D5DB" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvBikeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Honda Shine 125 • Black"
+                android:textSize="14sp"
+                android:textColor="#1f2937"
+                android:fontFamily="sans-serif-medium" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ENGINE NO:"
+                    android:textSize="10sp"
+                    android:textColor="#6b7280"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:id="@+id/tvEngineNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:background="#f3f4f6"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:text="ENG88292910"
+                    android:textSize="10sp"
+                    android:textColor="#374151"
+                    android:fontFamily="monospace" />
+                
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="2023-10-24"
+                    android:textSize="10sp"
+                    android:textColor="#9ca3af" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f3f4f6"
+                android:layout_marginTop="16dp" />
+
+            <!-- Status Grid -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:gravity="center">
+
+                <!-- Insurance -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/ivStatus1"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/circle_shape"
+                        android:backgroundTint="#f0fdf4"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_health_safety"
+                        app:tint="#16a34a" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Insured"
+                        android:textSize="10sp"
+                        android:textColor="#6b7280"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <!-- RC -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/ivStatus2"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/circle_shape"
+                        android:backgroundTint="#f0fdf4"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_menu_book"
+                        app:tint="#16a34a" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="RC Book"
+                        android:textSize="10sp"
+                        android:textColor="#6b7280"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <!-- Plate -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/ivStatus3"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/circle_shape"
+                        android:backgroundTint="#fff7ed"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_confirmation_number"
+                        app:tint="#ea580c" />
+
+                    <TextView
+                        android:id="@+id/tvStatus3Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Pending"
+                        android:textSize="10sp"
+                        android:textColor="#ea580c"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <!-- Verification -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/ivStatus4"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/circle_shape"
+                        android:backgroundTint="#f0fdf4"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_verified_user"
+                        app:tint="#16a34a" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Verified"
+                        android:textSize="10sp"
+                        android:textColor="#6b7280"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

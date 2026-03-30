@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_light"
+    tools:context=".AddBikeActivity">
+
+    <!-- Sticky Header -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:elevation="2dp"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="#111318"
+            android:background="?attr/selectableItemBackgroundBorderless"/>
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Add Bike &amp; Variants"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textColor="#111318"/>
+             <!-- Spacer to balance title -->
+         <View android:layout_width="40dp" android:layout_height="40dp"/>
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
+        android:layout_above="@id/bottomButtons"
+        android:fillViewport="true"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:paddingBottom="32dp">
+
+            <!-- Section 1: Master Model Details -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Master Model Details"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#111318"
+                android:layout_marginBottom="12dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_new"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+                
+                <!-- Brand -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginBottom="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Brand" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                    <EditText android:id="@+id/etBrand" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="Select or Type Brand" android:textColor="#111318"/>
+                </LinearLayout>
+                
+                <!-- Model Name -->
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginBottom="16dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Model Name" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                    <EditText android:id="@+id/etModel" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="e.g. Super Sport 600" android:textColor="#111318"/>
+                </LinearLayout>
+
+                <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:useDefaultMargins="false">
+                    <!-- Year -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginEnd="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Model Year" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <Spinner android:id="@+id/spinnerYear" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new"/>
+                    </LinearLayout>
+                    <!-- Engine -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginStart="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Engine CC" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                         <EditText android:id="@+id/etEngineCC" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="600" android:inputType="number" android:textColor="#111318"/>
+                    </LinearLayout>
+                    
+                    <!-- Fuel -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginEnd="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fuel Type" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <Spinner android:id="@+id/spinnerFuelType" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new"/>
+                    </LinearLayout>
+                    <!-- Transmission -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginStart="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Transmission" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <Spinner android:id="@+id/spinnerTransmission" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new"/>
+                    </LinearLayout>
+                    
+                    <!-- Mileage -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginEnd="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mileage" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <EditText android:id="@+id/etMileage" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="kmpl" android:inputType="number" android:textColor="#111318"/>
+                    </LinearLayout>
+                    <!-- Tank -->
+                     <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginStart="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Fuel Tank" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <EditText android:id="@+id/etFuelTank" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="Litres" android:inputType="number" android:textColor="#111318"/>
+                    </LinearLayout>
+
+                     <!-- Kerb Weight -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginEnd="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kerb Weight" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <EditText android:id="@+id/etKerbWeight" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="kg" android:inputType="number" android:textColor="#111318"/>
+                    </LinearLayout>
+                     <!-- Seat Height -->
+                     <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginStart="8dp" android:layout_marginBottom="16dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Seat Height" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <EditText android:id="@+id/etSeatHeight" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="mm" android:inputType="number" android:textColor="#111318"/>
+                    </LinearLayout>
+
+                    <!-- Max Torque -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginEnd="8dp" android:layout_marginBottom="0dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Max Torque" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <EditText android:id="@+id/etMaxTorque" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="e.g. 64 Nm" android:textColor="#111318"/>
+                    </LinearLayout>
+                     <!-- Ground Clearance -->
+                     <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginStart="8dp" android:layout_marginBottom="0dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Ground Clearance" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                        <EditText android:id="@+id/etGroundClearance" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="mm" android:inputType="number" android:textColor="#111318"/>
+                    </LinearLayout>
+                </GridLayout>
+            </LinearLayout>
+
+            <!-- Section 2: Variants -->
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:orientation="horizontal"
+                 android:gravity="center_vertical"
+                 android:layout_marginBottom="12dp">
+                 <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Variants"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#111318"/>
+                 <TextView
+                     android:id="@+id/tvVariantCount"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:text="1 Variant Added"
+                     android:textStyle="bold"
+                     android:textSize="12sp"
+                     android:textColor="@color/primary_blue"
+                     android:background="@drawable/bg_badge_blue"
+                     android:paddingHorizontal="8dp"
+                     android:paddingVertical="4dp"
+                     android:textAllCaps="true"/>
+             </LinearLayout>
+            
+            <LinearLayout
+                android:id="@+id/variantsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:animateLayoutChanges="true"/>
+
+             <Button
+                android:id="@+id/btnAddVariant"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Add Another Variant"
+                android:background="@drawable/bg_dashed_border_new"
+                android:textColor="@color/primary_blue"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_add_circle"
+                app:iconTint="@color/primary_blue"
+                app:iconGravity="textStart"
+                android:layout_marginBottom="32dp"/>
+
+            <!-- Section 3: Warranty & Fittings -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_new"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Warranty &amp; Service"
+                    android:textStyle="bold"
+                    android:textColor="#111318"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="16dp"/>
+
+                 <GridLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:columnCount="2" android:useDefaultMargins="false">
+                     <!-- Warranty -->
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginEnd="8dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Warranty Period" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                         <Spinner android:id="@+id/spinnerWarranty" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new"/>
+                    </LinearLayout>
+                     <!-- Free Services -->
+                     <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_columnWeight="1" android:orientation="vertical" android:layout_marginStart="8dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Free Services" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                         <EditText android:id="@+id/etFreeServices" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="3" android:inputType="number" android:textColor="#111318"/>
+                    </LinearLayout>
+                 </GridLayout>
+                 
+                  <!-- Date -->
+                  <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical" android:layout_marginTop="16dp">
+                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Date" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                         <EditText android:id="@+id/etDate" android:layout_width="match_parent" android:layout_height="48dp" android:background="@drawable/bg_input_new" android:paddingHorizontal="16dp" android:textSize="14sp" android:hint="Select Date" android:focusable="false" android:textColor="#111318"/>
+                     </LinearLayout>
+            </LinearLayout>
+
+            <!-- Mandatory Fittings -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_new"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_settings" app:tint="@color/primary_blue" android:layout_marginEnd="8dp"/>
+                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mandatory Fittings" android:textStyle="bold" android:textColor="#111318" android:textSize="16sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/mandatoryFittingsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+            </LinearLayout>
+
+            <!-- Additional Fittings -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_new"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_grid_view" app:tint="@color/primary_blue" android:layout_marginEnd="8dp"/>
+                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Additional Fittings (Optional)" android:textStyle="bold" android:textColor="#111318" android:textSize="16sp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/additionalFittingsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+
+                 <Button
+                    android:id="@+id/btnAddCustomFitting"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="Add Custom Fitting"
+                    android:textAllCaps="false"
+                    android:textColor="@color/primary_blue"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_dashed_border_new"
+                    app:icon="@drawable/ic_add"
+                    app:iconTint="@color/primary_blue"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- Invoice Legal Notes -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_new"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginBottom="24dp">
+                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="16dp">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:src="@drawable/ic_description" app:tint="@color/primary_blue" android:layout_marginEnd="8dp"/>
+                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Invoice Legal Notes" android:textStyle="bold" android:textColor="#111318" android:textSize="16sp"/>
+                </LinearLayout>
+
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Registration &amp; Address Proof" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                <EditText
+                    android:id="@+id/etRegistrationProof"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minLines="3"
+                    android:gravity="top|start"
+                    android:background="@drawable/bg_input_new"
+                    android:padding="16dp"
+                    android:text="For registration purpose any one of the following is required in ORIGINAL &amp; XEROX for Address Proof: Aadhar Card, LIC Policy, Passport, GST, Voter ID, PAN Card"
+                    android:textSize="14sp"
+                    android:textColor="#111318"
+                    android:layout_marginBottom="16dp"/>
+                    
+                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Price Disclaimer" android:textSize="12sp" android:textColor="@color/gray_500" android:textStyle="bold" android:layout_marginBottom="6dp"/>
+                <EditText
+                    android:id="@+id/etPriceDisclaimer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minLines="2"
+                    android:gravity="top|start"
+                    android:background="@drawable/bg_input_new"
+                    android:padding="16dp"
+                    android:text="Price &amp; taxes ruling at the time of delivery will be applicable."
+                    android:textSize="14sp"
+                    android:textColor="#111318"/>
+            </LinearLayout>
+
+            <!-- Bank Details -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_new"
+                android:orientation="vertical"
+                android:padding="16dp">
+                
+                  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginBottom="12dp">
+                      <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Showroom Bank Details" android:textStyle="bold" android:textSize="16sp" android:textColor="#111318"/>
+                      <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="READ ONLY" android:textSize="10sp" android:background="@drawable/bg_badge_gray" android:paddingHorizontal="6dp" android:paddingVertical="4dp" android:textColor="@color/gray_500" android:textStyle="bold" android:textAllCaps="true"/>
+                  </LinearLayout>
+
+                  <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:background="@drawable/bg_input_new"
+                      android:padding="16dp"
+                      android:orientation="vertical"
+                      android:backgroundTint="#F0F4F8">
+                      
+                      <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+                          <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Account Name:" android:textSize="12sp" android:textColor="@color/gray_500"/>
+                           <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="City Motors Private Limited" android:textSize="12sp" android:textStyle="bold" android:textColor="#111318"/>
+                      </LinearLayout>
+                       <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+                          <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Account Number:" android:textSize="12sp" android:textColor="@color/gray_500"/>
+                           <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="00429940003212" android:textSize="12sp" android:textStyle="bold" android:textColor="#111318"/>
+                      </LinearLayout>
+                       <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
+                          <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="IFSC Code:" android:textSize="12sp" android:textColor="@color/gray_500"/>
+                           <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="HDFC0000042" android:textSize="12sp" android:textStyle="bold" android:textColor="#111318"/>
+                      </LinearLayout>
+                       <LinearLayout android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="wrap_content">
+                          <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Bank &amp; Branch:" android:textSize="12sp" android:textColor="@color/gray_500"/>
+                           <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="HDFC Bank, Downtown Branch" android:textSize="12sp" android:textStyle="bold" android:textColor="#111318"/>
+                      </LinearLayout>
+                  </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+     <!-- Footer -->
+    <LinearLayout
+        android:id="@+id/bottomButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:padding="16dp"
+        android:elevation="16dp">
+
+        <Button
+            android:id="@+id/btnSaveBike"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Save Bike Model"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/primary_blue"
+            android:textStyle="bold"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_save"
+            app:iconGravity="textStart"
+            android:elevation="4dp"/>
+    </LinearLayout>
+
+</RelativeLayout>

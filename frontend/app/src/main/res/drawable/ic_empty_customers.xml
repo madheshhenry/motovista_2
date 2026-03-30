@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+    <path
+        android:fillColor="@color/gray_300"
+        android:pathData="M60,20c22.1,0 40,17.9 40,40s-17.9,40 -40,40 -40,-17.9 -40,-40 17.9,-40 40,-40m0,-10c-27.6,0 -50,22.4 -50,50s22.4,50 50,50 50,-22.4 50,-50 -22.4,-50 -50,-50z" />
+    <path
+        android:fillColor="@color/gray_300"
+        android:pathData="M60,40c11,0 20,9 20,20s-9,20 -20,20 -20,-9 -20,-20 9,-20 20,-20m0,-10c-16.6,0 -30,13.4 -30,30s13.4,30 30,30 30,-13.4 30,-30 -13.4,-30 -30,-30z" />
+    <path
+        android:fillColor="@color/gray_300"
+        android:pathData="M40,80c0,11 -9,20 -20,20s-20,-9 -20,-20 9,-20 20,-20 20,9 20,20z" />
+    <path
+        android:fillColor="@color/gray_300"
+        android:pathData="M120,80c0,11 -9,20 -20,20s-20,-9 -20,-20 9,-20 20,-20 20,9 20,20z" />
+    <path
+        android:fillColor="@color/gray_300"
+        android:pathData="M60,80c0,0 0,10 0,10 0,5.5 -4.5,10 -10,10s-10,-4.5 -10,-10c0,0 0,-10 0,-10 0,-5.5 4.5,-10 10,-10s10,4.5 10,10z" />
+    <path
+        android:fillColor="@color/gray_300"
+        android:pathData="M80,80c0,0 0,10 0,10 0,5.5 -4.5,10 -10,10s-10,-4.5 -10,-10c0,0 0,-10 0,-10 0,-5.5 4.5,-10 10,-10s10,4.5 10,10z" />
+</vector>

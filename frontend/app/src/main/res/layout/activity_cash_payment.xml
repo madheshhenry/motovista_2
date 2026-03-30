@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_light"
+    android:fitsSystemWindows="true">
+
+    <!-- Top App Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:padding="@dimen/padding_medium"
+        android:paddingBottom="8dp"
+        android:gravity="center_vertical"
+        android:elevation="4dp">
+
+        <!-- Back Button -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            android:background="?attr/selectableItemBackgroundBorderless">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@color/text_dark"
+                android:contentDescription="Back" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cash Payment"
+            android:textColor="@color/text_dark"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:layout_marginEnd="48dp" />
+
+    </LinearLayout>
+
+    <!-- Main Scrollable Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingBottom="100dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Order Summary Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_medium"
+                android:paddingBottom="@dimen/padding_small">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:layout_marginBottom="@dimen/padding_small">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_receipt"
+                        android:tint="@color/text_secondary"
+                        android:layout_marginEnd="12dp"
+                        android:contentDescription="Receipt" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ORDER SUMMARY"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif"
+                        android:letterSpacing="0.05" />
+
+                </LinearLayout>
+
+                <!-- Financial Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <!-- Vehicle Details -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/padding_large"
+                        android:background="?attr/selectableItemBackground">
+
+                        <!-- Bike Image Placeholder -->
+                        <LinearLayout
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:background="@color/gray_200"
+                            android:gravity="center"
+                            android:layout_marginEnd="@dimen/padding_medium"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:src="@drawable/ic_motorcycle"
+                                android:tint="@color/gray_500"
+                                android:contentDescription="Motorcycle" />
+
+                        </LinearLayout>
+
+                        <!-- Vehicle Info -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Vehicle Model"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp"
+                                android:fontFamily="sans-serif"
+                                android:layout_marginBottom="4dp" />
+
+                            <TextView
+                                android:id="@+id/tvVehicleModel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Royal Enfield Classic 350"
+                                android:textColor="@color/text_dark"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-medium"
+                                android:maxLines="1"
+                                android:ellipsize="end" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Gunmetal Grey • Dual Channel"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp"
+                                android:fontFamily="sans-serif"
+                                android:layout_marginTop="2dp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_200" />
+
+                    <!-- Price Details -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_large"
+                        android:background="@color/gray_200">
+
+                        <!-- Total Bike Price -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="16dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Total Bike Price"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="14sp"
+                                android:fontFamily="sans-serif-medium" />
+
+                            <TextView
+                                android:id="@+id/tvTotalPrice"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="₹ 1,50,000"
+                                android:textColor="@color/text_dark"
+                                android:textSize="14sp"
+                                android:fontFamily="sans-serif-medium" />
+
+                        </LinearLayout>
+
+                        <!-- Dashed Divider -->
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@drawable/dashed_divider"
+                            android:layout_marginBottom="16dp" />
+
+                        <!-- Amount to be Paid -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Amount to be Paid"
+                                android:textColor="@color/text_dark"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-medium" />
+
+                            <TextView
+                                android:id="@+id/tvAmountToPay"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="₹ 1,50,000"
+                                android:textColor="@color/primary"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-medium" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <!-- Payment Mode Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_medium"
+                android:paddingTop="0dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SELECT PAYMENT MODE"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif"
+                    android:letterSpacing="0.05"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Payment Options - Simple LinearLayout instead of GridLayout -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:weightSum="3">
+
+                    <!-- Cash Option -->
+                    <LinearLayout
+                        android:id="@+id/optionCash"
+                        android:layout_width="0dp"
+                        android:layout_height="96dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="4dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/payment_option_bg"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_payments"
+                            android:tint="@color/gray_400"
+                            android:layout_marginBottom="8dp"
+                            android:contentDescription="Cash" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cash"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <!-- Checkmark - initially hidden -->
+                        <ImageView
+                            android:id="@+id/checkCash"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_check_circle"
+                            android:tint="@color/primary"
+                            android:visibility="visible"
+                            android:layout_marginTop="4dp"
+                            android:contentDescription="Selected" />
+
+                    </LinearLayout>
+
+                    <!-- GPay Option -->
+                    <LinearLayout
+                        android:id="@+id/optionGPay"
+                        android:layout_width="0dp"
+                        android:layout_height="96dp"
+                        android:layout_weight="1"
+                        android:layout_marginHorizontal="4dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/payment_option_bg"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_smartphone"
+                            android:tint="@color/gray_400"
+                            android:layout_marginBottom="8dp"
+                            android:contentDescription="GPay" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="GPay"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <ImageView
+                            android:id="@+id/checkGPay"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_check_circle"
+                            android:tint="@color/primary"
+                            android:visibility="invisible"
+                            android:layout_marginTop="4dp"
+                            android:contentDescription="Selected" />
+
+                    </LinearLayout>
+
+                    <!-- PhonePe Option -->
+                    <LinearLayout
+                        android:id="@+id/optionPhonePe"
+                        android:layout_width="0dp"
+                        android:layout_height="96dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/payment_option_bg"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_qr_code"
+                            android:tint="@color/gray_400"
+                            android:layout_marginBottom="8dp"
+                            android:contentDescription="PhonePe" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PhonePe"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <ImageView
+                            android:id="@+id/checkPhonePe"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_check_circle"
+                            android:tint="@color/primary"
+                            android:visibility="invisible"
+                            android:layout_marginTop="4dp"
+                            android:contentDescription="Selected" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Verification Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/padding_medium"
+                android:paddingVertical="8dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/primary_light"
+                    android:padding="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/padding_medium"
+                        android:background="?attr/selectableItemBackground">
+
+                        <!-- Checkbox -->
+                        <CheckBox
+                            android:id="@+id/cbPaymentConfirm"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:button="@null"
+                            android:background="@drawable/custom_checkbox"
+                            android:layout_marginEnd="@dimen/padding_medium" />
+
+                        <!-- Confirmation Text -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Payment Confirmation"
+                                android:textColor="@color/text_dark"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-medium"
+                                android:layout_marginBottom="4dp" />
+
+                            <TextView
+                                android:id="@+id/tvConfirmationText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="I certify that the payment of ₹ 1,50,000 has been physically received from the customer."
+                                android:textColor="@color/text_secondary"
+                                android:textSize="12sp"
+                                android:fontFamily="sans-serif"
+                                android:lineSpacingExtra="2dp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <!-- Spacer for footer -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="32dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Footer Action Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/padding_medium"
+        android:elevation="8dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btnConfirmPayment"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/primary"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/padding_large">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Confirm Payment"
+                    android:textColor="@color/text_dark"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="start" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_arrow_forward"
+                    android:tint="@color/text_dark"
+                    android:contentDescription="Confirm" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</LinearLayout>

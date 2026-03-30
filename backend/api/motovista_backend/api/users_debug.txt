@@ -1,0 +1,29 @@
+Users Table Count: 1
+Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [full_name] => max
+            [email] => mmadhesh225@gmail.com
+            [phone] => 8056085230
+            [password] => $2y$10$eVR5wX5QkiOBhdqZtiY01ujzwIZ/2g5/besZ4o0snA3L6HitkJ4cW
+            [token] => dff117eede980fb890380b73c560fea25d3a9ad489968212e8519add670ea5e4
+            [verification_token] => edc449241ab1bda7a14b9c40129bff2e
+            [is_verified] => 0
+            [is_profile_completed] => 0
+            [created_at] => 2026-01-05 19:54:27
+            [dob] => 
+            [house_no] => 
+            [street] => 
+            [city] => 
+            [state] => 
+            [pincode] => 
+            [pan_no] => 
+            [profile_image] => 
+            [aadhar_front] => 
+            [aadhar_back] => 
+        )
+
+)
+

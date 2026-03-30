@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "11624205114",
+    "project_id": "motovista-856c2",
+    "storage_bucket": "motovista-856c2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:11624205114:android:c32f6bfb9837e8b32f1e03",
+        "android_client_info": {
+          "package_name": "com.example.motovista_deep"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBBnizfbngKCeNdsE_Iv7dt49CiLCVDm8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

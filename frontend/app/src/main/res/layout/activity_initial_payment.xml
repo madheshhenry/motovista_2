@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_light"
+    android:fitsSystemWindows="true">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:padding="@dimen/padding_medium"
+        android:gravity="center_vertical"
+        android:elevation="4dp">
+
+        <!-- Back Button -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_marginStart="-8dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@color/text_dark"
+                android:contentDescription="Back" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Initial Payment"
+            android:textColor="@color/text_dark"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center" />
+
+        <!-- Spacer for alignment -->
+        <View
+            android:layout_width="40dp"
+            android:layout_height="1dp" />
+
+    </LinearLayout>
+
+    <!-- Main Scrollable Content -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingBottom="100dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="24dp"
+            android:paddingHorizontal="@dimen/padding_medium">
+
+            <!-- Order Reference -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="4dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Order Reference"
+                        android:textColor="@color/text_admin"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif"
+                        android:letterSpacing="0.05"
+                        android:textAllCaps="true" />
+
+                    <TextView
+                        android:id="@+id/tvOrderReference"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="#1024"
+                        android:textColor="@color/text_dark"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:background="@drawable/badge_bg_gray"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="4dp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvVehicleName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hero Splendor+"
+                    android:textColor="@color/text_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tvVehicleDetails"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Matte Black • Drum Brake"
+                    android:textColor="@color/text_admin"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif" />
+
+            </LinearLayout>
+
+            <!-- Total Amount Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/white"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/card_left_border">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_medium"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/tvTotalAmountLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Amount to Collect"
+                        android:textColor="@color/text_admin"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/tvTotalAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="₹ 25,000"
+                        android:textColor="@color/text_dark"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium"
+                        android:layout_marginBottom="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@drawable/badge_bg_primary"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_pending"
+                            android:tint="@color/primary"
+                            android:layout_marginEnd="4dp"
+                            android:contentDescription="Pending" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Pending Collection"
+                            android:textColor="@color/primary"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif-medium" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/border_color"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Payment Mode Selection -->
+            <TextView
+                android:id="@+id/tvPaymentModeLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Payment Mode"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Payment Mode Grid -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="3"
+                android:rowCount="1"
+                android:columnWidth="0dp"
+                android:useDefaultMargins="true"
+                android:alignmentMode="alignBounds"
+                android:layout_marginBottom="24dp">
+
+                <!-- Cash Option -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardCash"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/white"
+                    android:layout_margin="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_medium"
+                        android:gravity="center_horizontal">
+
+                        <LinearLayout
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circle_bg_gray"
+                            android:gravity="center"
+                            android:layout_marginBottom="8dp">
+
+                            <ImageView
+                                android:id="@+id/ivCashIcon"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_payments"
+                                android:tint="@color/text_admin"
+                                android:contentDescription="Cash" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvCashLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cash"
+                            android:textColor="@color/text_admin"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <!-- Checkmark (initially hidden) -->
+                        <ImageView
+                            android:id="@+id/ivCashCheck"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_check_circle"
+                            android:tint="@color/primary"
+                            android:visibility="visible"
+                            android:layout_marginTop="8dp"
+                            android:contentDescription="Selected" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- GPay Option -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardGPay"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/white"
+                    android:layout_margin="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_medium"
+                        android:gravity="center_horizontal">
+
+                        <LinearLayout
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circle_bg_gray"
+                            android:gravity="center"
+                            android:layout_marginBottom="8dp">
+
+                            <ImageView
+                                android:id="@+id/ivGPayIcon"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_wallet"
+                                android:tint="@color/text_admin"
+                                android:contentDescription="GPay" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvGPayLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="GPay"
+                            android:textColor="@color/text_admin"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <!-- Checkmark (initially hidden) -->
+                        <ImageView
+                            android:id="@+id/ivGPayCheck"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_check_circle"
+                            android:tint="@color/primary"
+                            android:visibility="invisible"
+                            android:layout_marginTop="8dp"
+                            android:contentDescription="Selected" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- PhonePe Option -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardPhonePe"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/white"
+                    android:layout_margin="4dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_medium"
+                        android:gravity="center_horizontal">
+
+                        <LinearLayout
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circle_bg_gray"
+                            android:gravity="center"
+                            android:layout_marginBottom="8dp">
+
+                            <ImageView
+                                android:id="@+id/ivPhonePeIcon"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_smartphone"
+                                android:tint="@color/text_admin"
+                                android:contentDescription="PhonePe" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tvPhonePeLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="PhonePe"
+                            android:textColor="@color/text_admin"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif-medium" />
+
+                        <!-- Checkmark (initially hidden) -->
+                        <ImageView
+                            android:id="@+id/ivPhonePeCheck"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_check_circle"
+                            android:tint="@color/primary"
+                            android:visibility="invisible"
+                            android:layout_marginTop="8dp"
+                            android:contentDescription="Selected" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </GridLayout>
+
+            <!-- Confirmation Checkbox -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/primary_light"
+                android:layout_marginBottom="32dp"
+                android:padding="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/padding_medium"
+                    android:gravity="center_vertical">
+
+                    <!-- Custom Checkbox -->
+                    <LinearLayout
+                        android:id="@+id/checkboxContainer"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/checkbox_background"
+                        android:gravity="center"
+                        android:layout_marginEnd="12dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:id="@+id/ivCheckmark"
+                            android:layout_width="14dp"
+                            android:layout_height="14dp"
+                            android:src="@drawable/ic_check"
+                            android:tint="@color/white"
+                            android:visibility="invisible"
+                            android:contentDescription="Checkmark" />
+
+                    </LinearLayout>
+
+                    <!-- Confirmation Text -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvConfirmationTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="I confirm receipt"
+                            android:textColor="@color/text_dark"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tvConfirmationMessage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="I verify that the initial amount of ₹25,000 has been successfully collected from the customer."
+                            android:textColor="@color/text_admin"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif"
+                            android:lineSpacingExtra="2dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Spacer for footer -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="80dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Footer Action Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/padding_medium"
+        android:elevation="8dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btnConfirmPayment"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/primary"
+            android:clickable="true"
+            android:focusable="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/padding_large">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Confirm &amp; Proceed"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="start" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_arrow_forward"
+                    android:tint="@color/white"
+                    android:contentDescription="Confirm" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</LinearLayout>

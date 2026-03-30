@@ -1,0 +1,37 @@
+{
+    "time": "2026-01-29 16:03:22",
+    "path": "C:\\xampp\\htdocs\\motovista_backend\\api\\debug_notifications_unique_v1.php",
+    "token_summary": [
+        {
+            "user_type": "customer",
+            "count": 1
+        },
+        {
+            "user_type": "admin",
+            "count": 2
+        }
+    ],
+    "recent_admin_notifs": [
+        {
+            "id": 1,
+            "title": "New Bike Order! \ud83c\udfcd\ufe0f",
+            "message": "Customer mad just ordered a Yamaha R15 V2 (V1)",
+            "type": "general",
+            "is_read": 0,
+            "created_at": "2026-01-29 20:01:51"
+        }
+    ],
+    "admin_tokens": [
+        {
+            "user_id": 999,
+            "device_name": "CLI Tester",
+            "user_type": "admin"
+        },
+        {
+            "user_id": 2,
+            "device_name": "OnePlus CPH2585",
+            "user_type": "admin"
+        }
+    ],
+    "success": true
+}

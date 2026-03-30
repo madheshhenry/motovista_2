@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardBike"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true"
+    app:cardBackgroundColor="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Image Container -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@color/gray_200">
+
+            <!-- Bike Image -->
+            <ImageView
+                android:id="@+id/ivBikeImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:padding="8dp"
+                android:src="@drawable/featured_community"
+                android:contentDescription="Bike Image" />
+
+            <!-- Status Badge -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:orientation="horizontal"
+                android:background="@drawable/badge_green_background"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:gravity="center_vertical">
+
+                <!-- Pulse Dot -->
+                <View
+                    android:layout_width="6dp"
+                    android:layout_height="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/circle_green_pulse" />
+
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Active"
+                    android:textColor="@color/green_800"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <!-- Content -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Title Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvBikeName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bike Name"
+                        android:textColor="@color/text_dark"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="4dp">
+
+                        <View
+                            android:id="@+id/viewColorIndicator"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_marginEnd="8dp"
+                            android:background="@drawable/circle_shape" />
+
+                        <TextView
+                            android:id="@+id/tvBikeColor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Color"
+                            android:textColor="@color/primary_color"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Chevron -->
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_chevron_right"
+                    android:tint="@color/gray_400"
+                    android:contentDescription="More" />
+
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginVertical="12dp"
+                android:background="@color/gray_200" />
+
+            <!-- Details Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Reg Number -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ORDER ID"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="10sp"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.05"
+                        android:fontFamily="sans-serif"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvOrderId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="#ORDER123"
+                        android:textColor="@color/text_dark"
+                        android:textSize="14sp"
+                        android:fontFamily="monospace"
+                        android:background="@color/gray_200"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="4dp"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_vertical" />
+
+                </LinearLayout>
+
+                <!-- Purchase Date -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="end">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PURCHASED"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="10sp"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.05"
+                        android:fontFamily="sans-serif"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvPurchaseDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jan 12, 2023"
+                        android:textColor="@color/text_dark"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center_vertical" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

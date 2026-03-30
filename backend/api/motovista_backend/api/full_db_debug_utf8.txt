@@ -1,0 +1,207 @@
+﻿Connected successfully to android_app_db
+
+--- Tables ---
+Array
+(
+    [0] => admin_notifications
+    [1] => admins
+    [2] => ai_chat_logs
+    [3] => bike_models
+    [4] => bike_requests
+    [5] => bike_variants
+    [6] => bikes
+    [7] => brands
+    [8] => customer_notifications
+    [9] => customer_requests
+    [10] => customers
+    [11] => emi_ledgers
+    [12] => emi_payments
+    [13] => insurance_ledger
+    [14] => registration_ledger
+    [15] => registration_status
+    [16] => stock_bikes
+    [17] => user_fcm_tokens
+    [18] => users
+)
+
+--- customer_notifications Table Structure ---
+Array
+(
+    [0] => Array
+        (
+            [Field] => id
+            [Type] => int(11)
+            [Null] => NO
+            [Key] => PRI
+            [Default] => 
+            [Extra] => auto_increment
+        )
+
+    [1] => Array
+        (
+            [Field] => user_id
+            [Type] => int(11)
+            [Null] => NO
+            [Key] => MUL
+            [Default] => 
+            [Extra] => 
+        )
+
+    [2] => Array
+        (
+            [Field] => title
+            [Type] => varchar(255)
+            [Null] => NO
+            [Key] => 
+            [Default] => 
+            [Extra] => 
+        )
+
+    [3] => Array
+        (
+            [Field] => message
+            [Type] => text
+            [Null] => NO
+            [Key] => 
+            [Default] => 
+            [Extra] => 
+        )
+
+    [4] => Array
+        (
+            [Field] => type
+            [Type] => varchar(50)
+            [Null] => YES
+            [Key] => 
+            [Default] => system
+            [Extra] => 
+        )
+
+    [5] => Array
+        (
+            [Field] => is_read
+            [Type] => tinyint(1)
+            [Null] => YES
+            [Key] => 
+            [Default] => 0
+            [Extra] => 
+        )
+
+    [6] => Array
+        (
+            [Field] => created_at
+            [Type] => timestamp
+            [Null] => NO
+            [Key] => 
+            [Default] => current_timestamp()
+            [Extra] => 
+        )
+
+)
+
+--- user_fcm_tokens Table Structure ---
+Array
+(
+    [0] => Array
+        (
+            [Field] => id
+            [Type] => int(11)
+            [Null] => NO
+            [Key] => PRI
+            [Default] => 
+            [Extra] => auto_increment
+        )
+
+    [1] => Array
+        (
+            [Field] => user_id
+            [Type] => int(11)
+            [Null] => NO
+            [Key] => MUL
+            [Default] => 
+            [Extra] => 
+        )
+
+    [2] => Array
+        (
+            [Field] => user_type
+            [Type] => enum('customer','admin')
+            [Null] => YES
+            [Key] => 
+            [Default] => customer
+            [Extra] => 
+        )
+
+    [3] => Array
+        (
+            [Field] => fcm_token
+            [Type] => text
+            [Null] => NO
+            [Key] => 
+            [Default] => 
+            [Extra] => 
+        )
+
+    [4] => Array
+        (
+            [Field] => device_name
+            [Type] => varchar(255)
+            [Null] => YES
+            [Key] => 
+            [Default] => 
+            [Extra] => 
+        )
+
+    [5] => Array
+        (
+            [Field] => created_at
+            [Type] => timestamp
+            [Null] => NO
+            [Key] => 
+            [Default] => current_timestamp()
+            [Extra] => 
+        )
+
+    [6] => Array
+        (
+            [Field] => updated_at
+            [Type] => timestamp
+            [Null] => NO
+            [Key] => 
+            [Default] => current_timestamp()
+            [Extra] => on update current_timestamp()
+        )
+
+)
+
+--- Recent Notifications (Last 10) ---
+Array
+(
+)
+
+--- Recent FCM Tokens ---
+Array
+(
+    [0] => Array
+        (
+            [id] => 2
+            [user_id] => 11
+            [user_type] => customer
+            [fcm_token] => c7gbM8KgTvaN02gUmToQ8j:APA91bEwEDNWUu4sQqxz-6o0kk4Fzg5zLRKK7rncSaji4HlSBQgKVxz7EsTiV83DB7vySKkhwSCy2uH-NE69pZU31FrRaM9Me8XeFiOJkOO1XTNLqx6c9Wg
+            [device_name] => motorola moto g35 5G
+            [created_at] => 2026-01-29 20:00:40
+            [updated_at] => 2026-01-29 21:11:44
+        )
+
+    [1] => Array
+        (
+            [id] => 4
+            [user_id] => 2
+            [user_type] => admin
+            [fcm_token] => dTOMgTKqSByaputFBuacpq:APA91bFmAdJ8lfR3KDTmaCKRnBqNIZpwAplNrwsKJQdEQZTK4djJ1hCbaaarxEWc17rrkUb_bzO3j-4IXYwm4tTaIJWGfs4ii84d-Qw7v710pDZUnzeaZSg
+            [device_name] => OnePlus CPH2585
+            [created_at] => 2026-01-29 20:01:16
+            [updated_at] => 2026-01-29 21:11:38
+        )
+
+)

@@ -1,0 +1,1110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_light"
+    android:fitsSystemWindows="true">
+
+    <!-- Top App Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:padding="@dimen/padding_medium"
+        android:paddingBottom="8dp"
+        android:gravity="center_vertical"
+        android:elevation="4dp">
+
+        <!-- Back Button -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="0dp"
+            android:background="?attr/selectableItemBackgroundBorderless">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_back"
+                android:tint="@color/text_dark"
+                android:contentDescription="Back" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Title -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Delivery Note Preview"
+            android:textColor="@color/text_dark"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:layout_marginEnd="48dp" />
+
+    </LinearLayout>
+
+    <!-- Main Scrollable Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_medium">
+
+            <!-- Delivery Note Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/white"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Header Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_large"
+                        android:paddingBottom="@dimen/padding_medium"
+                        android:gravity="center_horizontal"
+                        android:background="?attr/selectableItemBackground">
+
+                        <!-- Shop Name -->
+                        <TextView
+                            android:id="@+id/tvShopName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Santhosh Bikes"
+                            android:textColor="@color/primary"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium"
+                            android:gravity="center"
+                            android:layout_marginBottom="4dp"
+                            android:textAllCaps="true" />
+
+                        <!-- Shop Address -->
+                        <TextView
+                            android:id="@+id/tvShopAddress"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="123, Gandhi Road, Chennai, 600001"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center"
+                            android:layout_marginBottom="2dp" />
+
+                        <!-- Shop Contact -->
+                        <TextView
+                            android:id="@+id/tvShopContact"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Ph: +91 98765 43210 | support@santhoshbikes.com"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center"
+                            android:layout_marginBottom="16dp" />
+
+                    </LinearLayout>
+
+                    <!-- Delivery Note Number and Date -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="?attr/selectableItemBackground">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:padding="@dimen/padding_medium"
+                            android:background="@color/gray_200">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Delivery Note No"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:textAllCaps="true"
+                                android:letterSpacing="0.1"
+                                android:layout_marginBottom="4dp" />
+
+                            <TextView
+                                android:id="@+id/tvDeliveryNoteNo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="AUTO-10293"
+                                android:textColor="@color/text_dark"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-medium" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:padding="@dimen/padding_medium"
+                            android:background="@color/gray_200">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Date"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:textAllCaps="true"
+                                android:letterSpacing="0.1"
+                                android:layout_marginBottom="4dp" />
+
+                            <TextView
+                                android:id="@+id/tvDeliveryDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="24 Oct 2023"
+                                android:textColor="@color/text_dark"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-medium" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Customer Details Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- Section Header -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@color/gray_200"
+                            android:padding="@dimen/padding_medium"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Customer Details"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:textAllCaps="true"
+                                android:letterSpacing="0.1" />
+
+                        </LinearLayout>
+
+                        <!-- Customer Details Grid -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <!-- Name -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="?attr/selectableItemBackground">
+
+                                <TextView
+                                    android:layout_width="100dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="Name"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:padding="@dimen/padding_medium"
+                                    android:paddingVertical="12dp" />
+
+                                <TextView
+                                    android:id="@+id/tvCustomerName"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Rahul Kumar"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:padding="@dimen/padding_medium"
+                                    android:paddingVertical="12dp" />
+
+                            </LinearLayout>
+
+                            <!-- Father's Name -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="?attr/selectableItemBackground">
+
+                                <TextView
+                                    android:layout_width="100dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="S/o"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:padding="@dimen/padding_medium"
+                                    android:paddingVertical="12dp" />
+
+                                <TextView
+                                    android:id="@+id/tvFatherName"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="Suresh Kumar"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:padding="@dimen/padding_medium"
+                                    android:paddingVertical="12dp" />
+
+                            </LinearLayout>
+
+                            <!-- Phone -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="?attr/selectableItemBackground">
+
+                                <TextView
+                                    android:layout_width="100dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="Phone"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:padding="@dimen/padding_medium"
+                                    android:paddingVertical="12dp" />
+
+                                <TextView
+                                    android:id="@+id/tvCustomerPhone"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="+91 98400 12345"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:padding="@dimen/padding_medium"
+                                    android:paddingVertical="12dp" />
+
+                            </LinearLayout>
+
+                            <!-- Address -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="?attr/selectableItemBackground">
+
+                                <TextView
+                                    android:layout_width="100dp"
+                                    android:layout_height="wrap_content"
+                                    android:text="Address"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:padding="@dimen/padding_medium"
+                                    android:paddingVertical="12dp" />
+
+                                <TextView
+                                    android:id="@+id/tvCustomerAddress"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="No 45, 2nd Main Road,\nAnna Nagar, Chennai,\nPIN: 600040"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif-medium"
+                                    android:padding="@dimen/padding_medium"
+                                    android:paddingVertical="12dp"
+                                    android:lineSpacingExtra="4dp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Vehicle Details Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="1dp">
+
+                        <!-- Section Header -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@color/gray_200"
+                            android:padding="@dimen/padding_medium"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Vehicle Details"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:textAllCaps="true"
+                                android:letterSpacing="0.1" />
+
+                        </LinearLayout>
+
+                        <!-- Vehicle Details Grid -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <!-- Vehicle Name -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:background="?attr/selectableItemBackground"
+                                android:padding="@dimen/padding_medium"
+                                android:paddingVertical="16dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Vehicle Name"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:textAllCaps="true"
+                                    android:letterSpacing="0.1"
+                                    android:layout_marginBottom="8dp" />
+
+                                <TextView
+                                    android:id="@+id/tvVehicleName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Royal Enfield Classic 350"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif-medium" />
+
+                            </LinearLayout>
+
+                            <!-- Color and Engine No -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:background="?attr/selectableItemBackground">
+
+                                <!-- Color -->
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical"
+                                    android:padding="@dimen/padding_medium"
+                                    android:paddingVertical="12dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Colour"
+                                        android:textColor="@color/text_secondary"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="sans-serif"
+                                        android:textAllCaps="true"
+                                        android:letterSpacing="0.1"
+                                        android:layout_marginBottom="6dp" />
+
+                                    <TextView
+                                        android:id="@+id/tvVehicleColor"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Halcyon Black"
+                                        android:textColor="@color/text_dark"
+                                        android:textSize="14sp"
+                                        android:fontFamily="sans-serif-medium" />
+
+                                </LinearLayout>
+
+                                <!-- Divider -->
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/gray_300" />
+
+                                <!-- Engine No -->
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical"
+                                    android:padding="@dimen/padding_medium"
+                                    android:paddingVertical="12dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Engine No"
+                                        android:textColor="@color/text_secondary"
+                                        android:textSize="10sp"
+                                        android:textStyle="bold"
+                                        android:fontFamily="sans-serif"
+                                        android:textAllCaps="true"
+                                        android:letterSpacing="0.1"
+                                        android:layout_marginBottom="6dp" />
+
+                                    <TextView
+                                        android:id="@+id/tvEngineNo"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="U3S5F00881"
+                                        android:textColor="@color/text_dark"
+                                        android:textSize="14sp"
+                                        android:fontFamily="monospace"/>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <!-- Chassis No -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:background="?attr/selectableItemBackground"
+                                android:padding="@dimen/padding_medium"
+                                android:paddingVertical="12dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Chassis No"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="10sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:textAllCaps="true"
+                                    android:letterSpacing="0.1"
+                                    android:layout_marginBottom="6dp" />
+
+                                <TextView
+                                    android:id="@+id/tvChassisNo"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="ME3J35F008992"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="14sp"
+                                    android:fontFamily="monospace"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Declaration Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:background="@color/icon_bg_yellow"
+                        android:padding="@dimen/padding_large"
+                        android:layout_marginTop="1dp">
+
+                        <TextView
+                            android:id="@+id/tvDeclaration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="&quot;Today I have taken delivery of the above cited vehicle and I have received in good condition. The entire risk is being borne by me from this date.&quot;"
+                            android:textColor="@color/text_dark"
+                            android:textSize="14sp"
+                            android:fontFamily="sans-serif"
+                            android:fontStyle="italic"
+                            android:lineSpacingExtra="4dp"
+                            android:textAlignment="textStart" />
+
+                    </LinearLayout>
+
+                    <!-- Checklist Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="1dp">
+
+                        <!-- Section Header -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:background="@color/gray_200"
+                            android:padding="@dimen/padding_medium"
+                            android:paddingVertical="12dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Items &amp; Documents Checklist"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:textAllCaps="true"
+                                android:letterSpacing="0.1" />
+
+                        </LinearLayout>
+
+                        <!-- Checklist Items -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="@dimen/padding_medium"
+                            android:paddingVertical="12dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginBottom="12dp">
+
+                                <!-- Column 1 -->
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <!-- Item 1 -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:gravity="center_vertical"
+                                        android:layout_marginBottom="8dp">
+
+                                        <ImageView
+                                            android:layout_width="20dp"
+                                            android:layout_height="20dp"
+                                            android:src="@drawable/ic_check_box"
+                                            android:tint="@color/primary"
+                                            android:layout_marginEnd="8dp"
+                                            android:contentDescription="Checked" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Company Name"
+                                            android:textColor="@color/text_dark"
+                                            android:textSize="14sp"
+                                            android:fontFamily="sans-serif-medium" />
+
+                                    </LinearLayout>
+
+                                    <!-- Item 2 -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:gravity="center_vertical"
+                                        android:layout_marginBottom="8dp">
+
+                                        <ImageView
+                                            android:layout_width="20dp"
+                                            android:layout_height="20dp"
+                                            android:src="@drawable/ic_check_box"
+                                            android:tint="@color/primary"
+                                            android:layout_marginEnd="8dp"
+                                            android:contentDescription="Checked" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="HP (Hypothecation)"
+                                            android:textColor="@color/text_dark"
+                                            android:textSize="14sp"
+                                            android:fontFamily="sans-serif-medium" />
+
+                                    </LinearLayout>
+
+                                    <!-- Item 3 -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:gravity="center_vertical"
+                                        android:layout_marginBottom="8dp">
+
+                                        <ImageView
+                                            android:layout_width="20dp"
+                                            android:layout_height="20dp"
+                                            android:src="@drawable/ic_check_box"
+                                            android:tint="@color/primary"
+                                            android:layout_marginEnd="8dp"
+                                            android:contentDescription="Checked" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Free Service Book"
+                                            android:textColor="@color/text_dark"
+                                            android:textSize="14sp"
+                                            android:fontFamily="sans-serif-medium" />
+
+                                    </LinearLayout>
+
+                                    <!-- Item 4 -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:gravity="center_vertical"
+                                        android:layout_marginBottom="8dp">
+
+                                        <ImageView
+                                            android:layout_width="20dp"
+                                            android:layout_height="20dp"
+                                            android:src="@drawable/ic_check_box"
+                                            android:tint="@color/primary"
+                                            android:layout_marginEnd="8dp"
+                                            android:contentDescription="Checked" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Tool Kit"
+                                            android:textColor="@color/text_dark"
+                                            android:textSize="14sp"
+                                            android:fontFamily="sans-serif-medium" />
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <!-- Column 2 -->
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <!-- Item 5 -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:gravity="center_vertical"
+                                        android:layout_marginBottom="8dp">
+
+                                        <ImageView
+                                            android:layout_width="20dp"
+                                            android:layout_height="20dp"
+                                            android:src="@drawable/ic_check_box"
+                                            android:tint="@color/primary"
+                                            android:layout_marginEnd="8dp"
+                                            android:contentDescription="Checked" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Aadhaar No"
+                                            android:textColor="@color/text_dark"
+                                            android:textSize="14sp"
+                                            android:fontFamily="sans-serif-medium" />
+
+                                    </LinearLayout>
+
+                                    <!-- Item 6 -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:gravity="center_vertical"
+                                        android:layout_marginBottom="8dp">
+
+                                        <ImageView
+                                            android:layout_width="20dp"
+                                            android:layout_height="20dp"
+                                            android:src="@drawable/ic_check_box_outline"
+                                            android:tint="@color/gray_400"
+                                            android:layout_marginEnd="8dp"
+                                            android:contentDescription="Not Checked" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="PAN No"
+                                            android:textColor="@color/text_secondary"
+                                            android:textSize="14sp"
+                                            android:fontFamily="sans-serif-medium" />
+
+                                    </LinearLayout>
+
+                                    <!-- Item 7 -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:gravity="center_vertical"
+                                        android:layout_marginBottom="8dp">
+
+                                        <ImageView
+                                            android:layout_width="20dp"
+                                            android:layout_height="20dp"
+                                            android:src="@drawable/ic_check_box"
+                                            android:tint="@color/primary"
+                                            android:layout_marginEnd="8dp"
+                                            android:contentDescription="Checked" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Battery No"
+                                            android:textColor="@color/text_dark"
+                                            android:textSize="14sp"
+                                            android:fontFamily="sans-serif-medium" />
+
+                                    </LinearLayout>
+
+                                    <!-- Item 8 -->
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="horizontal"
+                                        android:gravity="center_vertical"
+                                        android:layout_marginBottom="8dp">
+
+                                        <ImageView
+                                            android:layout_width="20dp"
+                                            android:layout_height="20dp"
+                                            android:src="@drawable/ic_check_box"
+                                            android:tint="@color/primary"
+                                            android:layout_marginEnd="8dp"
+                                            android:contentDescription="Checked" />
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Customer Photo"
+                                            android:textColor="@color/text_dark"
+                                            android:textSize="14sp"
+                                            android:fontFamily="sans-serif-medium" />
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <!-- Full width item -->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/ic_check_box"
+                                    android:tint="@color/primary"
+                                    android:layout_marginEnd="8dp"
+                                    android:contentDescription="Checked" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Balance Moved"
+                                    android:textColor="@color/text_dark"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif-medium" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Signature Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/padding_medium"
+                        android:layout_marginTop="1dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:layout_marginBottom="16dp">
+
+                            <!-- Customer Signature -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:layout_marginEnd="8dp">
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="96dp"
+                                    android:background="@drawable/border_dashed"
+                                    android:layout_marginBottom="8dp">
+
+                                    <!-- Signature SVG Placeholder -->
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:src="@drawable/sample_signature_wave"
+                                        android:scaleType="fitCenter"
+                                        android:contentDescription="Signature"
+                                        android:alpha="0.7" />
+
+                                </FrameLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Customer Signature"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:textAllCaps="true"
+                                    android:letterSpacing="0.1" />
+
+                            </LinearLayout>
+
+                            <!-- Authorized Signatory -->
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical"
+                                android:gravity="center"
+                                android:layout_marginStart="8dp">
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="96dp"
+                                    android:background="@drawable/border_dashed"
+                                    android:layout_marginBottom="8dp">
+
+                                    <!-- Pending Text -->
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:text="Pending"
+                                        android:textColor="@color/text_secondary"
+                                        android:textSize="12sp"
+                                        android:fontFamily="sans-serif" />
+
+                                </FrameLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Authorized Signatory"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="11sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="sans-serif"
+                                    android:textAllCaps="true"
+                                    android:letterSpacing="0.1" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <!-- Remarks Section -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Shortage / Remarks"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif"
+                                android:textAllCaps="true"
+                                android:letterSpacing="0.1"
+                                android:layout_marginBottom="8dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="64dp"
+                                android:background="@color/white"
+                                android:padding="@dimen/padding_medium"
+                                android:gravity="center_vertical"
+                                android:elevation="1dp">
+
+                                <TextView
+                                    android:id="@+id/tvRemarks"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Nil"
+                                    android:textColor="@color/text_secondary"
+                                    android:textSize="14sp"
+                                    android:fontFamily="sans-serif" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="8dp">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnShare"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:paddingHorizontal="16dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_share"
+                            android:tint="@color/primary"
+                            android:layout_marginEnd="8dp"
+                            android:contentDescription="Share" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Share"
+                            android:textColor="@color/primary"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnPrint"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/primary"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:paddingHorizontal="16dp">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_print"
+                            android:tint="@color/white"
+                            android:layout_marginEnd="8dp"
+                            android:contentDescription="Print" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Print"
+                            android:textColor="@color/white"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

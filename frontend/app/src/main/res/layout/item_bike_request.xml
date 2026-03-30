@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header: Name and Date -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvCustomerName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="John Doe"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="#111718"/>
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Oct 24, 2023"
+                    android:textSize="12sp"
+                    android:textColor="#6b7280"/>
+            </LinearLayout>
+
+            <!-- Status Badge -->
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/pill_gray"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:text="PENDING"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:textColor="#374151"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#f3f4f6"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Body: Request Details -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="REQUESTED BIKE"
+            android:textSize="10sp"
+            android:textColor="#9ca3af"
+            android:letterSpacing="0.05"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvBikeModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Yamaha R15 V4"
+            android:textSize="18sp"
+            android:textColor="#111718"
+            android:textStyle="bold"
+            android:layout_marginTop="2dp"/>
+
+        <TextView
+            android:id="@+id/tvFeatures"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Looking for Racing Blue color with quick shifter."
+            android:textSize="14sp"
+            android:textColor="#4b5563"
+            android:layout_marginTop="8dp"/>
+
+        <!-- Contact Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+            
+            <TextView
+                android:id="@+id/tvMobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+91 9876543210"
+                android:textSize="12sp"
+                android:textColor="#6b7280"
+                android:drawableStart="@drawable/ic_call" 
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                app:drawableTint="#6b7280"/>
+        </LinearLayout>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:id="@+id/layoutActions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:weightSum="2">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnReject"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="Reject"
+                android:textColor="#dc2626"
+                android:background="@drawable/btn_outline_red"
+                android:layout_marginEnd="8dp"
+                android:textAllCaps="false"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnAccept"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:text="Accept"
+                android:textColor="#ffffff"
+                android:background="@drawable/btn_fill_green"
+                android:layout_marginStart="8dp"
+                android:textAllCaps="false"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

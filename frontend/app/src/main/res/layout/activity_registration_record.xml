@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#f6f7f8">
+
+    <!-- Top App Bar -->
+    <RelativeLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="1dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingHorizontal="16dp">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_centerVertical="true"
+                android:padding="6dp"
+                android:src="@drawable/ic_arrow_back"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="#111827" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Registration Record"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#111827" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:paddingBottom="32dp">
+
+            <!-- Section 1: Customer & Bike Information -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Customer &amp; Bike Information"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#111418"
+                android:layout_marginBottom="12dp" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:cardBackgroundColor="@color/white"
+                android:layout_marginBottom="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- Header part -->
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_toStartOf="@id/profileIconContainer">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="CUSTOMER"
+                                android:textSize="10sp"
+                                android:textColor="#137fec"
+                                android:textStyle="bold"
+                                android:letterSpacing="0.05" />
+
+                            <TextView
+                                android:id="@+id/tvCustomerName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Rahul Sharma"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:textColor="#111827" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:layout_marginTop="8dp">
+
+                                <ImageView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_call"
+                                    app:tint="#6b7280" />
+
+                                <TextView
+                                    android:id="@+id/tvCustomerPhone"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="6dp"
+                                    android:text="+91 98765 43210"
+                                    android:textSize="14sp"
+                                    android:textColor="#6b7280"
+                                    android:fontFamily="sans-serif-medium" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <FrameLayout
+                            android:id="@+id/profileIconContainer"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_alignParentEnd="true"
+                            android:background="@drawable/circle_shape"
+                            android:backgroundTint="#eff6ff">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_person"
+                                app:tint="#137fec" />
+                        </FrameLayout>
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#f3f4f6" />
+
+                    <!-- Details Grid -->
+                    <GridLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:columnCount="2">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="2"
+                            android:orientation="vertical"
+                            android:layout_marginBottom="16dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Bike Model"
+                                android:textSize="11sp"
+                                android:textColor="#6b7280" />
+
+                            <TextView
+                                android:id="@+id/tvBikeName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:text="Royal Enfield Classic 350"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#111827" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Engine Number"
+                                android:textSize="11sp"
+                                android:textColor="#6b7280" />
+
+                            <TextView
+                                android:id="@+id/tvEngineNumber"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:background="#f9fafb"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="4dp"
+                                android:text="U3S59932"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="#111827"
+                                android:fontFamily="monospace" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Order ID"
+                                android:textSize="11sp"
+                                android:textColor="#6b7280" />
+
+                            <TextView
+                                android:id="@+id/tvOrderId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:background="#f9fafb"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="4dp"
+                                android:text="ORD-10234"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:textColor="#111827"
+                                android:fontFamily="monospace" />
+                        </LinearLayout>
+                    </GridLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Section 2: Registration Process -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Registration Process"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="#111418" />
+
+                <TextView
+                    android:id="@+id/tvCompletedCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="1/4 Completed"
+                    android:textSize="12sp"
+                    android:textColor="#6b7280"
+                    android:fontFamily="sans-serif-medium" />
+            </RelativeLayout>
+
+            <include
+                android:id="@+id/layoutStep1"
+                layout="@layout/item_registration_step" />
+
+            <include
+                android:id="@+id/layoutStep2"
+                layout="@layout/item_registration_step" />
+
+            <include
+                android:id="@+id/layoutStep3"
+                layout="@layout/item_registration_step" />
+
+            <include
+                android:id="@+id/layoutStep4"
+                layout="@layout/item_registration_step" />
+
+            <!-- Section 3: Customer Verification -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Customer Verification"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#111418"
+                android:layout_marginBottom="12dp" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#e0e7ff"
+                app:cardBackgroundColor="#f5f7ff">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:orientation="horizontal"
+                    android:gravity="top">
+
+                    <FrameLayout
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/circle_shape"
+                        android:backgroundTint="#e0e7ff">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_verified_user"
+                            app:tint="#4f46e5" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Customer App Status"
+                                android:textSize="14sp"
+                                android:textStyle="bold"
+                                android:textColor="#111827" />
+
+                            <TextView
+                                android:id="@+id/tvCustomerAppStatusBadge"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:background="#fef3c7"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="2dp"
+                                android:text="WAITING"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:textColor="#b45309" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Waiting for customer to verify documents on the mobile app."
+                            android:textSize="13sp"
+                            android:textColor="#4b5563"
+                            android:lineSpacingExtra="2dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="14dp"
+                                android:layout_height="14dp"
+                                android:src="@drawable/ic_sync" 
+                                app:tint="#4f46e5" /> <!-- Should be a sync icon -->
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="6dp"
+                                android:text="Syncs automatically from customer app"
+                                android:textSize="11sp"
+                                android:textStyle="bold"
+                                android:textColor="#4f46e5" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

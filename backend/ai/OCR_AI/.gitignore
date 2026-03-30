@@ -1,0 +1,13 @@
+venv/
+venv_ocr/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+ocr_training/checkpoints/
+ocr_training/backups/
+ocr_training/logs/
+ocr_training/venv/
+ocr_training/venv_ocr/
+dataset_generator/synthetic_ocr_dataset/

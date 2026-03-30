@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card_ios"
+    android:padding="16dp"
+    android:layout_marginBottom="16dp">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <View
+            android:layout_width="4dp"
+            android:layout_height="16dp"
+            android:background="@color/primary_blue"
+            android:backgroundTint="@color/primary_blue"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:id="@+id/tvRowNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Bike #1"
+            android:textColor="@color/primary_blue"
+            android:textSize="14sp"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_info"
+            app:tint="@color/gray_300"/>
+    </LinearLayout>
+
+    <!-- Chassis Number -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chassis Number"
+            android:textSize="12sp"
+            android:textColor="@color/gray_500"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etChassisInput"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_input_rounded"
+                android:backgroundTint="@color/background_light"
+                android:hint="Enter Chassis Number"
+                android:paddingHorizontal="16dp"
+                android:textSize="14sp"
+                android:inputType="textCapCharacters"
+                android:singleLine="true"
+                android:layout_marginEnd="8dp"/>
+
+            <FrameLayout
+                android:id="@+id/btnScanChassisRow"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_input_rounded"
+                android:backgroundTint="#2013a4ec">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_barcode_scanner"
+                    app:tint="@color/primary_blue"/>
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Engine Number -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Engine Number"
+            android:textSize="12sp"
+            android:textColor="@color/gray_500"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etEngineInput"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_input_rounded"
+                android:backgroundTint="@color/background_light"
+                android:hint="Enter Engine Number"
+                android:paddingHorizontal="16dp"
+                android:textSize="14sp"
+                android:inputType="textCapCharacters"
+                android:singleLine="true"
+                android:layout_marginEnd="8dp"/>
+
+            <FrameLayout
+                android:id="@+id/btnScanEngineRow"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_input_rounded"
+                android:backgroundTint="#2013a4ec">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_barcode_scanner"
+                    app:tint="@color/primary_blue"/>
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
