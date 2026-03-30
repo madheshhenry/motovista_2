@@ -14,3 +14,4 @@ backend/ai/OCR_AI/ocr_training/logs/
 node_modules/
 .DS_Store
 *.log
+backend/api/motovista_backend/config/service-account.json
