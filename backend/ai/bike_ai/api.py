@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 # --------------------------------
 # LOAD AI ENGINE (Data Layer)
-# --------------------------------
+# ---------------------------------
 print("⏳ Loading AI Models...")
 
 # Load Embeddings
