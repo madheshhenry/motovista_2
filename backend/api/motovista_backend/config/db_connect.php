@@ -12,6 +12,6 @@ try {
     // Let the calling script handle the connection failure (chk for $conn) or throw exception.
     // We can just exit with 500 if we want, but better to let register.php try-catch handle it.
     // For now we do nothing, $conn will be null or script dies depending on error handling.
-    // Ideally log it.
+    // Ideally log it..
     error_log("DB Connection failed: " . $e->getMessage());
 }
