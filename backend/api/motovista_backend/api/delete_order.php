@@ -18,6 +18,11 @@ try {
 
     $conn->beginTransaction();
 
+    // NEW: Fetch order context before deletion to notify the customer
+    $stmtContext = $conn->prepare("SELECT customer_id, bike_name, bike_variant FROM customer_requests WHERE id = :rid");
+    $stmtContext->execute([':rid' => $requestId]);
+    $orderContext = $stmtContext->fetch(PDO::FETCH_ASSOC);
+
     // 1. Find EMI ledgers related to this request
     $stmtEmi = $conn->prepare("SELECT id FROM emi_ledgers WHERE request_id = :rid");
     $stmtEmi->execute([':rid' => $requestId]);
@@ -45,6 +50,21 @@ try {
     // 6. Delete from customer_requests
     $stmtDelReq = $conn->prepare("DELETE FROM customer_requests WHERE id = :rid");
     $stmtDelReq->execute([':rid' => $requestId]);
+
+    // NEW: Insert Notification for the customer if record existed
+    if ($orderContext) {
+        $notifTitle = "Order Removed by Admin";
+        $bikeName = $orderContext['bike_name'] . " (" . $orderContext['bike_variant'] . ")";
+        $notifMessage = "Your order for " . $bikeName . " has been removed from the system by an administrator.";
+        
+        $stmtNotif = $conn->prepare("INSERT INTO customer_notifications (user_id, title, message, type, target_screen) 
+                                     VALUES (:uid, :title, :msg, 'cancellation', 'orders')");
+        $stmtNotif->execute([
+            ':uid' => $orderContext['customer_id'],
+            ':title' => $notifTitle,
+            ':msg' => $notifMessage
+        ]);
+    }
 
     $conn->commit();
 

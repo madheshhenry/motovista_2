@@ -22,10 +22,16 @@ public class CustomerNotificationAdapter extends RecyclerView.Adapter<CustomerNo
 
     private Context context;
     private List<CustomerNotification> notifications;
+    private OnNotificationDeleteListener deleteListener;
 
-    public CustomerNotificationAdapter(Context context, List<CustomerNotification> notifications) {
+    public interface OnNotificationDeleteListener {
+        void onDeleteClick(CustomerNotification notification, int position);
+    }
+
+    public CustomerNotificationAdapter(Context context, List<CustomerNotification> notifications, OnNotificationDeleteListener deleteListener) {
         this.context = context;
         this.notifications = notifications;
+        this.deleteListener = deleteListener;
     }
 
     @NonNull
@@ -44,7 +50,7 @@ public class CustomerNotificationAdapter extends RecyclerView.Adapter<CustomerNo
         holder.tvTime.setText(notification.getTimestamp());
 
         // Set icon based on type
-        switch (notification.getType()) {
+        switch (notification.getType() != null ? notification.getType() : "") {
             case "order":
                 holder.ivIcon.setImageResource(R.drawable.ic_receipt_long);
                 break;
@@ -52,7 +58,7 @@ public class CustomerNotificationAdapter extends RecyclerView.Adapter<CustomerNo
                 holder.ivIcon.setImageResource(R.drawable.ic_calculate);
                 break;
             case "offer":
-                holder.ivIcon.setImageResource(R.drawable.ic_confirmation_number); // Using ticket icon for offers
+                holder.ivIcon.setImageResource(R.drawable.ic_confirmation_number);
                 break;
             default:
                 holder.ivIcon.setImageResource(R.drawable.ic_notifications);
@@ -60,6 +66,12 @@ public class CustomerNotificationAdapter extends RecyclerView.Adapter<CustomerNo
         }
 
         holder.unreadIndicator.setVisibility(notification.isRead() ? View.GONE : View.VISIBLE);
+
+        holder.btnDelete.setOnClickListener(v -> {
+            if (deleteListener != null) {
+                deleteListener.onDeleteClick(notification, position);
+            }
+        });
 
         holder.itemView.setOnClickListener(v -> {
             String screen = notification.getTarget_screen();
@@ -72,7 +84,12 @@ public class CustomerNotificationAdapter extends RecyclerView.Adapter<CustomerNo
                     intent.putExtra("ORDER_ID", id);
                 } else if ("EmiDetailsActivity".equals(screen)) {
                     intent = new Intent(context, EmiDetailsActivity.class);
-                    intent.putExtra("LEDGER_ID", id != null ? Integer.parseInt(id) : -1);
+                    // Use a safer parsing for ID
+                    try {
+                        intent.putExtra("LEDGER_ID", id != null ? Integer.parseInt(id) : -1);
+                    } catch (NumberFormatException e) {
+                        intent.putExtra("LEDGER_ID", -1);
+                    }
                     intent.putExtra("IS_CUSTOMER_VIEW", true);
                 }
 
@@ -89,13 +106,14 @@ public class CustomerNotificationAdapter extends RecyclerView.Adapter<CustomerNo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivIcon;
+        ImageView ivIcon, btnDelete;
         TextView tvTitle, tvMessage, tvTime;
         View unreadIndicator;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivIcon = itemView.findViewById(R.id.ivNotificationIcon);
+            btnDelete = itemView.findViewById(R.id.btnDeleteNotification);
             tvTitle = itemView.findViewById(R.id.tvNotificationTitle);
             tvMessage = itemView.findViewById(R.id.tvNotificationMessage);
             tvTime = itemView.findViewById(R.id.tvNotificationTime);

@@ -101,6 +101,11 @@ public class CustomerOrdersAdapter extends RecyclerView.Adapter<CustomerOrdersAd
         });
 
         holder.itemView.setOnLongClickListener(v -> {
+            String currentStatus = order.getStatus();
+            if (currentStatus != null && (currentStatus.equalsIgnoreCase("completed") || currentStatus.equalsIgnoreCase("delivered"))) {
+                android.widget.Toast.makeText(context, "Completed orders cannot be deleted", android.widget.Toast.LENGTH_SHORT).show();
+                return true;
+            }
             if (longClickListener != null) {
                 longClickListener.onLongClick(order);
                 return true;

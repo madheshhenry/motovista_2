@@ -35,48 +35,50 @@ try {
     if ($stmt->execute([':status' => $status, ':id' => $requestId])) {
 
         // --- INVENTORY UPDATE LOGIC (Start) ---
+        // --- FETCH REQUEST DETAILS (Always needed for ledger) ---
+        $reqSql = "SELECT customer_id, customer_name, bike_id, bike_name, bike_variant, bike_color FROM customer_requests WHERE id = :id";
+        $reqStmt = $conn->prepare($reqSql);
+        $reqStmt->execute([':id' => $requestId]);
+        $reqData = $reqStmt->fetch(PDO::FETCH_ASSOC);
+
         if (!$inventoryAlreadyDeducted) {
 
-            // --- INVENTORY UPDATE LOGIC (Start) ---
-            // 1. Get Request Details
-            $reqSql = "SELECT customer_name, bike_name, bike_variant, bike_color FROM customer_requests WHERE id = :id";
-            $reqStmt = $conn->prepare($reqSql);
-            $reqStmt->execute([':id' => $requestId]);
-            $reqData = $reqStmt->fetch(PDO::FETCH_ASSOC);
-
             if ($reqData) {
-                $model = trim($reqData['bike_name']);
-                $variant = trim($reqData['bike_variant']);
-
-                // Handle Color Parsing (Name|Hex)
-                $color = trim($reqData['bike_color']);
-                if (strpos($color, '|') !== false) {
-                    $parts = explode('|', $color);
-                    $color = trim($parts[0]);
+                $searchModel = trim($reqData['bike_name'] ?? '');
+                $searchVariant = trim($reqData['bike_variant'] ?? '');
+                $searchColor = trim($reqData['bike_color'] ?? '');
+                
+                if (strpos($searchColor, '|') !== false) {
+                    $searchColor = trim(explode('|', $searchColor)[0]);
                 }
 
-                // 2. Find ONE available bike (FIFO)
+                // STRICT FIFO SEARCH (Picking the first one added by brand or model match)
                 $findBikeSql = "SELECT id FROM bikes 
-                               WHERE model LIKE :model 
-                               AND variant LIKE :variant 
-                               AND colors LIKE :color 
+                               WHERE status = 'Available' 
                                AND condition_type = 'NEW'
-                               AND (status IS NULL OR status = 'Available')
-                               ORDER BY date ASC 
+                               AND (
+                                   (LOWER(REPLACE(model, ' ', '')) = LOWER(REPLACE(:model, ' ', '')))
+                                   OR (model LIKE :model_like)
+                                   OR (CONCAT(LOWER(brand), ' ', LOWER(model)) = LOWER(:full_name))
+                               )
+                               AND (colors LIKE :color OR LOWER(colors) LIKE :color_exact)
+                               ORDER BY id ASC 
                                LIMIT 1";
 
                 $stmtFind = $conn->prepare($findBikeSql);
                 $stmtFind->execute([
-                    ':model' => '%' . $model . '%',
-                    ':variant' => '%' . $variant . '%',
-                    ':color' => '%' . $color . '%'
+                    ':model' => $searchModel,
+                    ':model_like' => '%' . str_replace(' ', '%', $searchModel) . '%',
+                    ':full_name' => $searchModel, // "Honda CB"
+                    ':color' => '%' . $searchColor . '%',
+                    ':color_exact' => '%' . strtolower($searchColor) . '%'
                 ]);
                 $bike = $stmtFind->fetch(PDO::FETCH_ASSOC);
 
                 if ($bike) {
                     $assignedBikeId = $bike['id'];
 
-                    // 3. Mark as Sold
+                    // 4. Mark as Sold (Harden this update)
                     $updateBikeSql = "UPDATE bikes 
                                    SET status = 'Sold', 
                                        sold_date = NOW(), 
@@ -89,28 +91,51 @@ try {
                         ':custName' => $reqData['customer_name'],
                         ':bikeId' => $assignedBikeId
                     ]);
+                } else {
+                    throw new Exception("INVENTORY ERROR: No physical bike matching '$searchModel' in color '$searchColor' is available.");
                 }
+            }
+        } else if ($reqData) {
+            // DEEP SYNC: If already deducted, find the bike that was just sold to this customer
+            $searchModel = trim($reqData['bike_name'] ?? '');
+            $findSoldSql = "SELECT id FROM bikes 
+                            WHERE status = 'Sold' 
+                            AND (LOWER(TRIM(customer_name)) = LOWER(TRIM(:custName)))
+                            AND (brand LIKE :name OR model LIKE :name OR CONCAT(brand, ' ', model) LIKE :name)
+                            ORDER BY id DESC LIMIT 1";
+            $stmtSold = $conn->prepare($findSoldSql);
+            $stmtSold->execute([':custName' => $reqData['customer_name'], ':name' => '%' . $searchModel . '%']);
+            $soldBike = $stmtSold->fetch(PDO::FETCH_ASSOC);
+            if ($soldBike) {
+                $assignedBikeId = $soldBike['id'];
             }
         }
 
-        // --- REGISTRATION LEDGER CREATION (Start) ---
-        // Create a new entry in registration_ledger
-        $ledgerSql = "INSERT INTO registration_ledger (order_id, customer_id, customer_name, bike_name, physical_bike_id, step_1_status, step_2_status, step_3_status, step_4_status) 
-                          VALUES (:orderId, :custId, :custName, :bikeName, :bikeId, 'pending', 'locked', 'locked', 'locked')";
-        $ledgerStmt = $conn->prepare($ledgerSql);
+        // --- REGISTRATION LEDGER CREATION/UPDATE ---
+        // Check if ledger exists
+        $checkL = $conn->prepare("SELECT id FROM registration_ledger WHERE order_id = :oid");
+        $checkL->execute([':oid' => $requestId]);
+        $existingLedger = $checkL->fetch(PDO::FETCH_ASSOC);
 
-        // Re-fetch details if needed, or use existing reqData
-        $infoSql = "SELECT customer_id, customer_name, bike_name FROM customer_requests WHERE id = :id";
-        $infoStmt = $conn->prepare($infoSql);
-        $infoStmt->execute([':id' => $requestId]);
-        $infoData = $infoStmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($infoData) {
+        if ($existingLedger) {
+            // Update existing ledger with physical bike link
+            $upLedger = $conn->prepare("UPDATE registration_ledger SET 
+                                        physical_bike_id = :bid 
+                                        WHERE order_id = :oid");
+            $upLedger->execute([
+                ':bid' => isset($assignedBikeId) ? $assignedBikeId : null,
+                ':oid' => $requestId
+            ]);
+        } else if ($reqData) {
+            // Create new ledger
+            $ledgerSql = "INSERT INTO registration_ledger (order_id, customer_id, customer_name, bike_name, physical_bike_id, step_1_status, step_2_status, step_3_status, step_4_status) 
+                              VALUES (:orderId, :custId, :custName, :bikeName, :bikeId, 'pending', 'locked', 'locked', 'locked')";
+            $ledgerStmt = $conn->prepare($ledgerSql);
             $ledgerStmt->execute([
                 ':orderId' => $requestId,
-                ':custId' => $infoData['customer_id'],
-                ':custName' => $infoData['customer_name'],
-                ':bikeName' => $infoData['bike_name'],
+                ':custId' => $reqData['customer_id'],
+                ':custName' => $reqData['customer_name'],
+                ':bikeName' => $reqData['bike_name'],
                 ':bikeId' => isset($assignedBikeId) ? $assignedBikeId : null
             ]);
         }
@@ -124,6 +149,7 @@ try {
     }
 
 } catch (Exception $e) {
+    http_response_code(400); // Set error status code
     echo json_encode(["success" => false, "message" => $e->getMessage()]);
 }
 ?>

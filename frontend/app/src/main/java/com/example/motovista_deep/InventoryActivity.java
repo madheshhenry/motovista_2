@@ -83,7 +83,7 @@ public class InventoryActivity extends AppCompatActivity {
 
         rvInventory.setLayoutManager(new GridLayoutManager(this, 2));
         
-        adapter = new InventoryBrandAdapter(this, brandList, this::showAddBrandDialog);
+        adapter = new InventoryBrandAdapter(this, brandList, this::showAddBrandDialog, this::showBrandOptionsDialog);
         rvInventory.setAdapter(adapter);
 
         btnBack.setOnClickListener(v -> finish());
@@ -255,6 +255,143 @@ public class InventoryActivity extends AppCompatActivity {
         dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(v -> dialog.dismiss());
     }
 
+    private void showBrandOptionsDialog(InventoryBrand brand) {
+        String[] options = {"Edit", "Delete"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(brand.getBrand() + " Options");
+        builder.setItems(options, (dialog, which) -> {
+            if (which == 0) {
+                showEditBrandDialog(brand);
+            } else if (which == 1) {
+                showDeleteConfirmDialog(brand);
+            }
+        });
+        builder.show();
+    }
+
+    private void showEditBrandDialog(InventoryBrand brand) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Edit Brand");
+
+        View view = getLayoutInflater().inflate(R.layout.dialog_add_brand, null);
+        final EditText etBrandName = view.findViewById(R.id.etBrandName);
+        ivDialogPreview = view.findViewById(R.id.ivBrandLogo);
+        Button btnSelectImage = view.findViewById(R.id.btnSelectImage);
+        btnSelectImage.setVisibility(View.VISIBLE);
+
+        etBrandName.setText(brand.getBrand());
+
+        String logoUrl = com.example.motovista_deep.utils.ImageUtils.getFullImageUrl(brand.getLogo(), com.example.motovista_deep.utils.ImageUtils.PATH_BRANDS);
+        if (logoUrl != null && !logoUrl.isEmpty()) {
+            com.bumptech.glide.Glide.with(this)
+                .load(logoUrl)
+                .placeholder(R.drawable.ic_bike_placeholder)
+                .into(ivDialogPreview);
+        }
+
+        selectedImageUri = null; // Reset selection
+
+        btnSelectImage.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            imagePickerLauncher.launch(intent);
+        });
+
+        builder.setView(view);
+
+        builder.setPositiveButton("Update", null);
+        builder.setNegativeButton("Cancel", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
+            String name = etBrandName.getText().toString().trim();
+            if (!name.isEmpty()) {
+                dialog.dismiss();
+                updateBrandApi(brand.getId(), name, selectedImageUri);
+            } else {
+                Toast.makeText(InventoryActivity.this, "Brand Name Required", Toast.LENGTH_SHORT).show();
+            }
+        });
+        
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener(v -> dialog.dismiss());
+    }
+
+    private void showDeleteConfirmDialog(InventoryBrand brand) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete Brand");
+        builder.setMessage("Are you sure you want to delete '" + brand.getBrand() + "'? This will permanently delete ALL NEW bikes associated with this brand. Customer requests will be preserved for history.");
+        builder.setPositiveButton("Delete", (dialog, which) -> {
+            deleteBrandApi(brand.getId());
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
+    }
+
+    private void updateBrandApi(int brandId, String name, Uri imageUri) {
+        progressBar.setVisibility(View.VISIBLE);
+        String token = SharedPrefManager.getInstance(this).getToken();
+        ApiService apiService = RetrofitClient.getApiService();
+
+        MultipartBody.Part body = null;
+        if (imageUri != null) {
+            File file = getFileFromUri(imageUri);
+            if (file != null) {
+                RequestBody requestFile = RequestBody.create(MediaType.parse(getContentResolver().getType(imageUri)), file);
+                body = MultipartBody.Part.createFormData("brand_logo", file.getName(), requestFile);
+            }
+        }
+
+        RequestBody reqBrandName = RequestBody.create(MultipartBody.FORM, name);
+        RequestBody reqBrandId = RequestBody.create(MultipartBody.FORM, String.valueOf(brandId));
+
+        apiService.updateBrand("Bearer " + token, reqBrandId, reqBrandName, body).enqueue(new Callback<GenericResponse>() {
+            @Override
+            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                progressBar.setVisibility(View.GONE);
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    Toast.makeText(InventoryActivity.this, "Brand Updated Successfully", Toast.LENGTH_SHORT).show();
+                    loadInventory();
+                } else {
+                    Toast.makeText(InventoryActivity.this, "Update Failed: " + (response.body() != null ? response.body().getMessage() : "Unknown"), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GenericResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(InventoryActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void deleteBrandApi(int brandId) {
+        progressBar.setVisibility(View.VISIBLE);
+        String token = SharedPrefManager.getInstance(this).getToken();
+        ApiService apiService = RetrofitClient.getApiService();
+
+        com.example.motovista_deep.models.DeleteBrandRequest req = new com.example.motovista_deep.models.DeleteBrandRequest(brandId);
+        
+        apiService.deleteBrand("Bearer " + token, req).enqueue(new Callback<GenericResponse>() {
+            @Override
+            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                progressBar.setVisibility(View.GONE);
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    Toast.makeText(InventoryActivity.this, "Brand Deleted Successfully", Toast.LENGTH_SHORT).show();
+                    loadInventory();
+                } else {
+                    Toast.makeText(InventoryActivity.this, "Deleteted Failed: " + (response.body() != null ? response.body().getMessage() : "Unknown"), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GenericResponse> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(InventoryActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void uploadNewBrand(String name, Uri imageUri) {
         progressBar.setVisibility(View.VISIBLE);
         String token = SharedPrefManager.getInstance(this).getToken();
@@ -315,7 +452,7 @@ public class InventoryActivity extends AppCompatActivity {
         String token = SharedPrefManager.getInstance(this).getToken();
         ApiService apiService = RetrofitClient.getApiService();
 
-        apiService.getBrands("Bearer " + token).enqueue(new Callback<InventoryResponse>() {
+        apiService.getBrands("Bearer " + token, System.currentTimeMillis()).enqueue(new Callback<InventoryResponse>() {
             @Override
             public void onResponse(Call<InventoryResponse> call, Response<InventoryResponse> response) {
                 progressBar.setVisibility(View.GONE);
@@ -326,7 +463,7 @@ public class InventoryActivity extends AppCompatActivity {
                         brandList.addAll(data);
                         
                         if (adapter == null) {
-                            adapter = new InventoryBrandAdapter(InventoryActivity.this, brandList, InventoryActivity.this::showAddBrandDialog);
+                            adapter = new InventoryBrandAdapter(InventoryActivity.this, brandList, InventoryActivity.this::showAddBrandDialog, InventoryActivity.this::showBrandOptionsDialog);
                             rvInventory.setAdapter(adapter);
                         } else {
                             // Efficiently update existing adapter

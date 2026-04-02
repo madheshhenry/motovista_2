@@ -223,6 +223,12 @@ public class CustomerOrdersActivity extends AppCompatActivity {
         tvProfile.setTypeface(null, Typeface.NORMAL);
     }
     private void showDeleteConfirmationDialog(CustomerRequest order) {
+        String status = order.getStatus();
+        if (status != null && (status.equalsIgnoreCase("completed") || status.equalsIgnoreCase("delivered"))) {
+            Toast.makeText(this, "Completed orders cannot be deleted", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         new androidx.appcompat.app.AlertDialog.Builder(this)
                 .setTitle("Delete Order")
                 .setMessage("Are you sure you want to delete this order? This will remove all associated Registration and EMI records.")

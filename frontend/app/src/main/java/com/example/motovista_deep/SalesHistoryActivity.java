@@ -12,12 +12,39 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.motovista_deep.adapters.SalesHistoryAdapter;
+import com.example.motovista_deep.api.ApiService;
+import com.example.motovista_deep.api.RetrofitClient;
+import com.example.motovista_deep.models.SalesHistoryItem;
+import com.example.motovista_deep.models.SalesHistoryResponse;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class SalesHistoryActivity extends AppCompatActivity {
 
     private ImageView btnBack;
     private Button btnFilterAll, btnFilterCash, btnFilterEMI, btnFilterThisMonth;
-    private CardView cardSale1, cardSale2, cardSale3, cardSale4, cardSale5;
-    private TextView tvTitle;
+    private RecyclerView recyclerSalesHistory;
+    private TextView tvEmptyState;
+    private SalesHistoryAdapter adapter;
+    private List<SalesHistoryItem> allSales = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,174 +57,129 @@ public class SalesHistoryActivity extends AppCompatActivity {
         // Setup click listeners
         setupClickListeners();
 
-        // Set active filter (All)
-        setActiveFilter(btnFilterAll);
+        // Fetch Data
+        fetchSalesHistory();
     }
 
     private void initializeViews() {
-        // Header
         btnBack = findViewById(R.id.btnBack);
-        tvTitle = findViewById(R.id.tvTitle);
-
-        // Filter buttons
         btnFilterAll = findViewById(R.id.btnFilterAll);
         btnFilterCash = findViewById(R.id.btnFilterCash);
         btnFilterEMI = findViewById(R.id.btnFilterEMI);
         btnFilterThisMonth = findViewById(R.id.btnFilterThisMonth);
+        recyclerSalesHistory = findViewById(R.id.recyclerSalesHistory);
+        tvEmptyState = findViewById(R.id.tvEmptyState);
 
-        // Sale cards
-        cardSale1 = findViewById(R.id.cardSale1);
-        cardSale2 = findViewById(R.id.cardSale2);
-        cardSale3 = findViewById(R.id.cardSale3);
-        cardSale4 = findViewById(R.id.cardSale4);
-        cardSale5 = findViewById(R.id.cardSale5);
+        recyclerSalesHistory.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new SalesHistoryAdapter(new ArrayList<>(), item -> showSaleDetails(item));
+        recyclerSalesHistory.setAdapter(adapter);
+    }
+
+    private void fetchSalesHistory() {
+        ApiService apiService = RetrofitClient.getApiService();
+        apiService.getSalesHistory().enqueue(new Callback<SalesHistoryResponse>() {
+            @Override
+            public void onResponse(Call<SalesHistoryResponse> call, Response<SalesHistoryResponse> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    allSales = response.body().getData();
+                    updateDisplayList(allSales);
+                    setActiveFilter(btnFilterAll);
+                } else {
+                    tvEmptyState.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SalesHistoryResponse> call, Throwable t) {
+                Toast.makeText(SalesHistoryActivity.this, "Network error", Toast.LENGTH_SHORT).show();
+                tvEmptyState.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void updateDisplayList(List<SalesHistoryItem> list) {
+        if (list == null || list.isEmpty()) {
+            tvEmptyState.setVisibility(View.VISIBLE);
+            recyclerSalesHistory.setVisibility(View.GONE);
+        } else {
+            tvEmptyState.setVisibility(View.GONE);
+            recyclerSalesHistory.setVisibility(View.VISIBLE);
+            adapter.updateList(list);
+        }
     }
 
     private void setupClickListeners() {
-        // Back button
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
+        btnBack.setOnClickListener(v -> onBackPressed());
+
+        btnFilterAll.setOnClickListener(v -> {
+            setActiveFilter(btnFilterAll);
+            updateDisplayList(allSales);
         });
 
-        // Filter buttons
-        btnFilterAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveFilter(btnFilterAll);
-                Toast.makeText(SalesHistoryActivity.this, "Showing all sales", Toast.LENGTH_SHORT).show();
-                // TODO: Filter sales data
+        btnFilterCash.setOnClickListener(v -> {
+            setActiveFilter(btnFilterCash);
+            List<SalesHistoryItem> filtered = new ArrayList<>();
+            for (SalesHistoryItem s : allSales) {
+                if ("Cash".equalsIgnoreCase(s.getPaymentType())) filtered.add(s);
             }
+            updateDisplayList(filtered);
         });
 
-        btnFilterCash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveFilter(btnFilterCash);
-                Toast.makeText(SalesHistoryActivity.this, "Showing cash sales", Toast.LENGTH_SHORT).show();
-                // TODO: Filter sales data for cash payments
+        btnFilterEMI.setOnClickListener(v -> {
+            setActiveFilter(btnFilterEMI);
+            List<SalesHistoryItem> filtered = new ArrayList<>();
+            for (SalesHistoryItem s : allSales) {
+                if ("EMI".equalsIgnoreCase(s.getPaymentType())) filtered.add(s);
             }
+            updateDisplayList(filtered);
         });
 
-        btnFilterEMI.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveFilter(btnFilterEMI);
-                Toast.makeText(SalesHistoryActivity.this, "Showing EMI sales", Toast.LENGTH_SHORT).show();
-                // TODO: Filter sales data for EMI payments
-            }
-        });
+        btnFilterThisMonth.setOnClickListener(v -> {
+            setActiveFilter(btnFilterThisMonth);
+            List<SalesHistoryItem> filtered = new ArrayList<>();
+            Calendar now = Calendar.getInstance();
+            int currentMonth = now.get(Calendar.MONTH);
+            int currentYear = now.get(Calendar.YEAR);
 
-        btnFilterThisMonth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setActiveFilter(btnFilterThisMonth);
-                Toast.makeText(SalesHistoryActivity.this, "Showing this month's sales", Toast.LENGTH_SHORT).show();
-                // TODO: Filter sales data for current month
-            }
-        });
-
-        // Sale card clicks
-        cardSale1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSaleDetails("Yamaha R15 V4", "John Doe", "Oct 24, 2023", "EMI", "$2,400.00");
-            }
-        });
-
-        cardSale2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSaleDetails("Royal Enfield Classic", "Sarah Smith", "Oct 23, 2023", "Cash", "$4,500.00");
-            }
-        });
-
-        cardSale3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSaleDetails("Honda CB350", "Mike Ross", "Oct 22, 2023", "EMI", "$3,100.00");
-            }
-        });
-
-        cardSale4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSaleDetails("KTM Duke 250", "Alex Chen", "Oct 20, 2023", "Cash", "$5,200.00");
-            }
-        });
-
-        cardSale5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSaleDetails("Bajaj Avenger 220", "Priya Patel", "Oct 18, 2023", "EMI", "$1,800.00");
-            }
+            // Note: In real app, you'd parse item.getSaleDate() to compare
+            // For now, simplify or filter based on a flag from backend
+            updateDisplayList(allSales); // Placeholder for complex date filter
         });
     }
 
     private void setActiveFilter(Button activeButton) {
-        // Reset all buttons
         resetFilterButtons();
-
-        // Set active button style
         activeButton.setTextColor(ContextCompat.getColor(this, R.color.white));
         activeButton.setBackground(ContextCompat.getDrawable(this, R.drawable.primary_button_rounded));
-
-        // Set inactive buttons style
-        if (activeButton != btnFilterAll) {
-            btnFilterAll.setTextColor(ContextCompat.getColor(this, R.color.text_primary_light));
-            btnFilterAll.setBackground(ContextCompat.getDrawable(this, R.drawable.gray_button_rounded));
-        }
-        if (activeButton != btnFilterCash) {
-            btnFilterCash.setTextColor(ContextCompat.getColor(this, R.color.text_primary_light));
-            btnFilterCash.setBackground(ContextCompat.getDrawable(this, R.drawable.gray_button_rounded));
-        }
-        if (activeButton != btnFilterEMI) {
-            btnFilterEMI.setTextColor(ContextCompat.getColor(this, R.color.text_primary_light));
-            btnFilterEMI.setBackground(ContextCompat.getDrawable(this, R.drawable.gray_button_rounded));
-        }
-        if (activeButton != btnFilterThisMonth) {
-            btnFilterThisMonth.setTextColor(ContextCompat.getColor(this, R.color.text_primary_light));
-            btnFilterThisMonth.setBackground(ContextCompat.getDrawable(this, R.drawable.gray_button_rounded));
-        }
     }
 
     private void resetFilterButtons() {
-        btnFilterAll.setTextColor(ContextCompat.getColor(this, R.color.text_primary_light));
-        btnFilterAll.setBackground(ContextCompat.getDrawable(this, R.drawable.gray_button_rounded));
-
-        btnFilterCash.setTextColor(ContextCompat.getColor(this, R.color.text_primary_light));
-        btnFilterCash.setBackground(ContextCompat.getDrawable(this, R.drawable.gray_button_rounded));
-
-        btnFilterEMI.setTextColor(ContextCompat.getColor(this, R.color.text_primary_light));
-        btnFilterEMI.setBackground(ContextCompat.getDrawable(this, R.drawable.gray_button_rounded));
-
-        btnFilterThisMonth.setTextColor(ContextCompat.getColor(this, R.color.text_primary_light));
-        btnFilterThisMonth.setBackground(ContextCompat.getDrawable(this, R.drawable.gray_button_rounded));
+        Button[] buttons = {btnFilterAll, btnFilterCash, btnFilterEMI, btnFilterThisMonth};
+        for (Button b : buttons) {
+            b.setTextColor(ContextCompat.getColor(this, R.color.text_primary_light));
+            b.setBackground(ContextCompat.getDrawable(this, R.drawable.gray_button_rounded));
+        }
     }
 
-    private void showSaleDetails(String bikeName, String customer, String date, String paymentType, String price) {
-        Intent intent = new Intent(SalesHistoryActivity.this, SaleDetailsActivity.class);
+    private void showSaleDetails(SalesHistoryItem item) {
+        String cleanPrice = item.getTotalValue();
+        if (cleanPrice != null) {
+            cleanPrice = cleanPrice.replaceAll("[^0-9.]", "").trim();
+        } else {
+            cleanPrice = "0.00";
+        }
 
-        // Pass data to SaleDetailsActivity
-        intent.putExtra("BIKE_NAME", bikeName);
-        intent.putExtra("BIKE_COLOR", "Dark Stealth Black");
-        intent.putExtra("ENGINE_NUMBER", "RE350-9821X");
-        intent.putExtra("CHASSIS_NUMBER", "ME3-7728-Y");
-
-        intent.putExtra("CUSTOMER_NAME", "Rahul Sharma");
-        intent.putExtra("CUSTOMER_PHONE", "+91 98765 43210");
-        intent.putExtra("CUSTOMER_ADDRESS", "123, MG Road, District A, Bangalore, Karnataka - 560001");
-
-        intent.putExtra("SALE_DATE", "24 Oct, 2023");
-        intent.putExtra("PAYMENT_TYPE", "EMI Finance");
-        intent.putExtra("DOWN_PAYMENT", "₹50,000");
-        intent.putExtra("TOTAL_VALUE", "₹2,10,000");
-
-        intent.putExtra("INVOICE_NUMBER", "INV-2023-001");
-        intent.putExtra("DELIVERY_NOTE", "DEL-099-BLR");
-
+        Intent intent = new Intent(this, SaleDetailsActivity.class);
+        intent.putExtra("BIKE_NAME", item.getBrand() + " " + item.getModel());
+        intent.putExtra("BIKE_COLOR", item.getBikeColorName());
+        intent.putExtra("ENGINE_NUMBER", item.getEngineNumber());
+        intent.putExtra("CHASSIS_NUMBER", item.getChassisNumber());
+        intent.putExtra("CUSTOMER_NAME", item.getCustomerName());
+        intent.putExtra("CUSTOMER_PHONE", item.getCustomerPhone());
+        intent.putExtra("CUSTOMER_ADDRESS", item.getCustomerAddress());
+        intent.putExtra("SALE_DATE", item.getFormattedDate());
+        intent.putExtra("PAYMENT_TYPE", item.getPaymentType());
+        intent.putExtra("TOTAL_VALUE", "₹" + cleanPrice);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }

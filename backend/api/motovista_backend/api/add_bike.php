@@ -93,13 +93,21 @@ try {
     // 6. Commit
     $conn->commit();
 
-    echo json_encode(["status" => true, "message" => "Bike and Variants added successfully"]);
+    echo json_encode([
+        "status" => "success",
+        "success" => true,
+        "message" => "Bike and Variants added successfully"
+    ]);
 
 } catch (Exception $e) {
-    if ($conn->inTransaction()) {
+    if (isset($conn) && $conn->inTransaction()) {
         $conn->rollBack();
     }
-    http_response_code(500); // Or 400
-    echo json_encode(["status" => false, "message" => $e->getMessage()]);
+    http_response_code(400); // Bad Request or appropriate error code
+    echo json_encode([
+        "status" => "error",
+        "success" => false, 
+        "message" => $e->getMessage()
+    ]);
 }
 ?>

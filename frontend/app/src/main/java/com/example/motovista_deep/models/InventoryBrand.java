@@ -5,6 +5,9 @@ import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
 public class InventoryBrand implements Serializable {
+    @SerializedName("id")
+    private int id;
+
     @SerializedName("brand")
     private String brand;
 
@@ -17,6 +20,7 @@ public class InventoryBrand implements Serializable {
     @SerializedName("logo")
     private String logo;
 
+    public int getId() { return id; }
     public String getBrand() { return brand; }
     public int getCount() { return count; }
     public List<InventoryBike> getBikes() { return bikes; }

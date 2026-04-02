@@ -34,15 +34,21 @@ public class InventoryBrandAdapter extends RecyclerView.Adapter<InventoryBrandAd
     private static final int TYPE_ADD = 1;
 
     private OnAddBrandClickListener addListener;
+    private OnBrandLongClickListener longClickListener;
 
     public interface OnAddBrandClickListener {
         void onAddBrandClick();
     }
 
-    public InventoryBrandAdapter(Context context, List<InventoryBrand> brandList, OnAddBrandClickListener addListener) {
+    public interface OnBrandLongClickListener {
+        void onBrandLongClick(InventoryBrand brand);
+    }
+
+    public InventoryBrandAdapter(Context context, List<InventoryBrand> brandList, OnAddBrandClickListener addListener, OnBrandLongClickListener longClickListener) {
         this.context = context;
         this.brandList = brandList;
         this.addListener = addListener;
+        this.longClickListener = longClickListener;
         initializeBrandMap();
     }
 
@@ -146,6 +152,14 @@ public class InventoryBrandAdapter extends RecyclerView.Adapter<InventoryBrandAd
             // But we can check. For now passing list is fine if model has it.
             intent.putExtra("BIKE_LIST", (Serializable) brand.getBikes());
             context.startActivity(intent);
+        });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (longClickListener != null) {
+                longClickListener.onBrandLongClick(brand);
+                return true;
+            }
+            return false;
         });
     }
 

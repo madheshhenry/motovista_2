@@ -74,6 +74,17 @@
 
         </LinearLayout>
 
+        <!-- Delete Button -->
+        <ImageView
+            android:id="@+id/btnDeleteNotification"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="6dp"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/gray_400"
+            android:background="?selectableItemBackgroundBorderless"
+            android:layout_marginStart="8dp" />
+
         <!-- Unread Indicator -->
         <View
             android:id="@+id/unreadIndicator"

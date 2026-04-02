@@ -54,6 +54,7 @@ import com.example.motovista_deep.models.GenericResponse;
 import com.example.motovista_deep.models.GetBikesResponse;
 import com.example.motovista_deep.models.InventoryBrand;
 import com.example.motovista_deep.models.InventoryResponse;
+import com.example.motovista_deep.models.MasterCatalogResponse;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -133,6 +134,15 @@ public class AddStockBikeActivity extends AppCompatActivity {
         enableSelection(containerColor, iconEndColor, false);
 
         setupCameraLauncher();
+        
+        // Visual versioning to confirm deployment
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Add Stock (Sync v2)");
+        } else {
+            TextView tvTitle = findViewById(R.id.tvTitle); // Assuming standard ID
+            if (tvTitle != null) tvTitle.setText("Add Stock (Sync v2)");
+        }
+        
         fetchMasterData();
     }
 
@@ -540,7 +550,7 @@ public class AddStockBikeActivity extends AppCompatActivity {
         if (masterBikeList == null) masterBikeList = new ArrayList<>();
         List<SelectionItem> items = new ArrayList<>();
         for (InventoryBrand b : masterBrandList) {
-             if (b.getBrand() != null && !b.getBrand().isEmpty()) items.add(new SelectionItem(b.getBrand()));
+             if (b.getBrand() != null && !b.getBrand().trim().isEmpty()) items.add(new SelectionItem(b.getBrand().trim()));
         }
         if (items.isEmpty()) {
              Set<String> brands = new HashSet<>();
@@ -564,14 +574,24 @@ public class AddStockBikeActivity extends AppCompatActivity {
 
     private void showModelDialog() {
         Set<String> models = new HashSet<>();
+        String brandToMatch = selectedBrand.trim();
         for (BikeModel bike : masterBikeList) {
-            if (selectedBrand.equalsIgnoreCase(bike.getBrand()) && bike.getModel() != null) models.add(bike.getModel());
+            if (bike.getBrand() != null && brandToMatch.equalsIgnoreCase(bike.getBrand().trim()) && bike.getModel() != null && !bike.getModel().trim().isEmpty()) {
+                models.add(bike.getModel().trim());
+            }
         }
-        // if (models.isEmpty()) Toast.makeText(this, "No models found", Toast.LENGTH_SHORT).show();
+        if (models.isEmpty()) {
+            if (masterBikeList == null || masterBikeList.isEmpty()) {
+                 Toast.makeText(this, "Master list empty. Retrying...", Toast.LENGTH_SHORT).show();
+                 fetchMasterData();
+            } else {
+                 Toast.makeText(this, "No models found for " + selectedBrand + " in " + masterBikeList.size() + " catalog items.", Toast.LENGTH_LONG).show();
+            }
+            return;
+        }
         List<SelectionItem> items = new ArrayList<>();
-        List<String> sortedModels = new ArrayList<>(models);
-        Collections.sort(sortedModels);
-        for(String m : sortedModels) items.add(new SelectionItem(m));
+        for(String m : models) items.add(new SelectionItem(m));
+        Collections.sort(items, (o1, o2) -> o1.name.compareTo(o2.name));
         
         showSelectionDialog("Select Model", items, item -> {
             selectedModel = item.name;
@@ -587,11 +607,13 @@ public class AddStockBikeActivity extends AppCompatActivity {
 
     private void showVariantDialog() {
         Set<String> variants = new HashSet<>();
+        String brandToMatch = selectedBrand.trim();
+        String modelToMatch = selectedModel.trim();
         for (BikeModel bike : masterBikeList) {
-            if (selectedBrand.equalsIgnoreCase(bike.getBrand()) && selectedModel.equalsIgnoreCase(bike.getModel())) {
+            if (bike.getBrand() != null && bike.getModel() != null && brandToMatch.equalsIgnoreCase(bike.getBrand().trim()) && modelToMatch.equalsIgnoreCase(bike.getModel().trim())) {
                 if (bike.getVariants() != null && !bike.getVariants().isEmpty()) {
-                    for (BikeVariantModel v : bike.getVariants()) if (v.variantName != null) variants.add(v.variantName);
-                } else if (bike.getVariant() != null) variants.add(bike.getVariant());
+                    for (BikeVariantModel v : bike.getVariants()) if (v.variantName != null && !v.variantName.trim().isEmpty()) variants.add(v.variantName.trim());
+                } else if (bike.getVariant() != null && !bike.getVariant().trim().isEmpty()) variants.add(bike.getVariant().trim());
             }
         }
         List<SelectionItem> items = new ArrayList<>();
@@ -612,12 +634,15 @@ public class AddStockBikeActivity extends AppCompatActivity {
     private void showColorDialog() {
         List<SelectionItem> items = new ArrayList<>();
         Set<String> uniqueColors = new HashSet<>();
+        String brandToMatch = selectedBrand.trim();
+        String modelToMatch = selectedModel.trim();
+        String variantToMatch = selectedVariant.trim();
         for (BikeModel bike : masterBikeList) {
-             if (selectedBrand.equalsIgnoreCase(bike.getBrand()) && selectedModel.equalsIgnoreCase(bike.getModel())) {
+             if (bike.getBrand() != null && bike.getModel() != null && brandToMatch.equalsIgnoreCase(bike.getBrand().trim()) && modelToMatch.equalsIgnoreCase(bike.getModel().trim())) {
                  boolean foundInVariants = false;
                  if (bike.getVariants() != null) {
                      for (BikeVariantModel v : bike.getVariants()) {
-                         if (selectedVariant.equalsIgnoreCase(v.variantName) && v.colors != null) {
+                         if (v.variantName != null && variantToMatch.equalsIgnoreCase(v.variantName.trim()) && v.colors != null) {
                              for (BikeVariantModel.VariantColor c : v.colors) {
                                  String key = c.colorName + "|" + (c.colorHex!=null?c.colorHex:"#CCCCCC");
                                  if (uniqueColors.add(key)) items.add(new SelectionItem(c.colorName, c.colorHex, key));
@@ -724,36 +749,53 @@ public class AddStockBikeActivity extends AppCompatActivity {
     }
     
     private void fetchMasterData() {
-        progressDialog.setMessage("Loading Catalog...");
+        Toast.makeText(this, "DEBUG: Starting Unified Sync...", Toast.LENGTH_SHORT).show();
+        progressDialog.setMessage("Synchronizing Catalog...");
         progressDialog.show();
+        
         String token = SharedPrefManager.getInstance(this).getToken();
         ApiService apiService = RetrofitClient.getApiService();
-        apiService.getBrands("Bearer " + token).enqueue(new Callback<InventoryResponse>() {
-            @Override public void onResponse(Call<InventoryResponse> call, Response<InventoryResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    masterBrandList = response.body().getData();
-                    if (masterBrandList == null) masterBrandList = new ArrayList<>();
-                } else {
-                    masterBrandList = new ArrayList<>();
-                }
-                fetchModels(apiService, token);
-            }
-            @Override public void onFailure(Call<InventoryResponse> call, Throwable t) { masterBrandList = new ArrayList<>(); fetchModels(apiService, token); }
-        });
-    }
-    
-    private void fetchModels(ApiService apiService, String token) {
-        apiService.getNewBikes("Bearer " + token).enqueue(new Callback<GetBikesResponse>() {
-            @Override public void onResponse(Call<GetBikesResponse> call, Response<GetBikesResponse> response) {
+        
+        long timestamp = System.currentTimeMillis();
+        
+        apiService.getMasterCatalog("Bearer " + token, timestamp).enqueue(new Callback<MasterCatalogResponse>() {
+            @Override
+            public void onResponse(Call<MasterCatalogResponse> call, Response<MasterCatalogResponse> response) {
                 progressDialog.dismiss();
+                Toast.makeText(AddStockBikeActivity.this, "DEBUG: Response Received (" + response.code() + ")", Toast.LENGTH_SHORT).show();
                 if (response.isSuccessful() && response.body() != null) {
-                    masterBikeList = response.body().getData();
-                    if (masterBikeList == null) masterBikeList = new ArrayList<>();
+                    if (response.body().isSuccess()) {
+                        masterBrandList = response.body().getBrands();
+                        masterBikeList = response.body().getCatalog();
+                        
+                        if (masterBrandList == null) masterBrandList = new ArrayList<>();
+                        if (masterBikeList == null) masterBikeList = new ArrayList<>();
+                        
+                        String debugBrand = (masterBikeList.size() > 0) ? masterBikeList.get(0).getBrand() : "NONE";
+                        Toast.makeText(AddStockBikeActivity.this, 
+                            "Sync Complete: " + masterBrandList.size() + " brands, " + masterBikeList.size() + " models.", 
+                            Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(AddStockBikeActivity.this, "Sync Error: " + response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    masterBikeList = new ArrayList<>();
+                    Toast.makeText(AddStockBikeActivity.this, "HTTP Error " + response.code(), Toast.LENGTH_LONG).show();
                 }
             }
-            @Override public void onFailure(Call<GetBikesResponse> call, Throwable t) { progressDialog.dismiss(); masterBikeList = new ArrayList<>(); }
+
+            @Override
+            public void onFailure(Call<MasterCatalogResponse> call, Throwable t) {
+                progressDialog.dismiss();
+                String errorMsg = t.getMessage();
+                if (t instanceof com.google.gson.JsonSyntaxException) {
+                    errorMsg = "Sync JSON Mismatch: " + errorMsg;
+                } else {
+                    errorMsg = "Connection Error: " + errorMsg;
+                }
+                Toast.makeText(AddStockBikeActivity.this, errorMsg, Toast.LENGTH_LONG).show();
+                masterBrandList = new ArrayList<>();
+                masterBikeList = new ArrayList<>();
+            }
         });
     }
     

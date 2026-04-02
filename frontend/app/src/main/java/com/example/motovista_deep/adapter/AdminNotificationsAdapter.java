@@ -16,9 +16,20 @@ public class AdminNotificationsAdapter extends RecyclerView.Adapter<AdminNotific
 
     private List<AdminNotification> items;
     private OnNotificationClickListener listener;
+    private java.util.Set<Integer> selectedIds = new java.util.HashSet<>();
+    private boolean selectionMode = false;
+    private OnSelectionListener selectionListener;
 
     public interface OnNotificationClickListener {
         void onNotificationClick(AdminNotification notification);
+    }
+
+    public interface OnSelectionListener {
+        void onSelectionChanged(int count);
+    }
+
+    public void setSelectionListener(OnSelectionListener listener) {
+        this.selectionListener = listener;
     }
 
     public AdminNotificationsAdapter(List<AdminNotification> items, OnNotificationClickListener listener) {
@@ -48,14 +59,87 @@ public class AdminNotificationsAdapter extends RecyclerView.Adapter<AdminNotific
             holder.ivBike.setImageResource(R.drawable.ic_notifications);
         }
 
+        // --- SELECTION LOGIC ---
+        boolean isSelected = selectedIds.contains(item.getId());
+        holder.itemView.setBackgroundColor(isSelected ? 
+                holder.itemView.getContext().getResources().getColor(R.color.gray_100) : 
+                android.graphics.Color.TRANSPARENT);
+
         holder.itemView.setOnClickListener(v -> {
-            if (listener != null) listener.onNotificationClick(item);
+            if (selectionMode) {
+                toggleSelection(item.getId());
+            } else if (listener != null) {
+                listener.onNotificationClick(item);
+            }
         });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (!selectionMode) {
+                selectionMode = true;
+                toggleSelection(item.getId());
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void toggleSelection(int id) {
+        if (selectedIds.contains(id)) {
+            selectedIds.remove(id);
+        } else {
+            selectedIds.add(id);
+        }
+        
+        if (selectedIds.isEmpty()) {
+            selectionMode = false;
+        }
+
+        if (selectionListener != null) {
+            selectionListener.onSelectionChanged(selectedIds.size());
+        }
+        notifyDataSetChanged();
+    }
+
+    public void clearSelection() {
+        selectedIds.clear();
+        selectionMode = false;
+        notifyDataSetChanged();
+        if (selectionListener != null) selectionListener.onSelectionChanged(0);
+    }
+
+    public java.util.Set<Integer> getSelectedIds() {
+        return selectedIds;
+    }
+
+    public boolean isSelectionMode() {
+        return selectionMode;
+    }
+
+    public List<AdminNotification> getItems() {
+        return items;
+    }
+
+    public AdminNotification getItemAt(int position) {
+        if (items != null && position >= 0 && position < items.size()) {
+            return items.get(position);
+        }
+        return null;
     }
 
     @Override
     public int getItemCount() {
         return items == null ? 0 : items.size();
+    }
+
+    public void removeItems(java.util.Set<Integer> idsToRemove) {
+        if (items == null) return;
+        java.util.Iterator<AdminNotification> it = items.iterator();
+        while (it.hasNext()) {
+            if (idsToRemove.contains(it.next().getId())) {
+                it.remove();
+            }
+        }
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

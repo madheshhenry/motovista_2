@@ -8,10 +8,12 @@ try {
     }
     $customerId = intval($_GET['customer_id']);
 
-    $sql = "SELECT id, bike_name, bike_variant, bike_color, bike_price, status, created_at 
-            FROM customer_requests 
-            WHERE customer_id = :cid 
-            ORDER BY created_at DESC";
+    $sql = "SELECT cr.id, cr.bike_name, cr.bike_variant, cr.bike_color, cr.bike_price, cr.status, cr.created_at,
+                   rl.step_1_status, rl.step_2_status, rl.step_3_status, rl.step_4_status, rl.physical_bike_id
+            FROM customer_requests cr
+            LEFT JOIN registration_ledger rl ON cr.id = rl.order_id
+            WHERE cr.customer_id = :cid 
+            ORDER BY cr.created_at DESC";
 
     $stmt = $conn->prepare($sql);
     $stmt->execute([':cid' => $customerId]);

@@ -21,7 +21,7 @@ try {
     // 2. Fetch Brands (Also count bikes for each brand)
     // We subquery both tables to get counts per brand
     $sql = "
-    SELECT b.id, b.brand_name, b.brand_logo, 
+    SELECT b.id, TRIM(b.brand_name) as brand_name, b.brand_logo, 
            (
                (SELECT COUNT(*) FROM bikes WHERE brand = b.brand_name AND condition_type = 'NEW') + 
                (SELECT COUNT(*) FROM stock_bikes WHERE brand = b.brand_name AND condition_type = 'NEW')
@@ -37,6 +37,7 @@ try {
     $formattedBrands = [];
     foreach ($brands as $brand) {
         $formattedBrands[] = [
+            'id' => $brand['id'],
             'brand' => $brand['brand_name'],
             'logo' => $brand['brand_logo'],
             'count' => $brand['bike_count'],

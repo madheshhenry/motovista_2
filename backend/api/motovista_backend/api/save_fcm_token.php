@@ -25,11 +25,23 @@ $user_type = isset($data['user_type']) ? $data['user_type'] : 'customer';
 $device_name = isset($data['device_name']) ? $data['device_name'] : 'Unknown Device';
 
 try {
+    $conn->beginTransaction();
+
+    // 1. CLEAR ANY OLD ASSIGNMENTS: 
+    // Delete any existing records for this token, regardless of user_id or user_type.
+    // This ensures that if you switch from Admin to Customer on the same phone, 
+    // the old Admin registration is removed from this device.
+    $stmtDelete = $conn->prepare("DELETE FROM user_fcm_tokens WHERE fcm_token = ?");
+    $stmtDelete->execute([$fcm_token]);
+
+    // 2. REGISTER NEW ASSIGNMENT:
     $stmt = $conn->prepare("INSERT INTO user_fcm_tokens (user_id, fcm_token, device_name, user_type) 
                            VALUES (?, ?, ?, ?) 
                            ON DUPLICATE KEY UPDATE device_name = ?, updated_at = CURRENT_TIMESTAMP");
 
     $stmt->execute([$user_id, $fcm_token, $device_name, $user_type, $device_name]);
+
+    $conn->commit();
 
     error_log("FCM Token registered for $user_type (ID: $user_id): $fcm_token");
 

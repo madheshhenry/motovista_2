@@ -463,6 +463,25 @@ public class AddBikeActivity extends AppCompatActivity {
     // (Consolidated VariantViewHolder logic is already defined above)
         
     private boolean validateData() {
+        // Parent Fields Validation
+        if (etBrand.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "Brand is required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (etModelName.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "Model Name is required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (etYear.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "Model Year is required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (etEngineCC.getText().toString().trim().isEmpty()) {
+            Toast.makeText(this, "Engine CC is required", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        
+        // Variants Validation
         if (bikeVariants.isEmpty()) {
             Toast.makeText(this, "Add at least one variant", Toast.LENGTH_SHORT).show();
             return false;
@@ -474,7 +493,7 @@ public class AddBikeActivity extends AppCompatActivity {
                 return false;
             }
             // Check colors
-            if (v.colors.isEmpty()) {
+            if (v.colors == null || v.colors.isEmpty()) {
                 Toast.makeText(this, "Variant " + v.variantName + " needs at least one color", Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -585,7 +604,7 @@ public class AddBikeActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
                         pd.dismiss();
-                        if (response.isSuccessful() && response.body() != null && "success".equalsIgnoreCase(response.body().getStatus())) {
+                        if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                             Toast.makeText(AddBikeActivity.this, "Bike Updated Successfully!", Toast.LENGTH_LONG).show();
                             setResult(RESULT_OK); // Notify caller
                             finish();
@@ -609,7 +628,7 @@ public class AddBikeActivity extends AppCompatActivity {
                         public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
                             pd.dismiss();
                             if (response.isSuccessful() && response.body() != null) {
-                                if (response.body().getStatus().equalsIgnoreCase("success")) {
+                                if (response.body().isSuccess()) {
                                     Toast.makeText(AddBikeActivity.this, "Bike Added Successfully!", Toast.LENGTH_LONG).show();
                                     finish();
                                 } else {

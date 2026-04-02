@@ -40,29 +40,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <!-- Bike Icon Container -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    app:cardCornerRadius="70dp"
-                    app:cardBackgroundColor="@color/primary_light"
-                    app:cardElevation="12dp"
-                    android:layout_marginBottom="32dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"
-                            android:src="@drawable/ic_bike"
-                            android:tint="@color/primary_color" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
+                <!-- App Logo (Same as Splash) -->
+                <ImageView
+                    android:id="@+id/iv_logo"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp"
+                    android:src="@drawable/splash_logo"
+                    android:scaleType="fitCenter"
+                    android:layout_marginBottom="24dp" />
 
                 <!-- Welcome Text -->
                 <TextView

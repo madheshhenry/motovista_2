@@ -122,41 +122,17 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void animateViews() {
-        // Get views
-        CardView iconContainer = findViewById(R.id.icon_bike_container);
-        TextView appName = findViewById(R.id.tv_app_name);
-        TextView motovista = findViewById(R.id.tv_motovista);
-        TextView tagline = findViewById(R.id.tv_tagline);
+        // Get the new logo view
+        ImageView splashLogo = findViewById(R.id.img_splash_logo);
 
-        // Load animations - Using correct animation resources
-        Animation fadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
-        Animation slideUp = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
+        if (splashLogo != null) {
+            // Load a simple fade-in animation
+            Animation fadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
+            fadeIn.setDuration(1200);
 
-        // Create slide from right animation (we'll create it manually since it doesn't exist)
-        Animation slideFromRight = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
-        slideFromRight.setInterpolator(this, android.R.anim.accelerate_decelerate_interpolator);
-
-        // Set animation durations
-        fadeIn.setDuration(1000);
-        slideUp.setDuration(800);
-        slideFromRight.setDuration(800);
-
-        // For slide from right, we need to create it differently
-        // Let's use translate animation
-        Animation translateFromRight = new android.view.animation.TranslateAnimation(
-                Animation.RELATIVE_TO_PARENT, 1.0f,  // From X = 100% (right)
-                Animation.RELATIVE_TO_PARENT, 0.0f,  // To X = 0% (original)
-                Animation.RELATIVE_TO_SELF, 0.0f,    // From Y = 0%
-                Animation.RELATIVE_TO_SELF, 0.0f     // To Y = 0%
-        );
-        translateFromRight.setDuration(800);
-        translateFromRight.setInterpolator(new android.view.animation.AccelerateDecelerateInterpolator());
-
-        // Apply animations
-        iconContainer.startAnimation(fadeIn);
-        appName.startAnimation(slideUp);
-        motovista.startAnimation(translateFromRight);
-        tagline.startAnimation(fadeIn);
+            // Apply animation
+            splashLogo.startAnimation(fadeIn);
+        }
     }
 
     private void animateProgress() {

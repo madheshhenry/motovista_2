@@ -149,9 +149,18 @@ public interface ApiService {
             @Header("Authorization") String token
     );
 
+    @Headers("Cache-Control: no-cache")
     @GET("get_new_bikes.php")
     Call<GetBikesResponse> getNewBikes(
-            @Header("Authorization") String token
+            @Header("Authorization") String token,
+            @Query("timestamp") long timestamp
+    );
+
+    @Headers("Cache-Control: no-cache")
+    @GET("get_catalog_master.php")
+    Call<com.example.motovista_deep.models.MasterCatalogResponse> getMasterCatalog(
+            @Header("Authorization") String token,
+            @Query("timestamp") long timestamp
     );
 
     @GET("get_second_hand_bikes.php")
@@ -260,7 +269,6 @@ public interface ApiService {
     @GET("get_inventory.php")
     Call<InventoryResponse> getInventory(@Header("Authorization") String token);
 
-    // ✅ MULTIPART PROFILE UPDATE (WITH IMAGES)
     @Multipart
     @POST("upload_profile_images.php")
     Call<GenericResponse> uploadProfileWithImages(
@@ -332,7 +340,22 @@ public interface ApiService {
     );
 
     @GET("get_brands.php")
-    Call<com.example.motovista_deep.models.InventoryResponse> getBrands(@Header("Authorization") String token);
+    Call<com.example.motovista_deep.models.InventoryResponse> getBrands(@Header("Authorization") String token, @Query("timestamp") long timestamp);
+
+    @Multipart
+    @POST("update_brand.php")
+    Call<GenericResponse> updateBrand(
+            @Header("Authorization") String token,
+            @Part("brand_id") RequestBody brandId,
+            @Part("brand_name") RequestBody brandName,
+            @Part MultipartBody.Part brandLogo
+    );
+
+    @POST("delete_brand.php")
+    Call<GenericResponse> deleteBrand(
+            @Header("Authorization") String token,
+            @Body com.example.motovista_deep.models.DeleteBrandRequest request
+    );
 
     @GET("get_brand_bikes.php")
     Call<com.example.motovista_deep.models.BikeListResponse> getBikesByBrand(
@@ -385,11 +408,17 @@ public interface ApiService {
     @POST("notify_emi_payment.php")
     Call<GenericResponse> notifyEmiPayment(@Body com.example.motovista_deep.models.NotifyPaymentRequest request);
 
-    @GET("get_admin_notifications_list.php")
-    Call<AdminNotificationListResponse> getAdminNotificationList();
-
     @GET("get_admin_notifications.php")
     Call<AdminNotificationResponse> getAdminNotifications();
+
+    @POST("delete_admin_notifications.php")
+    Call<GenericResponse> deleteNotifications(
+            @Header("Authorization") String token,
+            @Body com.example.motovista_deep.models.DeleteNotificationsRequest request
+    );
+
+    @GET("get_admin_notifications_list.php")
+    Call<AdminNotificationListResponse> getAdminNotificationList();
 
     @GET("get_pending_verifications.php")
     Call<AdminVerificationResponse> getPendingVerifications();
@@ -431,6 +460,17 @@ public interface ApiService {
 
     @GET("get_customer_notifications.php")
     Call<GetCustomerNotificationsResponse> getCustomerNotifications(@Query("user_id") int userId);
+
+    @GET("get_sales_history.php")
+    Call<com.example.motovista_deep.models.SalesHistoryResponse> getSalesHistory();
+
+    @POST("delete_customer_notification.php")
+    @Headers("Content-Type: application/json")
+    Call<com.example.motovista_deep.models.GenericResponse> deleteNotification(@Body java.util.Map<String, Integer> body);
+
+    @POST("clear_all_notifications.php")
+    @Headers("Content-Type: application/json")
+    Call<com.example.motovista_deep.models.GenericResponse> clearAllNotifications(@Body java.util.Map<String, Integer> body);
 
     @POST("save_fcm_token.php")
     Call<GenericResponse> saveFcmToken(@Body com.example.motovista_deep.models.SaveFcmTokenRequest request);

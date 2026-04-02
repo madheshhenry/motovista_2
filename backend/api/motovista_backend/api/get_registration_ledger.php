@@ -5,15 +5,11 @@ require_once '../config/db_connect.php';
 try {
     // We join registration_ledger with customer_requests to get the phone number
     // And we join with bikes to get physical details like engine number
-    // We prefer the accurate physical_bike_id link, falling back to name match with GROUP BY to avoid duplicates
+    // We prioritize the accurate physical_bike_id link.
     $sql = "SELECT rl.*, cr.customer_phone as phone, b.engine_number, b.variant, b.colors as bike_color
             FROM registration_ledger rl
             LEFT JOIN customer_requests cr ON rl.order_id = cr.id
-            LEFT JOIN bikes b ON (
-                (rl.physical_bike_id IS NOT NULL AND b.id = rl.physical_bike_id)
-                OR
-                (rl.physical_bike_id IS NULL AND b.customer_name = rl.customer_name AND b.model = rl.bike_name AND b.status = 'Sold')
-            )
+            LEFT JOIN bikes b ON rl.physical_bike_id = b.id
             GROUP BY rl.id
             ORDER BY rl.created_at DESC";
     $stmt = $conn->prepare($sql);

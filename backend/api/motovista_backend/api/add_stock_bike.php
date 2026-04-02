@@ -47,9 +47,50 @@ try {
         throw new Exception("Bike with this Engine or Chassis number already exists completely.");
     }
 
-    // 6. Insert
+    // 6. DYNAMIC: Fetch Image from bike_variants based on Model, Variant, and Color
+    $imagePath = "[]"; // Default empty JSON array
+    try {
+        // Find the model ID first
+        $modelSql = "SELECT id FROM bike_models WHERE LOWER(TRIM(brand)) = LOWER(TRIM(:brd)) AND LOWER(TRIM(model_name)) = LOWER(TRIM(:mdl)) LIMIT 1";
+        $modelStmt = $conn->prepare($modelSql);
+        $modelStmt->execute([':brd' => $brand, ':mdl' => $model]);
+        $modelData = $modelStmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($modelData) {
+            $mid = $modelData['id'];
+            // Find the variant
+            $variantSql = "SELECT colors FROM bike_variants WHERE model_id = :mid AND LOWER(TRIM(variant_name)) = LOWER(TRIM(:vnt)) LIMIT 1";
+            $variantStmt = $conn->prepare($variantSql);
+            $variantStmt->execute([':mid' => $mid, ':vnt' => $variant]);
+            $variantData = $variantStmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($variantData && $variantData['colors']) {
+                $dbColors = json_decode($variantData['colors'], true);
+                // Incoming color is likely JSON array like ["Red|#FF0000"]
+                $inputColorsArr = json_decode($colors, true);
+                if (is_array($inputColorsArr) && !empty($inputColorsArr)) {
+                    $selectedColorFull = $inputColorsArr[0]; // "Red|#FF0000"
+                    $selectedColorName = explode('|', $selectedColorFull)[0];
+
+                    foreach ($dbColors as $c) {
+                        if (isset($c['color_name']) && strcasecmp(trim($c['color_name']), trim($selectedColorName)) == 0) {
+                            if (!empty($c['image_paths']) && is_array($c['image_paths'])) {
+                                $imagePath = json_encode($c['image_paths']);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    } catch (Exception $e) {
+        // Log error but don't fail the insert if image lookup fails
+        error_log("Image lookup error in add_stock_bike.php: " . $e->getMessage());
+    }
+
+    // 7. Insert
     $sql = "INSERT INTO bikes (brand, model, variant, colors, engine_number, chassis_number, date, condition_type, image_paths, status, created_at) 
-            VALUES (:brand, :model, :variant, :colors, :engine_number, :chassis_number, :date, 'NEW', '[]', 'Available', NOW())";
+            VALUES (:brand, :model, :variant, :colors, :engine_number, :chassis_number, :date, 'NEW', :img, 'Available', NOW())";
 
     $stmt = $conn->prepare($sql);
     $params = [
@@ -59,7 +100,8 @@ try {
         ':colors' => $colors,
         ':engine_number' => $engine_number,
         ':chassis_number' => $chassis_number,
-        ':date' => $date
+        ':date' => $date,
+        ':img' => $imagePath
     ];
 
     if ($stmt->execute($params)) {

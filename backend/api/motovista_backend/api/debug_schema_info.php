@@ -1,19 +1,11 @@
 <?php
-require_once __DIR__ . '/../config/db_connect.php';
-$out = "";
+header('Content-Type: application/json');
+require_once '../config/db_connect.php';
 try {
-    $stmt = $conn->query("SHOW CREATE TABLE user_fcm_tokens");
+    $stmt = $conn->query("SHOW CREATE TABLE registration_ledger");
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    $out .= $row['Create Table'] . "\n\n";
-
-    $stmt = $conn->query("SELECT * FROM user_fcm_tokens");
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $out .= "Current Data Count: " . count($rows) . "\n";
-    $out .= print_r($rows, true) . "\n";
-
+    echo json_encode($row);
 } catch (Exception $e) {
-    $out .= "ERROR: " . $e->getMessage() . "\n";
+    echo json_encode(["error" => $e->getMessage()]);
 }
-file_put_contents(__DIR__ . '/schema_info_log.txt', $out);
-echo "Done\n";
 ?>

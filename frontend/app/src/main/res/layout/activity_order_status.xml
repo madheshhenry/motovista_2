@@ -583,7 +583,7 @@
                                 </LinearLayout>
                             </LinearLayout>
 
-                            <!-- ITEM 4: Registration completed -->
+                            <!-- ITEM 4: Document Verification -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -617,7 +617,7 @@
                                         android:id="@+id/tvStep4Title"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Registration completed"
+                                        android:text="Document Verification"
                                         android:textColor="@color/gray_500"
                                         android:textSize="15sp"/>
                                     <TextView
@@ -630,7 +630,7 @@
                                 </LinearLayout>
                             </LinearLayout>
 
-                            <!-- ITEM 5: Number Plate -->
+                            <!-- ITEM 5: Tax Payment -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -664,7 +664,7 @@
                                         android:id="@+id/tvStep5Title"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Number plate"
+                                        android:text="Tax Payment"
                                         android:textColor="@color/gray_500"
                                         android:textSize="15sp"/>
                                     <TextView
@@ -677,7 +677,7 @@
                                 </LinearLayout>
                             </LinearLayout>
 
-                            <!-- ITEM 6: RC book -->
+                            <!-- ITEM 6: Registration & RC Book -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -707,7 +707,7 @@
                                         android:id="@+id/tvStep6Title"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="RC book"
+                                        android:text="Registration &amp; RC Book"
                                         android:textColor="@color/gray_500"
                                         android:textSize="15sp"/>
                                     <TextView

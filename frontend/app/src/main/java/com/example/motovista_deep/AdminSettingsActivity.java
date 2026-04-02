@@ -216,15 +216,7 @@ public class AdminSettingsActivity extends AppCompatActivity {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AdminSettingsActivity.this, "Logging out...", Toast.LENGTH_SHORT).show();
-
-                // Clear any admin session data from SharedPreferences
-                // Navigate to Role Selection screen
-                Intent intent = new Intent(AdminSettingsActivity.this, RoleSelectionActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(0, 0);
+                showLogoutDialog();
             }
         });
 
@@ -274,6 +266,30 @@ public class AdminSettingsActivity extends AppCompatActivity {
                 Toast.makeText(AdminSettingsActivity.this, "Settings selected", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void showLogoutDialog() {
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Log Out")
+                .setMessage("Are you sure you want to log out?")
+                .setPositiveButton("Log Out", (dialog, which) -> performLogout())
+                .setNegativeButton("Cancel", null)
+                .setCancelable(true)
+                .show();
+    }
+
+    private void performLogout() {
+        Toast.makeText(AdminSettingsActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+
+        // 1. Clear SharedPreferences session
+        com.example.motovista_deep.helpers.SharedPrefManager.getInstance(this).clear();
+
+        // 2. Navigate to Role Selection screen
+        Intent intent = new Intent(AdminSettingsActivity.this, RoleSelectionActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     private void setActiveTab(LinearLayout activeTab) {

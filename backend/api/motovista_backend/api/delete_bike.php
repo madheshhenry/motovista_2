@@ -44,52 +44,44 @@ if (!$conn) {
 }
 
 // 3. Delete Logic
-// We need to delete from child tables first (fittings, bike_colors) then the parent table (bikes)
 try {
     $conn->beginTransaction();
 
-    // Delete related fittings
-    $stmt1 = $conn->prepare("DELETE FROM fittings WHERE bike_id = ?");
-    $stmt1->execute([$bike_id]);
+    // The ID passed from the frontend for NEW bikes belongs to the 'bike_models' table
+    $fetchStmt = $conn->prepare("SELECT brand, model_name FROM bike_models WHERE id = ?");
+    $fetchStmt->execute([$bike_id]);
+    $bikeInfo = $fetchStmt->fetch(PDO::FETCH_ASSOC);
 
-    // Delete related colors
-    $stmt2 = $conn->prepare("DELETE FROM bike_colors WHERE bike_id = ?");
-    $stmt2->execute([$bike_id]);
+    if (!$bikeInfo) {
+        $conn->rollBack();
+        echo json_encode(["status" => "error", "message" => "Bike not found"]);
+        exit();
+    }
 
-    // Delete custom fittings associated with this bike? 
-    // The previous schema didn't explicitly link custom_fittings table by bike_id in the same way, but let's assume if it exists.
-    // If fittings table covers it, good. If "custom_fittings" is a separate table, we should check schema.
-    // Based on get_bikes.php, fittings are json columns in bikes table? 
-    // Wait, get_bikes.php selects 'custom_fittings' etc FROM bikes table.
-    // So if they are just JSON columns, we don't need to delete from child tables unless there is a 'fittings' table.
-    // The previous 'delete_bike' I wrote assumed a normalized schema.
-    // But get_bikes.php implies denormalized JSON columns?
-    // Let's check 'create_bikes_table.php' or similar if possible.
-    // However, if I look at 'add_bike.php', I can see how it saves data.
-    // Assuming for now that if 'fittings' table exists, we delete from it, otherwise safe to ignore.
-    // But wait, the previous code had 'stmt1' deleting from 'fittings'. If 'fittings' table doesn't exist, this will throw error.
+    $brand = $bikeInfo['brand'];
+    $model = $bikeInfo['model_name'];
 
-    // Let's just delete from 'bikes' table primarily. 
-    // The references to 'fittings' and 'bike_colors' tables might be from a different version of schema.
-    // Checking `get_bikes.php`, it selects `custom_fittings` column directly. 
-    // So likely NO separate table for that.
+    // Delete associated variants
+    $deleteVariants = $conn->prepare("DELETE FROM bike_variants WHERE model_id = ?");
+    $deleteVariants->execute([$bike_id]);
 
-    // However, let's keep it simple: Delete from 'bikes' table.
-    // If 'bike_colors' or 'fittings' tables exist and have FK constraints, we might need to delete them.
-    // To be safe and avoid SQL errors if tables don't exist, we can wrap in try-catch or just delete from bikes and let FK cascade if configured.
-    // But since I don't know if those tables exist, I will assume a simpler architecture matching get_bikes.php which implies all data is in 'bikes' table (or JSON columns).
-
-    // Update: 'add_bike.php' could verify this. But to fix the immediate 500, I will focus on 'bikes' table.
-
-    $stmt3 = $conn->prepare("DELETE FROM bikes WHERE id = ?");
+    // Delete the master model
+    $stmt3 = $conn->prepare("DELETE FROM bike_models WHERE id = ?");
     $stmt3->execute([$bike_id]);
 
     if ($stmt3->rowCount() > 0) {
+        // Cascade delete all associated NEW stock bikes in both tables
+        $deleteStockBikesLegacy = $conn->prepare("DELETE FROM bikes WHERE brand = ? AND model = ? AND condition_type = 'NEW'");
+        $deleteStockBikesLegacy->execute([$brand, $model]);
+
+        $deleteStockBikes = $conn->prepare("DELETE FROM stock_bikes WHERE brand = ? AND model = ? AND condition_type = 'NEW'");
+        $deleteStockBikes->execute([$brand, $model]);
+
         $conn->commit();
-        $response = ["status" => "success", "message" => "Bike deleted successfully"];
+        $response = ["status" => "success", "message" => "Bike model and associated stock deleted successfully"];
     } else {
         $conn->rollback();
-        $response = ["status" => "error", "message" => "Bike not found or already deleted"];
+        $response = ["status" => "error", "message" => "Failed to delete bike model"];
     }
 
 } catch (Exception $e) {

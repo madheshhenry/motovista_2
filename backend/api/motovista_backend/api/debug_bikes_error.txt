@@ -39,3 +39,5 @@ Headers: {"Authorization":"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX
 Headers: {"Authorization":"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6Imxha3NobWFuYW5sYXRoYTEyMzQ1NkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Njk2Mjc4NTcsImV4cCI6MTc3MDIzMjY1N30.keX_HSzlg44UE9ACCisOyZoxWblW0rttQzzqWurYjt8","Host":"192.168.0.103","Connection":"Keep-Alive","Accept-Encoding":"gzip","User-Agent":"okhttp\/4.11.0"}
 [2026-03-29 04:54:42] get_bikes.php: Unauthorized access
 Headers: {"Authorization":"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6Imxha3NobWFuYW5sYXRoYTEyMzQ1NkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Njk2Mjc4NTcsImV4cCI6MTc3MDIzMjY1N30.keX_HSzlg44UE9ACCisOyZoxWblW0rttQzzqWurYjt8","Host":"192.168.0.103","Connection":"Keep-Alive","Accept-Encoding":"gzip","User-Agent":"okhttp\/4.11.0"}
+[2026-03-30 21:52:35] get_new_bikes.php: Authorization token missing
+Headers: {"User-Agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell\/5.1.26100.7920","Host":"localhost","Connection":"Keep-Alive"}

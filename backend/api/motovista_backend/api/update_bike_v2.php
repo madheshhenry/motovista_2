@@ -108,13 +108,21 @@ try {
     // 7. Commit
     $conn->commit();
 
-    echo json_encode(["status" => "success", "message" => "Bike updated successfully"]);
+    echo json_encode([
+        "status" => "success", 
+        "success" => true,
+        "message" => "Bike updated successfully"
+    ]);
 
 } catch (Exception $e) {
-    if ($conn->inTransaction()) {
+    if (isset($conn) && $conn->inTransaction()) {
         $conn->rollBack();
     }
     http_response_code(500);
-    echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+    echo json_encode([
+        "status" => "error", 
+        "success" => false,
+        "message" => $e->getMessage()
+    ]);
 }
 ?>

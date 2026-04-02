@@ -46,14 +46,16 @@ try {
     $bikeVariantName = $requestData['bike_variant'];
     $bikeColorName = $requestData['bike_color'];
 
-    // 2. Fetch Brand from Bike Models
+    // 2. Fetch Brand and Exact Model Name from Bike Models (Canonical Names)
     $brand = "Unknown";
+    $canonicalModel = "";
     if ($bikeId) {
-        $stmtModel = $conn->prepare("SELECT brand FROM bike_models WHERE id = :mid");
+        $stmtModel = $conn->prepare("SELECT brand, model_name FROM bike_models WHERE id = :mid");
         $stmtModel->execute([':mid' => $bikeId]);
         $modelData = $stmtModel->fetch(PDO::FETCH_ASSOC);
         if ($modelData) {
             $brand = $modelData['brand'];
+            $canonicalModel = $modelData['model_name'];
         }
     }
 
@@ -62,42 +64,31 @@ try {
     $finalBikeColor = $bikeColorName; // Default to just name
 
     if ($bikeId && $bikeVariantName) {
-        $stmtVar = $conn->prepare("SELECT colors FROM bike_variants WHERE model_id = :mid AND variant_name = :vname");
+        $stmtVar = $conn->prepare("SELECT variant_name, colors FROM bike_variants WHERE model_id = :mid AND LOWER(TRIM(variant_name)) = LOWER(TRIM(:vname))");
         $stmtVar->execute([':mid' => $bikeId, ':vname' => $bikeVariantName]);
         $variantData = $stmtVar->fetch(PDO::FETCH_ASSOC);
 
-        if ($variantData && isset($variantData['colors'])) {
-            $colors = json_decode($variantData['colors'], true);
-            if (is_array($colors)) {
-                // Find matching color
-                foreach ($colors as $colorObj) {
-                    $cName = $colorObj['color_name'] ?? '';
+        if ($variantData) {
+            // Case correction if needed, but we mainly need colors
+            if (isset($variantData['colors'])) {
+                $colors = json_decode($variantData['colors'], true);
+                if (is_array($colors)) {
+                    // Find matching color
+                    foreach ($colors as $colorObj) {
+                        $cName = $colorObj['color_name'] ?? '';
+                        $hex = $colorObj['hex_code'] ?? ($colorObj['color_hex'] ?? '#000000');
 
-                    $hex = $colorObj['hex_code'] ?? ($colorObj['color_hex'] ?? '#000000');
-
-                    // Match by Name OR Hex
-                    if (
-                        strcasecmp(trim($cName), trim($bikeColorName)) == 0 ||
-                        strcasecmp(trim($hex), trim($bikeColorName)) == 0
-                    ) {
-
-                        // Found it
-                        if (isset($colorObj['image_paths']) && is_array($colorObj['image_paths']) && count($colorObj['image_paths']) > 0) {
-                            $imagePaths = implode(",", $colorObj['image_paths']);
+                        // Match by Name OR Hex
+                        if (
+                            strcasecmp(trim($cName), trim($bikeColorName)) == 0 ||
+                            strcasecmp(trim($hex), trim($bikeColorName)) == 0
+                        ) {
+                            if (isset($colorObj['image_paths']) && is_array($colorObj['image_paths']) && count($colorObj['image_paths']) > 0) {
+                                $imagePaths = implode(",", $colorObj['image_paths']);
+                            }
+                            $finalBikeColor = $cName . "|" . $hex;
+                            break;
                         }
-
-                        // Get Hex
-                        $finalBikeColor = $cName . "|" . $hex;
-
-                        break;
-                    }
-                }
-
-                // Fallback for image (if not found specifically)
-                if (empty($imagePaths) && count($colors) > 0) {
-                    $firstColor = $colors[0];
-                    if (isset($firstColor['image_paths']) && is_array($firstColor['image_paths']) && count($firstColor['image_paths']) > 0) {
-                        $imagePaths = implode(",", $firstColor['image_paths']);
                     }
                 }
             }
@@ -113,14 +104,14 @@ try {
     // Construct Response Data
     $responseData = [
         "registration_progress" => $ledgerData ? $ledgerData : null,
-        "request_id" => $requestData['request_id'],
+        "request_id" => (int) $requestData['request_id'],
         "customer_name" => $requestData['customer_name'],
         "customer_phone" => $requestData['customer_phone'],
         "customer_profile" => $requestData['customer_profile'],
         "status" => $requestData['status'],
         "created_at" => $requestData['created_at'],
 
-        "bike_id" => $requestData['bike_id'],
+        "bike_id" => (int) $requestData['bike_id'],
         "brand" => $brand,
         "bike_name" => $requestData['bike_name'],
         "bike_variant" => $requestData['bike_variant'],
@@ -128,13 +119,10 @@ try {
         "on_road_price" => $requestData['bike_price'],
         "selected_fittings" => $requestData['selected_fittings'],
 
-        // These fields are expected by OrderSummaryData model but might not be in our snapshot
-        // We can send defaults or empty strings to avoid crashing
         "year" => "",
         "engine_cc" => "",
         "fuel_type" => "",
         "mileage" => "",
-
         "image_paths" => $imagePaths,
 
         // Stock Check info
@@ -142,38 +130,35 @@ try {
         "is_in_stock" => false
     ];
 
-    // 4. Check Real-time Stock in 'bikes' table
-    if ($brand && $requestData['bike_name']) {
-        // Prepare search terms
-        $searchModel = trim($requestData['bike_name']);
+    // 4. Check Real-time Stock in 'bikes' table using Canonical Names
+    // We use the exact model/brand from bike_models table for better accuracy.
+    if ($brand && ($canonicalModel || $requestData['bike_name'])) {
+        $searchModel = !empty($canonicalModel) ? $canonicalModel : $requestData['bike_name'];
         $searchVariant = trim($requestData['bike_variant']);
-
-        // Color matching can be tricky. requestData['bike_color'] might be "Red" or "Red|#FF0000".
-        // bikes table 'colors' column might be "Red" or "Red, Black". 
-        // We'll try to match strict first, then loose.
         $searchColor = trim($requestData['bike_color']);
+
         if (strpos($searchColor, '|') !== false) {
-            $parts = explode('|', $searchColor);
-            $searchColor = trim($parts[0]); // Just "Red"
+            $searchColor = trim(explode('|', $searchColor)[0]);
         }
 
-        // Count query
-        // We match model and variant. For color, we use LIKE to handle partial matches or case differences.
-        // We ensure condition_type is NEW (assuming requests are for new bikes).
+        // Count query - Robust matching
         $stockSql = "SELECT COUNT(*) as count FROM bikes 
-                     WHERE (model = :model OR model LIKE :model_like)
-                     AND (variant = :variant OR variant LIKE :variant_like)
-                     AND colors LIKE :color
-                     AND status = 'Available'
+                     WHERE (LOWER(TRIM(brand)) = LOWER(TRIM(:brand)))
+                     AND (LOWER(TRIM(model)) = LOWER(TRIM(:model)) OR model LIKE :model_like)
+                     AND (LOWER(TRIM(variant)) = LOWER(TRIM(:variant)) OR variant LIKE :variant_like)
+                     AND (colors LIKE :color OR LOWER(TRIM(colors)) = LOWER(TRIM(:color_exact)))
+                     AND (status = 'Available' OR status IS NULL)
                      AND condition_type = 'NEW'";
 
         $stmtStock = $conn->prepare($stockSql);
         $stmtStock->execute([
+            ':brand' => $brand,
             ':model' => $searchModel,
             ':model_like' => '%' . $searchModel . '%',
             ':variant' => $searchVariant,
             ':variant_like' => '%' . $searchVariant . '%',
-            ':color' => '%' . $searchColor . '%'
+            ':color' => '%' . $searchColor . '%',
+            ':color_exact' => $searchColor
         ]);
 
         $stockResult = $stmtStock->fetch(PDO::FETCH_ASSOC);
