@@ -2,101 +2,100 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardBike"
-    android:layout_width="300dp"
-    android:layout_height="200dp"
+    android:layout_width="240dp"
+    android:layout_height="300dp"
     android:layout_marginEnd="16dp"
-    android:layout_marginBottom="12dp"
+    android:layout_marginBottom="16dp"
     android:layout_marginTop="8dp"
-    app:cardCornerRadius="32dp"
-    app:cardElevation="4dp"
-    app:cardBackgroundColor="@color/transparent">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="?attr/colorSurface"
+    android:foreground="?attr/selectableItemBackground">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#0F172A">
+        android:orientation="vertical">
 
-        <!-- Full-Bleed Background Image -->
-        <ImageView
-            android:id="@+id/ivBike"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/bike_cruiser"
-            android:alpha="0.8" />
+            android:layout_height="140dp"
+            android:background="@drawable/bg_image_tint">
 
-        <!-- Gradient Fade Overlay -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/cinematic_gradient_overlay" />
+            <ImageView
+                android:id="@+id/ivBike"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_image_placeholder" />
 
-        <!-- Luminous Tag -->
-        <TextView
-            android:id="@+id/tvTag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/bg_glass_pill"
-            android:paddingHorizontal="14dp"
-            android:paddingVertical="6dp"
-            android:text="LIMITED EDITION"
-            android:textColor="@color/white"
-            android:textSize="11sp"
-            android:textStyle="bold"
-            android:elevation="4dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/tvTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:background="@drawable/bg_premium_glass_card"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:text="RECOMMENDED"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="9sp"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.05"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </RelativeLayout>
 
-        <!-- Glassmorphic Info Plate -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:background="@drawable/bg_item_glass"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="12dp"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:padding="16dp"
+            android:gravity="top">
 
             <TextView
                 android:id="@+id/tvBrand"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Yamaha"
-                android:textColor="#CCFFFFFF"
+                android:text="Brand"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="12sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.1"/>
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.05"/>
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tvModel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:text="Model"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-black"
+                android:layout_marginTop="2dp"
+                android:maxLines="1"
+                android:ellipsize="end" />
 
-                <TextView
-                    android:id="@+id/tvModel"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="SB-Cruiser"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-black" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
-                <TextView
-                    android:id="@+id/tvPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="₹ 1,50,000"
-                    android:textColor="@color/primary_color"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+            <!-- The Critical SOLID CTA Button Fix -->
+            <TextView
+                android:id="@+id/tvPrice"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:text="Explore"
+                android:gravity="center"
+                android:textColor="?attr/colorOnPrimary"
+                android:background="@drawable/bg_primary_solid_button"
+                android:textSize="13sp"
+                android:fontFamily="sans-serif-bold"
+                android:foreground="?attr/selectableItemBackground"
+                android:letterSpacing="0.02" />
 
         </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

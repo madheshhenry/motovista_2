@@ -5,7 +5,7 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
+    android:background="?attr/colorBackground"
     android:fitsSystemWindows="true">
 
     <!-- Main Scroll View -->
@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:orientation="horizontal"
-                android:background="@color/card_background"
+                android:background="?attr/colorSurface"
                 android:gravity="center_vertical"
                 android:paddingHorizontal="@dimen/padding_medium"
                 android:elevation="2dp">
@@ -42,7 +42,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_arrow_back"
-                    android:tint="@color/primary"
+                    android:tint="?attr/colorPrimary"
                     android:padding="12dp"
                     android:contentDescription="Back"
                     android:clickable="true"
@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Admin Settings"
-                    android:textColor="@color/text_primary_light"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:gravity="center"
@@ -80,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="ACCOUNT MANAGEMENT"
-                    android:textColor="@color/text_secondary_light"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.5"
@@ -97,7 +97,8 @@
                     app:cardElevation="1dp"
                     app:cardUseCompatPadding="true"
                     android:layout_marginBottom="@dimen/padding_small"
-                    android:background="@drawable/rounded_card_light">
+                    android:background="@drawable/rounded_card_light"
+                    app:cardBackgroundColor="?attr/colorSurface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -120,7 +121,7 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_person"
-                                android:tint="@color/primary"
+                                android:tint="?attr/colorPrimary"
                                 android:contentDescription="Manage Profile" />
 
                         </LinearLayout>
@@ -132,7 +133,7 @@
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
                             android:text="Manage Profile"
-                            android:textColor="@color/text_primary_light"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="normal"
                             android:fontFamily="sans-serif" />
@@ -142,7 +143,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_chevron_right"
-                            android:tint="@color/text_secondary_light"
+                            android:tint="?attr/colorOnSurfaceVariant"
                             android:contentDescription="More" />
 
                     </LinearLayout>
@@ -157,7 +158,8 @@
                     app:cardElevation="1dp"
                     app:cardUseCompatPadding="true"
                     android:layout_marginBottom="@dimen/padding_small"
-                    android:background="@drawable/rounded_card_light">
+                    android:background="@drawable/rounded_card_light"
+                    app:cardBackgroundColor="?attr/colorSurface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -180,7 +182,7 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_lock"
-                                android:tint="@color/primary"
+                                android:tint="?attr/colorPrimary"
                                 android:contentDescription="Change Password" />
 
                         </LinearLayout>
@@ -192,7 +194,7 @@
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
                             android:text="Change Password"
-                            android:textColor="@color/text_primary_light"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="normal"
                             android:fontFamily="sans-serif" />
@@ -202,7 +204,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_chevron_right"
-                            android:tint="@color/text_secondary_light"
+                            android:tint="?attr/colorOnSurfaceVariant"
                             android:contentDescription="More" />
 
                     </LinearLayout>
@@ -217,7 +219,8 @@
                     app:cardElevation="1dp"
                     app:cardUseCompatPadding="true"
                     android:layout_marginBottom="@dimen/padding_large"
-                    android:background="@drawable/rounded_card_light">
+                    android:background="@drawable/rounded_card_light"
+                    app:cardBackgroundColor="?attr/colorSurface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -240,7 +243,7 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_verified_user"
-                                android:tint="@color/primary"
+                                android:tint="?attr/colorPrimary"
                                 android:contentDescription="Security Settings" />
 
                         </LinearLayout>
@@ -252,7 +255,7 @@
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
                             android:text="Security Settings"
-                            android:textColor="@color/text_primary_light"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="normal"
                             android:fontFamily="sans-serif" />
@@ -262,7 +265,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_chevron_right"
-                            android:tint="@color/text_secondary_light"
+                            android:tint="?attr/colorOnSurfaceVariant"
                             android:contentDescription="More" />
 
                     </LinearLayout>
@@ -274,7 +277,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="USER &amp; PERMISSIONS"
-                    android:textColor="@color/text_secondary_light"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.5"
@@ -290,7 +293,8 @@
                     app:cardElevation="1dp"
                     app:cardUseCompatPadding="true"
                     android:layout_marginBottom="@dimen/padding_small"
-                    android:background="@drawable/rounded_card_light">
+                    android:background="@drawable/rounded_card_light"
+                    app:cardBackgroundColor="?attr/colorSurface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -313,7 +317,7 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_group"
-                                android:tint="@color/primary"
+                                android:tint="?attr/colorPrimary"
                                 android:contentDescription="User Management" />
 
                         </LinearLayout>
@@ -325,7 +329,7 @@
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
                             android:text="User Management"
-                            android:textColor="@color/text_primary_light"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="normal"
                             android:fontFamily="sans-serif" />
@@ -335,7 +339,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_chevron_right"
-                            android:tint="@color/text_secondary_light"
+                            android:tint="?attr/colorOnSurfaceVariant"
                             android:contentDescription="More" />
 
                     </LinearLayout>
@@ -350,7 +354,8 @@
                     app:cardElevation="1dp"
                     app:cardUseCompatPadding="true"
                     android:layout_marginBottom="@dimen/padding_large"
-                    android:background="@drawable/rounded_card_light">
+                    android:background="@drawable/rounded_card_light"
+                    app:cardBackgroundColor="?attr/colorSurface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -373,7 +378,7 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_badge"
-                                android:tint="@color/primary"
+                                android:tint="?attr/colorPrimary"
                                 android:contentDescription="Role Management" />
 
                         </LinearLayout>
@@ -385,7 +390,7 @@
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
                             android:text="Role Management"
-                            android:textColor="@color/text_primary_light"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="normal"
                             android:fontFamily="sans-serif" />
@@ -395,7 +400,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_chevron_right"
-                            android:tint="@color/text_secondary_light"
+                            android:tint="?attr/colorOnSurfaceVariant"
                             android:contentDescription="More" />
 
                     </LinearLayout>
@@ -407,7 +412,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="APP CONFIGURATION"
-                    android:textColor="@color/text_secondary_light"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.5"
@@ -423,7 +428,8 @@
                     app:cardElevation="1dp"
                     app:cardUseCompatPadding="true"
                     android:layout_marginBottom="@dimen/padding_small"
-                    android:background="@drawable/rounded_card_light">
+                    android:background="@drawable/rounded_card_light"
+                    app:cardBackgroundColor="?attr/colorSurface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -446,7 +452,7 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_notifications"
-                                android:tint="@color/primary"
+                                android:tint="?attr/colorPrimary"
                                 android:contentDescription="Notification Preferences" />
 
                         </LinearLayout>
@@ -458,7 +464,7 @@
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
                             android:text="Notification Preferences"
-                            android:textColor="@color/text_primary_light"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="normal"
                             android:fontFamily="sans-serif" />
@@ -468,7 +474,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_chevron_right"
-                            android:tint="@color/text_secondary_light"
+                            android:tint="?attr/colorOnSurfaceVariant"
                             android:contentDescription="More" />
 
                     </LinearLayout>
@@ -483,7 +489,8 @@
                     app:cardElevation="1dp"
                     app:cardUseCompatPadding="true"
                     android:layout_marginBottom="@dimen/padding_small"
-                    android:background="@drawable/rounded_card_light">
+                    android:background="@drawable/rounded_card_light"
+                    app:cardBackgroundColor="?attr/colorSurface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -506,7 +513,7 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_tune"
-                                android:tint="@color/primary"
+                                android:tint="?attr/colorPrimary"
                                 android:contentDescription="System Configurations" />
 
                         </LinearLayout>
@@ -518,7 +525,7 @@
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
                             android:text="System Configurations"
-                            android:textColor="@color/text_primary_light"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="normal"
                             android:fontFamily="sans-serif" />
@@ -528,7 +535,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_chevron_right"
-                            android:tint="@color/text_secondary_light"
+                            android:tint="?attr/colorOnSurfaceVariant"
                             android:contentDescription="More" />
 
                     </LinearLayout>
@@ -543,7 +550,8 @@
                     app:cardElevation="1dp"
                     app:cardUseCompatPadding="true"
                     android:layout_marginBottom="@dimen/padding_large"
-                    android:background="@drawable/rounded_card_light">
+                    android:background="@drawable/rounded_card_light"
+                    app:cardBackgroundColor="?attr/colorSurface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -566,7 +574,7 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_construction"
-                                android:tint="@color/primary"
+                                android:tint="?attr/colorPrimary"
                                 android:contentDescription="Maintenance Mode" />
 
                         </LinearLayout>
@@ -578,7 +586,7 @@
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
                             android:text="Maintenance Mode"
-                            android:textColor="@color/text_primary_light"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="normal"
                             android:fontFamily="sans-serif" />
@@ -599,7 +607,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="SUPPORT &amp; INFORMATION"
-                    android:textColor="@color/text_secondary_light"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.5"
@@ -615,7 +623,8 @@
                     app:cardElevation="1dp"
                     app:cardUseCompatPadding="true"
                     android:layout_marginBottom="@dimen/padding_small"
-                    android:background="@drawable/rounded_card_light">
+                    android:background="@drawable/rounded_card_light"
+                    app:cardBackgroundColor="?attr/colorSurface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -638,7 +647,7 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_help_outline"
-                                android:tint="@color/primary"
+                                android:tint="?attr/colorPrimary"
                                 android:contentDescription="Help &amp; Support" />
 
                         </LinearLayout>
@@ -650,7 +659,7 @@
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
                             android:text="Help &amp; Support"
-                            android:textColor="@color/text_primary_light"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="normal"
                             android:fontFamily="sans-serif" />
@@ -660,7 +669,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_chevron_right"
-                            android:tint="@color/text_secondary_light"
+                            android:tint="?attr/colorOnSurfaceVariant"
                             android:contentDescription="More" />
 
                     </LinearLayout>
@@ -675,7 +684,8 @@
                     app:cardElevation="1dp"
                     app:cardUseCompatPadding="true"
                     android:layout_marginBottom="@dimen/padding_large"
-                    android:background="@drawable/rounded_card_light">
+                    android:background="@drawable/rounded_card_light"
+                    app:cardBackgroundColor="?attr/colorSurface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -698,7 +708,7 @@
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_help_outline"
-                                android:tint="@color/primary"
+                                android:tint="?attr/colorPrimary"
                                 android:contentDescription="About" />
 
                         </LinearLayout>
@@ -710,7 +720,7 @@
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
                             android:text="About"
-                            android:textColor="@color/text_primary_light"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="normal"
                             android:fontFamily="sans-serif" />
@@ -720,7 +730,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_chevron_right"
-                            android:tint="@color/text_secondary_light"
+                            android:tint="?attr/colorOnSurfaceVariant"
                             android:contentDescription="More" />
 
                     </LinearLayout>
@@ -749,7 +759,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="App Version 1.0.0"
-                    android:textColor="@color/text_secondary_light"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:gravity="center"
                     android:fontFamily="sans-serif"
@@ -767,7 +777,7 @@
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="96dp"
-        android:background="@color/white"
+        android:background="?attr/colorSurface"
         android:orientation="horizontal"
         android:elevation="16dp"
         android:paddingTop="12dp"
@@ -791,7 +801,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_dashboard"
-                android:tint="@color/gray_400"
+                android:tint="?attr/colorOnSurfaceVariant"
                 android:contentDescription="Dashboard" />
 
             <TextView

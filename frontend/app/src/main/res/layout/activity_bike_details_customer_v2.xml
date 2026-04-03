@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F6F7F8">
+    android:background="?attr/colorBackground">
 
     <!-- Header -->
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/white"
-        android:elevation="4dp"
+        android:background="?attr/colorSurface"
+        android:elevation="2dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingHorizontal="16dp">
@@ -22,7 +22,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_arrow_back"
-            app:tint="#111618" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="?attr/colorOnSurface" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -35,8 +36,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Yamaha MT-15 V2"
-                android:textColor="#111618"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
+                android:fontFamily="sans-serif-bold"
                 android:textStyle="bold" />
 
             <TextView
@@ -44,12 +46,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Yamaha · 2024"
-                android:textColor="#617C89"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/header"
@@ -60,13 +63,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="24dp">
+            android:paddingTop="16dp"
+            android:paddingBottom="48dp"
+            android:clipToPadding="false">
 
             <!-- Image Slider Container -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:background="@android:color/white">
+                android:background="?attr/colorSurfaceVariant">
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/vpBikeImages"
@@ -92,8 +97,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@android:color/white"
-                android:elevation="4dp"
+                android:background="?attr/colorSurface"
+                android:elevation="2dp"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -102,8 +107,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="MT-15 V2 - DELUXE"
-                    android:textColor="#111618"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="20sp"
+                    android:fontFamily="sans-serif-black"
                     android:textStyle="bold" />
 
                 <TextView
@@ -112,8 +118,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="155cc · Petrol · 6-Speed"
-                    android:textColor="#617C89"
-                    android:textSize="14sp" />
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -127,8 +134,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="₹ 2,05,400"
-                        android:textColor="#111618"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="24sp"
+                        android:fontFamily="sans-serif-black"
                         android:textStyle="bold" />
 
                     <TextView
@@ -137,8 +145,9 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginBottom="4dp"
                         android:text="On-Road"
-                        android:textColor="#13A4EC"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="14sp"
+                        android:fontFamily="sans-serif-bold"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -147,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="*Price varies by variant and city"
-                    android:textColor="#617C89"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="10sp"
                     android:textStyle="italic" />
             </LinearLayout>
@@ -156,7 +165,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:orientation="vertical"
                 android:paddingHorizontal="16dp">
 
@@ -165,8 +174,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:text="Select Variant"
-                    android:textColor="#111618"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"
+                    android:fontFamily="sans-serif-bold"
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -183,7 +193,7 @@
                 android:id="@+id/llColorsSection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:orientation="vertical"
                 android:paddingHorizontal="16dp">
 
@@ -192,8 +202,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:text="Available Colors"
-                    android:textColor="#111618"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"
+                    android:fontFamily="sans-serif-bold"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -208,8 +219,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Cyan Storm"
-                    android:textColor="#617C89"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="12sp"
+                    android:fontFamily="sans-serif-bold"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -219,9 +231,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="24dp"
-                app:cardBackgroundColor="@android:color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="?attr/colorSurface"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -241,9 +256,8 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@drawable/ic_engine_outline" 
-                            app:tint="#13A4EC" />
-                        <!-- Fallback icon needed or custom vector -->
+                            android:src="@drawable/ic_engine_outline"
+                            app:tint="?attr/colorPrimary" />
 
                         <TextView
                             android:id="@+id/tvEngineCC"
@@ -252,12 +266,13 @@
                             android:layout_marginTop="4dp"
                             android:text="155 CC"
                             android:textAllCaps="true"
-                            android:textColor="#111618"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="10sp"
+                            android:fontFamily="sans-serif-bold"
                             android:textStyle="bold" />
                     </LinearLayout>
-                    
-                    <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#F0F0F0"/>
+
+                    <View android:layout_width="1dp" android:layout_height="match_parent" android:background="?attr/colorOutlineVariant"/>
 
                     <!-- Mileage -->
                     <LinearLayout
@@ -271,7 +286,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_mileage_outline"
-                            app:tint="#13A4EC" />
+                            app:tint="?attr/colorPrimary" />
 
                         <TextView
                             android:id="@+id/tvMileage"
@@ -280,12 +295,13 @@
                             android:layout_marginTop="4dp"
                             android:text="45 KMPL"
                             android:textAllCaps="true"
-                            android:textColor="#111618"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="10sp"
+                            android:fontFamily="sans-serif-bold"
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#F0F0F0"/>
+                    <View android:layout_width="1dp" android:layout_height="match_parent" android:background="?attr/colorOutlineVariant"/>
 
                     <!-- Braking -->
                     <LinearLayout
@@ -299,7 +315,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_brakes_outline"
-                            app:tint="#13A4EC" />
+                            app:tint="?attr/colorPrimary" />
 
                         <TextView
                             android:id="@+id/tvBrakingType"
@@ -308,12 +324,13 @@
                             android:layout_marginTop="4dp"
                             android:text="DUAL ABS"
                             android:textAllCaps="true"
-                            android:textColor="#111618"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="10sp"
+                            android:fontFamily="sans-serif-bold"
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#F0F0F0"/>
+                    <View android:layout_width="1dp" android:layout_height="match_parent" android:background="?attr/colorOutlineVariant"/>
 
                     <!-- Transmission -->
                     <LinearLayout
@@ -327,7 +344,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_transmission_outline"
-                            app:tint="#13A4EC" />
+                            app:tint="?attr/colorPrimary" />
 
                         <TextView
                             android:id="@+id/tvTransmission"
@@ -336,8 +353,9 @@
                             android:layout_marginTop="4dp"
                             android:text="6 SPEED"
                             android:textAllCaps="true"
-                            android:textColor="#111618"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="10sp"
+                            android:fontFamily="sans-serif-bold"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -350,9 +368,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@android:color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="?attr/colorSurface"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
+                app:cardElevation="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -364,28 +385,29 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="16dp">
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_wheel_outline"
-                            app:tint="#13A4EC" />
+                            app:tint="?attr/colorPrimary" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:text="Brakes &amp; Wheels"
-                            android:textColor="#111618"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
+                            android:fontFamily="sans-serif-bold"
                             android:textStyle="bold" />
                     </LinearLayout>
 
                     <GridLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
                         android:columnCount="2"
                         android:orientation="horizontal">
 
@@ -401,8 +423,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="FRONT BRAKE"
-                                android:textColor="#617C89"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="10sp"
+                                android:fontFamily="sans-serif-bold"
+                                android:letterSpacing="0.05"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -411,8 +435,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:text="282 mm Disc"
-                                android:textColor="#111618"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
+                                android:fontFamily="sans-serif-bold"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -428,8 +453,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="REAR BRAKE"
-                                android:textColor="#617C89"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="10sp"
+                                android:fontFamily="sans-serif-bold"
+                                android:letterSpacing="0.05"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -438,12 +465,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:text="220 mm Disc"
-                                android:textColor="#111618"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
+                                android:fontFamily="sans-serif-bold"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                        <!-- Tyre Type -->
+                        <!-- Braking System -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -454,8 +482,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="BRAKING SYSTEM"
-                                android:textColor="#617C89"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="10sp"
+                                android:fontFamily="sans-serif-bold"
+                                android:letterSpacing="0.05"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -466,8 +496,9 @@
                                 android:text="Dual Channel ABS"
                                 android:maxLines="2"
                                 android:ellipsize="end"
-                                android:textColor="#111618"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
+                                android:fontFamily="sans-serif-bold"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
@@ -482,8 +513,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="WHEEL TYPE"
-                                android:textColor="#617C89"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="10sp"
+                                android:fontFamily="sans-serif-bold"
+                                android:letterSpacing="0.05"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -492,12 +525,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:text="Alloy Wheels"
-                                android:textColor="#111618"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
+                                android:fontFamily="sans-serif-bold"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </GridLayout>
-                    
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -523,8 +557,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:text="Warranty &amp; Service"
-                    android:textColor="#111618"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp"
+                    android:fontFamily="sans-serif-bold"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -549,6 +584,8 @@
                             android:text="STANDARD WARRANTY"
                             android:textColor="#0284C7"
                             android:textSize="10sp"
+                            android:fontFamily="sans-serif-bold"
+                            android:letterSpacing="0.05"
                             android:textStyle="bold" />
 
                         <TextView
@@ -557,8 +594,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="5 Years / 70k KM"
-                            android:textColor="#111618"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp"
+                            android:fontFamily="sans-serif-bold"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -579,6 +617,8 @@
                             android:text="FREE SERVICE"
                             android:textColor="#16A34A"
                             android:textSize="10sp"
+                            android:fontFamily="sans-serif-bold"
+                            android:letterSpacing="0.05"
                             android:textStyle="bold" />
 
                         <TextView
@@ -587,29 +627,33 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="3 Coupons Incl."
-                            android:textColor="#111618"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp"
+                            android:fontFamily="sans-serif-bold"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-            
+
             <!-- Technical Specs -->
-             <androidx.cardview.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@android:color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="?attr/colorSurface"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
-                
+                app:cardElevation="2dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                    
-                     <LinearLayout
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -620,7 +664,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_list_outline"
-                            app:tint="#BDBDBD" />
+                            app:tint="?attr/colorOnSurfaceVariant" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -628,17 +672,18 @@
                             android:layout_weight="1"
                             android:layout_marginStart="8dp"
                             android:text="Technical Specifications"
-                            android:textColor="#111618"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
+                            android:fontFamily="sans-serif-bold"
                             android:textStyle="bold" />
-                            
-                         <ImageView
+
+                        <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_expand_more"
-                            app:tint="#BDBDBD" />
+                            app:tint="?attr/colorOnSurfaceVariant" />
                     </LinearLayout>
-                    
+
                     <GridLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -646,8 +691,8 @@
                         android:paddingBottom="20dp"
                         android:columnCount="2"
                         android:orientation="horizontal">
-                        
-                         <!-- Tank Capacity -->
+
+                        <!-- Tank Capacity -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -659,8 +704,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="TANK CAPACITY"
-                                android:textColor="#617C89"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="10sp"
+                                android:fontFamily="sans-serif-bold"
+                                android:letterSpacing="0.05"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -669,12 +716,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:text="10 Litres"
-                                android:textColor="#111618"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
+                                android:fontFamily="sans-serif-bold"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
-                         <!-- Kerb Weight -->
+                        <!-- Kerb Weight -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -686,8 +734,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="KERB WEIGHT"
-                                android:textColor="#617C89"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="10sp"
+                                android:fontFamily="sans-serif-bold"
+                                android:letterSpacing="0.05"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -696,12 +746,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:text="141 kg"
-                                android:textColor="#111618"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
+                                android:fontFamily="sans-serif-bold"
                                 android:textStyle="bold" />
                         </LinearLayout>
-                        
-                         <!-- Seat Height -->
+
+                        <!-- Seat Height -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -713,8 +764,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="SEAT HEIGHT"
-                                android:textColor="#617C89"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="10sp"
+                                android:fontFamily="sans-serif-bold"
+                                android:letterSpacing="0.05"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -723,12 +776,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:text="810 mm"
-                                android:textColor="#111618"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
+                                android:fontFamily="sans-serif-bold"
                                 android:textStyle="bold" />
                         </LinearLayout>
-                        
-                         <!-- Ground Clearance -->
+
+                        <!-- Ground Clearance -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -740,8 +794,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="GROUND CLEARANCE"
-                                android:textColor="#617C89"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="10sp"
+                                android:fontFamily="sans-serif-bold"
+                                android:letterSpacing="0.05"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -750,22 +806,23 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:text="170 mm"
-                                android:textColor="#111618"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
+                                android:fontFamily="sans-serif-bold"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </GridLayout>
-                    
+
                     <!-- Power & Torque Row -->
-                     <GridLayout
+                    <GridLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="20dp"
                         android:paddingBottom="20dp"
                         android:columnCount="2"
                         android:orientation="horizontal">
-                        
-                         <!-- Max Power -->
+
+                        <!-- Max Power -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -777,8 +834,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="MAX POWER"
-                                android:textColor="#617C89"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="10sp"
+                                android:fontFamily="sans-serif-bold"
+                                android:letterSpacing="0.05"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -787,12 +846,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:text="18.4 PS"
-                                android:textColor="#111618"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
+                                android:fontFamily="sans-serif-bold"
                                 android:textStyle="bold" />
                         </LinearLayout>
-                        
-                         <!-- Max Torque -->
+
+                        <!-- Max Torque -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -804,8 +864,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="MAX TORQUE"
-                                android:textColor="#617C89"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="10sp"
+                                android:fontFamily="sans-serif-bold"
+                                android:letterSpacing="0.05"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -814,102 +876,105 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:text="14.2 Nm"
-                                android:textColor="#111618"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
+                                android:fontFamily="sans-serif-bold"
                                 android:textStyle="bold" />
                         </LinearLayout>
 
                     </GridLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-            
+
             <!-- Price Breakup -->
-             <androidx.cardview.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="24dp"
-                app:cardBackgroundColor="@android:color/white"
+                app:cardBackgroundColor="?attr/colorSurface"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
-                
+                app:cardElevation="2dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="20dp"
                     android:orientation="vertical">
-                    
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:gravity="center_vertical">
-                        
-                         <TextView
+
+                        <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Price Breakup"
-                            android:textColor="#111618"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
+                            android:fontFamily="sans-serif-bold"
                             android:textStyle="bold" />
-                            
-                         <ImageView
+
+                        <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:src="@drawable/ic_info"
-                            app:tint="#9CA3AF" />
+                            app:tint="?attr/colorOnSurfaceVariant" />
                     </LinearLayout>
-                    
+
                     <!-- Ex Showroom -->
-                    <LinearLayout
-                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp">
-                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Ex-Showroom" android:textColor="#617C89" android:textSize="14sp"/>
-                        <TextView android:id="@+id/tvExShowroom" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹ 1,72,700" android:textColor="#111618" android:textStyle="bold"/>
-                    </LinearLayout>
-                    
-                     <!-- Insurance -->
-                    <LinearLayout
-                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp">
-                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Insurance" android:textColor="#617C89" android:textSize="14sp"/>
-                        <TextView android:id="@+id/tvInsurance" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹ 12,450" android:textColor="#111618" android:textStyle="bold"/>
-                    </LinearLayout>
-                    
-                     <!-- Registration -->
-                    <LinearLayout
-                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp">
-                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="RTO &amp; Charges" android:textColor="#617C89" android:textSize="14sp"/>
-                        <TextView android:id="@+id/tvRegistration" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹ 18,250" android:textColor="#111618" android:textStyle="bold"/>
-                    </LinearLayout>
-                    
-                     <!-- LTRT -->
-                    <LinearLayout
-                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp">
-                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="LTRT" android:textColor="#617C89" android:textSize="14sp"/>
-                        <TextView android:id="@+id/tvLTRT" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹ 2,000" android:textColor="#111618" android:textStyle="bold"/>
-                    </LinearLayout>
-                    
-                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E5E7EB" android:layout_marginVertical="12dp"/>
-                    
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="#E0F2FE"
+                        android:layout_marginBottom="8dp">
+                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Ex-Showroom" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="14sp" android:fontFamily="sans-serif-medium"/>
+                        <TextView android:id="@+id/tvExShowroom" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹ 1,72,700" android:textColor="?attr/colorOnSurface" android:fontFamily="sans-serif-bold" android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <!-- Insurance -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp">
+                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Insurance" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="14sp" android:fontFamily="sans-serif-medium"/>
+                        <TextView android:id="@+id/tvInsurance" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹ 12,450" android:textColor="?attr/colorOnSurface" android:fontFamily="sans-serif-bold" android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <!-- Registration -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp">
+                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="RTO &amp; Charges" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="14sp" android:fontFamily="sans-serif-medium"/>
+                        <TextView android:id="@+id/tvRegistration" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹ 18,250" android:textColor="?attr/colorOnSurface" android:fontFamily="sans-serif-bold" android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <!-- LTRT -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp">
+                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="LTRT" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="14sp" android:fontFamily="sans-serif-medium"/>
+                        <TextView android:id="@+id/tvLTRT" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹ 2,000" android:textColor="?attr/colorOnSurface" android:fontFamily="sans-serif-bold" android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp" android:background="?attr/colorOutlineVariant" android:layout_marginVertical="12dp"/>
+
+                    <!-- Total Amount Highlight -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_blue_light_st"
                         android:padding="12dp"
                         android:layout_marginTop="4dp"
                         android:gravity="center_vertical">
-                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Total Amount" android:textColor="#111618" android:textStyle="bold" android:textSize="14sp"/>
-                        <TextView android:id="@+id/tvTotalBreakdown" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹ 2,05,400" android:textColor="#111618" android:textStyle="bold" android:textSize="18sp"/>
+                        <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="Total Amount" android:textColor="?attr/colorOnSurface" android:fontFamily="sans-serif-black" android:textStyle="bold" android:textSize="14sp"/>
+                        <TextView android:id="@+id/tvTotalBreakdown" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="₹ 2,05,400" android:textColor="?attr/colorPrimary" android:fontFamily="sans-serif-black" android:textStyle="bold" android:textSize="18sp"/>
                     </LinearLayout>
-                    
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -922,8 +987,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@android:color/white"
-        android:elevation="16dp"
+        android:background="?attr/colorSurface"
+        android:elevation="8dp"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -934,38 +999,39 @@
 
             <Button
                 android:id="@+id/btnViewInvoice"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:paddingVertical="12dp"
                 android:text="View Invoice"
-                android:textColor="#13A4EC"
-                app:strokeColor="#13A4EC"
-                app:strokeWidth="2dp" 
-                app:cornerRadius="12dp"
-                android:textSize="14sp"/>
+                android:textColor="?attr/colorPrimary"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-bold"
+                app:strokeColor="?attr/colorPrimary"
+                app:strokeWidth="2dp"
+                app:cornerRadius="12dp"/>
 
             <Button
                 android:id="@+id/btnOrderNow"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1.5"
-                android:backgroundTint="#13A4EC"
-                android:paddingVertical="12dp"
+                android:backgroundTint="?attr/colorPrimary"
                 android:text="Order Now"
-                android:textColor="@android:color/white" 
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-bold"
                 app:cornerRadius="12dp"/>
         </LinearLayout>
-        
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Booking request will be sent to showroom. No payment required now."
-            android:textColor="#617C89"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="10sp"
             android:gravity="center" />
     </LinearLayout>

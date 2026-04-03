@@ -1,41 +1,55 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Motovista_deep" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <!-- Premium Light Theme for Customer Side -->
+    <style name="Base.Theme.Motovista_deep" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary Brand Colors -->
+        <item name="colorPrimary">#13A4EC</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#E0F2FE</item>
+        <item name="colorOnPrimaryContainer">#0C4A6E</item>
+        
+        <!-- Background and Surface Colors -->
+        <item name="android:colorBackground">#F8FAFC</item>
+        <item name="colorBackground">#F8FAFC</item>
+        <item name="colorOnBackground">#0F172A</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#1E293B</item>
+        <item name="colorSurfaceVariant">#F1F5F9</item>
+        <item name="colorOnSurfaceVariant">#64748B</item>
+        <item name="colorOutline">#CBD5E1</item>
+        <item name="colorOutlineVariant">#E2E8F0</item>
+        <item name="colorError">#EF4444</item>
+        <item name="colorOnError">#FFFFFF</item>
+        <item name="colorControlHighlight">#1A13A4EC</item>
+
+        <!-- System UI Properties -->
+        <item name="android:statusBarColor">#00000000</item>
+        <item name="android:navigationBarColor">#00000000</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
     <style name="Theme.Motovista_deep" parent="Base.Theme.Motovista_deep" />
 
-    <style name="Theme.MotovistaDeep" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Make status bar and navigation bar transparent -->
+    <style name="Theme.MotovistaDeep" parent="Theme.Motovista_deep">
+        <!-- Edge-to-edge support -->
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-
-        <!-- For edge-to-edge display -->
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
-
-        <!-- Remove action bar -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        
+        <!-- Animations -->
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>
 
-
-
-        <!-- Base application theme -->
-        <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-            <!-- Customize your theme here. -->
-            <item name="android:windowFullscreen">false</item>
-            <item name="android:windowTranslucentStatus">true</item>
-            <item name="android:windowTranslucentNavigation">true</item>
-            <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-            <item name="android:statusBarColor">@android:color/transparent</item>
-            <item name="android:navigationBarColor">@android:color/transparent</item>
-            <item name="android:windowLightStatusBar">true</item>
-        </style>
+    <!-- Base application theme (Legacy) -->
+    <style name="AppTheme" parent="Theme.Motovista_deep">
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 
     <style name="BottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
@@ -48,12 +62,10 @@
         <item name="android:windowExitAnimation">@anim/slide_down</item>
     </style>
 
-
-
     <style name="CropperTheme" parent="Theme.AppCompat.Light">
-        <item name="colorPrimary">#2563EB</item>
-        <item name="colorPrimaryDark">#1D4ED8</item>
-        <item name="colorAccent">#2563EB</item>
+        <item name="colorPrimary">#13A4EC</item>
+        <item name="colorPrimaryDark">#0C4A6E</item>
+        <item name="colorAccent">#13A4EC</item>
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>
     </style>

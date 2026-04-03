@@ -4,20 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
+    android:background="?attr/colorBackground"
     tools:context=".InvoiceSelectionActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="?attr/colorSurface"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/white">
+            android:background="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -31,7 +31,7 @@
                     android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_arrow_back"
-                    app:tint="@color/text_dark" />
+                    app:tint="?attr/colorOnSurface" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -40,7 +40,7 @@
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center"
                     android:text="Customize Your Order"
-                    android:textColor="@color/text_dark"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -54,7 +54,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/border_color" />
+            android:background="?attr/colorOutlineVariant" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -69,14 +69,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingHorizontal="16dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="32dp"
+            android:clipToPadding="false">
 
             <!-- Bike Header Summary -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardInvoiceDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="20dp"
-                app:cardBackgroundColor="@color/white"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="?attr/colorSurface"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp">
 
@@ -92,7 +100,7 @@
                         android:layout_height="100dp"
                         android:scaleType="fitCenter"
                         android:padding="8dp"
-                        android:background="#F8FAFC"
+                        android:background="?attr/colorSurfaceVariant"
                         app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
 
                     <LinearLayout
@@ -107,7 +115,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-black"
                             android:text="Bike Name"
-                            android:textColor="@color/text_dark"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="20sp"
                             android:textStyle="bold" />
 
@@ -117,7 +125,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Variant | Color"
-                            android:textColor="@color/text_gray"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="14sp" />
 
                         <TextView
@@ -127,7 +135,7 @@
                             android:layout_marginTop="8dp"
                             android:fontFamily="sans-serif-medium"
                             android:text="₹ 0.00"
-                            android:textColor="@color/primary_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -140,7 +148,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="?attr/colorSurface"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp">
 
@@ -155,7 +163,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:text="Warranty &amp; Services"
-                        android:textColor="@color/text_dark"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -169,8 +177,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Warranty" android:textColor="@color/text_gray" android:textSize="12sp" />
-                            <TextView android:id="@+id/tvWarranty" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textColor="@color/text_dark" android:textSize="14sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Warranty" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="12sp" />
+                            <TextView android:id="@+id/tvWarranty" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textColor="?attr/colorOnSurface" android:textSize="14sp" android:textStyle="bold" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -178,8 +186,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Free Services" android:textColor="@color/text_gray" android:textSize="12sp" />
-                            <TextView android:id="@+id/tvFreeServices" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textColor="@color/text_dark" android:textSize="14sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Free Services" android:textColor="?attr/colorOnSurfaceVariant" android:textSize="12sp" />
+                            <TextView android:id="@+id/tvFreeServices" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="-" android:textColor="?attr/colorOnSurface" android:textSize="14sp" android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -190,7 +198,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="?attr/colorSurface"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp">
 
@@ -205,7 +213,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:text="Mandatory Fittings (Included)"
-                        android:textColor="@color/text_dark"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -222,7 +230,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="?attr/colorSurface"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="2dp">
 
@@ -244,7 +252,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Additional Fittings (Optional)"
-                            android:textColor="@color/text_dark"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -262,7 +270,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:text="Select/deselect to customize your order"
-                        android:textColor="@color/text_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="12sp" />
 
                     <LinearLayout
@@ -278,7 +286,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="#F8FAFC"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp">
 
@@ -293,7 +301,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:text="Invoice Legal Notes"
-                        android:textColor="@color/text_dark"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -302,7 +310,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Price &amp; taxes ruling at the time of delivery will be applicable."
-                        android:textColor="@color/text_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="12sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -312,6 +320,7 @@
 
     <!-- Bottom Action Bar -->
     <androidx.cardview.widget.CardView
+        android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -321,10 +330,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:background="?attr/colorSurface"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="16dp">
+            android:paddingHorizontal="16dp"
+            android:paddingTop="16dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -336,7 +346,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Final Total Price"
-                    android:textColor="@color/text_gray"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp" />
 
                 <TextView
@@ -345,7 +355,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-black"
                     android:text="₹ 0.00"
-                    android:textColor="@color/text_dark"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -363,9 +373,9 @@
                 android:textStyle="bold"
                 app:cornerRadius="12dp"
                 app:icon="@drawable/ic_download"
-                app:iconTint="@color/primary_color"
+                app:iconTint="?attr/colorPrimary"
                 app:iconGravity="textStart"
-                app:strokeColor="@color/primary_color"
+                app:strokeColor="?attr/colorPrimary"
                 app:strokeWidth="1dp" />
 
             <com.google.android.material.button.MaterialButton

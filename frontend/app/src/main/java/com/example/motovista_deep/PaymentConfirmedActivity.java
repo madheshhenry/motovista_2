@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.motovista_deep.utils.SystemUIHelper;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -41,6 +43,12 @@ public class PaymentConfirmedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_confirmed);
+
+        // Dynamic system UI inset handling
+        android.view.View rootView = findViewById(android.R.id.content);
+        android.view.View headerView = findViewById(R.id.headerLayout);
+        android.view.View footerView = findViewById(R.id.footerLayout);
+        SystemUIHelper.setupEdgeToEdge(this, rootView, headerView, footerView);
 
         sessionManager = new com.example.motovista_deep.helpers.OrderSessionManager(this);
 

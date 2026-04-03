@@ -5,10 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
-    app:cardUseCompatPadding="true"
-    app:cardBackgroundColor="@color/white">
+    android:layout_marginHorizontal="2dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="?attr/colorSurface"
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,15 +20,14 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@color/gray_200">
+            android:background="?attr/colorBackground">
 
             <!-- Bike Image -->
             <ImageView
                 android:id="@+id/ivBikeImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitCenter"
-                android:padding="8dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/featured_community"
                 android:contentDescription="Bike Image" />
 
@@ -40,9 +40,10 @@
                 android:background="@drawable/badge_green_background"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="6dp"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true">
 
-                <!-- Pulse Dot -->
                 <View
                     android:layout_width="6dp"
                     android:layout_height="6dp"
@@ -56,11 +57,9 @@
                     android:text="Active"
                     android:textColor="@color/green_800"
                     android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif" />
+                    android:fontFamily="sans-serif-bold" />
 
             </LinearLayout>
-
         </RelativeLayout>
 
         <!-- Content -->
@@ -68,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="20dp">
 
             <!-- Title Row -->
             <LinearLayout
@@ -88,10 +87,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Bike Name"
-                        android:textColor="@color/text_dark"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:fontFamily="sans-serif-medium" />
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="18sp"
+                        android:fontFamily="sans-serif-bold" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -112,12 +110,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Color"
-                            android:textColor="@color/primary_color"
+                            android:textColor="?attr/colorPrimary"
                             android:textSize="14sp"
-                            android:fontFamily="sans-serif" />
-
+                            android:fontFamily="sans-serif-medium" />
                     </LinearLayout>
-
                 </LinearLayout>
 
                 <!-- Chevron -->
@@ -125,17 +121,16 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_chevron_right"
-                    android:tint="@color/gray_400"
+                    app:tint="?attr/colorOutline"
                     android:contentDescription="More" />
 
             </LinearLayout>
 
-            <!-- Divider -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginVertical="12dp"
-                android:background="@color/gray_200" />
+                android:layout_marginVertical="16dp"
+                android:background="?attr/colorOutlineVariant" />
 
             <!-- Details Row -->
             <LinearLayout
@@ -154,22 +149,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ORDER ID"
-                        android:textColor="@color/text_secondary"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textAllCaps="true"
                         android:letterSpacing="0.05"
-                        android:fontFamily="sans-serif"
-                        android:textStyle="bold" />
+                        android:fontFamily="sans-serif-medium" />
 
                     <TextView
                         android:id="@+id/tvOrderId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="#ORDER123"
-                        android:textColor="@color/text_dark"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="14sp"
                         android:fontFamily="monospace"
-                        android:background="@color/gray_200"
+                        android:background="?attr/colorBackground"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="4dp"
                         android:layout_marginTop="4dp"
@@ -189,21 +183,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="PURCHASED"
-                        android:textColor="@color/text_secondary"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textAllCaps="true"
                         android:letterSpacing="0.05"
-                        android:fontFamily="sans-serif"
-                        android:textStyle="bold" />
+                        android:fontFamily="sans-serif-medium" />
 
                     <TextView
                         android:id="@+id/tvPurchaseDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Jan 12, 2023"
-                        android:textColor="@color/text_dark"
-                        android:textSize="14sp"
-                        android:fontFamily="sans-serif"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="15sp"
+                        android:fontFamily="sans-serif-bold"
                         android:layout_marginTop="4dp"
                         android:gravity="center_vertical" />
 

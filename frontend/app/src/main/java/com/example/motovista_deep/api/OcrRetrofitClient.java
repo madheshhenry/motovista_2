@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class OcrRetrofitClient {
     // Port 5000 for the Flask OCR server
     // Use the actual IP address for physical devices on same network
-    public static final String OCR_BASE_URL = "http://192.168.0.103:5001/";
+    public static final String OCR_BASE_URL = "http://192.168.0.105:5001/";
 
     private static OcrApiService apiService;
 

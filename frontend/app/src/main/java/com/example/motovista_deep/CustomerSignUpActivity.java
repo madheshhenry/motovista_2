@@ -28,6 +28,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.example.motovista_deep.utils.SystemUIHelper;
+
 public class CustomerSignUpActivity extends AppCompatActivity {
 
     private EditText etFullName, etEmail, etPhone, etPassword, etConfirmPassword;
@@ -43,6 +45,13 @@ public class CustomerSignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_signup);
+
+        // Enable edge-to-edge display and dynamic insets
+        SystemUIHelper.setupEdgeToEdgeWithScroll(this, 
+            findViewById(R.id.rootLayout), 
+            findViewById(R.id.headerLayout), 
+            findViewById(R.id.scrollView),
+            null);
 
         initializeViews();
         setupClickListeners();

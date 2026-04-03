@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F8F9FA"
+    android:background="?attr/colorBackground"
     android:fitsSystemWindows="true">
 
     <!-- Header (Sticky) -->
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="#F8F9FA"
+        android:background="?attr/colorBackground"
         android:gravity="center_vertical"
         android:paddingHorizontal="16dp"
         android:paddingVertical="16dp"
@@ -35,7 +35,7 @@
                 android:layout_height="24dp"
                 android:text="←"
                 android:textSize="20sp"
-                android:textColor="#212529"
+                android:textColor="?attr/colorOnSurface"
                 android:gravity="center" />
 
         </LinearLayout>
@@ -48,7 +48,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Request a Bike"
-            android:textColor="#212529"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="18sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
@@ -65,7 +65,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#DEE2E6" />
+        android:background="?attr/colorOutlineVariant" />
 
     <!-- Scroll View for Content -->
     <ScrollView
@@ -73,7 +73,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:fillViewport="true"
-        android:background="#F8F9FA">
+        android:background="?attr/colorBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -86,7 +86,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Bike Details"
-                android:textColor="#212529"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif"
@@ -98,7 +99,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Bike Brand"
-                android:textColor="#212529"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:textSize="16sp"
                 android:fontFamily="sans-serif-medium"
                 android:paddingBottom="8dp" />
@@ -114,8 +116,8 @@
                 android:inputType="textCapWords"
                 android:paddingHorizontal="16dp"
                 android:background="@drawable/edittext_background"
-                android:textColor="#212529"
-                android:textColorHint="#618389"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:maxLines="1" />
 
             <!-- Spacing -->
@@ -128,7 +130,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Bike Model"
-                android:textColor="#212529"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:textSize="16sp"
                 android:fontFamily="sans-serif-medium"
                 android:paddingBottom="8dp" />
@@ -144,8 +147,8 @@
                 android:inputType="textCapWords"
                 android:paddingHorizontal="16dp"
                 android:background="@drawable/edittext_background"
-                android:textColor="#212529"
-                android:textColorHint="#618389"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:maxLines="1" />
 
             <!-- Spacing -->
@@ -158,7 +161,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Desired Features / Notes"
-                android:textColor="#212529"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:textSize="16sp"
                 android:fontFamily="sans-serif-medium"
                 android:paddingBottom="8dp" />
@@ -175,8 +179,8 @@
                 android:gravity="top"
                 android:padding="16dp"
                 android:background="@drawable/edittext_background"
-                android:textColor="#212529"
-                android:textColorHint="#618389" />
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant" />
 
             <!-- Spacing before next section -->
             <View
@@ -188,7 +192,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Your Contact Details"
-                android:textColor="#212529"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif"
@@ -200,7 +205,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Full Name"
-                android:textColor="#212529"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:textSize="16sp"
                 android:fontFamily="sans-serif-medium"
                 android:paddingBottom="8dp" />
@@ -216,8 +222,8 @@
                 android:inputType="textPersonName"
                 android:paddingHorizontal="16dp"
                 android:background="@drawable/edittext_background"
-                android:textColor="#212529"
-                android:textColorHint="#618389"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:maxLines="1" />
 
             <!-- Spacing -->
@@ -230,7 +236,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Mobile Number"
-                android:textColor="#212529"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:textSize="16sp"
                 android:fontFamily="sans-serif-medium"
                 android:paddingBottom="8dp" />
@@ -246,8 +253,8 @@
                 android:inputType="phone"
                 android:paddingHorizontal="16dp"
                 android:background="@drawable/edittext_background"
-                android:textColor="#212529"
-                android:textColorHint="#618389"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:maxLines="1" />
 
             <!-- Spacing -->
@@ -260,7 +267,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Email Address (Optional)"
-                android:textColor="#212529"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:textSize="16sp"
                 android:fontFamily="sans-serif-medium"
                 android:paddingBottom="8dp" />
@@ -276,8 +284,8 @@
                 android:inputType="textEmailAddress"
                 android:paddingHorizontal="16dp"
                 android:background="@drawable/edittext_background"
-                android:textColor="#212529"
-                android:textColorHint="#618389"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:maxLines="1" />
 
             <!-- Extra padding at bottom for scroll -->
@@ -293,7 +301,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#F8F9FA"
+        android:background="?attr/colorBackground"
         android:elevation="4dp"
         android:paddingTop="8dp"
         android:paddingHorizontal="16dp"
@@ -303,7 +311,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#DEE2E6" />
+            android:background="?attr/colorOutlineVariant" />
 
         <!-- Submit Button -->
         <Button
@@ -317,7 +325,7 @@
             android:fontFamily="sans-serif-medium"
             android:letterSpacing="-0.015"
             android:background="@drawable/button_primary"
-            android:textColor="#FFFFFF" />
+            android:textColor="?attr/colorOnPrimary" />
 
     </LinearLayout>
 </LinearLayout>

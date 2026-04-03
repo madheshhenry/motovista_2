@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.motovista_deep.utils.SystemUIHelper;
+
 import com.bumptech.glide.Glide;
 import com.example.motovista_deep.adapter.BikeImageAdapter;
 import com.example.motovista_deep.api.RetrofitClient;
@@ -74,6 +76,12 @@ public class BikeDetailsCustomerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bike_details_customer_v2);
+
+        // Dynamic system UI inset handling
+        View rootView = findViewById(android.R.id.content);
+        View headerView = findViewById(R.id.header);
+        View footerView = findViewById(R.id.footer);
+        SystemUIHelper.setupEdgeToEdge(this, rootView, headerView, footerView);
 
         bikeId = getIntent().getIntExtra("bike_id", -1);
         if (bikeId == -1) {

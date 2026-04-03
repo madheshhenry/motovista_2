@@ -6,16 +6,16 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
+    android:background="?attr/colorBackground"
     android:fitsSystemWindows="true">
 
-    <!-- Main Content Container -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         android:fitsSystemWindows="true"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,9 +24,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="20dp"
-            android:paddingVertical="24dp"
-            android:fitsSystemWindows="true">
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="32dp">
 
             <!-- Top Icon Section -->
             <LinearLayout
@@ -35,46 +34,41 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="24dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <!-- App Logo (Same as Splash) -->
                 <ImageView
                     android:id="@+id/iv_logo"
-                    android:layout_width="180dp"
-                    android:layout_height="180dp"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
                     android:src="@drawable/splash_logo"
                     android:scaleType="fitCenter"
                     android:layout_marginBottom="24dp" />
 
-                <!-- Welcome Text -->
                 <TextView
                     android:id="@+id/tv_welcome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Welcome to Santhosh Bikes"
-                    android:textColor="@color/text_dark"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif"
+                    android:text="Welcome to MotoVista"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="28sp"
+                    android:letterSpacing="-0.01"
+                    android:fontFamily="sans-serif-black"
                     android:gravity="center"
-                    android:maxLines="2"
-                    android:lineSpacingExtra="4sp" />
+                    android:maxLines="2" />
 
-                <!-- Select Role Text -->
                 <TextView
                     android:id="@+id/tv_select_role"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Select your role to get started."
-                    android:textColor="@color/text_dark"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="16sp"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="sans-serif-medium"
                     android:gravity="center"
-                    android:layout_marginTop="12dp"
-                    android:maxLines="2" />
+                    android:layout_marginTop="8dp" />
 
             </LinearLayout>
 
@@ -84,172 +78,187 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="40dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/top_section">
 
                 <!-- Customer Card -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_customer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="24dp"
                     app:cardElevation="8dp"
-                    app:cardUseCompatPadding="true"
-                    android:layout_marginBottom="20dp"
-                    android:background="@android:color/white"
-                    android:minHeight="140dp">
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorOutline"
+                    app:rippleColor="?attr/colorPrimary">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:padding="24dp">
+                        android:background="@drawable/bg_premium_glass_card"
+                        android:padding="24dp"
+                        android:gravity="center_vertical">
 
-                        <!-- Icon -->
-                        <ImageView
-                            android:id="@+id/icon_customer"
-                            android:layout_width="44dp"
-                            android:layout_height="44dp"
-                            android:src="@drawable/ic_person"
-                            android:tint="@color/primary_color"
-                            android:layout_marginEnd="20dp" />
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            app:cardCornerRadius="24dp"
+                            app:cardBackgroundColor="?attr/colorPrimaryContainer"
+                            app:cardElevation="0dp"
+                            android:layout_marginEnd="16dp">
+                            <ImageView
+                                android:id="@+id/icon_customer"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_person"
+                                app:tint="?attr/colorPrimary" />
+                        </androidx.cardview.widget.CardView>
 
-                        <!-- Text Content -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center_vertical">
+                            android:orientation="vertical">
 
                             <TextView
                                 android:id="@+id/tv_customer_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Customer"
-                                android:textColor="@color/text_dark"
-                                android:textSize="20sp"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="18sp"
                                 android:textStyle="bold"
-                                android:fontFamily="sans-serif" />
+                                android:fontFamily="sans-serif-medium" />
 
                             <TextView
                                 android:id="@+id/tv_customer_desc"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Explore our collection, book services, and manage your profile."
-                                android:textColor="@color/text_admin"
-                                android:textSize="15sp"
-                                android:fontFamily="sans-serif"
-                                android:layout_marginTop="8dp"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:textSize="14sp"
                                 android:lineSpacingExtra="2sp"
-                                android:maxLines="3" />
-
+                                android:fontFamily="sans-serif"
+                                android:layout_marginTop="4dp" />
                         </LinearLayout>
 
-                        <!-- Selection Indicator -->
                         <ImageView
                             android:id="@+id/iv_customer_selected"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:src="@drawable/ic_check_circle"
-                            android:tint="@color/primary_color"
+                            app:tint="?attr/colorPrimary"
                             android:visibility="gone"
-                            android:layout_marginStart="12dp" />
+                            android:layout_marginStart="16dp" />
 
                     </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- Admin Card -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_admin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="20dp"
+                    android:layout_marginBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardCornerRadius="24dp"
                     app:cardElevation="8dp"
-                    app:cardUseCompatPadding="true"
-                    android:background="@android:color/white"
-                    android:minHeight="140dp">
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorOutline"
+                    app:rippleColor="?attr/colorPrimary">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:padding="24dp">
+                        android:background="@drawable/bg_premium_glass_card"
+                        android:padding="24dp"
+                        android:gravity="center_vertical">
 
-                        <!-- Icon -->
-                        <ImageView
-                            android:id="@+id/icon_admin"
-                            android:layout_width="44dp"
-                            android:layout_height="44dp"
-                            android:src="@drawable/ic_admin"
-                            android:tint="@color/primary_color"
-                            android:layout_marginEnd="20dp" />
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            app:cardCornerRadius="24dp"
+                            app:cardBackgroundColor="?attr/colorPrimaryContainer"
+                            app:cardElevation="0dp"
+                            android:layout_marginEnd="16dp">
+                            <ImageView
+                                android:id="@+id/icon_admin"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_admin"
+                                app:tint="?attr/colorPrimary" />
+                        </androidx.cardview.widget.CardView>
 
-                        <!-- Text Content -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:gravity="center_vertical">
+                            android:orientation="vertical">
 
                             <TextView
                                 android:id="@+id/tv_admin_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Admin"
-                                android:textColor="@color/text_dark"
-                                android:textSize="20sp"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="18sp"
                                 android:textStyle="bold"
-                                android:fontFamily="sans-serif" />
+                                android:fontFamily="sans-serif-medium" />
 
                             <TextView
                                 android:id="@+id/tv_admin_desc"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Access the dashboard to manage inventory, sales, and staff."
-                                android:textColor="@color/text_admin"
-                                android:textSize="15sp"
-                                android:fontFamily="sans-serif"
-                                android:layout_marginTop="8dp"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:textSize="14sp"
                                 android:lineSpacingExtra="2sp"
-                                android:maxLines="3" />
-
+                                android:fontFamily="sans-serif"
+                                android:layout_marginTop="4dp" />
                         </LinearLayout>
 
-                        <!-- Selection Indicator -->
                         <ImageView
                             android:id="@+id/iv_admin_selected"
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:src="@drawable/ic_check_circle"
-                            android:tint="@color/primary_color"
+                            app:tint="?attr/colorPrimary"
                             android:visibility="gone"
-                            android:layout_marginStart="12dp" />
+                            android:layout_marginStart="16dp" />
 
                     </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
 
-            <!-- Continue Button -->
             <Button
                 android:id="@+id/btn_continue"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:text="Continue"
-                android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:fontFamily="sans-serif"
-                android:background="@drawable/button_background"
+                android:fontFamily="sans-serif-medium"
+                android:background="@drawable/bg_premium_primary_btn"
                 android:layout_marginTop="40dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="24dp"
                 android:enabled="false"
+                android:elevation="6dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

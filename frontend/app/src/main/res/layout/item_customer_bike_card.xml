@@ -3,32 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginBottom="16dp"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginBottom="20dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
-    app:cardBackgroundColor="@color/white">
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="?attr/colorSurface"
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Image Section with Badge -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="220dp">
+            android:layout_height="180dp"
+            android:background="@drawable/bg_image_tint">
 
             <ImageView
                 android:id="@+id/ivBikeImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitCenter"
-                android:padding="16dp"
-                android:src="@drawable/ic_two_wheeler"
-                android:background="#F8FAFC" />
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_image_placeholder" />
 
-            <!-- Category Badge (Top Left) -->
             <TextView
                 android:id="@+id/tvBadge"
                 android:layout_width="wrap_content"
@@ -36,77 +34,65 @@
                 android:layout_margin="12dp"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="4dp"
-                android:background="@drawable/bg_new_badge"
+                android:background="@drawable/bg_premium_glass_card"
                 android:text="Popular"
-                android:textColor="@color/white"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="10sp"
-                android:textStyle="bold"
+                android:fontFamily="sans-serif-bold"
                 android:visibility="visible" />
         </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- Title and Brand -->
-            <TextView
-                android:id="@+id/tvBikeName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Yamaha R15 V4"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#0F172A"
-                android:ellipsize="end"
-                android:maxLines="1" />
-
-            <!-- Price with Label -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="6dp"
-                android:gravity="center_vertical">
+                android:orientation="vertical"
+                android:layout_toStartOf="@id/btnViewDetails"
+                android:layout_marginEnd="16dp"
+                android:layout_centerVertical="true">
+
+                <TextView
+                    android:id="@+id/tvBikeName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bike Name"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-black"
+                    android:textColor="?attr/colorOnSurface"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
 
                 <TextView
                     android:id="@+id/tvBikePrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="₹ 2,40,000"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/primary_color" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" Onwards"
-                    android:textSize="12sp"
-                    android:textColor="#64748B"
-                    android:layout_marginStart="4dp"/>
+                    android:text="₹ 0"
+                    android:textSize="15sp"
+                    android:fontFamily="sans-serif-bold"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:layout_marginTop="2dp"/>
             </LinearLayout>
 
-            <!-- Action Button -->
-            <com.google.android.material.button.MaterialButton
+            <TextView
                 android:id="@+id/btnViewDetails"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:layout_marginTop="12dp"
-                android:text="Explore Bike"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="Details"
                 android:textAllCaps="false"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                app:cornerRadius="12dp"
-                android:backgroundTint="@color/primary_light"
-                android:textColor="@color/primary_color"
-                app:rippleColor="@color/primary_color"
-                app:strokeWidth="1dp"
-                app:strokeColor="@color/primary_color"
-                style="@style/Widget.MaterialComponents.Button.TextButton"/>
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-bold"
+                android:textColor="?attr/colorOnSurface"
+                android:background="@drawable/bg_outline_button"
+                android:paddingHorizontal="16dp" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background_light"
+    android:background="?attr/colorBackground"
     android:fitsSystemWindows="true">
 
     <!-- Header -->
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/white"
+        android:background="?attr/colorSurface"
         android:padding="@dimen/padding_medium"
         android:gravity="center_vertical"
         android:elevation="4dp">
@@ -31,7 +31,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_arrow_back"
-                android:tint="@color/text_dark"
+                android:tint="?attr/colorOnSurface"
                 android:contentDescription="Back" />
 
         </androidx.cardview.widget.CardView>
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Documents"
-            android:textColor="@color/text_dark"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="18sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif-medium"
@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Generate and manage post-payment documents for this order."
-                android:textColor="@color/text_secondary"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="14sp"
                 android:fontFamily="sans-serif-medium"
                 android:layout_marginBottom="@dimen/spacing_large"
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="?attr/colorSurface"
                 android:layout_marginBottom="@dimen/spacing_medium"
                 android:layout_marginHorizontal="@dimen/padding_small">
 
@@ -107,7 +107,7 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_receipt_long"
-                            android:tint="@color/primary"
+                            android:tint="?attr/colorPrimary"
                             android:contentDescription="Receipt" />
 
                     </LinearLayout>
@@ -133,7 +133,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Bill / Cash Receipt"
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 android:fontFamily="sans-serif-medium" />
@@ -160,7 +160,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Complete payment breakdown including taxes and EMI details."
-                            android:textColor="@color/text_secondary"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="14sp"
                             android:fontFamily="sans-serif"
                             android:layout_marginBottom="@dimen/padding_large"
@@ -198,7 +198,7 @@
                                         android:layout_width="18dp"
                                         android:layout_height="18dp"
                                         android:src="@drawable/ic_visibility"
-                                        android:tint="@color/text_dark"
+                                        android:tint="?attr/colorOnSurface"
                                         android:layout_marginEnd="8dp"
                                         android:contentDescription="Preview" />
 
@@ -206,7 +206,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Preview"
-                                        android:textColor="@color/text_dark"
+                                        android:textColor="?attr/colorOnSurface"
                                         android:textSize="14sp"
                                         android:textStyle="bold"
                                         android:fontFamily="sans-serif-medium" />
@@ -224,7 +224,7 @@
                                 android:layout_marginStart="8dp"
                                 app:cardCornerRadius="12dp"
                                 app:cardElevation="0dp"
-                                app:cardBackgroundColor="@color/gray_200"
+                                app:cardBackgroundColor="?attr/colorOutlineVariant"
                                 android:clickable="true"
                                 android:focusable="true">
 
@@ -239,7 +239,7 @@
                                         android:layout_width="18dp"
                                         android:layout_height="18dp"
                                         android:src="@drawable/ic_download"
-                                        android:tint="@color/text_dark"
+                                        android:tint="?attr/colorOnSurface"
                                         android:layout_marginEnd="8dp"
                                         android:contentDescription="Download" />
 
@@ -247,7 +247,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Download PDF"
-                                        android:textColor="@color/text_dark"
+                                        android:textColor="?attr/colorOnSurface"
                                         android:textSize="14sp"
                                         android:textStyle="bold"
                                         android:fontFamily="sans-serif-medium" />
@@ -271,7 +271,7 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="?attr/colorSurface"
                 android:layout_marginBottom="@dimen/spacing_large"
                 android:layout_marginHorizontal="@dimen/padding_small">
 
@@ -295,7 +295,7 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_motorcycle"
-                            android:tint="@color/gray_500"
+                            android:tint="?attr/colorOnSurfaceVariant"
                             android:contentDescription="Delivery" />
 
                     </LinearLayout>
@@ -313,7 +313,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Delivery Note"
-                            android:textColor="@color/text_dark"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:fontFamily="sans-serif-medium"
@@ -324,7 +324,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Vehicle handover authorization, checklist, and gate pass."
-                            android:textColor="@color/text_secondary"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="14sp"
                             android:fontFamily="sans-serif"
                             android:layout_marginBottom="@dimen/padding_large"
@@ -362,7 +362,7 @@
                                         android:layout_width="18dp"
                                         android:layout_height="18dp"
                                         android:src="@drawable/ic_visibility"
-                                        android:tint="@color/text_dark"
+                                        android:tint="?attr/colorOnSurface"
                                         android:layout_marginEnd="8dp"
                                         android:contentDescription="Preview" />
 
@@ -370,7 +370,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Preview"
-                                        android:textColor="@color/text_dark"
+                                        android:textColor="?attr/colorOnSurface"
                                         android:textSize="14sp"
                                         android:textStyle="bold"
                                         android:fontFamily="sans-serif-medium" />
@@ -388,7 +388,7 @@
                                 android:layout_marginStart="8dp"
                                 app:cardCornerRadius="12dp"
                                 app:cardElevation="0dp"
-                                app:cardBackgroundColor="@color/gray_200"
+                                app:cardBackgroundColor="?attr/colorOutlineVariant"
                                 android:clickable="true"
                                 android:focusable="true">
 
@@ -403,7 +403,7 @@
                                         android:layout_width="18dp"
                                         android:layout_height="18dp"
                                         android:src="@drawable/ic_download"
-                                        android:tint="@color/text_dark"
+                                        android:tint="?attr/colorOnSurface"
                                         android:layout_marginEnd="8dp"
                                         android:contentDescription="Download" />
 
@@ -411,7 +411,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Download PDF"
-                                        android:textColor="@color/text_dark"
+                                        android:textColor="?attr/colorOnSurface"
                                         android:textSize="14sp"
                                         android:textStyle="bold"
                                         android:fontFamily="sans-serif-medium" />
@@ -441,7 +441,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="?attr/colorSurface"
         android:padding="@dimen/padding_medium"
         android:elevation="8dp">
 
@@ -451,7 +451,7 @@
             android:layout_height="56dp"
             app:cardCornerRadius="14dp"
             app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/primary"
+            app:cardBackgroundColor="?attr/colorPrimary"
             android:clickable="true"
             android:focusable="true">
 
@@ -466,7 +466,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Finish Order"
-                    android:textColor="@color/text_dark"
+                    android:textColor="?attr/colorOnPrimary"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium" />

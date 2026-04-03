@@ -25,6 +25,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.example.motovista_deep.utils.SystemUIHelper;
+
 public class AdminLoginActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword, etOtp;
@@ -39,10 +41,17 @@ public class AdminLoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        makeFullScreen();
+        
         setContentView(R.layout.activity_admin_login);
 
-        // Check if Admin is already logged in
+        // Enable edge-to-edge display and dynamic insets
+        SystemUIHelper.setupEdgeToEdgeWithScroll(this, 
+            findViewById(R.id.root_layout), 
+            null, 
+            findViewById(R.id.scrollView),
+            null);
+
+        // FIXED AUTO LOGIN - We'll check profile completion in navigateToHome()gged in
         if (SharedPrefManager.getInstance(this).isLoggedIn() &&
                 "admin".equals(SharedPrefManager.getInstance(this).getRole())) {
             
@@ -58,17 +67,6 @@ public class AdminLoginActivity extends AppCompatActivity {
         apiService = RetrofitClient.getApiService();
         initViews();
         setupClickListeners();
-    }
-
-    private void makeFullScreen() {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            WindowManager.LayoutParams params = getWindow().getAttributes();
-            params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-            getWindow().setAttributes(params);
-        }
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
     }
 
     private void initViews() {

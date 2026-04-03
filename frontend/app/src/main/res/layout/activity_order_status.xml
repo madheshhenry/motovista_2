@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
-    android:fitsSystemWindows="true">
+    android:background="?attr/colorBackground">
 
     <!-- Sticky Header -->
     <LinearLayout
@@ -27,9 +26,11 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_arrow_back"
-            app:tint="@color/text_dark"
+            app:tint="?attr/colorOnSurface"
             android:padding="12dp"
-            android:background="@drawable/circle_background_primary"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
             android:contentDescription="Back" />
 
         <!-- Title -->
@@ -39,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Order Status"
-            android:textColor="@color/text_dark"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="18sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif-medium"
@@ -64,7 +65,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="center_horizontal"
-            android:padding="@dimen/padding_large">
+            android:padding="@dimen/padding_large"
+            android:paddingTop="24dp"
+            android:paddingBottom="48dp"
+            android:clipToPadding="false">
 
             <!-- =========================
                  STATE 1: INITIAL STATUS
@@ -100,7 +104,7 @@
                         android:layout_centerInParent="true"
                         app:cardCornerRadius="40dp"
                         app:cardElevation="6dp"
-                        app:cardBackgroundColor="@color/primary">
+                        app:cardBackgroundColor="?attr/colorPrimary">
 
                         <ImageView
                             android:id="@+id/ivStatusIcon"
@@ -128,7 +132,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Processing Order"
-                        android:textColor="@color/text_dark"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         android:gravity="center"
@@ -140,7 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="We are reviewing your request."
-                        android:textColor="@color/text_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="14sp"
                         android:gravity="center"
                         android:fontFamily="sans-serif"
@@ -157,7 +161,7 @@
                     android:layout_marginBottom="24dp"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="3dp"
-                    app:cardBackgroundColor="@color/white">
+                    app:cardBackgroundColor="?attr/colorSurface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -169,7 +173,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="ORDER DETAILS"
-                            android:textColor="@color/text_gray"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:letterSpacing="0.1"
@@ -187,14 +191,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Order ID"
-                                android:textColor="@color/text_gray"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="14sp" />
                             <TextView
                                 android:id="@+id/tvOrderId"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="..."
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -209,14 +213,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Bike"
-                                android:textColor="@color/text_gray"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="14sp" />
                             <TextView
                                 android:id="@+id/tvBikeName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="..."
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:maxWidth="200dp"
@@ -235,14 +239,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Variant"
-                                android:textColor="@color/text_gray"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="14sp" />
                             <TextView
                                 android:id="@+id/tvBikeVariant"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="..."
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -257,14 +261,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Price"
-                                android:textColor="@color/text_gray"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="14sp" />
                             <TextView
                                 android:id="@+id/tvBikePrice"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="..."
-                                android:textColor="@color/primary"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -279,7 +283,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Color"
-                                android:textColor="@color/text_gray"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="14sp"
                                 android:fontFamily="sans-serif" />
                             <LinearLayout
@@ -298,7 +302,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="..."
-                                    android:textColor="@color/text_dark"
+                                    android:textColor="?attr/colorOnSurface"
                                     android:textSize="14sp"
                                     android:textStyle="bold"
                                     android:fontFamily="sans-serif" />
@@ -315,14 +319,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Request Date"
-                                android:textColor="@color/text_gray"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="14sp" />
                             <TextView
                                 android:id="@+id/tvOrderDate"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="..."
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -350,7 +354,7 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="2dp"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardBackgroundColor="?attr/colorSurface"
                     android:layout_marginBottom="16dp">
 
                     <LinearLayout
@@ -367,7 +371,7 @@
                             android:layout_height="80dp"
                             android:src="@drawable/placeholder_bike"
                             android:scaleType="centerCrop"
-                            android:background="@color/background_light"
+                            android:background="?attr/colorSurfaceVariant"
                             android:layout_marginEnd="16dp"/>
                         
                         <LinearLayout
@@ -381,7 +385,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Classic Cruiser 350"
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 android:maxLines="1"
@@ -393,7 +397,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Order #4492-B"
-                                android:textColor="@color/text_gray"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="14sp"
                                 android:layout_marginTop="4dp"/>
                                 
@@ -402,7 +406,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Placed on Oct 24, 2023"
-                                android:textColor="@color/text_gray"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="12sp"
                                 android:layout_marginTop="2dp"/>
                         </LinearLayout>
@@ -416,7 +420,7 @@
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="2dp"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardBackgroundColor="?attr/colorSurface"
                     android:layout_marginBottom="16dp">
 
                     <LinearLayout
@@ -429,7 +433,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Order Progress"
-                            android:textColor="@color/text_dark"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:padding="16dp"
@@ -458,12 +462,12 @@
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
                                         android:src="@drawable/ic_check_circle"
-                                        app:tint="@color/emi_success_green"/>
+                                        app:tint="?attr/colorPrimary"/>
                                     <View
                                         android:id="@+id/viewStep1Line"
                                         android:layout_width="2dp"
                                         android:layout_height="40dp"
-                                        android:background="@color/emi_success_green"/>
+                                        android:background="?attr/colorPrimary"/>
                                 </LinearLayout>
                                 
                                 <LinearLayout
@@ -476,7 +480,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Order Confirmed"
-                                        android:textColor="@color/text_dark"
+                                        android:textColor="?attr/colorOnSurface"
                                         android:textStyle="bold"
                                         android:textSize="15sp"/>
                                     <TextView
@@ -484,7 +488,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Completed"
-                                        android:textColor="@color/gray_500"
+                                        android:textColor="?attr/colorOnSurfaceVariant"
                                         android:textSize="13sp"/>
                                 </LinearLayout>
                             </LinearLayout>
@@ -506,12 +510,12 @@
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
                                         android:src="@drawable/ic_circle_outline"
-                                        app:tint="@color/gray_400"/>
+                                        app:tint="?attr/colorOutlineVariant"/>
                                     <View
                                         android:id="@+id/viewStep2Line"
                                         android:layout_width="2dp"
                                         android:layout_height="40dp"
-                                        android:background="@color/gray_300"/>
+                                        android:background="?attr/colorOutlineVariant"/>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -524,14 +528,14 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Payment Completed"
-                                        android:textColor="@color/gray_500"
+                                        android:textColor="?attr/colorOnSurfaceVariant"
                                         android:textSize="15sp"/>
                                     <TextView
                                         android:id="@+id/tvStep2Status"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Locked"
-                                        android:textColor="@color/text_gray"
+                                        android:textColor="?attr/colorOnSurfaceVariant"
                                         android:textSize="13sp"/>
                                 </LinearLayout>
                             </LinearLayout>
@@ -553,12 +557,12 @@
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
                                         android:src="@drawable/ic_circle_outline"
-                                        app:tint="@color/gray_400"/>
+                                        app:tint="?attr/colorOutlineVariant"/>
                                     <View
                                         android:id="@+id/viewStep3Line"
                                         android:layout_width="2dp"
                                         android:layout_height="40dp"
-                                        android:background="@color/gray_300"/>
+                                        android:background="?attr/colorOutlineVariant"/>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -571,14 +575,14 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Insurance Process"
-                                        android:textColor="@color/gray_500"
+                                        android:textColor="?attr/colorOnSurfaceVariant"
                                         android:textSize="15sp"/>
                                     <TextView
                                         android:id="@+id/tvStep3Status"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Locked"
-                                        android:textColor="@color/text_gray"
+                                        android:textColor="?attr/colorOnSurfaceVariant"
                                         android:textSize="13sp"/>
                                 </LinearLayout>
                             </LinearLayout>
@@ -600,12 +604,12 @@
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
                                         android:src="@drawable/ic_circle_outline"
-                                        app:tint="@color/gray_400"/>
+                                        app:tint="?attr/colorOutlineVariant"/>
                                     <View
                                         android:id="@+id/viewStep4Line"
                                         android:layout_width="2dp"
                                         android:layout_height="40dp"
-                                        android:background="@color/gray_300"/>
+                                        android:background="?attr/colorOutlineVariant"/>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -618,14 +622,14 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Document Verification"
-                                        android:textColor="@color/gray_500"
+                                        android:textColor="?attr/colorOnSurfaceVariant"
                                         android:textSize="15sp"/>
                                     <TextView
                                         android:id="@+id/tvStep4Status"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Locked"
-                                        android:textColor="@color/text_gray"
+                                        android:textColor="?attr/colorOnSurfaceVariant"
                                         android:textSize="13sp"/>
                                 </LinearLayout>
                             </LinearLayout>
@@ -647,12 +651,12 @@
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
                                         android:src="@drawable/ic_circle_outline"
-                                        app:tint="@color/gray_400"/>
+                                        app:tint="?attr/colorOutlineVariant"/>
                                     <View
                                         android:id="@+id/viewStep5Line"
                                         android:layout_width="2dp"
                                         android:layout_height="40dp"
-                                        android:background="@color/gray_300"/>
+                                        android:background="?attr/colorOutlineVariant"/>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -665,14 +669,14 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Tax Payment"
-                                        android:textColor="@color/gray_500"
+                                        android:textColor="?attr/colorOnSurfaceVariant"
                                         android:textSize="15sp"/>
                                     <TextView
                                         android:id="@+id/tvStep5Status"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Locked"
-                                        android:textColor="@color/text_gray"
+                                        android:textColor="?attr/colorOnSurfaceVariant"
                                         android:textSize="13sp"/>
                                 </LinearLayout>
                             </LinearLayout>
@@ -694,7 +698,7 @@
                                         android:layout_width="24dp"
                                         android:layout_height="24dp"
                                         android:src="@drawable/ic_circle_outline"
-                                        app:tint="@color/gray_400"/>
+                                        app:tint="?attr/colorOutlineVariant"/>
                                     <!-- No Low Line for last item -->
                                 </LinearLayout>
 
@@ -708,14 +712,14 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Registration &amp; RC Book"
-                                        android:textColor="@color/gray_500"
+                                        android:textColor="?attr/colorOnSurfaceVariant"
                                         android:textSize="15sp"/>
                                     <TextView
                                         android:id="@+id/tvStep6Status"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Locked"
-                                        android:textColor="@color/text_gray"
+                                        android:textColor="?attr/colorOnSurfaceVariant"
                                         android:textSize="13sp"/>
                                 </LinearLayout>
                             </LinearLayout>
@@ -740,12 +744,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Need help with this order?"
-                        android:textColor="@color/primary"
+                        android:textColor="?attr/colorPrimary"
                         android:textStyle="bold"
                         android:textSize="14sp"
                         android:drawablePadding="12dp"
                         app:drawableStartCompat="@drawable/ic_chat"
-                        app:tint="@color/primary" />
+                        app:tint="?attr/colorPrimary" />
                 </LinearLayout>
 
             </LinearLayout>

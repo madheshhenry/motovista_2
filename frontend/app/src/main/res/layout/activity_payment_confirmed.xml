@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background_light"
-    android:fitsSystemWindows="true">
+    android:background="?attr/colorBackground">
 
     <!-- Top App Bar -->
     <LinearLayout
+        android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/white"
+        android:background="?attr/colorSurface"
         android:padding="@dimen/padding_medium"
         android:paddingBottom="8dp"
         android:gravity="center_vertical"
@@ -32,7 +32,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_arrow_back"
-                android:tint="@color/text_dark"
+                android:tint="?attr/colorOnSurface"
                 android:contentDescription="Back" />
 
         </androidx.cardview.widget.CardView>
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Payment Confirmed"
-            android:textColor="@color/text_dark"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="18sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif-medium"
@@ -57,14 +57,16 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingBottom="100dp">
+        android:paddingBottom="48dp"
+        android:clipToPadding="false"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/padding_medium"
-            android:paddingTop="@dimen/padding_large">
+            android:paddingTop="24dp">
 
             <!-- Success Feedback Section -->
             <LinearLayout
@@ -95,8 +97,11 @@
                         android:layout_width="96dp"
                         android:layout_height="96dp"
                         android:layout_centerInParent="true"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         app:cardCornerRadius="48dp"
-                        app:cardBackgroundColor="@color/primary"
+                        app:cardBackgroundColor="?attr/colorPrimary"
                         app:cardElevation="8dp">
 
                         <ImageView
@@ -104,7 +109,7 @@
                             android:layout_height="48dp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_check"
-                            android:tint="@color/white"
+                            android:tint="?attr/colorOnPrimary"
                             android:contentDescription="Success" />
 
                     </androidx.cardview.widget.CardView>
@@ -123,7 +128,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Payment Confirmed"
-                        android:textColor="@color/text_dark"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         android:fontFamily="sans-serif-medium"
@@ -134,7 +139,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Successfully"
-                        android:textColor="@color/text_dark"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         android:fontFamily="sans-serif-medium"
@@ -146,7 +151,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Transaction ID: #TXN-88392"
-                        android:textColor="@color/text_secondary"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="14sp"
                         android:fontFamily="sans-serif"
                         android:gravity="center" />
@@ -161,7 +166,7 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="2dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="?attr/colorSurface"
                 android:layout_marginBottom="@dimen/spacing_xlarge">
 
                 <LinearLayout
@@ -192,7 +197,7 @@
                                 android:layout_height="16dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_receipt"
-                                android:tint="@color/primary"
+                                android:tint="?attr/colorPrimary"
                                 android:contentDescription="Receipt" />
 
                         </androidx.cardview.widget.CardView>
@@ -203,7 +208,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Transaction Summary"
-                            android:textColor="@color/text_dark"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:fontFamily="sans-serif-medium"
@@ -215,7 +220,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/gray_200"
+                        android:background="?attr/colorOutlineVariant"
                         android:layout_marginBottom="@dimen/padding_medium" />
 
                     <!-- Transaction Details -->
@@ -238,7 +243,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Customer Name"
-                                android:textColor="@color/text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="14sp"
                                 android:fontFamily="sans-serif" />
 
@@ -247,7 +252,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Rahul Sharma"
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:fontFamily="sans-serif-medium" />
@@ -267,7 +272,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Model"
-                                android:textColor="@color/text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="14sp"
                                 android:fontFamily="sans-serif" />
 
@@ -276,7 +281,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Yamaha R15 V4"
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
                                 android:fontFamily="sans-serif-medium" />
@@ -295,7 +300,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Payment Mode"
-                                android:textColor="@color/text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="14sp"
                                 android:fontFamily="sans-serif" />
 
@@ -309,7 +314,7 @@
                                     android:layout_width="16dp"
                                     android:layout_height="16dp"
                                     android:src="@drawable/ic_smartphone"
-                                    android:tint="@color/text_secondary"
+                                    android:tint="?attr/colorOnSurfaceVariant"
                                     android:layout_marginEnd="4dp"
                                     android:contentDescription="UPI" />
 
@@ -318,7 +323,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="UPI / GPay"
-                                    android:textColor="@color/text_dark"
+                                    android:textColor="?attr/colorOnSurface"
                                     android:textSize="14sp"
                                     android:textStyle="bold"
                                     android:fontFamily="sans-serif-medium" />
@@ -335,7 +340,7 @@
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="12dp"
                         app:cardElevation="0dp"
-                        app:cardBackgroundColor="@color/background_light">
+                        app:cardBackgroundColor="?attr/colorSurfaceVariant">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -349,7 +354,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Amount Paid"
-                                android:textColor="@color/text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="14sp"
                                 android:fontFamily="sans-serif-medium" />
 
@@ -358,7 +363,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="₹25,000"
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
                                 android:fontFamily="sans-serif-black" />
@@ -382,9 +387,10 @@
 
     <!-- Sticky Bottom Action -->
     <LinearLayout
+        android:id="@+id/footerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="?attr/colorSurface"
         android:padding="@dimen/padding_medium"
         android:elevation="8dp">
 
@@ -394,7 +400,7 @@
             android:layout_height="56dp"
             app:cardCornerRadius="14dp"
             app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/primary"
+            app:cardBackgroundColor="?attr/colorPrimary"
             android:clickable="true"
             android:focusable="true">
 
@@ -410,7 +416,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="View Documents"
-                    android:textColor="@color/text_dark"
+                    android:textColor="?attr/colorOnPrimary"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium"
@@ -420,7 +426,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_arrow_forward"
-                    android:tint="@color/text_dark"
+                    android:tint="?attr/colorOnPrimary"
                     android:contentDescription="Proceed" />
 
             </LinearLayout>

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
+import com.example.motovista_deep.utils.SystemUIHelper;
+
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
@@ -76,6 +78,12 @@ public class OrderStatusActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_status);
+
+        // Dynamic system UI inset handling
+        android.view.View rootView = findViewById(android.R.id.content);
+        android.view.View headerView = findViewById(R.id.headerLayout);
+        android.view.View scrollView = findViewById(R.id.scrollView);
+        SystemUIHelper.setupEdgeToEdgeWithScroll(this, rootView, headerView, scrollView, null);
 
         // Get Data
         if (getIntent().hasExtra("ORDER_ID")) {

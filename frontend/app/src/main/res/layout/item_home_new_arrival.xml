@@ -2,13 +2,14 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardBike"
-    android:layout_width="150dp"
+    android:layout_width="160dp"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="12dp"
-    android:layout_marginBottom="16dp"
-    app:cardCornerRadius="24dp"
-    app:cardElevation="3dp"
-    app:cardBackgroundColor="@color/white">
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="?attr/colorSurface"
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,22 +18,16 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:background="#0F172A"
-            android:padding="0dp">
+            android:layout_height="120dp"
+            android:background="@drawable/bg_image_tint">
 
             <ImageView
                 android:id="@+id/ivBike"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/bike_cruiser" />
-
-            <!-- Gradient Fade Overlay -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bottom_fade_gradient" />
+                android:padding="4dp"
+                android:src="@drawable/ic_image_placeholder" />
         </FrameLayout>
 
         <LinearLayout
@@ -46,21 +41,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Bike Model"
-                android:textColor="#1E293B"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="14sp"
-                android:textStyle="bold"
+                android:fontFamily="sans-serif-bold"
                 android:maxLines="1"
-                android:ellipsize="end"
-                android:fontFamily="sans-serif-medium" />
+                android:ellipsize="end" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="View Details"
-                android:textColor="@color/primary_color"
+                android:textColor="?attr/colorPrimary"
                 android:textSize="11sp"
                 android:layout_marginTop="4dp"
-                android:textStyle="bold" />
+                android:fontFamily="sans-serif-medium" />
 
         </LinearLayout>
 

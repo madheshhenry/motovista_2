@@ -19,6 +19,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.recyclerview.widget.LinearSnapHelper;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.WindowCompat;
+import android.util.Log;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -40,6 +45,8 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import com.example.motovista_deep.utils.SystemUIHelper;
 
 public class CustomerHomeActivity extends AppCompatActivity {
 
@@ -63,10 +70,30 @@ public class CustomerHomeActivity extends AppCompatActivity {
     private ImageView btnNotifications, ivUserProfile;
     private TextView tvWelcome;
 
+    private ApiService apiService;
+    private SharedPrefManager sharedPrefManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_home);
+
+        // Enable edge-to-edge display and dynamic insets
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        
+        // Pass null for headerView as we'll handle its premium padding manually below
+        SystemUIHelper.setupEdgeToEdgeWithScroll(this, 
+            findViewById(R.id.rootLayout), 
+            null, 
+            findViewById(R.id.scrollView),
+            findViewById(R.id.bottomNavigation));
+
+        // Manual targeted fix for Premium Header overlap
+        // Called AFTER SystemUIHelper setup as per user requirements
+        applyHeaderWindowInsets();
+
+        sharedPrefManager = SharedPrefManager.getInstance(this);
+        apiService = RetrofitClient.getApiService();
 
         initializeViews();
         setupRecyclerViews();
@@ -80,6 +107,28 @@ public class CustomerHomeActivity extends AppCompatActivity {
         applyEntryAnimations();
         startNotificationPulse();
         setupParallaxEffect();
+    }
+
+    private void applyHeaderWindowInsets() {
+        View premiumHeader = findViewById(R.id.premiumHeader);
+        if (premiumHeader == null) return;
+
+        // Baseline padding from XML (20dp) + extra safety spacing (8dp)
+        final int baselinePadding = (int) (28 * getResources().getDisplayMetrics().density);
+
+        ViewCompat.setOnApplyWindowInsetsListener(premiumHeader, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.statusBars());
+            v.setPadding(
+                v.getPaddingLeft(),
+                systemBars.top + baselinePadding, // Dynamic Status Bar Height + Premium Margin
+                v.getPaddingRight(),
+                v.getPaddingBottom()
+            );
+            return insets;
+        });
+
+        // Ensure insets are actually triggered
+        ViewCompat.requestApplyInsets(premiumHeader);
     }
 
     private void setupParallaxEffect() {
@@ -417,6 +466,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<GetProfileResponse> call, Response<GetProfileResponse> response) {
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    Log.d("API_DEBUG", "Profile Load Success: " + response.body().message);
                     GetProfileResponse.Data user = response.body().data;
 
                     // Update welcome text
@@ -438,12 +488,14 @@ public class CustomerHomeActivity extends AppCompatActivity {
                                 .into(ivUserProfile);
                     }
                 } else {
+                    Log.d("API_DEBUG", "Profile Load Error: " + response.code() + " - " + response.message());
                     setDefaultWelcome();
                 }
             }
 
             @Override
             public void onFailure(Call<GetProfileResponse> call, Throwable t) {
+                Log.d("API_DEBUG", "Profile Load Failure: " + t.getMessage());
                 setDefaultWelcome();
                 // Optional: Log error for debugging
                 // Log.e("CustomerHomeActivity", "Failed to load profile: " + t.getMessage());

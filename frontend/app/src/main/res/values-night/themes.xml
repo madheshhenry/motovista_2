@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Premium Dark Theme for Customer Side -->
+    <style name="Base.Theme.Motovista_deep" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary Brand Colors -->
+        <item name="colorPrimary">#13A4EC</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorPrimaryContainer">#075985</item>
+        <item name="colorOnPrimaryContainer">#E0F2FE</item>
+        
+        <!-- Background and Surface Colors -->
+        <item name="android:colorBackground">#030712</item>
+        <item name="colorBackground">#030712</item>
+        <item name="colorOnBackground">#F8FAFC</item>
+        <item name="colorSurface">#0F172A</item>
+        <item name="colorOnSurface">#F1F5F9</item>
+        <item name="colorSurfaceVariant">#1E293B</item>
+        <item name="colorOnSurfaceVariant">#94A3B8</item>
+        <item name="colorOutline">#334155</item>
+        <item name="colorOutlineVariant">#1E293B</item>
+        <item name="colorError">#F87171</item>
+        <item name="colorOnError">#000000</item>
+        <item name="colorControlHighlight">#3313A4EC</item>
+
+        <!-- System UI Properties -->
+        <item name="android:statusBarColor">#00000000</item>
+        <item name="android:navigationBarColor">#00000000</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+</resources>

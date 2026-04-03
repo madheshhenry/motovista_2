@@ -28,6 +28,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.example.motovista_deep.utils.SystemUIHelper;
+
 public class CustomerLoginActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
@@ -42,10 +44,16 @@ public class CustomerLoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        makeFullScreen();
         setContentView(R.layout.activity_customer_login);
 
-        // FIXED AUTO LOGIN - We'll check profile completion in navigateToHome()
+        // Enable edge-to-edge display and dynamic insets
+        SystemUIHelper.setupEdgeToEdgeWithScroll(this, 
+            findViewById(R.id.root_layout), 
+            null, 
+            findViewById(R.id.scrollView),
+            null);
+
+        // Check if user is already logged incheck profile completion in navigateToHome()
         String role = SharedPrefManager.getInstance(this).getRole();
         if (SharedPrefManager.getInstance(this).isLoggedIn() && "customer".equals(role)) {
             navigateToHome(); // This will now check profile completion
@@ -56,23 +64,6 @@ public class CustomerLoginActivity extends AppCompatActivity {
 
         initViews();
         setupClickListeners();
-    }
-
-    private void makeFullScreen() {
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            WindowManager.LayoutParams params = getWindow().getAttributes();
-            params.layoutInDisplayCutoutMode =
-                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
-            getWindow().setAttributes(params);
-        }
-
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
     }
 
     private void initViews() {
@@ -156,22 +147,6 @@ public class CustomerLoginActivity extends AppCompatActivity {
                         User customer = loginResponse.getData().getCustomer();
                         String token = loginResponse.getData().getToken();
 
-                        // ✅ ADD DEBUG LOGS HERE
-                        Log.d("LOGIN_DEBUG", "========== LOGIN DEBUG START ==========");
-                        Log.d("LOGIN_DEBUG", "Customer object: " + customer);
-                        Log.d("LOGIN_DEBUG", "Customer ID: " + customer.getId());
-                        Log.d("LOGIN_DEBUG", "Customer Name: " + customer.getFull_name());
-                        Log.d("LOGIN_DEBUG", "Profile Completed Flag: " + customer.isIs_profile_completed());
-
-                        // Also log the raw JSON response
-                        try {
-                            Log.d("LOGIN_DEBUG", "Raw JSON Response: " + new Gson().toJson(loginResponse));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                        Log.d("LOGIN_DEBUG", "========== LOGIN DEBUG END ==========");
-
                         // Save to SharedPreferences
                         SharedPrefManager.getInstance(CustomerLoginActivity.this)
                                 .saveCustomerLogin(customer, token);
@@ -179,13 +154,11 @@ public class CustomerLoginActivity extends AppCompatActivity {
                         Toast.makeText(CustomerLoginActivity.this,
                                 "Login successful!", Toast.LENGTH_SHORT).show();
 
-                        // ✅ CHECK THE FLOW LOGIC
+                        // Navigate based on profile completion
                         if (!customer.isIs_profile_completed()) {
-                            Log.d("LOGIN_DEBUG", "DECISION: Sending to Profile Setup");
                             Intent intent = new Intent(CustomerLoginActivity.this, CustomerProfileActivity.class);
                             startActivity(intent);
                         } else {
-                            Log.d("LOGIN_DEBUG", "DECISION: Sending directly to Home");
                             Intent intent = new Intent(CustomerLoginActivity.this, CustomerHomeActivity.class);
                             startActivity(intent);
                         }
@@ -200,6 +173,7 @@ public class CustomerLoginActivity extends AppCompatActivity {
                 } else {
                     // Handle server errors
                     String errorMsg = "Login failed";
+                    Log.d("API_DEBUG", "Login Response Error: " + response.code() + " - " + response.message());
                     if (response.code() == 401) {
                         errorMsg = "Invalid email or password";
                     } else if (response.code() == 500) {
@@ -214,6 +188,7 @@ public class CustomerLoginActivity extends AppCompatActivity {
             public void onFailure(Call<LoginResponse> call, Throwable t) {
                 btnLogin.setText("Login");
                 btnLogin.setEnabled(true);
+                Log.d("API_DEBUG", "Login Failure: " + t.getMessage());
                 Toast.makeText(CustomerLoginActivity.this,
                         "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }

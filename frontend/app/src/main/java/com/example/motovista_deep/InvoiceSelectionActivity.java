@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import java.io.File;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +64,12 @@ public class InvoiceSelectionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invoice_selection);
+
+        // Dynamic system UI inset handling
+        View rootView = findViewById(android.R.id.content);
+        View headerView = findViewById(R.id.toolbar);
+        View footerView = findViewById(R.id.bottomBar);
+        com.example.motovista_deep.utils.SystemUIHelper.setupEdgeToEdge(this, rootView, headerView, footerView);
 
         bike = getIntent().getParcelableExtra("BIKE_DATA");
         selectedColor = getIntent().getStringExtra("SELECTED_COLOR");

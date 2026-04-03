@@ -1,6 +1,8 @@
 package com.example.motovista_deep;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.motovista_deep.utils.SystemUIHelper;
 import androidx.core.content.ContextCompat;
 
 import android.animation.Animator;
@@ -56,6 +58,12 @@ public class RequestSentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_sent);
+
+        // Dynamic system UI inset handling
+        View rootView = findViewById(android.R.id.content);
+        View headerView = findViewById(R.id.headerLayout);
+        View footerView = findViewById(R.id.bottomButtonLayout);
+        SystemUIHelper.setupEdgeToEdge(this, rootView, headerView, footerView);
 
         // Get data from intent
         getIntentData();

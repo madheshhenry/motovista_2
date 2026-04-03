@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -406,16 +407,29 @@ public class BikeCatalogActivity extends AppCompatActivity implements CustomerBi
         resetChip(chipSecondHand, "Pre-owned");
 
         // Set active chip
-        activeChip.setCardBackgroundColor(ContextCompat.getColor(this, R.color.primary_color));
-        ((TextView) activeChip.getChildAt(0)).setTextColor(ContextCompat.getColor(this, R.color.white));
+        TypedValue typedValue = new TypedValue();
+        if (getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true)) {
+            activeChip.setCardBackgroundColor(typedValue.data);
+        }
+        
+        if (getTheme().resolveAttribute(R.attr.colorOnPrimary, typedValue, true)) {
+            ((TextView) activeChip.getChildAt(0)).setTextColor(typedValue.data);
+        }
         ((TextView) activeChip.getChildAt(0)).setTypeface(null, android.graphics.Typeface.BOLD);
     }
 
     private void resetChip(CardView chip, String text) {
-        chip.setCardBackgroundColor(Color.parseColor("#F1F5F9"));
+        TypedValue typedValue = new TypedValue();
+        int surfaceVariant = R.attr.colorSurfaceVariant;
+        if (getTheme().resolveAttribute(surfaceVariant, typedValue, true)) {
+            chip.setCardBackgroundColor(typedValue.data);
+        }
+        
         TextView tv = (TextView) chip.getChildAt(0);
         tv.setText(text);
-        tv.setTextColor(Color.parseColor("#64748B"));
+        if (getTheme().resolveAttribute(R.attr.colorOnSurfaceVariant, typedValue, true)) {
+            tv.setTextColor(typedValue.data);
+        }
         tv.setTypeface(null, android.graphics.Typeface.NORMAL);
     }
 

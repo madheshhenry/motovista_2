@@ -5,53 +5,39 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
+    android:background="?attr/colorBackground"
     android:fitsSystemWindows="true">
 
-    <!-- Header -->
-    <LinearLayout
+    <!-- Premium Header -->
+    <RelativeLayout
         android:id="@+id/header"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="@dimen/padding_medium"
-        android:paddingVertical="16dp"
-        android:background="@color/white"
-        android:elevation="2dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:paddingHorizontal="16dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Back Button -->
         <ImageView
             android:id="@+id/btnBack"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_arrow_back"
-            android:tint="@color/text_dark"
-            android:contentDescription="Back"
             android:padding="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+            app:tint="?attr/colorOnSurface"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
 
-        <!-- Title -->
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Profile"
-            android:textColor="@color/text_dark"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center" />
-
-        <!-- Spacer to balance the layout -->
-        <View
-            android:layout_width="40dp"
-            android:layout_height="40dp" />
-
-    </LinearLayout>
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-bold"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
 
     <!-- Main Scroll Content -->
     <androidx.core.widget.NestedScrollView
@@ -59,8 +45,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
+        android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@+id/header"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        app:layout_constraintBottom_toTopOf="@+id/topBorder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -76,38 +63,49 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
-                android:padding="@dimen/padding_large"
-                android:layout_marginTop="@dimen/padding_medium">
+                android:paddingTop="16dp"
+                android:paddingBottom="24dp">
 
                 <!-- Profile Picture Container -->
                 <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_width="100dp"
+                    android:layout_height="100dp">
 
-                    <!-- Profile Image -->
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/ivProfilePicture"
+                    <androidx.cardview.widget.CardView
                         android:layout_width="96dp"
                         android:layout_height="96dp"
-                        android:src="@drawable/ic_profile_placeholder"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="Profile picture"
-                        app:civ_border_width="2dp"
-                        app:civ_border_color="@color/primary_color" />
+                        app:cardCornerRadius="48dp"
+                        app:cardElevation="2dp"
+                        app:cardBackgroundColor="?attr/colorPrimaryContainer"
+                        android:layout_centerInParent="true">
+                        <ImageView
+                            android:id="@+id/ivProfilePicture"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_profile_placeholder"
+                            android:scaleType="centerCrop" />
+                    </androidx.cardview.widget.CardView>
 
                     <!-- Edit Button -->
-                    <ImageView
-                        android:id="@+id/btnEditProfile"
+                    <androidx.cardview.widget.CardView
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@drawable/ic_edit"
-                        android:background="@drawable/circle_background_primary"
-                        android:padding="6dp"
-                        android:tint="@color/white"
-                        android:layout_alignBottom="@+id/ivProfilePicture"
-                        android:layout_alignEnd="@+id/ivProfilePicture"
-                        android:contentDescription="Edit profile"
-                        android:backgroundTint="@color/primary_color" />
+                        app:cardCornerRadius="16dp"
+                        app:cardBackgroundColor="?attr/colorPrimary"
+                        app:cardElevation="4dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginBottom="2dp">
+                        <ImageView
+                            android:id="@+id/btnEditProfile"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_edit"
+                            android:padding="8dp"
+                            app:tint="?attr/colorOnPrimary"
+                            android:foreground="?attr/selectableItemBackground" />
+                    </androidx.cardview.widget.CardView>
 
                 </RelativeLayout>
 
@@ -117,11 +115,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Santhosh Kumar"
-                    android:textColor="@color/text_dark"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginTop="@dimen/padding_medium" />
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="22sp"
+                    android:fontFamily="sans-serif-black"
+                    android:layout_marginTop="16dp" />
 
                 <!-- Email -->
                 <TextView
@@ -129,197 +126,172 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="santhosh.k@example.com"
-                    android:textColor="@color/text_secondary"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="14sp"
-                    android:fontFamily="sans-serif"
+                    android:fontFamily="sans-serif-medium"
                     android:layout_marginTop="4dp" />
 
             </LinearLayout>
 
-            <!-- Main Content -->
+            <!-- Main Content Container with standard paddings -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingHorizontal="@dimen/padding_medium"
-                android:layout_marginTop="@dimen/padding_medium">
+                android:paddingHorizontal="24dp">
 
                 <!-- Personal Information Section -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Personal Information"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="@dimen/padding_small" />
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-bold"
+                    android:letterSpacing="0.05"
+                    android:textAllCaps="true"
+                    android:layout_marginBottom="12dp" />
 
                 <!-- Personal Information Card -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="@dimen/card_corner_radius"
-                    app:cardElevation="1dp"
-                    app:cardUseCompatPadding="true"
-                    android:layout_marginBottom="@dimen/padding_large"
-                    android:background="@color/white">
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    android:layout_marginBottom="24dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="@dimen/padding_medium">
+                        android:padding="16dp">
 
                         <!-- Full Name -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:layout_marginBottom="@dimen/padding_medium">
-
+                            android:layout_marginBottom="16dp">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Full Name"
-                                android:textColor="@color/text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="12sp"
-                                android:fontFamily="sans-serif" />
-
+                                android:fontFamily="sans-serif-medium" />
                             <EditText
                                 android:id="@+id/etFullName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="16sp"
+                                android:fontFamily="sans-serif-bold"
                                 android:background="@null"
+                                android:layout_marginTop="4dp"
                                 android:focusable="false"
                                 android:focusableInTouchMode="false"
                                 android:cursorVisible="false"
                                 android:clickable="false"
                                 android:longClickable="false" />
-
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:background="@color/border_color"
-                                android:layout_marginTop="4dp" />
-
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?attr/colorOutlineVariant"
+                            android:layout_marginBottom="16dp" />
 
                         <!-- Email Address -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:layout_marginBottom="@dimen/padding_medium">
-
+                            android:layout_marginBottom="16dp">
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Email Address"
-                                android:textColor="@color/text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="12sp"
-                                android:fontFamily="sans-serif" />
-
+                                android:fontFamily="sans-serif-medium" />
                             <EditText
                                 android:id="@+id/etEmail"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="16sp"
+                                android:fontFamily="sans-serif-bold"
                                 android:background="@null"
+                                android:layout_marginTop="4dp"
                                 android:focusable="false"
                                 android:focusableInTouchMode="false"
                                 android:cursorVisible="false"
                                 android:clickable="false"
                                 android:longClickable="false" />
-
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:background="@color/border_color"
-                                android:layout_marginTop="4dp" />
-
                         </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?attr/colorOutlineVariant"
+                            android:layout_marginBottom="16dp" />
 
                         <!-- Phone Number -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Phone Number"
-                                android:textColor="@color/text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="12sp"
-                                android:fontFamily="sans-serif" />
-
+                                android:fontFamily="sans-serif-medium" />
                             <EditText
                                 android:id="@+id/etPhone"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="16sp"
+                                android:fontFamily="sans-serif-bold"
                                 android:background="@null"
+                                android:layout_marginTop="4dp"
                                 android:focusable="false"
                                 android:focusableInTouchMode="false"
                                 android:cursorVisible="false"
                                 android:clickable="false"
                                 android:longClickable="false" />
-
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:background="@color/border_color"
-                                android:layout_marginTop="4dp" />
-
                         </LinearLayout>
 
                     </LinearLayout>
-
                 </androidx.cardview.widget.CardView>
 
                 <!-- Prime Subscription Section -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="MotoVista Prime"
-                    android:textColor="#FFD700"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="@dimen/padding_small" />
-
                 <androidx.cardview.widget.CardView
                     android:id="@+id/btnJoinPrime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="@dimen/card_corner_radius"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true"
-                    android:layout_marginBottom="@dimen/padding_large"
-                    android:background="@android:color/black">
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="6dp"
+                    app:cardBackgroundColor="#111827"
+                    android:layout_marginBottom="24dp"
+                    android:foreground="?attr/selectableItemBackground">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:background="#111618"
-                        android:padding="@dimen/padding_medium">
+                        android:padding="16dp">
 
                         <ImageView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:src="@drawable/ic_star_filled"
-                            android:tint="#FFD700"
-                            android:layout_marginEnd="@dimen/padding_medium" />
+                            app:tint="#FBBF24"
+                            android:layout_marginEnd="16dp" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -330,25 +302,25 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Join Prime Club"
-                                android:textColor="#FFD700"
+                                android:text="MotoVista Prime"
+                                android:textColor="#FBBF24"
                                 android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:fontFamily="sans-serif-black" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Unlock ordering &amp; verified badge"
-                                android:textColor="@android:color/white"
-                                android:textSize="12sp" />
+                                android:textColor="#9CA3AF"
+                                android:textSize="12sp"
+                                android:layout_marginTop="2dp" />
                         </LinearLayout>
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_chevron_right"
-                            android:tint="@android:color/white" />
-
+                            app:tint="#D1D5DB" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -357,21 +329,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Settings"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="@dimen/padding_small" />
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-bold"
+                    android:letterSpacing="0.05"
+                    android:textAllCaps="true"
+                    android:layout_marginBottom="12dp" />
 
-                <!-- Settings Card -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="@dimen/card_corner_radius"
-                    app:cardElevation="1dp"
-                    app:cardUseCompatPadding="true"
-                    android:layout_marginBottom="@dimen/padding_large"
-                    android:background="@color/white">
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    android:layout_marginBottom="24dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -385,40 +356,35 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
-                            android:padding="@dimen/padding_medium"
+                            android:padding="16dp"
                             android:background="?attr/selectableItemBackground">
-
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_notifications"
-                                android:tint="@color/primary_color"
-                                android:contentDescription="Notifications"
-                                android:layout_marginEnd="@dimen/padding_medium" />
-
+                                app:tint="?attr/colorPrimary"
+                                android:layout_marginEnd="16dp" />
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Notifications"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="16sp"
                                 android:fontFamily="sans-serif-medium" />
-
                             <androidx.appcompat.widget.SwitchCompat
                                 android:id="@+id/switchNotifications"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:thumbTint="@color/white"
-                                app:trackTint="@color/gray_400" />
-
+                                android:thumbTint="?attr/colorSurface"
+                                app:trackTint="?attr/colorOutlineVariant" />
                         </LinearLayout>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="@color/border_color"
-                            android:layout_marginStart="@dimen/padding_medium" />
+                            android:background="?attr/colorOutlineVariant"
+                            android:layout_marginStart="56dp" />
 
                         <!-- Downloaded Invoice -->
                         <LinearLayout
@@ -427,40 +393,34 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
-                            android:padding="@dimen/padding_medium"
+                            android:padding="16dp"
                             android:background="?attr/selectableItemBackground">
-
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_download"
-                                android:tint="@color/primary_color"
-                                android:contentDescription="Downloaded Invoice"
-                                android:layout_marginEnd="@dimen/padding_medium" />
-
+                                app:tint="?attr/colorPrimary"
+                                android:layout_marginEnd="16dp" />
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Downloaded Invoice"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="16sp"
                                 android:fontFamily="sans-serif-medium" />
-
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:src="@drawable/ic_chevron_right"
-                                android:tint="@color/gray_400"
-                                android:contentDescription="Arrow" />
-
+                                app:tint="?attr/colorOutline" />
                         </LinearLayout>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="@color/border_color"
-                            android:layout_marginStart="@dimen/padding_medium" />
+                            android:background="?attr/colorOutlineVariant"
+                            android:layout_marginStart="56dp" />
 
                         <!-- Purchases -->
                         <LinearLayout
@@ -469,40 +429,34 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
-                            android:padding="@dimen/padding_medium"
+                            android:padding="16dp"
                             android:background="?attr/selectableItemBackground">
-
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_shopping_bag"
-                                android:tint="@color/primary_color"
-                                android:contentDescription="Purchases"
-                                android:layout_marginEnd="@dimen/padding_medium" />
-
+                                app:tint="?attr/colorPrimary"
+                                android:layout_marginEnd="16dp" />
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Purchases"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="16sp"
                                 android:fontFamily="sans-serif-medium" />
-
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:src="@drawable/ic_chevron_right"
-                                android:tint="@color/gray_400"
-                                android:contentDescription="Arrow" />
-
+                                app:tint="?attr/colorOutline" />
                         </LinearLayout>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="@color/border_color"
-                            android:layout_marginStart="@dimen/padding_medium" />
+                            android:background="?attr/colorOutlineVariant"
+                            android:layout_marginStart="56dp" />
 
                         <!-- Requested Bikes -->
                         <LinearLayout
@@ -511,37 +465,29 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
-                            android:padding="@dimen/padding_medium"
+                            android:padding="16dp"
                             android:background="?attr/selectableItemBackground">
-
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_two_wheeler"
-                                android:tint="@color/primary_color"
-                                android:contentDescription="Requested Bikes"
-                                android:layout_marginEnd="@dimen/padding_medium" />
-
+                                app:tint="?attr/colorPrimary"
+                                android:layout_marginEnd="16dp" />
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Requested Bikes"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="16sp"
                                 android:fontFamily="sans-serif-medium" />
-
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:src="@drawable/ic_chevron_right"
-                                android:tint="@color/gray_400"
-                                android:contentDescription="Arrow" />
-
+                                app:tint="?attr/colorOutline" />
                         </LinearLayout>
-
                     </LinearLayout>
-
                 </androidx.cardview.widget.CardView>
 
                 <!-- Support Section -->
@@ -549,20 +495,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Support"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="@dimen/padding_small" />
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-bold"
+                    android:letterSpacing="0.05"
+                    android:textAllCaps="true"
+                    android:layout_marginBottom="12dp" />
 
-                <!-- Support Card -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="@dimen/card_corner_radius"
-                    app:cardElevation="1dp"
-                    app:cardUseCompatPadding="true"
-                    android:background="@color/white">
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    android:layout_marginBottom="24dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -576,40 +522,34 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
-                            android:padding="@dimen/padding_medium"
+                            android:padding="16dp"
                             android:background="?attr/selectableItemBackground">
-
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_help_outline"
-                                android:tint="@color/primary_color"
-                                android:contentDescription="Help &amp; Support"
-                                android:layout_marginEnd="@dimen/padding_medium" />
-
+                                app:tint="?attr/colorPrimary"
+                                android:layout_marginEnd="16dp" />
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Help &amp; Support"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="16sp"
                                 android:fontFamily="sans-serif-medium" />
-
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:src="@drawable/ic_chevron_right"
-                                android:tint="@color/gray_400"
-                                android:contentDescription="Arrow" />
-
+                                app:tint="?attr/colorOutline" />
                         </LinearLayout>
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="@color/border_color"
-                            android:layout_marginStart="@dimen/padding_medium" />
+                            android:background="?attr/colorOutlineVariant"
+                            android:layout_marginStart="56dp" />
 
                         <!-- FAQ -->
                         <LinearLayout
@@ -618,110 +558,97 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:gravity="center_vertical"
-                            android:padding="@dimen/padding_medium"
+                            android:padding="16dp"
                             android:background="?attr/selectableItemBackground">
-
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_quiz"
-                                android:tint="@color/primary_color"
-                                android:contentDescription="FAQ"
-                                android:layout_marginEnd="@dimen/padding_medium" />
-
+                                app:tint="?attr/colorPrimary"
+                                android:layout_marginEnd="16dp" />
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="FAQ"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
+                                android:textColor="?attr/colorOnSurface"
+                                android:textSize="16sp"
                                 android:fontFamily="sans-serif-medium" />
-
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:src="@drawable/ic_chevron_right"
-                                android:tint="@color/gray_400"
-                                android:contentDescription="Arrow" />
-
+                                app:tint="?attr/colorOutline" />
                         </LinearLayout>
-
                     </LinearLayout>
-
                 </androidx.cardview.widget.CardView>
 
-                <!-- Logout Button Section -->
-                <LinearLayout
+                <!-- Logout -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btnLogout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="@dimen/padding_large"
-                    android:paddingBottom="@dimen/padding_small">
-
-                    <!-- Logout Button -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/btnLogout"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    android:layout_marginBottom="32dp"
+                    android:foreground="?attr/selectableItemBackground">
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="@dimen/card_corner_radius"
-                        app:cardElevation="1dp"
-                        app:cardUseCompatPadding="true"
-                        android:background="@color/white">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="16dp">
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_logout"
+                            app:tint="?attr/colorError"
+                            android:layout_marginEnd="16dp" />
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="@dimen/padding_medium"
-                            android:background="?attr/selectableItemBackground">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_logout"
-                                android:tint="#FF453A"
-                                android:contentDescription="Logout"
-                                android:layout_marginEnd="@dimen/padding_medium" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Log Out"
-                                android:textColor="#FF453A"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:fontFamily="sans-serif-medium" />
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
+                            android:layout_weight="1"
+                            android:text="Log Out"
+                            android:textColor="?attr/colorError"
+                            android:textSize="16sp"
+                            android:fontFamily="sans-serif-bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
             </LinearLayout>
 
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Navigation (same as home screen) -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/topBorder"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/colorOutlineVariant"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation" />
+
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
-        android:background="@color/white"
+        android:layout_height="76dp"
+        android:background="?attr/colorSurface"
         android:orientation="horizontal"
-        android:elevation="16dp"
+        android:elevation="8dp"
         android:paddingTop="12dp"
-        android:paddingBottom="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:paddingBottom="12dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- Home Tab -->
         <LinearLayout
             android:id="@+id/tabHome"
             android:layout_width="0dp"
@@ -729,30 +656,29 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:clickable="true"
-            android:focusable="true">
-
+            android:foreground="?attr/selectableItemBackgroundBorderless">
             <ImageView
                 android:id="@+id/ivHome"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home_filled"
-                android:tint="@color/gray_400"
-                android:contentDescription="Home" />
-
+                app:tint="?attr/colorOutline" />
             <TextView
                 android:id="@+id/tvHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Home"
-                android:textColor="@color/gray_400"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
-                android:layout_marginTop="4dp" />
-
+                android:textColor="?attr/colorOutline"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginTop="3dp" />
+            <View
+                android:id="@+id/dotHome"
+                android:layout_width="16dp"
+                android:layout_height="4dp"
+                android:visibility="invisible" />
         </LinearLayout>
 
-        <!-- Bikes Tab -->
         <LinearLayout
             android:id="@+id/tabBikes"
             android:layout_width="0dp"
@@ -760,30 +686,29 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:clickable="true"
-            android:focusable="true">
-
+            android:foreground="?attr/selectableItemBackgroundBorderless">
             <ImageView
                 android:id="@+id/ivBikes"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_two_wheeler"
-                android:tint="@color/gray_400"
-                android:contentDescription="Bikes" />
-
+                app:tint="?attr/colorOutline" />
             <TextView
                 android:id="@+id/tvBikes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bikes"
-                android:textColor="@color/gray_400"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
-                android:layout_marginTop="4dp" />
-
+                android:textColor="?attr/colorOutline"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginTop="3dp" />
+            <View
+                android:id="@+id/dotBikes"
+                android:layout_width="16dp"
+                android:layout_height="4dp"
+                android:visibility="invisible" />
         </LinearLayout>
 
-        <!-- EMI Calculator Tab -->
         <LinearLayout
             android:id="@+id/tabEmiCalculator"
             android:layout_width="0dp"
@@ -791,30 +716,29 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:clickable="true"
-            android:focusable="true">
-
+            android:foreground="?attr/selectableItemBackgroundBorderless">
             <ImageView
                 android:id="@+id/ivEmiCalculator"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_calculate"
-                android:tint="@color/gray_400"
-                android:contentDescription="EMI Calculator" />
-
+                app:tint="?attr/colorOutline" />
             <TextView
                 android:id="@+id/tvEmiCalculator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="EMI Calculator"
-                android:textColor="@color/gray_400"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
-                android:layout_marginTop="4dp" />
-
+                android:text="EMI"
+                android:textColor="?attr/colorOutline"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginTop="3dp" />
+            <View
+                android:id="@+id/dotEmiCalculator"
+                android:layout_width="16dp"
+                android:layout_height="4dp"
+                android:visibility="invisible" />
         </LinearLayout>
 
-        <!-- Orders Tab -->
         <LinearLayout
             android:id="@+id/tabOrders"
             android:layout_width="0dp"
@@ -822,30 +746,29 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:clickable="true"
-            android:focusable="true">
-
+            android:foreground="?attr/selectableItemBackgroundBorderless">
             <ImageView
                 android:id="@+id/ivOrders"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_receipt_long"
-                android:tint="@color/gray_400"
-                android:contentDescription="Orders" />
-
+                app:tint="?attr/colorOutline" />
             <TextView
                 android:id="@+id/tvOrders"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Orders"
-                android:textColor="@color/gray_400"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
-                android:layout_marginTop="4dp" />
-
+                android:textColor="?attr/colorOutline"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginTop="3dp" />
+            <View
+                android:id="@+id/dotOrders"
+                android:layout_width="16dp"
+                android:layout_height="4dp"
+                android:visibility="invisible" />
         </LinearLayout>
 
-        <!-- Profile Tab -->
         <LinearLayout
             android:id="@+id/tabProfile"
             android:layout_width="0dp"
@@ -853,28 +776,28 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:gravity="center"
-            android:clickable="true"
-            android:focusable="true">
-
+            android:foreground="?attr/selectableItemBackgroundBorderless">
             <ImageView
                 android:id="@+id/ivProfile"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_person_filled"
-                android:tint="@color/primary_color"
-                android:contentDescription="Profile" />
-
+                android:src="@drawable/ic_person"
+                app:tint="?attr/colorPrimary" />
             <TextView
                 android:id="@+id/tvProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"
-                android:textColor="@color/primary_color"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif"
-                android:layout_marginTop="4dp" />
-
+                android:textColor="?attr/colorPrimary"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-bold"
+                android:layout_marginTop="3dp" />
+            <View
+                android:id="@+id/dotProfile"
+                android:layout_width="16dp"
+                android:layout_height="4dp"
+                android:background="@drawable/bg_active_pill"
+                android:layout_marginTop="3dp" />
         </LinearLayout>
 
     </LinearLayout>

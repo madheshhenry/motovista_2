@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView;
 import com.bumptech.glide.Glide;
 import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.utils.ImageUtils;
+import com.example.motovista_deep.utils.SystemUIHelper;
 
 public class BikeDetailsViewActivity extends AppCompatActivity {
 
@@ -44,6 +45,12 @@ public class BikeDetailsViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bike_details_view);
+
+        // Dynamic system UI inset handling
+        android.view.View rootView = findViewById(android.R.id.content);
+        android.view.View headerView = findViewById(R.id.toolbar);
+        android.view.View scrollView = findViewById(R.id.scrollView);
+        SystemUIHelper.setupEdgeToEdgeWithScroll(this, rootView, headerView, scrollView, null);
 
         // Initialize views
         initializeViews();

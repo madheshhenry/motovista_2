@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:background="@color/black"
+    android:fitsSystemWindows="true">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
@@ -16,10 +17,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="16dp"
-        android:background="#80000000"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_close"
-        android:padding="12dp"
-        android:tint="@android:color/white"
+        android:padding="8dp"
+        android:tint="@color/white"
         android:contentDescription="Close" />
 
 </RelativeLayout>

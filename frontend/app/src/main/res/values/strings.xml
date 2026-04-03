@@ -53,16 +53,53 @@
         <item>36 Months</item>
     </string-array>
 
-        <string-array name="payment_modes">
-            <item>Select Payment Mode</item>
-            <item>Cash</item>
-            <item>GPay / UPI</item>
-            <item>PhonePe</item>
-            <item>Bank Transfer</item>
-            <item>Credit Card</item>
-            <item>Debit Card</item>
-            <item>Net Banking</item>
-            <item>Cheque</item>
-        </string-array>
+    <string-array name="payment_modes">
+        <item>Select Payment Mode</item>
+        <item>Cash</item>
+        <item>GPay / UPI</item>
+        <item>PhonePe</item>
+        <item>Bank Transfer</item>
+        <item>Credit Card</item>
+        <item>Debit Card</item>
+        <item>Net Banking</item>
+        <item>Cheque</item>
+    </string-array>
 
+    <!-- Auth & General -->
+    <string name="welcome_back">Welcome Back</string>
+    <string name="login_subtitle">Sign in to explore our collection.</string>
+    <string name="email_label">Email Address</string>
+    <string name="email_hint">Enter your email</string>
+    <string name="password_label">Password</string>
+    <string name="password_hint">Enter your password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="btn_login">Login</string>
+    <string name="dont_have_account">Don\'t have an account? </string>
+    <string name="sign_up">Sign Up</string>
+
+    <!-- Signup -->
+    <string name="create_account">Create Account</string>
+    <string name="full_name_label">Full Name</string>
+    <string name="full_name_hint">Enter your full name</string>
+    <string name="phone_label">Phone Number</string>
+    <string name="phone_hint">Enter your phone number</string>
+    <string name="confirm_password_label">Confirm Password</string>
+    <string name="password_length_tip">Must be at least 8 characters long.</string>
+    <string name="terms_agreement">I agree to the Terms &amp; Conditions and Privacy Policy.</string>
+
+    <!-- Admin -->
+    <string name="admin_access_title">Administrator Access</string>
+    <string name="admin_login_subtitle">Log in to manage your showroom.</string>
+    <string name="admin_dashboard">Admin Dashboard</string>
+    <string name="welcome_admin">Welcome, Admin</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="verify_login">Verify &amp; Login</string>
+    <string name="add_new_bike">Add New Bike</string>
+    <string name="add_second_hand_bike">Add Second-Hand Bike</string>
+    <string name="add_stock_bike">Add Stock Bike</string>
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_inventory">Inventory</string>
+    <string name="nav_bikes">Bikes</string>
+    <string name="nav_customers">Customers</string>
+    <string name="nav_settings">Settings</string>
 </resources>

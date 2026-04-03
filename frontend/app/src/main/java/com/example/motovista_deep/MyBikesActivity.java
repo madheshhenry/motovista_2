@@ -36,7 +36,7 @@ public class MyBikesActivity extends AppCompatActivity {
     private MyBikesAdapter adapter;
     private List<MyBikeModel> bikeList = new ArrayList<>();
     private LinearLayout emptyStateLayout;
-    private Button btnBrowseShowroom;
+    private CardView btnBrowseShowroom;
     private ProgressBar progressBar;
     private ApiService apiService;
 

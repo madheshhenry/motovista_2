@@ -21,6 +21,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.example.motovista_deep.utils.SystemUIHelper;
+
 public class AdminDashboardActivity extends AppCompatActivity {
 
     private CardView cardEmiLedger, cardInsuranceLedger, cardRegistrationLedger,
@@ -41,6 +43,13 @@ public class AdminDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
+        // Enable edge-to-edge display and dynamic insets
+        SystemUIHelper.setupEdgeToEdgeWithScroll(this, 
+            findViewById(R.id.rootLayout), 
+            findViewById(R.id.header), 
+            findViewById(R.id.scrollView),
+            null);
+
         // Initialize views
         initializeViews();
 
@@ -52,7 +61,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
         // Set welcome text with admin name
         String adminName = "Admin"; // Change this to get from SharedPreferences
-        tvWelcome.setText("Welcome, " + adminName);
+        tvWelcome.setText(getString(R.string.welcome_admin));
 
         // Set initial active tab (Dashboard)
         setActiveTab(tabDashboard);

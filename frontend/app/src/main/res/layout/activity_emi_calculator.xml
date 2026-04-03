@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background_light"
+    android:background="?attr/colorBackground"
     android:fitsSystemWindows="true">
 
     <!-- Header - Sticky Header -->
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/white"
+        android:background="?attr/colorBackground"
         android:padding="16dp"
         android:gravity="center_vertical"
         android:elevation="4dp">
@@ -22,7 +22,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/ic_arrow_back"
-            app:tint="@color/text_dark"
+            app:tint="?attr/colorOnSurface"
             android:padding="4dp"
             android:background="?attr/selectableItemBackgroundBorderless" />
 
@@ -32,7 +32,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="EMI Calculator"
-            android:textColor="@color/text_dark"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="20sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif-medium" />
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="?attr/colorSurface"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true">
@@ -92,7 +92,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Loan amount"
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="16sp"
                                 android:textStyle="normal"
                                 android:fontFamily="sans-serif-medium" />
@@ -110,7 +110,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="₹"
-                                    android:textColor="@color/primary"
+                                    android:textColor="?attr/colorPrimary"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     android:layout_marginStart="4dp" />
@@ -122,7 +122,7 @@
                                     android:background="@null"
                                     android:inputType="number"
                                     android:text="1,05,000"
-                                    android:textColor="@color/primary"
+                                    android:textColor="?attr/colorPrimary"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     android:minWidth="80dp"
@@ -156,7 +156,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="₹50,000"
-                                android:textColor="@color/text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="12sp"
                                 android:fontFamily="sans-serif" />
 
@@ -164,7 +164,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="₹20,00,000"
-                                android:textColor="@color/text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="12sp"
                                 android:fontFamily="sans-serif" />
 
@@ -191,7 +191,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Rate of interest (p.a.)"
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="16sp"
                                 android:textStyle="normal"
                                 android:fontFamily="sans-serif-medium" />
@@ -204,7 +204,7 @@
                                 android:paddingHorizontal="8dp"
                                 android:paddingVertical="2dp"
                                 android:text="12%"
-                                android:textColor="@color/primary"
+                                android:textColor="?attr/colorPrimary"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 android:fontFamily="sans-serif" />
@@ -234,7 +234,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="6%"
-                                android:textColor="@color/text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="12sp"
                                 android:fontFamily="sans-serif" />
 
@@ -242,7 +242,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="20%"
-                                android:textColor="@color/text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="12sp"
                                 android:fontFamily="sans-serif" />
 
@@ -268,7 +268,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Loan tenure"
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="16sp"
                                 android:textStyle="normal"
                                 android:fontFamily="sans-serif-medium" />
@@ -281,7 +281,7 @@
                                 android:paddingHorizontal="8dp"
                                 android:paddingVertical="2dp"
                                 android:text="2 Yr"
-                                android:textColor="@color/primary"
+                                android:textColor="?attr/colorPrimary"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 android:fontFamily="sans-serif" />
@@ -311,7 +311,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="1 Yr"
-                                android:textColor="@color/text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="12sp"
                                 android:fontFamily="sans-serif" />
 
@@ -319,7 +319,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="6 Yr"
-                                android:textColor="@color/text_secondary"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="12sp"
                                 android:fontFamily="sans-serif" />
 
@@ -335,7 +335,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardBackgroundColor="?attr/colorSurface"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
                 app:cardUseCompatPadding="true">
@@ -371,7 +371,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="Monthly EMI"
-                                    android:textColor="@color/gray_500"
+                                    android:textColor="?attr/colorOnSurfaceVariant"
                                     android:textSize="13sp"
                                     android:fontFamily="sans-serif-medium" />
 
@@ -380,7 +380,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="₹5,005"
-                                    android:textColor="@color/text_dark"
+                                    android:textColor="?attr/colorOnSurface"
                                     android:textSize="26sp"
                                     android:textStyle="bold"
                                     android:fontFamily="sans-serif-bold"
@@ -415,7 +415,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="Principal Amount"
-                                    android:textColor="@color/gray_600"
+                                    android:textColor="?attr/colorOnSurfaceVariant"
                                     android:textSize="14sp" />
 
                                 <TextView
@@ -423,7 +423,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="₹1,05,000"
-                                    android:textColor="@color/text_dark"
+                                    android:textColor="?attr/colorOnSurface"
                                     android:textSize="14sp"
                                     android:textStyle="bold" />
 
@@ -449,7 +449,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="Total Interest"
-                                    android:textColor="@color/gray_600"
+                                    android:textColor="?attr/colorOnSurfaceVariant"
                                     android:textSize="14sp" />
 
                                 <TextView
@@ -457,7 +457,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="₹15,120"
-                                    android:textColor="@color/text_dark"
+                                    android:textColor="?attr/colorOnSurface"
                                     android:textSize="14sp"
                                     android:textStyle="bold" />
 
@@ -466,7 +466,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:background="@color/gray_200"
+                                android:background="?attr/colorOutlineVariant"
                                 android:layout_marginVertical="12dp" />
 
                             <!-- Total Amount -->
@@ -481,7 +481,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
                                     android:text="Total Amount Payable"
-                                    android:textColor="@color/text_dark"
+                                    android:textColor="?attr/colorOnSurface"
                                     android:textSize="15sp"
                                     android:textStyle="bold" />
 
@@ -490,7 +490,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="₹1,20,120"
-                                    android:textColor="@color/primary_color"
+                                    android:textColor="?attr/colorPrimary"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
 
@@ -518,7 +518,7 @@
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="96dp"
-            android:background="@color/white"
+            android:background="?attr/colorBackground"
             android:orientation="horizontal"
             android:elevation="16dp"
             android:paddingTop="12dp"
@@ -540,7 +540,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_home"
-                    app:tint="@color/gray_400"
+                    app:tint="?attr/colorOnSurfaceVariant"
                     android:contentDescription="Home" />
 
                 <TextView
@@ -548,7 +548,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Home"
-                    android:textColor="@color/gray_400"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:fontFamily="sans-serif"
                     android:layout_marginTop="4dp" />
@@ -571,7 +571,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_two_wheeler"
-                    app:tint="@color/gray_400"
+                    app:tint="?attr/colorOnSurfaceVariant"
                     android:contentDescription="Bikes" />
 
                 <TextView
@@ -579,7 +579,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bikes"
-                    android:textColor="@color/gray_400"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:fontFamily="sans-serif"
                     android:layout_marginTop="4dp" />
@@ -602,7 +602,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_calculate"
-                    app:tint="@color/primary_color"
+                    app:tint="?attr/colorPrimary"
                     android:contentDescription="EMI Calculator" />
 
                 <TextView
@@ -610,7 +610,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="EMI Calculator"
-                    android:textColor="@color/primary_color"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="12sp"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif"
@@ -634,7 +634,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_receipt_long"
-                    app:tint="@color/gray_400"
+                    app:tint="?attr/colorOnSurfaceVariant"
                     android:contentDescription="Orders" />
 
                 <TextView
@@ -642,7 +642,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Orders"
-                    android:textColor="@color/gray_400"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:fontFamily="sans-serif"
                     android:layout_marginTop="4dp" />
@@ -665,7 +665,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_person"
-                    app:tint="@color/gray_400"
+                    app:tint="?attr/colorOnSurfaceVariant"
                     android:contentDescription="Profile" />
 
                 <TextView
@@ -673,7 +673,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Profile"
-                    android:textColor="@color/gray_400"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:fontFamily="sans-serif"
                     android:layout_marginTop="4dp" />
