@@ -5,7 +5,7 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
+    android:background="?attr/colorBackground"
     android:fitsSystemWindows="true">
 
     <!-- Main Scroll View -->
@@ -35,7 +35,7 @@
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="12dp"
                 android:gravity="center_vertical"
-                android:background="@color/background_light"
+                android:background="?attr/colorSurface"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -46,8 +46,9 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/ic_arrow_back"
-                    android:tint="@color/gray_800"
+                    app:tint="?attr/colorOnSurface"
                     android:padding="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="Back" />
 
                 <!-- Title Text -->
@@ -57,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Customers"
-                    android:textColor="@color/text_dark"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:gravity="center"
@@ -74,11 +75,11 @@
             <LinearLayout
                 android:id="@+id/searchContainer"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:orientation="horizontal"
-                android:background="@drawable/rounded_search_bg"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="8dp"
+                android:background="@drawable/bg_input_rounded"
+                android:backgroundTint="?attr/colorSurfaceVariant"
+                android:paddingHorizontal="16dp"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="12dp"
                 android:gravity="center_vertical"
@@ -91,7 +92,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_search"
-                    android:tint="@color/gray_400"
+                    app:tint="?attr/colorOnSurfaceVariant"
                     android:layout_marginEnd="8dp"
                     android:contentDescription="Search" />
 
@@ -102,9 +103,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="Search by name, phone..."
-                    android:textColor="@color/text_dark"
-                    android:textColorHint="@color/gray_400"
-                    android:textSize="16sp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textColorHint="?attr/colorOnSurfaceVariant"
+                    android:textSize="14sp"
                     android:background="@android:color/transparent"
                     android:paddingVertical="8dp"
                     android:maxLines="1"
@@ -130,21 +131,17 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Navigation (Keep same as before) -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
-        android:background="@color/white"
+        android:layout_height="80dp"
+        android:background="?attr/colorSurface"
         android:orientation="horizontal"
-        android:elevation="16dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="24dp"
+        android:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <!-- Dashboard Tab -->
         <LinearLayout
             android:id="@+id/tabDashboard"
             android:layout_width="0dp"
@@ -153,27 +150,23 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             android:focusable="true">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_dashboard"
-                android:tint="@color/gray_400"
-                android:contentDescription="Dashboard" />
-
+                app:tint="?attr/colorOnSurfaceVariant" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Dashboard"
-                android:textColor="@color/gray_400"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginTop="4dp" />
-
         </LinearLayout>
 
-        <!-- Inventory Tab -->
         <LinearLayout
             android:id="@+id/tabInventory"
             android:layout_width="0dp"
@@ -182,27 +175,23 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             android:focusable="true">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_inventory"
-                android:tint="@color/gray_400"
-                android:contentDescription="Inventory" />
-
+                app:tint="?attr/colorOnSurfaceVariant" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Inventory"
-                android:textColor="@color/gray_400"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginTop="4dp" />
-
         </LinearLayout>
 
-        <!-- Bikes Tab -->
         <LinearLayout
             android:id="@+id/tabBikes"
             android:layout_width="0dp"
@@ -211,27 +200,23 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             android:focusable="true">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_two_wheeler"
-                android:tint="@color/gray_400"
-                android:contentDescription="Bikes" />
-
+                app:tint="?attr/colorOnSurfaceVariant" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bikes"
-                android:textColor="@color/gray_400"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginTop="4dp" />
-
         </LinearLayout>
 
-        <!-- Customers Tab -->
         <LinearLayout
             android:id="@+id/tabCustomers"
             android:layout_width="0dp"
@@ -240,28 +225,24 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             android:focusable="true">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_groups"
-                android:tint="@color/primary_color"
-                android:contentDescription="Customers" />
-
+                app:tint="?attr/colorPrimary" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Customers"
-                android:textColor="@color/primary_color"
-                android:textSize="12sp"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="11sp"
                 android:textStyle="bold"
-                android:fontFamily="sans-serif"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginTop="4dp" />
-
         </LinearLayout>
 
-        <!-- Settings Tab -->
         <LinearLayout
             android:id="@+id/tabSettings"
             android:layout_width="0dp"
@@ -270,24 +251,21 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             android:focusable="true">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_settings"
-                android:tint="@color/gray_400"
-                android:contentDescription="Settings" />
-
+                app:tint="?attr/colorOnSurfaceVariant" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Settings"
-                android:textColor="@color/gray_400"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginTop="4dp" />
-
         </LinearLayout>
 
     </LinearLayout>

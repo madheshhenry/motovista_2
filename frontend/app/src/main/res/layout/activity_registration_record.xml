@@ -1,72 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#f6f7f8">
+    android:background="?attr/colorBackground"
+    android:fitsSystemWindows="true">
 
     <!-- Top App Bar -->
-    <RelativeLayout
-        android:id="@+id/headerLayout"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:elevation="1dp">
+        android:background="?attr/colorSurface"
+        app:layout_constraintTop_toTopOf="parent"
+        app:elevation="0dp">
 
-        <RelativeLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:paddingHorizontal="16dp">
+            app:contentInsetStart="0dp">
 
-            <ImageView
-                android:id="@+id/btnBack"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_centerVertical="true"
-                android:padding="6dp"
-                android:src="@drawable/ic_arrow_back"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="#111827" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="Registration Record"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#111827" />
-        </RelativeLayout>
-    </RelativeLayout>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_centerVertical="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_arrow_back"
+                    app:tint="?attr/colorOnSurface"
+                    android:contentDescription="Back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Registration Record"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:fontFamily="sans-serif-medium" />
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/appBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:clipToPadding="false"
+        android:paddingBottom="120dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:paddingBottom="32dp">
+            android:paddingHorizontal="16dp"
+            android:paddingTop="12dp">
 
             <!-- Section 1: Customer & Bike Information -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Customer &amp; Bike Information"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="#111418"
-                android:layout_marginBottom="12dp" />
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:layout_marginBottom="12dp"
+                android:letterSpacing="0.05"
+                android:fontFamily="sans-serif-medium" />
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="1dp"
-                app:cardBackgroundColor="@color/white"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:cardBackgroundColor="?attr/colorSurface"
                 android:layout_marginBottom="24dp">
 
                 <LinearLayout
@@ -78,7 +98,7 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="20dp">
+                        android:padding="16dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -91,7 +111,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="CUSTOMER"
                                 android:textSize="10sp"
-                                android:textColor="#137fec"
+                                android:textColor="?attr/colorPrimary"
                                 android:textStyle="bold"
                                 android:letterSpacing="0.05" />
 
@@ -103,7 +123,8 @@
                                 android:text="Rahul Sharma"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
-                                android:textColor="#111827" />
+                                android:textColor="?attr/colorOnSurface"
+                                android:fontFamily="sans-serif-medium" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -116,7 +137,7 @@
                                     android:layout_width="16dp"
                                     android:layout_height="16dp"
                                     android:src="@drawable/ic_call"
-                                    app:tint="#6b7280" />
+                                    app:tint="?attr/colorOnSurfaceVariant" />
 
                                 <TextView
                                     android:id="@+id/tvCustomerPhone"
@@ -125,7 +146,7 @@
                                     android:layout_marginStart="6dp"
                                     android:text="+91 98765 43210"
                                     android:textSize="14sp"
-                                    android:textColor="#6b7280"
+                                    android:textColor="?attr/colorOnSurfaceVariant"
                                     android:fontFamily="sans-serif-medium" />
                             </LinearLayout>
                         </LinearLayout>
@@ -136,27 +157,27 @@
                             android:layout_height="48dp"
                             android:layout_alignParentEnd="true"
                             android:background="@drawable/circle_shape"
-                            android:backgroundTint="#eff6ff">
+                            android:backgroundTint="?attr/colorSurfaceVariant">
 
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:layout_gravity="center"
                                 android:src="@drawable/ic_person"
-                                app:tint="#137fec" />
+                                app:tint="?attr/colorOnSurfaceVariant" />
                         </FrameLayout>
                     </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="#f3f4f6" />
+                        android:background="?attr/colorOutlineVariant" />
 
                     <!-- Details Grid -->
                     <GridLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="20dp"
+                        android:padding="16dp"
                         android:columnCount="2">
 
                         <LinearLayout
@@ -169,9 +190,12 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Bike Model"
-                                android:textSize="11sp"
-                                android:textColor="#6b7280" />
+                                android:text="BIKE MODEL"
+                                android:textSize="10sp"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:fontFamily="sans-serif-medium"
+                                android:letterSpacing="0.05"
+                                android:textAllCaps="true" />
 
                             <TextView
                                 android:id="@+id/tvBikeName"
@@ -181,7 +205,8 @@
                                 android:text="Royal Enfield Classic 350"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
-                                android:textColor="#111827" />
+                                android:textColor="?attr/colorOnSurface"
+                                android:fontFamily="sans-serif-medium" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -193,22 +218,26 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Engine Number"
-                                android:textSize="11sp"
-                                android:textColor="#6b7280" />
+                                android:text="ENGINE NUMBER"
+                                android:textSize="10sp"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:fontFamily="sans-serif-medium"
+                                android:letterSpacing="0.05"
+                                android:textAllCaps="true" />
 
                             <TextView
                                 android:id="@+id/tvEngineNumber"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:background="#f9fafb"
-                                android:paddingHorizontal="8dp"
+                                android:background="@drawable/bg_input_rounded"
+                                android:backgroundTint="?attr/colorSurfaceVariant"
+                                android:paddingHorizontal="10dp"
                                 android:paddingVertical="4dp"
                                 android:text="U3S59932"
                                 android:textSize="12sp"
                                 android:textStyle="bold"
-                                android:textColor="#111827"
+                                android:textColor="?attr/colorOnSurface"
                                 android:fontFamily="monospace" />
                         </LinearLayout>
 
@@ -221,27 +250,31 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Order ID"
-                                android:textSize="11sp"
-                                android:textColor="#6b7280" />
+                                android:text="ORDER ID"
+                                android:textSize="10sp"
+                                android:textColor="?attr/colorOnSurfaceVariant"
+                                android:fontFamily="sans-serif-medium"
+                                android:letterSpacing="0.05"
+                                android:textAllCaps="true" />
 
                             <TextView
                                 android:id="@+id/tvOrderId"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:background="#f9fafb"
-                                android:paddingHorizontal="8dp"
+                                android:background="@drawable/bg_input_rounded"
+                                android:backgroundTint="?attr/colorSurfaceVariant"
+                                android:paddingHorizontal="10dp"
                                 android:paddingVertical="4dp"
                                 android:text="ORD-10234"
                                 android:textSize="12sp"
                                 android:textStyle="bold"
-                                android:textColor="#111827"
+                                android:textColor="?attr/colorOnSurface"
                                 android:fontFamily="monospace" />
                         </LinearLayout>
                     </GridLayout>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Section 2: Registration Process -->
             <RelativeLayout
@@ -253,9 +286,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Registration Process"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="#111418" />
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:fontFamily="sans-serif-medium"
+                    android:letterSpacing="0.05" />
 
                 <TextView
                     android:id="@+id/tvCompletedCount"
@@ -264,7 +299,7 @@
                     android:layout_alignParentEnd="true"
                     android:text="1/4 Completed"
                     android:textSize="12sp"
-                    android:textColor="#6b7280"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:fontFamily="sans-serif-medium" />
             </RelativeLayout>
 
@@ -290,24 +325,26 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="Customer Verification"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="#111418"
-                android:layout_marginBottom="12dp" />
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:layout_marginBottom="12dp"
+                android:fontFamily="sans-serif-medium"
+                android:letterSpacing="0.05" />
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:strokeWidth="1dp"
-                app:strokeColor="#e0e7ff"
-                app:cardBackgroundColor="#f5f7ff">
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:cardBackgroundColor="?attr/colorSurface">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="20dp"
+                    android:padding="16dp"
                     android:orientation="horizontal"
                     android:gravity="top">
 
@@ -315,14 +352,14 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/circle_shape"
-                        android:backgroundTint="#e0e7ff">
+                        android:backgroundTint="?attr/colorSurfaceVariant">
 
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_verified_user"
-                            app:tint="#4f46e5" />
+                            app:tint="?attr/colorPrimary" />
                     </FrameLayout>
 
                     <LinearLayout
@@ -341,20 +378,21 @@
                                 android:text="Customer App Status"
                                 android:textSize="14sp"
                                 android:textStyle="bold"
-                                android:textColor="#111827" />
+                                android:textColor="?attr/colorOnSurface" />
 
                             <TextView
                                 android:id="@+id/tvCustomerAppStatusBadge"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
-                                android:background="#fef3c7"
-                                android:paddingHorizontal="8dp"
-                                android:paddingVertical="2dp"
+                                android:background="@drawable/pill_inactive"
+                                android:backgroundTint="?attr/colorSurfaceVariant"
+                                android:paddingHorizontal="10dp"
+                                android:paddingVertical="4dp"
                                 android:text="WAITING"
                                 android:textSize="10sp"
                                 android:textStyle="bold"
-                                android:textColor="#b45309" />
+                                android:textColor="?attr/colorOnSurfaceVariant" />
                         </RelativeLayout>
 
                         <TextView
@@ -363,7 +401,8 @@
                             android:layout_marginTop="8dp"
                             android:text="Waiting for customer to verify documents on the mobile app."
                             android:textSize="13sp"
-                            android:textColor="#4b5563"
+                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:fontFamily="sans-serif"
                             android:lineSpacingExtra="2dp" />
 
                         <LinearLayout
@@ -377,7 +416,7 @@
                                 android:layout_width="14dp"
                                 android:layout_height="14dp"
                                 android:src="@drawable/ic_sync" 
-                                app:tint="#4f46e5" /> <!-- Should be a sync icon -->
+                                app:tint="?attr/colorPrimary" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -386,11 +425,12 @@
                                 android:text="Syncs automatically from customer app"
                                 android:textSize="11sp"
                                 android:textStyle="bold"
-                                android:textColor="#4f46e5" />
+                                android:textColor="?attr/colorPrimary"
+                                android:fontFamily="sans-serif-medium" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

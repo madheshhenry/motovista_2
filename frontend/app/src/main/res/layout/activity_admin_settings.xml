@@ -772,21 +772,17 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Navigation (Same as Admin Dashboard) -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
+        android:layout_height="80dp"
         android:background="?attr/colorSurface"
         android:orientation="horizontal"
-        android:elevation="16dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="24dp"
+        android:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <!-- Dashboard Tab -->
         <LinearLayout
             android:id="@+id/tabDashboard"
             android:layout_width="0dp"
@@ -795,27 +791,23 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             android:focusable="true">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_dashboard"
-                android:tint="?attr/colorOnSurfaceVariant"
-                android:contentDescription="Dashboard" />
-
+                app:tint="?attr/colorOnSurfaceVariant" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Dashboard"
-                android:textColor="@color/gray_400"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginTop="4dp" />
-
         </LinearLayout>
 
-        <!-- Inventory Tab -->
         <LinearLayout
             android:id="@+id/tabInventory"
             android:layout_width="0dp"
@@ -824,27 +816,23 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             android:focusable="true">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_inventory"
-                android:tint="@color/gray_400"
-                android:contentDescription="Inventory" />
-
+                app:tint="?attr/colorOnSurfaceVariant" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Inventory"
-                android:textColor="@color/gray_400"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginTop="4dp" />
-
         </LinearLayout>
 
-        <!-- Bikes Tab -->
         <LinearLayout
             android:id="@+id/tabBikes"
             android:layout_width="0dp"
@@ -853,27 +841,23 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             android:focusable="true">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_two_wheeler"
-                android:tint="@color/gray_400"
-                android:contentDescription="Bikes" />
-
+                app:tint="?attr/colorOnSurfaceVariant" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bikes"
-                android:textColor="@color/gray_400"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginTop="4dp" />
-
         </LinearLayout>
 
-        <!-- Customers Tab -->
         <LinearLayout
             android:id="@+id/tabCustomers"
             android:layout_width="0dp"
@@ -882,27 +866,23 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             android:focusable="true">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_groups"
-                android:tint="@color/gray_400"
-                android:contentDescription="Customers" />
-
+                app:tint="?attr/colorOnSurfaceVariant" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Customers"
-                android:textColor="@color/gray_400"
-                android:textSize="12sp"
-                android:fontFamily="sans-serif"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="11sp"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginTop="4dp" />
-
         </LinearLayout>
 
-        <!-- Settings Tab (Active) -->
         <LinearLayout
             android:id="@+id/tabSettings"
             android:layout_width="0dp"
@@ -911,27 +891,23 @@
             android:orientation="vertical"
             android:gravity="center"
             android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             android:focusable="true">
-
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_settings"
-                android:tint="@color/primary_color"
-                android:contentDescription="Settings" />
-
+                app:tint="?attr/colorPrimary" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Settings"
-                android:textColor="@color/primary_color"
-                android:textSize="12sp"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="11sp"
                 android:textStyle="bold"
-                android:fontFamily="sans-serif"
+                android:fontFamily="sans-serif-medium"
                 android:layout_marginTop="4dp" />
-
         </LinearLayout>
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

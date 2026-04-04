@@ -71,6 +71,14 @@ public class BikeDetailsActivity extends AppCompatActivity {
         setupImageSlider();
         // Changed from loadBikeData() to fetchFreshBikeData()
         fetchFreshBikeData();
+
+        // Apply System UI Insets for Notch/Status Bar
+        com.example.motovista_deep.utils.SystemUIHelper.setupEdgeToEdgeWithScroll(
+            this,
+            findViewById(R.id.rootLayout),
+            findViewById(R.id.topHeader),
+            findViewById(R.id.scrollView)
+        );
     }
 
 
@@ -701,15 +709,23 @@ public class BikeDetailsActivity extends AppCompatActivity {
         sectionLayout.setOrientation(LinearLayout.VERTICAL);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        lp.bottomMargin = 24; // dp conversion ideally needed
+        lp.bottomMargin = 24; 
         sectionLayout.setLayoutParams(lp);
 
         // Title
         TextView tvTitle = new TextView(this);
         tvTitle.setText(section.sectionName);
-        tvTitle.setTextSize(12); // sp
-        tvTitle.setTextColor(getResources().getColor(R.color.gray_500));
+        tvTitle.setTextSize(10); // sp (Smaller for hierarchy)
+        
+        // Resolve colorOnSurfaceVariant for title
+        android.util.TypedValue typedValue = new android.util.TypedValue();
+        getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceVariant, typedValue, true);
+        tvTitle.setTextColor(typedValue.data);
+        
         tvTitle.setTypeface(null, android.graphics.Typeface.BOLD);
+        tvTitle.setAllCaps(true);
+        tvTitle.setLetterSpacing(0.05f);
+        
         LinearLayout.LayoutParams titleParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         titleParams.bottomMargin = 16;
@@ -722,23 +738,30 @@ public class BikeDetailsActivity extends AppCompatActivity {
         grid.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         
+        // Resolve colors for fields
+        getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnSurface, typedValue, true);
+        int colorOnSurface = typedValue.data;
+        getTheme().resolveAttribute(com.google.android.material.R.attr.colorSurfaceVariant, typedValue, true);
+        int colorSurfaceVariant = typedValue.data;
+
         if (section.fields != null) {
             for (com.example.motovista_deep.models.BikeVariantModel.CustomField field : section.fields) {
                 // Key View (Left Column)
                 TextView tvKey = new TextView(this);
                 tvKey.setText(field.key);
                 tvKey.setTextSize(14);
-                tvKey.setTextColor(android.graphics.Color.parseColor("#111318"));
+                tvKey.setTextColor(colorOnSurface);
                 tvKey.setTypeface(null, android.graphics.Typeface.BOLD);
-                tvKey.setBackgroundResource(R.drawable.bg_input_new);
-                tvKey.setPadding(24, 24, 24, 24); // px
+                tvKey.setBackgroundResource(R.drawable.bg_input_rounded);
+                tvKey.setBackgroundTintList(android.content.res.ColorStateList.valueOf(colorSurfaceVariant));
+                tvKey.setPadding(32, 32, 32, 32); 
                 
                 android.widget.GridLayout.LayoutParams keyParams = new android.widget.GridLayout.LayoutParams();
                 keyParams.width = 0;
                 keyParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
                 keyParams.columnSpec = android.widget.GridLayout.spec(android.widget.GridLayout.UNDEFINED, 1f);
                 keyParams.bottomMargin = 24;
-                keyParams.rightMargin = 12; // Gap
+                keyParams.rightMargin = 12; 
                 tvKey.setLayoutParams(keyParams);
                 
                 grid.addView(tvKey);
@@ -747,17 +770,18 @@ public class BikeDetailsActivity extends AppCompatActivity {
                 TextView tvValue = new TextView(this);
                 tvValue.setText(field.value);
                 tvValue.setTextSize(14);
-                tvValue.setTextColor(android.graphics.Color.parseColor("#111318"));
+                tvValue.setTextColor(colorOnSurface);
                 tvValue.setTypeface(null, android.graphics.Typeface.BOLD);
-                tvValue.setBackgroundResource(R.drawable.bg_input_new);
-                tvValue.setPadding(24, 24, 24, 24); // px
+                tvValue.setBackgroundResource(R.drawable.bg_input_rounded);
+                tvValue.setBackgroundTintList(android.content.res.ColorStateList.valueOf(colorSurfaceVariant));
+                tvValue.setPadding(32, 32, 32, 32); 
 
                 android.widget.GridLayout.LayoutParams valueParams = new android.widget.GridLayout.LayoutParams();
                 valueParams.width = 0;
                 valueParams.height = LinearLayout.LayoutParams.WRAP_CONTENT;
                 valueParams.columnSpec = android.widget.GridLayout.spec(android.widget.GridLayout.UNDEFINED, 1f);
                 valueParams.bottomMargin = 24;
-                valueParams.leftMargin = 12; // Gap
+                valueParams.leftMargin = 12; 
                 tvValue.setLayoutParams(valueParams);
 
                 grid.addView(tvValue);
@@ -934,14 +958,25 @@ public class BikeDetailsActivity extends AppCompatActivity {
             drawable.setColor(android.graphics.Color.LTGRAY);
         }
         // Add border
-        drawable.setStroke(2, android.graphics.Color.LTGRAY);
+        int outlineColor = android.graphics.Color.LTGRAY;
+        android.util.TypedValue typedValue = new android.util.TypedValue();
+        if (getTheme().resolveAttribute(com.google.android.material.R.attr.colorOutlineVariant, typedValue, true)) {
+            outlineColor = typedValue.data;
+        }
+        drawable.setStroke(2, outlineColor);
         
         colorCircle.setBackground(drawable);
 
         // Color Name
         TextView tvName = new TextView(this);
         tvName.setText(colorName);
-        tvName.setTextColor(getResources().getColor(R.color.text_dark));
+        
+        int textColor = android.graphics.Color.GRAY;
+        android.util.TypedValue textValue = new android.util.TypedValue();
+        if (getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceVariant, textValue, true)) {
+            textColor = textValue.data;
+        }
+        tvName.setTextColor(textColor);
         tvName.setTextSize(12);
         tvName.setTypeface(null, android.graphics.Typeface.BOLD);
         tvName.setGravity(android.view.Gravity.CENTER);

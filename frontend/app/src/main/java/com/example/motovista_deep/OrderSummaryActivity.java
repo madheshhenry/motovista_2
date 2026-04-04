@@ -370,10 +370,14 @@ public class OrderSummaryActivity extends AppCompatActivity {
                 if (fitting.isMandatory()) {
                     tvName.setText(fitting.getName() + " (Mandatory)");
                     tvPrice.setText("Included");
-                    tvPrice.setTextColor(Color.parseColor("#16a34a")); // Green
+                    
+                    // Resolve color from theme
+                    android.util.TypedValue typedValue = new android.util.TypedValue();
+                    getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+                    tvPrice.setTextColor(typedValue.data);
                 } else {
                     tvPrice.setText("₹ " + fitting.getPrice());
-                    tvPrice.setTextColor(Color.parseColor("#111718"));
+                    // Default color from XML (?attr/colorOnSurfaceVariant) will be used
                 }
 
                 llFittingsContainer.addView(itemView);

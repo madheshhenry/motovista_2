@@ -5,8 +5,7 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
-    android:fitsSystemWindows="true">
+    android:background="?attr/colorBackground">
 
     <!-- Top Header with Back Button -->
     <LinearLayout
@@ -14,8 +13,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/background_light"
-        android:paddingHorizontal="@dimen/padding_medium"
+        android:background="?attr/colorBackground"
+        android:paddingHorizontal="16dp"
         android:paddingVertical="12dp"
         android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +27,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:src="@drawable/ic_arrow_back"
-            android:tint="@color/gray_800"
+            android:tint="?attr/colorOnSurface"
             android:padding="12dp"
             android:contentDescription="Back"
             android:clickable="true"
@@ -41,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Add Second-Hand Bike"
-            android:textColor="@color/text_primary_light"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="18sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -60,7 +59,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        android:fitsSystemWindows="true"
+        android:paddingBottom="120dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,11 +79,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Brand"
-                android:textColor="@color/text_primary_light"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginBottom="6dp" />
 
             <EditText
                 android:id="@+id/etBrand"
@@ -93,9 +93,10 @@
                 android:inputType="text"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="12dp"
-                android:background="@drawable/edittext_background"
-                android:textColor="@color/text_primary_light"
-                android:textSize="16sp"
+                android:background="@drawable/bg_input_rounded"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp"
                 android:fontFamily="sans-serif"
                 android:layout_marginBottom="16dp" />
 
@@ -105,11 +106,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Model Name"
-                android:textColor="@color/text_primary_light"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="6dp" />
 
             <EditText
                 android:id="@+id/etModel"
@@ -119,9 +121,10 @@
                 android:inputType="text"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="12dp"
-                android:background="@drawable/edittext_background"
-                android:textColor="@color/text_primary_light"
-                android:textSize="16sp"
+                android:background="@drawable/bg_input_rounded"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp"
                 android:fontFamily="sans-serif"
                 android:layout_marginBottom="16dp" />
 
@@ -145,11 +148,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Year"
-                        android:textColor="@color/text_primary_light"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="sans-serif-medium"
-                        android:layout_marginBottom="4dp" />
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="6dp" />
 
                     <EditText
                         android:id="@+id/etYear"
@@ -159,9 +163,10 @@
                         android:inputType="number"
                         android:paddingHorizontal="16dp"
                         android:paddingVertical="12dp"
-                        android:background="@drawable/edittext_background"
-                        android:textColor="@color/text_primary_light"
-                        android:textSize="16sp"
+                        android:background="@drawable/bg_input_rounded"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:textSize="14sp"
                         android:fontFamily="sans-serif" />
 
                 </LinearLayout>
@@ -179,11 +184,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Odometer (KM)"
-                        android:textColor="@color/text_primary_light"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="sans-serif-medium"
-                        android:layout_marginBottom="4dp" />
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="6dp" />
 
                     <EditText
                         android:id="@+id/etOdometer"
@@ -193,9 +199,10 @@
                         android:inputType="number"
                         android:paddingHorizontal="16dp"
                         android:paddingVertical="12dp"
-                        android:background="@drawable/edittext_background"
-                        android:textColor="@color/text_primary_light"
-                        android:textSize="16sp"
+                        android:background="@drawable/bg_input_rounded"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:textSize="14sp"
                         android:fontFamily="sans-serif" />
 
                 </LinearLayout>
@@ -222,11 +229,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Engine CC"
-                        android:textColor="@color/text_primary_light"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="sans-serif-medium"
-                        android:layout_marginBottom="4dp" />
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="6dp" />
 
                     <EditText
                         android:id="@+id/etEngineCC"
@@ -236,9 +244,10 @@
                         android:inputType="number"
                         android:paddingHorizontal="16dp"
                         android:paddingVertical="12dp"
-                        android:background="@drawable/edittext_background"
-                        android:textColor="@color/text_primary_light"
-                        android:textSize="16sp"
+                        android:background="@drawable/bg_input_rounded"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:textSize="14sp"
                         android:fontFamily="sans-serif" />
 
                 </LinearLayout>
@@ -256,20 +265,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Braking Type"
-                        android:textColor="@color/text_primary_light"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="sans-serif-medium"
-                        android:layout_marginBottom="4dp" />
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="6dp" />
 
                     <Spinner
                         android:id="@+id/spinnerBrakingType"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:background="@drawable/edittext_background"
+                        android:background="@drawable/bg_input_rounded"
                         android:paddingHorizontal="16dp"
-                        android:textColor="@color/text_primary_light"
-                        android:textSize="16sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="14sp"
                         android:fontFamily="sans-serif" />
 
                 </LinearLayout>
@@ -296,11 +306,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Expected Price (₹)"
-                        android:textColor="@color/text_primary_light"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="sans-serif-medium"
-                        android:layout_marginBottom="4dp" />
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="6dp" />
 
                     <EditText
                         android:id="@+id/etPrice"
@@ -310,9 +321,10 @@
                         android:inputType="number"
                         android:paddingHorizontal="16dp"
                         android:paddingVertical="12dp"
-                        android:background="@drawable/edittext_background"
-                        android:textColor="@color/text_primary_light"
-                        android:textSize="16sp"
+                        android:background="@drawable/bg_input_rounded"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:textSize="14sp"
                         android:fontFamily="sans-serif" />
 
                 </LinearLayout>
@@ -330,21 +342,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Condition"
-                        android:textColor="@color/text_primary_light"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="sans-serif-medium"
-                        android:layout_marginBottom="4dp" />
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="6dp" />
 
                     <Spinner
                         android:id="@+id/spinnerCondition"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:background="@drawable/edittext_background"
+                        android:background="@drawable/bg_input_rounded"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:textColor="@color/text_primary_light"
-                        android:textSize="16sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="14sp"
                         android:fontFamily="sans-serif" />
 
                 </LinearLayout>
@@ -371,20 +384,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Ownership"
-                        android:textColor="@color/text_primary_light"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:fontFamily="sans-serif-medium"
-                        android:layout_marginBottom="4dp" />
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="6dp" />
 
                     <Spinner
                         android:id="@+id/spinnerOwnership"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:background="@drawable/edittext_background"
+                        android:background="@drawable/bg_input_rounded"
                         android:paddingHorizontal="16dp"
-                        android:textColor="@color/text_primary_light"
-                        android:textSize="16sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="14sp"
                         android:fontFamily="sans-serif" />
 
                 </LinearLayout>
@@ -413,19 +427,20 @@
             <LinearLayout
                 android:id="@+id/uploadContainer"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="140dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="@drawable/upload_background"
-                android:layout_marginBottom="4dp"
+                android:background="@drawable/bg_input_rounded"
+                android:layout_marginBottom="12dp"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:padding="20dp">
 
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/ic_upload"
-                    android:tint="@color/gray_500"
+                    app:tint="?attr/colorPrimary"
                     android:layout_marginBottom="8dp"
                     android:contentDescription="Upload" />
 
@@ -433,8 +448,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Click to upload or drag and drop"
-                    android:textColor="@color/gray_500"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp"
+                    android:textStyle="bold"
                     android:fontFamily="sans-serif"
                     android:layout_marginBottom="4dp" />
 
@@ -442,7 +458,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="SVG, PNG, JPG (MAX. 5MB)"
-                    android:textColor="@color/gray_400"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:fontFamily="sans-serif" />
 
@@ -454,7 +470,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="0 images selected"
-                android:textColor="@color/gray_600"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
@@ -477,11 +493,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Previous Owner Details (Optional)"
-                android:textColor="@color/text_primary_light"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="6dp" />
 
             <EditText
                 android:id="@+id/etOwnerDetails"
@@ -491,9 +508,10 @@
                 android:inputType="textMultiLine"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="12dp"
-                android:background="@drawable/edittext_background"
-                android:textColor="@color/text_primary_light"
-                android:textSize="16sp"
+                android:background="@drawable/bg_input_rounded"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp"
                 android:fontFamily="sans-serif"
                 android:gravity="top"
                 android:layout_marginBottom="16dp" />
@@ -504,11 +522,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Condition Details (Descriptive)"
-                android:textColor="@color/text_primary_light"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="6dp" />
 
             <EditText
                 android:id="@+id/etConditionDetails"
@@ -518,9 +537,10 @@
                 android:inputType="textMultiLine"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="12dp"
-                android:background="@drawable/edittext_background"
-                android:textColor="@color/text_primary_light"
-                android:textSize="16sp"
+                android:background="@drawable/bg_input_rounded"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp"
                 android:fontFamily="sans-serif"
                 android:gravity="top"
                 android:layout_marginBottom="16dp" />
@@ -531,11 +551,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Key Features/Specs"
-                android:textColor="@color/text_primary_light"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium"
-                android:layout_marginBottom="4dp" />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="6dp" />
 
             <EditText
                 android:id="@+id/etFeatures"
@@ -545,9 +566,10 @@
                 android:inputType="textMultiLine"
                 android:paddingHorizontal="16dp"
                 android:paddingVertical="12dp"
-                android:background="@drawable/edittext_background"
-                android:textColor="@color/text_primary_light"
-                android:textSize="16sp"
+                android:background="@drawable/bg_input_rounded"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp"
                 android:fontFamily="sans-serif"
                 android:gravity="top"
                 android:layout_marginBottom="24dp" />
@@ -558,11 +580,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:text="Save Bike"
-                android:textColor="@color/white"
+                android:textColor="?attr/colorOnPrimary"
+                android:backgroundTint="?attr/colorPrimary"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif"
-                android:background="@drawable/primary_button"
+                app:cornerRadius="12dp"
                 android:gravity="center"
                 android:layout_marginBottom="12dp" />
 
@@ -572,11 +595,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:text="Cancel"
-                android:textColor="@color/gray_600"
+                android:textColor="?attr/colorOnSurface"
+                android:backgroundTint="?attr/colorSurfaceVariant"
                 android:textSize="16sp"
                 android:textStyle="normal"
                 android:fontFamily="sans-serif"
-                android:background="@drawable/outline_button"
+                app:cornerRadius="12dp"
                 android:gravity="center" />
 
         </LinearLayout>

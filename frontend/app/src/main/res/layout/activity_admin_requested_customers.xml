@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -10,6 +10,7 @@
 
     <!-- Header -->
     <LinearLayout
+        android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
@@ -26,11 +27,11 @@
 
             <ImageView
                 android:id="@+id/btnBack"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_centerVertical="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="8dp"
+                android:padding="12dp"
                 android:src="@drawable/ic_arrow_back"
                 app:tint="?attr/colorOnSurface" />
 
@@ -46,7 +47,7 @@
                 android:letterSpacing="-0.015" />
         </RelativeLayout>
 
-        <!-- Search Bar (Optional, keeping it simple inside header or separate) -->
+        <!-- Search Bar -->
          <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,19 +59,22 @@
                 android:id="@+id/etSearch"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@drawable/rounded_search_bg"
+                android:background="?attr/colorSurfaceVariant"
+                android:backgroundTint="?attr/colorSurfaceVariant"
                 android:drawableStart="@drawable/ic_search"
+                app:drawableTint="?attr/colorOnSurfaceVariant"
                 android:drawablePadding="8dp"
                 android:hint="Search requests..."
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
                 android:textSize="14sp"
                 android:fontFamily="sans-serif"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:maxLines="1"
                 android:inputType="text" 
                 android:imeOptions="actionSearch"/>
         </LinearLayout>
-
 
         <!-- Filter Chips -->
         <HorizontalScrollView
@@ -87,76 +91,56 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/tvFilterAll"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:background="@drawable/pill_black"
-                    android:gravity="center"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:layout_height="36dp"
                     android:text="All"
+                    app:backgroundTint="?attr/colorPrimary"
                     android:textColor="?attr/colorOnPrimary"
                     android:textSize="14sp"
                     android:fontFamily="sans-serif-medium"
+                    app:cornerRadius="24dp"
                     android:layout_marginEnd="8dp"/>
 
-                <LinearLayout
-                    android:id="@+id/layoutFilterNew"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/tvFilterPending"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:background="@drawable/pill_gray"
-                    android:gravity="center"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:clickable="true"
-                    android:focusable="true">
-                    
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/ic_check_circle"
-                        app:tint="?attr/colorOnSurface"
-                        android:visibility="gone"
-                        android:layout_marginEnd="4dp"/>
-
-                    <TextView
-                        android:id="@+id/tvFilterPending"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="New"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="14sp"
-                        android:fontFamily="sans-serif-medium"/>
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tvFilterApproved"
-                    android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:background="@drawable/pill_gray"
-                    android:gravity="center"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="Accepted"
-                    android:textColor="?attr/colorOnSurface"
+                    android:layout_height="36dp"
+                    android:text="New"
+                    app:backgroundTint="?attr/colorSurfaceVariant"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="14sp"
                     android:fontFamily="sans-serif-medium"
+                    app:cornerRadius="24dp"
                     android:layout_marginEnd="8dp"/>
 
-                <TextView
-                    android:id="@+id/tvFilterRejected"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/tvFilterApproved"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
-                    android:background="@drawable/pill_gray"
-                    android:gravity="center"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:text="Rejected"
-                    android:textColor="?attr/colorOnSurface"
+                    android:layout_height="36dp"
+                    android:text="Accepted"
+                    app:backgroundTint="?attr/colorSurfaceVariant"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="14sp"
-                    android:fontFamily="sans-serif-medium"/>
+                    android:fontFamily="sans-serif-medium"
+                    app:cornerRadius="24dp"
+                    android:layout_marginEnd="8dp"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/tvFilterRejected"
+                    style="@style/Widget.Material3.Button.TonalButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="Rejected"
+                    app:backgroundTint="?attr/colorSurfaceVariant"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium"
+                    app:cornerRadius="24dp"/>
             </LinearLayout>
         </HorizontalScrollView>
     </LinearLayout>
@@ -171,7 +155,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:padding="16dp"
+            android:paddingBottom="24dp"
             android:scrollbars="vertical" />
             
         <!-- Empty State -->
@@ -182,7 +166,7 @@
             android:text="No requests found"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-medium"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:visibility="gone"/>
             

@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
+    android:background="?attr/colorBackground"
     android:fitsSystemWindows="true">
 
     <!-- Header -->
@@ -14,21 +14,22 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingHorizontal="16dp"
-        android:paddingVertical="16dp"
+        android:paddingVertical="12dp"
         android:gravity="center_vertical"
-        android:background="@color/white"
+        android:background="?attr/colorSurface"
+        android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:src="@drawable/ic_arrow_back"
-            app:tint="@color/text_primary_light"
-            android:background="?selectableItemBackgroundBorderless"
-            android:padding="8dp" />
+            app:tint="?attr/colorOnSurface"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="12dp" />
 
         <TextView
             android:id="@+id/tvTitle"
@@ -36,14 +37,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Sales History"
-            android:textColor="@color/text_primary_light"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:gravity="center" />
+            android:gravity="center"
+            android:fontFamily="sans-serif-medium" />
 
         <View
-            android:layout_width="40dp"
-            android:layout_height="40dp" />
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
 
     </LinearLayout>
 
@@ -52,10 +54,10 @@
         android:id="@+id/filterContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:paddingHorizontal="16dp"
-        android:background="@color/white"
+        android:paddingVertical="12dp"
         android:scrollbars="none"
+        android:clipToPadding="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/header">
@@ -63,51 +65,82 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingVertical="8dp">
+            android:orientation="horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnFilterAll"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="wrap_content"
                 android:text="All"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/filter_text_color"
+                app:strokeColor="@color/filter_stroke_color"
+                app:strokeWidth="2dp"
+                app:cornerRadius="24dp"
+                android:layout_marginEnd="8dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:textSize="13sp"
-                android:background="@drawable/primary_button_rounded"
-                android:layout_marginEnd="8dp" />
+                android:fontFamily="sans-serif-medium"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@null"
+                app:backgroundTint="@null" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnFilterCash"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="wrap_content"
                 android:text="Cash"
-                android:textAllCaps="false"
-                android:textColor="@color/text_primary_light"
+                android:textColor="@color/filter_text_color"
+                app:strokeColor="@color/filter_stroke_color"
+                app:strokeWidth="2dp"
+                app:cornerRadius="24dp"
+                android:layout_marginEnd="8dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:textSize="13sp"
-                android:background="@drawable/gray_button_rounded"
-                android:layout_marginEnd="8dp" />
+                android:fontFamily="sans-serif-medium"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@null"
+                app:backgroundTint="@null" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnFilterEMI"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="wrap_content"
                 android:text="EMI"
-                android:textAllCaps="false"
-                android:textColor="@color/text_primary_light"
+                android:textColor="@color/filter_text_color"
+                app:strokeColor="@color/filter_stroke_color"
+                app:strokeWidth="2dp"
+                app:cornerRadius="24dp"
+                android:layout_marginEnd="8dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:textSize="13sp"
-                android:background="@drawable/gray_button_rounded"
-                android:layout_marginEnd="8dp" />
+                android:fontFamily="sans-serif-medium"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@null"
+                app:backgroundTint="@null" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnFilterThisMonth"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="wrap_content"
                 android:text="This Month"
-                android:textAllCaps="false"
-                android:textColor="@color/text_primary_light"
+                android:textColor="@color/filter_text_color"
+                app:strokeColor="@color/filter_stroke_color"
+                app:strokeWidth="2dp"
+                app:cornerRadius="24dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
                 android:textSize="13sp"
-                android:background="@drawable/gray_button_rounded" />
+                android:fontFamily="sans-serif-medium"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@null"
+                app:backgroundTint="@null" />
 
         </LinearLayout>
 
@@ -120,21 +153,38 @@
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/filterContainer"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:paddingTop="8dp"
-        android:clipToPadding="false" />
+        android:clipToPadding="false"
+        android:paddingBottom="120dp" />
 
     <!-- Empty State -->
-    <TextView
-        android:id="@+id/tvEmptyState"
+    <LinearLayout
+        android:id="@+id/layoutEmptyState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No sales records found"
-        android:textColor="@color/gray_400"
-        android:textSize="14sp"
+        android:orientation="vertical"
+        android:gravity="center"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/filterContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_search"
+            app:tint="?attr/colorOutlineVariant"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:id="@+id/tvEmptyState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No sales records found"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

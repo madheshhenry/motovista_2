@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingBottom="@dimen/padding_medium">
 
     <!-- Bike Info Card -->
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/padding_medium"
-        android:background="@color/card_background"
-        android:padding="@dimen/padding_medium"
-        android:orientation="vertical"
-        android:elevation="2dp">
+        app:cardCornerRadius="20dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:strokeColor="?attr/colorOutlineVariant"
+        app:strokeWidth="1dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:orientation="vertical">
 
         <!-- Brand and Model Row -->
         <RelativeLayout
@@ -32,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Royal Enfield"
-                    android:textColor="@color/text_light_gray"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="14sp" />
 
                 <TextView
@@ -40,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Classic 350"
-                    android:textColor="@color/text_dark"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     android:layout_marginTop="4dp" />
@@ -60,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="₹1,45,000"
-                    android:textColor="@color/primary_color"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -68,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Expected Price"
-                    android:textColor="@color/text_light_gray"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:layout_marginTop="2dp" />
 
@@ -80,9 +90,9 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray_300"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:layout_marginBottom="@dimen/padding_medium" />
+            android:background="?attr/colorOutlineVariant"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
 
         <!-- Year, Odometer, Ownership, Condition Row -->
         <GridLayout
@@ -107,7 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2018"
-                    android:textColor="@color/text_dark"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -115,7 +125,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Year"
-                    android:textColor="@color/text_light_gray"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:layout_marginTop="2dp" />
             </LinearLayout>
@@ -134,7 +144,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="15,000 km"
-                    android:textColor="@color/text_dark"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -142,7 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Odometer"
-                    android:textColor="@color/text_light_gray"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:layout_marginTop="2dp" />
             </LinearLayout>
@@ -161,7 +171,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1st Owner"
-                    android:textColor="@color/text_dark"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -169,7 +179,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ownership"
-                    android:textColor="@color/text_light_gray"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:layout_marginTop="2dp" />
             </LinearLayout>
@@ -187,8 +197,8 @@
                     android:id="@+id/tvCondition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Good"
-                    android:textColor="@color/text_dark"
+                    android:text="Excellent"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -196,7 +206,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Condition"
-                    android:textColor="@color/text_light_gray"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:layout_marginTop="2dp" />
             </LinearLayout>
@@ -204,62 +214,118 @@
         </GridLayout>
 
     </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-    <!-- Condition Details Card -->
-    <LinearLayout
+    <!-- Vehicle History Section -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/padding_medium"
-        android:background="@color/card_background"
-        android:padding="@dimen/padding_medium"
-        android:orientation="vertical"
-        android:elevation="2dp">
+        app:cardCornerRadius="20dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:strokeColor="?attr/colorOutlineVariant"
+        app:strokeWidth="1dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vehicle History"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+    
+            <TextView
+                android:id="@+id/tvVehicleHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Full service history available. No accidents. Single owner used for city commute only."
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp"
+                android:lineSpacingExtra="4dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Condition Details Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:strokeColor="?attr/colorOutlineVariant"
+        app:strokeWidth="1dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Condition Details"
-            android:textColor="@color/text_dark"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginBottom="@dimen/padding_medium" />
+            android:layout_marginBottom="12dp" />
 
         <TextView
             android:id="@+id/tvConditionDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="The bike is in excellent running condition..."
-            android:textColor="@color/text_light_gray"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="14sp"
             android:lineSpacingExtra="4dp" />
 
-    </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <!-- Key Features & Specs Card -->
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/padding_medium"
-        android:background="@color/card_background"
-        android:padding="@dimen/padding_medium"
-        android:orientation="vertical"
-        android:elevation="2dp">
+        app:cardCornerRadius="20dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:strokeColor="?attr/colorOutlineVariant"
+        app:strokeWidth="1dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Specifications &amp; Features"
-            android:textColor="@color/text_dark"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginBottom="@dimen/padding_medium" />
+            android:layout_marginBottom="16dp" />
 
         <!-- Specs Grid -->
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:columnCount="2"
-            android:rowCount="1"
+            android:rowCount="2"
             android:alignmentMode="alignBounds"
             android:columnOrderPreserved="false"
             android:useDefaultMargins="true">
@@ -270,7 +336,7 @@
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:text="Engine:"
-                android:textColor="@color/text_light_gray"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="14sp" />
 
             <TextView
@@ -279,7 +345,7 @@
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:text="346 cc"
-                android:textColor="@color/text_dark"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -289,7 +355,7 @@
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:text="Brakes:"
-                android:textColor="@color/text_light_gray"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="14sp" />
 
             <TextView
@@ -298,7 +364,7 @@
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:text="Front Disc, Rear Drum"
-                android:textColor="@color/text_dark"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -308,7 +374,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/gray_300"
+            android:background="?attr/colorOutlineVariant"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp" />
 
@@ -316,7 +382,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Features:"
-            android:textColor="@color/text_light_gray"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="14sp"
             android:layout_marginBottom="4dp"/>
 
@@ -325,39 +391,49 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Original silencer available, single hand used, timely serviced."
-            android:textColor="@color/text_dark"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"
             android:lineSpacingExtra="4dp" />
 
-    </LinearLayout>
-
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+    
     <!-- Owner / Seller Details Card -->
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/padding_medium"
-        android:background="@color/card_background"
-        android:padding="@dimen/padding_medium"
-        android:orientation="vertical"
-        android:elevation="2dp">
+        app:cardCornerRadius="20dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:strokeColor="?attr/colorOutlineVariant"
+        app:strokeWidth="1dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Seller / Owner Details"
-            android:textColor="@color/text_dark"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="@dimen/padding_medium" />
+            android:padding="16dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvOwnerDetails"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Contact: +91 9876543210"
-            android:textColor="@color/text_dark"
-            android:textSize="14sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seller / Owner Details"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tvOwnerDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact: +91 9876543210"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

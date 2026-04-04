@@ -41,6 +41,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     private String profileImageUrl = "";
     private String aadharFrontUrl = "";
     private String aadharBackUrl = "";
+    private int customerId; // New class field
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         setupClickListeners();
 
         // Get customer_id from intent
-        int customerId = getIntent().getIntExtra("customer_id", 0);
+        customerId = getIntent().getIntExtra("customer_id", 0);
 
         Log.d(TAG, "Received Customer ID: " + customerId);
 
@@ -157,8 +158,10 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         btnPurchases.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(CustomerDetailsActivity.this,
-                        "View Purchases", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(CustomerDetailsActivity.this, AdminCustomerPurchasesActivity.class);
+                intent.putExtra("CUSTOMER_ID", customerId);
+                intent.putExtra("CUSTOMER_NAME", tvName.getText().toString());
+                startActivity(intent);
             }
         });
     }
@@ -313,7 +316,6 @@ public class CustomerDetailsActivity extends AppCompatActivity {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.MATCH_PARENT));
             ivAadharFront.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ivAadharFront.setBackgroundResource(R.color.gray_200);
 
             // Add to card
             LinearLayout frontContainer = (LinearLayout) cardAadharFront.getChildAt(0);
@@ -361,7 +363,6 @@ public class CustomerDetailsActivity extends AppCompatActivity {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.MATCH_PARENT));
             ivAadharBack.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            ivAadharBack.setBackgroundResource(R.color.gray_200);
 
             // Add to card
             LinearLayout backContainer = (LinearLayout) cardAadharBack.getChildAt(0);

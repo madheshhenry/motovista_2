@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Fitting Name"
-        android:textColor="#374151"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="13sp"
         android:fontFamily="sans-serif"/>
 
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="₹ 500"
-        android:textColor="#111718"
+        android:textColor="?attr/colorOnSurfaceVariant"
         android:textSize="13sp"
         android:fontFamily="sans-serif-medium"
         android:textStyle="bold"/>

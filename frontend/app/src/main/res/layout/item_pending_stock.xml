@@ -1,52 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:background="@drawable/bg_card_ios"
-    android:padding="12dp"
     android:layout_marginBottom="8dp"
-    android:gravity="center_vertical">
+    app:cardBackgroundColor="?attr/colorSurface"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="1dp"
+    app:strokeColor="?attr/colorOutlineVariant"
+    app:strokeWidth="1dp">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        android:foreground="?attr/selectableItemBackground"
+        android:clickable="true">
 
-        <TextView
-            android:id="@+id/tvPendBrandModel"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Yamaha R15 V4"
-            android:textStyle="bold"
-            android:textColor="@color/text_dark"
-            android:textSize="14sp"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvPendVariantColor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="V2 • Racing Blue"
-            android:textColor="@color/gray_500"
-            android:textSize="12sp"
-            android:layout_marginTop="2dp"/>
-            
-        <TextView
-            android:id="@+id/tvPendChassisCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2 Units"
-            android:textColor="@color/primary_blue"
-            android:textStyle="bold"
-            android:textSize="12sp"
-            android:layout_marginTop="4dp"/>
+            <TextView
+                android:id="@+id/tvPendBrandModel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yamaha R15 V4"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tvPendVariantColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="V2 • Racing Blue"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"/>
+                
+            <TextView
+                android:id="@+id/tvPendChassisCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2 Units"
+                android:textColor="?attr/colorPrimary"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-bold"
+                android:textSize="12sp"
+                android:layout_marginTop="8dp"
+                android:background="?attr/colorSecondaryContainer"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:backgroundTint="?attr/colorSecondaryContainer"/>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_edit"
+            app:tint="?attr/colorOnSurfaceVariant"
+            android:alpha="0.6"/>
+
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_edit"
-        android:alpha="0.6"/>
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -37,6 +37,7 @@ import com.example.motovista_deep.models.BikeVariantModel;
 import com.example.motovista_deep.models.GenericResponse;
 import com.example.motovista_deep.models.UploadBikeImageResponse;
 
+import com.example.motovista_deep.utils.SystemUIHelper;
 import com.example.motovista_deep.models.CustomFitting;
 import com.google.android.material.button.MaterialButton;
 
@@ -93,9 +94,18 @@ public class AddBikeActivity extends AppCompatActivity {
 
         initializeViews();
         setupListeners();
-
-        initializeViews();
-        setupListeners();
+        
+        // Apply System UI Insets for Notch/Status Bar
+        View headerLayout = findViewById(R.id.headerLayout);
+        if (headerLayout != null) {
+            SystemUIHelper.setupEdgeToEdgeWithScroll(
+                this,
+                findViewById(R.id.rootLayout),
+                headerLayout,
+                findViewById(R.id.scrollView),
+                findViewById(R.id.footerLayout)
+            );
+        }
 
         // Check for Edit Mode
         if (getIntent().hasExtra("bike_data") || getIntent().hasExtra("BIKE_MODEL")) {
@@ -237,10 +247,10 @@ public class AddBikeActivity extends AppCompatActivity {
         etPrice.setHint("Price");
         etPrice.setInputType(android.text.InputType.TYPE_CLASS_NUMBER | android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
-        row.setOnLongClickListener(v -> {
+        ImageButton btnDelete = row.findViewById(R.id.btnDeleteField);
+        btnDelete.setOnClickListener(v -> {
              container.removeView(row);
              trackingList.remove(row);
-             return true;
         });
     }
 
@@ -945,6 +955,12 @@ public class AddBikeActivity extends AppCompatActivity {
                     @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                     @Override public void onTextChanged(CharSequence s, int start, int before, int count) { field.value = s.toString(); }
                     @Override public void afterTextChanged(Editable s) {}
+                });
+
+                ImageButton btnDelete = fieldView.findViewById(R.id.btnDeleteField);
+                btnDelete.setOnClickListener(v -> {
+                    localFields.removeView(fieldView);
+                    section.fields.remove(field);
                 });
         }
 

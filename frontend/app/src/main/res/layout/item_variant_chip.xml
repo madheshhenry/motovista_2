@@ -1,14 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/cardVariant"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingHorizontal="16dp"
-    android:paddingVertical="8dp"
-    android:background="@drawable/bg_input_new"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="10dp"
+    android:background="@drawable/bg_input_rounded"
+    android:backgroundTint="?attr/colorSurfaceVariant"
     android:gravity="center"
-    android:layout_marginEnd="12dp">
+    android:layout_marginEnd="12dp"
+    android:minWidth="80dp">
 
     <TextView
         android:id="@+id/tvVariantName"
@@ -17,6 +18,7 @@
         android:text="Variant Name"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:textColor="#111318"/>
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:fontFamily="sans-serif-medium" />
         
 </LinearLayout>

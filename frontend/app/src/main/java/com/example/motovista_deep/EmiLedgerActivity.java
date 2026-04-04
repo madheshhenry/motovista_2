@@ -46,6 +46,18 @@ public class EmiLedgerActivity extends AppCompatActivity {
 
         // Fetch Data
         fetchLedgerData();
+
+        // Apply System UI Insets for Notch/Status Bar
+        View header = findViewById(R.id.headerLayout);
+        if (header != null) {
+            com.example.motovista_deep.utils.SystemUIHelper.setupEdgeToEdgeWithScroll(
+                this,
+                findViewById(R.id.rootLayout),
+                header,
+                recyclerView,
+                null
+            );
+        }
     }
 
     private void initializeViews() {
@@ -146,19 +158,27 @@ public class EmiLedgerActivity extends AppCompatActivity {
     }
 
     private void setActiveFilter(android.widget.Button activeChip) {
+        // Resolve theme colors
+        android.util.TypedValue typedValue = new android.util.TypedValue();
+        getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnSurface, typedValue, true);
+        int colorOnSurface = typedValue.data;
+        
+        getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true);
+        int colorOnPrimary = typedValue.data;
+
         // Reset all chips
         chipAll.setBackgroundResource(R.drawable.outline_button);
-        chipAll.setTextColor(ContextCompat.getColor(this, R.color.text_primary_light));
+        chipAll.setTextColor(colorOnSurface);
 
         chipRunning.setBackgroundResource(R.drawable.outline_button);
-        chipRunning.setTextColor(ContextCompat.getColor(this, R.color.text_primary_light));
+        chipRunning.setTextColor(colorOnSurface);
 
         chipCompleted.setBackgroundResource(R.drawable.outline_button);
-        chipCompleted.setTextColor(ContextCompat.getColor(this, R.color.text_primary_light));
+        chipCompleted.setTextColor(colorOnSurface);
 
         // Set active chip
         activeChip.setBackgroundResource(R.drawable.primary_button);
-        activeChip.setTextColor(ContextCompat.getColor(this, R.color.white));
+        activeChip.setTextColor(colorOnPrimary);
     }
 
     private void openCustomerDetails(com.example.motovista_deep.models.EmiLedgerItem item) {

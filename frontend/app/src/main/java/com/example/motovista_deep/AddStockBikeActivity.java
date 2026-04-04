@@ -55,6 +55,7 @@ import com.example.motovista_deep.models.GetBikesResponse;
 import com.example.motovista_deep.models.InventoryBrand;
 import com.example.motovista_deep.models.InventoryResponse;
 import com.example.motovista_deep.models.MasterCatalogResponse;
+import com.example.motovista_deep.utils.SystemUIHelper;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -135,11 +136,22 @@ public class AddStockBikeActivity extends AppCompatActivity {
 
         setupCameraLauncher();
         
+        // Apply System UI Insets for Notch/Status Bar
+        View headerLayout = findViewById(R.id.headerLayout);
+        if (headerLayout != null) {
+            SystemUIHelper.setupEdgeToEdgeWithScroll(
+                this,
+                findViewById(R.id.rootLayout),
+                headerLayout,
+                findViewById(R.id.mainScrollView)
+            );
+        }
+
         // Visual versioning to confirm deployment
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Add Stock (Sync v2)");
         } else {
-            TextView tvTitle = findViewById(R.id.tvTitle); // Assuming standard ID
+            TextView tvTitle = findViewById(R.id.tvTitle);
             if (tvTitle != null) tvTitle.setText("Add Stock (Sync v2)");
         }
         

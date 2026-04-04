@@ -160,29 +160,14 @@ public class RegistrationRecordActivity extends AppCompatActivity {
         if ("completed".equalsIgnoreCase(status)) {
             btn.setVisibility(View.GONE);
             tvStatus.setText("COMPLETED");
-            tvStatus.setBackgroundResource(R.drawable.pill_inactive);
-            tvStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#f0fdf4")));
-            tvStatus.setTextColor(android.graphics.Color.parseColor("#16a34a"));
-            icon.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#f0fdf4")));
-            icon.setImageTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#16a34a")));
             active.setVisibility(View.GONE);
         } else if ("locked".equalsIgnoreCase(status)) {
             btn.setVisibility(View.GONE);
             tvStatus.setText("LOCKED");
-            tvStatus.setBackgroundResource(R.drawable.pill_inactive);
-            tvStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#f3f4f6")));
-            tvStatus.setTextColor(android.graphics.Color.parseColor("#9ca3af"));
-            icon.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#f3f4f6")));
-            icon.setImageTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#9ca3af")));
             active.setVisibility(View.GONE);
         } else { // pending (active step)
             btn.setVisibility(View.VISIBLE);
             tvStatus.setText("PENDING");
-            tvStatus.setBackgroundResource(R.drawable.pill_inactive);
-            tvStatus.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#fff7ed")));
-            tvStatus.setTextColor(android.graphics.Color.parseColor("#ea580c"));
-            icon.setBackgroundTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#eff6ff")));
-            icon.setImageTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#137fec")));
             active.setVisibility(View.VISIBLE);
         }
     }

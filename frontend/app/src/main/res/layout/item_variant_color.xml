@@ -41,14 +41,14 @@
                  android:layout_weight="1"
                  android:text="Select Color"
                  android:textSize="14sp"
-                 android:textColor="@color/gray_900"
+                 android:textColor="?attr/colorOnSurface"
                  android:singleLine="true"/>
                  
              <ImageView
                  android:layout_width="20dp"
                  android:layout_height="20dp"
                  android:src="@drawable/ic_arrow_drop_down"
-                 app:tint="@color/gray_500"/>
+                 app:tint="?attr/colorOnSurfaceVariant"/>
         </LinearLayout>
 
         <ImageButton
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="0 Images Selected"
-            android:textColor="@color/text_gray"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="12sp" />
 
         <HorizontalScrollView
@@ -102,14 +102,14 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_add"
-                        android:tint="@color/primary_color" />
+                        app:tint="?attr/colorPrimary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:text="Add"
-                        android:textColor="@color/primary_color"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="10sp" />
                 </LinearLayout>
 

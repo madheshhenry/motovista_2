@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:padding="12dp"
-    android:background="@drawable/border_bottom_light">
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/bg_input_rounded"
+    android:backgroundTint="?attr/colorSurfaceVariant">
     
     <ImageView
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:src="@drawable/ic_check_circle"
-        android:tint="#22C55E"
+        app:tint="?attr/colorPrimary"
         android:layout_marginEnd="8dp"/>
         
     <TextView
@@ -21,7 +24,7 @@
         android:layout_weight="1"
         android:text="Crash Bar"
         android:textSize="14sp"
-        android:textColor="#111827"
+        android:textColor="?attr/colorOnSurface"
         android:textStyle="bold"/>
         
     <TextView
@@ -30,6 +33,6 @@
         android:layout_height="wrap_content"
         android:text="₹ 850"
         android:textSize="14sp"
-        android:textColor="#374151"
+        android:textColor="?attr/colorOnSurfaceVariant"
         android:textStyle="bold"/>
 </LinearLayout>

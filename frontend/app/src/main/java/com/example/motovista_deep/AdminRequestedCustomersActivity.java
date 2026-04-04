@@ -38,8 +38,7 @@ public class AdminRequestedCustomersActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     // Filter Views
-    private TextView tvFilterAll, tvFilterPending, tvFilterApproved, tvFilterRejected;
-    private LinearLayout layoutFilterNew;
+    private View tvFilterAll, tvFilterPending, tvFilterApproved, tvFilterRejected;
     private String currentStatusFilter = "all";
 
     // Data
@@ -58,6 +57,18 @@ public class AdminRequestedCustomersActivity extends AppCompatActivity {
         
         // Initial Fetch
         fetchCustomerRequests();
+
+        // Apply System UI Insets for Notch/Status Bar
+        View headerView = findViewById(R.id.headerLayout);
+        if (headerView != null) {
+            com.example.motovista_deep.utils.SystemUIHelper.setupEdgeToEdgeWithScroll(
+                this,
+                findViewById(R.id.rootLayout),
+                headerView,
+                rvRequests,
+                null
+            );
+        }
     }
     
     @Override
@@ -75,7 +86,6 @@ public class AdminRequestedCustomersActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
 
         tvFilterAll = findViewById(R.id.tvFilterAll);
-        layoutFilterNew = findViewById(R.id.layoutFilterNew);
         tvFilterPending = findViewById(R.id.tvFilterPending);
         tvFilterApproved = findViewById(R.id.tvFilterApproved);
         tvFilterRejected = findViewById(R.id.tvFilterRejected);
@@ -116,25 +126,18 @@ public class AdminRequestedCustomersActivity extends AppCompatActivity {
         
         // Filter Click Listener
         View.OnClickListener filterListener = v -> {
-            // Identify clicked view type for UI update
-            View clickedView = v;
-            if(v.getId() == R.id.layoutFilterNew) {
-                // Handle the LinearLayout click
-                 updateFilterUI(layoutFilterNew); 
-                 currentStatusFilter = "pending";
-            } else {
-                 updateFilterUI(v);
-                 int id = v.getId();
-                 if (id == R.id.tvFilterAll) currentStatusFilter = "all";
-                 else if (id == R.id.tvFilterApproved) currentStatusFilter = "approved";
-                 else if (id == R.id.tvFilterRejected) currentStatusFilter = "rejected";
-            }
+            updateFilterUI(v);
+            int id = v.getId();
+            if (id == R.id.tvFilterAll) currentStatusFilter = "all";
+            else if (id == R.id.tvFilterPending) currentStatusFilter = "pending";
+            else if (id == R.id.tvFilterApproved) currentStatusFilter = "approved";
+            else if (id == R.id.tvFilterRejected) currentStatusFilter = "rejected";
             
             filterList(etSearch.getText().toString());
         };
         
         tvFilterAll.setOnClickListener(filterListener);
-        layoutFilterNew.setOnClickListener(filterListener);
+        tvFilterPending.setOnClickListener(filterListener);
         tvFilterApproved.setOnClickListener(filterListener);
         tvFilterRejected.setOnClickListener(filterListener);
         
@@ -145,27 +148,33 @@ public class AdminRequestedCustomersActivity extends AppCompatActivity {
     private void updateFilterUI(View selected) {
         // Reset All
         resetPill(tvFilterAll);
-        resetPill(layoutFilterNew);
+        resetPill(tvFilterPending);
         resetPill(tvFilterApproved);
         resetPill(tvFilterRejected);
         
         // Activate Selected
-        if (selected instanceof LinearLayout) {
-             // For the "New" layout
-             selected.setBackgroundResource(R.drawable.pill_black);
-             tvFilterPending.setTextColor(android.graphics.Color.WHITE);
-        } else if (selected instanceof TextView) {
-             selected.setBackgroundResource(R.drawable.pill_black);
-             ((TextView) selected).setTextColor(android.graphics.Color.WHITE);
+        if (selected instanceof com.google.android.material.button.MaterialButton) {
+            com.google.android.material.button.MaterialButton btn = (com.google.android.material.button.MaterialButton) selected;
+            
+            android.util.TypedValue typedValue = new android.util.TypedValue();
+            getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+            btn.setBackgroundTintList(android.content.res.ColorStateList.valueOf(typedValue.data));
+            
+            getTheme().resolveAttribute(R.attr.colorOnPrimary, typedValue, true);
+            btn.setTextColor(typedValue.data);
         }
     }
     
     private void resetPill(View v) {
-        v.setBackgroundResource(R.drawable.pill_gray);
-        if (v instanceof LinearLayout) {
-            tvFilterPending.setTextColor(0xFF111718);
-        } else if (v instanceof TextView) {
-            ((TextView) v).setTextColor(0xFF111718);
+        if (v instanceof com.google.android.material.button.MaterialButton) {
+            com.google.android.material.button.MaterialButton btn = (com.google.android.material.button.MaterialButton) v;
+            
+            android.util.TypedValue typedValue = new android.util.TypedValue();
+            getTheme().resolveAttribute(R.attr.colorSurfaceVariant, typedValue, true);
+            btn.setBackgroundTintList(android.content.res.ColorStateList.valueOf(typedValue.data));
+            
+            getTheme().resolveAttribute(R.attr.colorOnSurfaceVariant, typedValue, true);
+            btn.setTextColor(typedValue.data);
         }
     }
 

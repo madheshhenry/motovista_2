@@ -5,7 +5,7 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
+    android:background="?attr/colorBackground"
     android:fitsSystemWindows="true">
 
     <!-- Main Content -->
@@ -23,10 +23,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/padding_medium"
+            android:paddingHorizontal="16dp"
             android:paddingVertical="12dp"
             android:gravity="center_vertical"
-            android:background="@color/background_light"
+            android:background="?attr/colorBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -37,7 +37,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:src="@drawable/ic_arrow_back"
-                android:tint="@color/text_dark"
+                android:tint="?attr/colorOnSurface"
                 android:scaleType="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Stock Detail"
-                android:textColor="@color/text_dark"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:gravity="center"
@@ -71,8 +71,10 @@
             android:layout_height="0dp"
             android:fillViewport="true"
             android:scrollbars="none"
-            android:paddingHorizontal="@dimen/padding_medium"
+            android:paddingHorizontal="16dp"
             android:paddingTop="12dp"
+            android:paddingBottom="120dp"
+            android:clipToPadding="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,12 +87,14 @@
                 android:paddingBottom="16dp">
 
                 <!-- Vehicle Information Card -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="@dimen/card_corner_radius"
-                    app:cardElevation="@dimen/card_elevation"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:strokeColor="?attr/colorOutlineVariant"
+                    app:strokeWidth="1dp"
                     android:layout_marginBottom="16dp">
 
                     <LinearLayout
@@ -104,21 +108,21 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:padding="16dp"
-                            android:background="@color/gray_200"
+                            android:background="?attr/colorSurfaceVariant"
                             android:gravity="center_vertical">
 
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_two_wheeler"
-                                android:tint="@color/primary"
+                                android:tint="?attr/colorPrimary"
                                 android:layout_marginEnd="8dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="VEHICLE INFORMATION"
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="12sp"
                                 android:textStyle="bold"
                                 android:fontFamily="sans-serif"
@@ -153,7 +157,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="BRAND"
-                                        android:textColor="@color/gray_500"
+                                        android:textColor="?attr/colorOnSurfaceVariant"
                                         android:textSize="10sp"
                                         android:textStyle="bold"
                                         android:fontFamily="sans-serif"
@@ -166,7 +170,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Royal Enfield"
-                                        android:textColor="@color/text_dark"
+                                        android:textColor="?attr/colorOnSurface"
                                         android:textSize="18sp"
                                         android:textStyle="bold"
                                         android:fontFamily="sans-serif" />
@@ -185,7 +189,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="MODEL"
-                                        android:textColor="@color/gray_500"
+                                        android:textColor="?attr/colorOnSurfaceVariant"
                                         android:textSize="10sp"
                                         android:textStyle="bold"
                                         android:fontFamily="sans-serif"
@@ -198,7 +202,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Classic 350"
-                                        android:textColor="@color/text_dark"
+                                        android:textColor="?attr/colorOnSurface"
                                         android:textSize="18sp"
                                         android:textStyle="bold"
                                         android:fontFamily="sans-serif" />
@@ -211,7 +215,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:background="@color/gray_300"
+                                android:background="?attr/colorOutlineVariant"
                                 android:layout_marginVertical="8dp" />
 
                             <!-- Engine Number -->
@@ -225,7 +229,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="ENGINE NUMBER"
-                                    android:textColor="@color/gray_500"
+                                    android:textColor="?attr/colorOnSurfaceVariant"
                                     android:textSize="10sp"
                                     android:textStyle="bold"
                                     android:fontFamily="sans-serif"
@@ -238,16 +242,14 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="U3S5F009827"
-                                    android:textColor="@color/text_dark"
+                                    android:textColor="?attr/colorOnSurface"
                                     android:textSize="14sp"
                                     android:fontFamily="monospace"
                                     android:letterSpacing="0.1"
                                     android:padding="12dp"
-                                    android:background="@color/gray_200"
-                                    android:backgroundTint="@color/gray_200"
-                                    app:backgroundTint="@color/gray_200"
-                                    android:gravity="center_vertical"
-                                    app:cardCornerRadius="8dp" />
+                                    android:background="@drawable/bg_input_rounded"
+                                    android:backgroundTint="?attr/colorSurfaceVariant"
+                                    android:gravity="center_vertical" />
 
                             </LinearLayout>
 
@@ -262,7 +264,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="CHASSIS NUMBER"
-                                    android:textColor="@color/gray_500"
+                                    android:textColor="?attr/colorOnSurfaceVariant"
                                     android:textSize="10sp"
                                     android:textStyle="bold"
                                     android:fontFamily="sans-serif"
@@ -275,16 +277,14 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="ME3U3S5F009827"
-                                    android:textColor="@color/text_dark"
+                                    android:textColor="?attr/colorOnSurface"
                                     android:textSize="14sp"
                                     android:fontFamily="monospace"
                                     android:letterSpacing="0.1"
                                     android:padding="12dp"
-                                    android:background="@color/gray_200"
-                                    android:backgroundTint="@color/gray_200"
-                                    app:backgroundTint="@color/gray_200"
-                                    android:gravity="center_vertical"
-                                    app:cardCornerRadius="8dp" />
+                                    android:background="@drawable/bg_input_rounded"
+                                    android:backgroundTint="?attr/colorSurfaceVariant"
+                                    android:gravity="center_vertical" />
 
                             </LinearLayout>
 
@@ -292,7 +292,7 @@
                             <View
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:background="@color/gray_300"
+                                android:background="?attr/colorOutlineVariant"
                                 android:layout_marginVertical="8dp" />
 
                             <!-- Stock Entry Date -->
@@ -305,7 +305,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="STOCK ENTRY DATE"
-                                    android:textColor="@color/gray_500"
+                                    android:textColor="?attr/colorOnSurfaceVariant"
                                     android:textSize="10sp"
                                     android:textStyle="bold"
                                     android:fontFamily="sans-serif"
@@ -318,7 +318,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="25 Oct, 2023"
-                                    android:textColor="@color/text_dark"
+                                    android:textColor="?attr/colorOnSurface"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     android:fontFamily="sans-serif" />
@@ -329,15 +329,17 @@
 
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- Sale Note Card -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardCornerRadius="@dimen/card_corner_radius"
-                    app:cardElevation="@dimen/card_elevation"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:strokeColor="?attr/colorOutlineVariant"
+                    app:strokeWidth="1dp"
                     android:layout_marginBottom="16dp">
 
                     <LinearLayout
@@ -351,21 +353,21 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:padding="16dp"
-                            android:background="@color/gray_200"
+                            android:background="?attr/colorSurfaceVariant"
                             android:gravity="center_vertical">
 
                             <ImageView
                                 android:layout_width="24dp"
                                 android:layout_height="24dp"
                                 android:src="@drawable/ic_edit_note"
-                                android:tint="@android:color/holo_orange_dark"
+                                android:tint="?attr/colorPrimary"
                                 android:layout_marginEnd="8dp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="SALE NOTE"
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="12sp"
                                 android:textStyle="bold"
                                 android:fontFamily="sans-serif"
@@ -393,7 +395,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="CUSTOMER NAME"
-                                    android:textColor="@color/gray_500"
+                                    android:textColor="?attr/colorOnSurfaceVariant"
                                     android:textSize="11sp"
                                     android:textStyle="bold"
                                     android:fontFamily="sans-serif"
@@ -406,8 +408,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="56dp"
                                     android:hint="Enter customer name"
-                                    android:textColor="@color/text_dark"
-                                    android:textColorHint="@color/gray_400"
+                                    android:textColor="?attr/colorOnSurface"
+                                    android:textColorHint="?attr/colorOnSurfaceVariant"
                                     android:textSize="14sp"
                                     android:padding="16dp"
                                     android:background="@drawable/bg_input_field"
@@ -426,7 +428,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="DELIVERY DATE"
-                                    android:textColor="@color/gray_500"
+                                    android:textColor="?attr/colorOnSurfaceVariant"
                                     android:textSize="11sp"
                                     android:textStyle="bold"
                                     android:fontFamily="sans-serif"
@@ -440,8 +442,8 @@
                                     android:layout_height="56dp"
                                     android:hint="Select delivery date"
                                     android:text="2023-11-15"
-                                    android:textColor="@color/text_dark"
-                                    android:textColorHint="@color/gray_400"
+                                    android:textColor="?attr/colorOnSurface"
+                                    android:textColorHint="?attr/colorOnSurfaceVariant"
                                     android:textSize="14sp"
                                     android:padding="16dp"
                                     android:background="@drawable/bg_input_field"
@@ -451,29 +453,28 @@
                             </LinearLayout>
 
                             <!-- Mark as Sold Button -->
-                            <Button
+                            <com.google.android.material.button.MaterialButton
                                 android:id="@+id/btnMarkAsSold"
                                 android:layout_width="match_parent"
                                 android:layout_height="56dp"
                                 android:text="Mark as Sold"
-                                android:textColor="@color/white"
+                                android:textColor="?attr/colorOnPrimary"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 android:fontFamily="sans-serif"
-                                android:backgroundTint="@color/primary"
-                                app:backgroundTint="@color/primary"
-                                app:cornerRadius="16dp"
+                                app:backgroundTint="?attr/colorPrimary"
+                                app:cornerRadius="28dp"
                                 android:gravity="center"
                                 android:drawablePadding="8dp"
-                                app:drawableStartCompat="@drawable/ic_check_circle"
-                                android:drawableTint="@color/white"
+                                app:icon="@drawable/ic_check_circle"
+                                app:iconTint="?attr/colorOnPrimary"
                                 android:stateListAnimator="@null" />
 
                         </LinearLayout>
 
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
 
@@ -486,7 +487,7 @@
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="96dp"
-        android:background="@color/white"
+        android:background="?attr/colorSurface"
         android:orientation="horizontal"
         android:elevation="16dp"
         android:paddingTop="12dp"
@@ -511,7 +512,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_dashboard"
-                android:tint="@color/gray_400"
+                android:tint="?attr/colorOnSurfaceVariant"
                 android:contentDescription="Dashboard" />
 
             <TextView
@@ -519,7 +520,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Dashboard"
-                android:textColor="@color/gray_400"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif"
                 android:layout_marginTop="4dp" />
@@ -542,7 +543,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_inventory"
-                android:tint="@color/gray_400"
+                android:tint="?attr/colorOnSurfaceVariant"
                 android:contentDescription="Inventory" />
 
             <TextView
@@ -550,7 +551,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Inventory"
-                android:textColor="@color/gray_400"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif"
                 android:layout_marginTop="4dp" />
@@ -573,7 +574,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_two_wheeler"
-                android:tint="@color/gray_400"
+                android:tint="?attr/colorOnSurfaceVariant"
                 android:contentDescription="Bikes" />
 
             <TextView
@@ -581,7 +582,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bikes"
-                android:textColor="@color/gray_400"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif"
                 android:layout_marginTop="4dp" />
@@ -604,7 +605,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_groups"
-                android:tint="@color/gray_400"
+                android:tint="?attr/colorOnSurfaceVariant"
                 android:contentDescription="Customers" />
 
             <TextView
@@ -612,7 +613,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Customers"
-                android:textColor="@color/gray_400"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif"
                 android:layout_marginTop="4dp" />
@@ -635,7 +636,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_settings"
-                android:tint="@color/gray_400"
+                android:tint="?attr/colorOnSurfaceVariant"
                 android:contentDescription="Settings" />
 
             <TextView
@@ -643,7 +644,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Settings"
-                android:textColor="@color/gray_400"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif"
                 android:layout_marginTop="4dp" />

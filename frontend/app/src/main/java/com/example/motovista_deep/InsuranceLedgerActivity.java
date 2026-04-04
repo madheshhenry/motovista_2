@@ -49,6 +49,18 @@ public class InsuranceLedgerActivity extends AppCompatActivity {
         
         fetchInsuranceData();
         setActiveFilter(chipAll);
+
+        // Apply System UI Insets for Notch/Status Bar
+        View header = findViewById(R.id.headerLayout);
+        if (header != null) {
+            com.example.motovista_deep.utils.SystemUIHelper.setupEdgeToEdgeWithScroll(
+                this,
+                findViewById(R.id.rootLayout),
+                header,
+                rvInsurance,
+                null
+            );
+        }
     }
 
     private void initializeViews() {

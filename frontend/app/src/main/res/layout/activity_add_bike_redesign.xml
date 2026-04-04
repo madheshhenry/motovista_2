@@ -2,22 +2,26 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
+    android:background="?attr/colorBackground"
     tools:context=".AddBikeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="?attr/colorSurface"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/white">
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:paddingTop="20dp"
+            android:background="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -31,16 +35,17 @@
                     android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_arrow_back"
-                    app:tint="@color/text_dark" />
+                    app:tint="?attr/colorOnSurface" />
 
                 <TextView
+                    android:id="@+id/tvTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center"
                     android:text="Add New Bike"
-                    android:textColor="@color/text_dark"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -54,15 +59,16 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/border_color" />
+            android:background="?attr/colorOutlineVariant" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="100dp"
+        android:paddingBottom="132dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -71,14 +77,13 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- SECTION 1: BIKE MODEL DETAILS (Shared Specifications) -->
-            <androidx.cardview.widget.CardView
+            <!-- SECTION 1: BIKE MODEL DETAILS -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/MaterialCardViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -89,7 +94,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:orientation="vertical"
                         android:padding="16dp">
 
@@ -98,7 +102,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="sans-serif-medium"
                             android:text="Bike Model Details"
-                            android:textColor="@color/text_dark"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -107,14 +111,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Shared specifications for all variants"
-                            android:textColor="@color/text_gray"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="14sp" />
                     </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/background_light" />
+                        android:background="?attr/colorOutlineVariant" />
 
                     <!-- Form Grid -->
                     <LinearLayout
@@ -270,7 +274,7 @@
 
                                 <Spinner
                                     android:id="@+id/spFuelType"
-                                    style="@style/InputSpinner" />
+                                    style="@style/SimpleSpinner" />
                             </LinearLayout>
 
                             <!-- Transmission -->
@@ -287,7 +291,7 @@
 
                                 <Spinner
                                     android:id="@+id/spTransmission"
-                                    style="@style/InputSpinner" />
+                                    style="@style/SimpleSpinner" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -440,13 +444,14 @@
                     </LinearLayout>
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- SECTION HEADER: VARIANT BUILDER -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -456,141 +461,133 @@
                     android:layout_weight="1"
                     android:fontFamily="sans-serif-medium"
                     android:text="Variant Builder"
-                    android:textColor="@color/text_dark"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
 
-
-
-        <!-- Variant Builder Section (Dynamic) -->
-        <TextView
-            style="@style/LabelText"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="24dp"
-            android:text="VARIANTS"
-            android:textSize="14sp" />
-
-        <LinearLayout
-            android:id="@+id/variantsContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAddVariant"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
-            android:text="+ Add Another Variant"
-            android:textAllCaps="false"
-            app:strokeWidth="1dp" />
-
-        <!-- INVOICE DETAILS HEADER -->
-        <TextView
-            style="@style/LabelText"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="24dp"
-            android:text="INVOICE DETAILS"
-            android:textSize="14sp" />
-
-        <!-- Warranty & Services -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="24dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp">
+            <!-- Variant Builder Section (Dynamic) -->
+            <TextView
+                style="@style/LabelText"
+                android:layout_marginTop="12dp"
+                android:text="VARIANTS"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp" />
 
             <LinearLayout
+                android:id="@+id/variantsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_marginTop="8dp"
+                android:orientation="vertical" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:text="Warranty &amp; Services"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAddVariant"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:text="+ Add Another Variant"
+                android:textColor="?attr/colorPrimary"
+                app:cornerRadius="28dp"
+                android:textAllCaps="false" />
+
+            <!-- INVOICE DETAILS HEADER -->
+            <TextView
+                style="@style/LabelText"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"
+                android:text="INVOICE DETAILS"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="14sp" />
+
+            <!-- Warranty & Services -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/MaterialCardViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="Warranty &amp; Services"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <TextView
-                            style="@style/LabelText"
-                            android:text="Warranty (Years)" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-                        <LinearLayout style="@style/InputContainer">
-                            <ImageView
-                                style="@style/InputIcon"
-                                android:src="@drawable/ic_verified_user" />
+                            <TextView
+                                style="@style/LabelText"
+                                android:text="Warranty (Years)" />
 
-                            <EditText
-                                android:id="@+id/etWarranty"
-                                style="@style/InputEditText"
-                                android:hint="e.g. 5 Years"
-                                android:inputType="text|number" />
+                            <LinearLayout style="@style/InputContainer">
+                                <ImageView
+                                    style="@style/InputIcon"
+                                    android:src="@drawable/ic_verified_user" />
+
+                                <EditText
+                                    android:id="@+id/etWarranty"
+                                    style="@style/InputEditText"
+                                    android:hint="e.g. 5 Years"
+                                    android:inputType="text|number" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/LabelText"
+                                android:text="Free Services" />
+
+                            <LinearLayout style="@style/InputContainer">
+                                <ImageView
+                                    style="@style/InputIcon"
+                                    android:src="@drawable/ic_build_circle" />
+
+                                <EditText
+                                    android:id="@+id/etFreeServices"
+                                    style="@style/InputEditText"
+                                    android:hint="e.g. 3"
+                                    android:inputType="number" />
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/LabelText"
-                            android:text="Free Services" />
-
-                        <LinearLayout style="@style/InputContainer">
-                            <ImageView
-                                style="@style/InputIcon"
-                                android:src="@drawable/ic_build_circle" />
-
-                            <EditText
-                                android:id="@+id/etFreeServices"
-                                style="@style/InputEditText"
-                                android:hint="e.g. 3"
-                                android:inputType="number" />
-                        </LinearLayout>
-                    </LinearLayout>
                 </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-            <!-- FITTINGS SECTION (Moved Here) -->
-            <androidx.cardview.widget.CardView
+            <!-- FITTINGS SECTION -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/MaterialCardViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@android:color/white"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp">
 
                 <LinearLayout
                     android:id="@+id/llFittingsSection"
@@ -598,104 +595,107 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp"
                     android:orientation="vertical">
-                <!-- Mandatory Fittings Section (Checklist) -->
+                
                 <TextView
                     style="@style/LabelText"
-                    android:layout_marginTop="16dp"
-                    android:text="Mandatory Fittings" />
+                    android:text="Mandatory Fittings"
+                    android:textColor="?attr/colorOnSurface" />
                 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_rounded_gray_50"
+                    android:background="@drawable/bg_input_rounded"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:layout_marginTop="16dp"
+                    android:padding="16dp">
 
-                    <CheckBox android:id="@+id/cbCrashBar" android:text="Crash Bar" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-                    <CheckBox android:id="@+id/cbSareeGuard" android:text="Saree Guard" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-                    <CheckBox android:id="@+id/cbMirror" android:text="Mirror Set" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-                    <CheckBox android:id="@+id/cbNumberPlate" android:text="Front &amp; Rear Number Plate" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-                    <CheckBox android:id="@+id/cbSideStand" android:text="Side Stand" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-                    <CheckBox android:id="@+id/cbFootRest" android:text="Foot Rest" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                    <CheckBox android:id="@+id/cbCrashBar" android:text="Crash Bar" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp"/>
+                    <CheckBox android:id="@+id/cbSareeGuard" android:text="Saree Guard" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp"/>
+                    <CheckBox android:id="@+id/cbMirror" android:text="Mirror Set" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp"/>
+                    <CheckBox android:id="@+id/cbNumberPlate" android:text="Front &amp; Rear Number Plate" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp"/>
+                    <CheckBox android:id="@+id/cbSideStand" android:text="Side Stand" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp"/>
+                    <CheckBox android:id="@+id/cbFootRest" android:text="Foot Rest" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp"/>
                 </LinearLayout>
 
                 <!-- Additional Fittings Section -->
                 <TextView
                     style="@style/LabelText"
-                    android:layout_marginTop="16dp"
-                    android:text="Additional Fittings (Optional)" />
+                    android:layout_marginTop="24dp"
+                    android:text="Additional Fittings (Optional)"
+                    android:textColor="?attr/colorOnSurface" />
                 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_rounded_gray_50"
+                    android:background="@drawable/bg_input_rounded"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:layout_marginTop="16dp"
+                    android:padding="16dp">
 
                     <!-- Side Box -->
-                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp">
                         <CheckBox android:id="@+id/cbSideBox" android:text="Side Box (Fibre)" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <EditText android:id="@+id/etSideBoxPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp"/>
+                        <EditText android:id="@+id/etSideBoxPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
                     
                     <!-- Petrol Tank Bag -->
-                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp">
                         <CheckBox android:id="@+id/cbPetrolTankBag" android:text="Petrol Tank Bag" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <EditText android:id="@+id/etPetrolTankBagPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp"/>
+                        <EditText android:id="@+id/etPetrolTankBagPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
                     
                     <!-- Grip Cover -->
-                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp">
                         <CheckBox android:id="@+id/cbGripCover" android:text="Grip Cover" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <EditText android:id="@+id/etGripCoverPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp"/>
+                        <EditText android:id="@+id/etGripCoverPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
                     
                     <!-- Bag Hook -->
-                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp">
                         <CheckBox android:id="@+id/cbBagHook" android:text="Bag Hook" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <EditText android:id="@+id/etBagHookPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp"/>
+                        <EditText android:id="@+id/etBagHookPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
                     
                     <!-- Helmet (Free) -->
-                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp">
                         <CheckBox android:id="@+id/cbHelmet" android:text="Helmet" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <TextView android:text="FREE" android:layout_width="80dp" android:layout_height="wrap_content" android:background="@drawable/bg_input_rounded" android:backgroundTint="#E3F2FD" android:textColor="@color/primary_color" android:gravity="center" android:padding="8dp" android:textSize="10sp" android:textStyle="bold"/>
+                        <TextView android:text="FREE" android:layout_width="80dp" android:layout_height="wrap_content" android:background="@drawable/bg_input_rounded" android:backgroundTint="?attr/colorPrimaryContainer" android:textColor="?attr/colorPrimary" android:gravity="center" android:padding="8dp" android:textSize="10sp" android:textStyle="bold"/>
                     </LinearLayout>
                     
                     <!-- Body Cover -->
-                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp">
                         <CheckBox android:id="@+id/cbBodyCover" android:text="Body Cover (Full)" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <EditText android:id="@+id/etBodyCoverPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp"/>
+                        <EditText android:id="@+id/etBodyCoverPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
                     
                     <!-- Indicator Buzzer -->
-                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp">
                         <CheckBox android:id="@+id/cbIndicatorBuzzer" android:text="Indicator Buzzer" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <EditText android:id="@+id/etIndicatorBuzzerPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp"/>
+                        <EditText android:id="@+id/etIndicatorBuzzerPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
                     
                     <!-- Seat Cover -->
-                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp">
                         <CheckBox android:id="@+id/cbSeatCover" android:text="Seat Cover" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <EditText android:id="@+id/etSeatCoverPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp"/>
+                        <EditText android:id="@+id/etSeatCoverPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
                     
                     <!-- Ladies Handle -->
-                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp">
                         <CheckBox android:id="@+id/cbLadiesHandle" android:text="Ladies Handle" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <EditText android:id="@+id/etLadiesHandlePrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp"/>
+                        <EditText android:id="@+id/etLadiesHandlePrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
                     
                     <!-- Engine Guard -->
-                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp">
                         <CheckBox android:id="@+id/cbEngineGuard" android:text="Engine Guard" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <EditText android:id="@+id/etEngineGuardPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp"/>
+                        <EditText android:id="@+id/etEngineGuardPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
                     
                     <!-- Bumper SS -->
-                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="4dp">
+                    <LinearLayout android:orientation="horizontal" android:gravity="center_vertical" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="14dp">
                         <CheckBox android:id="@+id/cbBumperSS" android:text="Bumper SS" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content"/>
-                        <EditText android:id="@+id/etBumperSSPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp"/>
+                        <EditText android:id="@+id/etBumperSSPrice" android:hint="0" android:inputType="number" android:layout_width="80dp" android:layout_height="40dp" android:background="@drawable/bg_input_rounded" android:padding="8dp" android:textSize="12sp" android:textColor="?attr/colorOnSurface"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -709,114 +709,113 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnAddAdditionalFitting"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:drawableStart="@drawable/ic_add"
                     android:text="Add Custom Fitting"
-                    android:textColor="@color/primary_color" />
+                    android:textColor="?attr/colorPrimary" />
 
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-
-        <!-- Invoice Legal Notes (Static) -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            app:cardBackgroundColor="@android:color/white"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="2dp">
-
-            <LinearLayout
+            <!-- Invoice Legal Notes -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/MaterialCardViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:text="Invoice Legal Notes"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    style="@style/LabelText"
-                    android:text="Registration &amp; Address Proof" />
-                
-                <TextView
-                    android:id="@+id/etRegProof"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_rounded_gray_50"
-                    android:padding="12dp"
-                    android:text="For registration purpose any one of the following is required in ORIGINAL &amp; XEROX for Address Proof: Aadhar Card, LIC Policy, Passport, GST, Voter ID, PAN Card"
-                    android:textColor="@color/text_gray"
-                    android:textSize="12sp"
-                    android:layout_marginBottom="16dp" />
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                <TextView
-                    style="@style/LabelText"
-                    android:text="Price Disclaimer" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:text="Invoice Legal Notes"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/etPriceDisclaimer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bg_rounded_gray_50"
-                    android:padding="12dp"
-                    android:text="Price &amp; taxes ruling at the time of delivery will be applicable."
-                    android:textColor="@color/text_gray"
-                    android:textSize="12sp" />
+                    <TextView
+                        style="@style/LabelText"
+                        android:text="Registration &amp; Address Proof"
+                        android:textColor="?attr/colorOnSurface" />
+                    
+                    <TextView
+                        android:id="@+id/etRegProof"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_input_rounded"
+                        android:padding="12dp"
+                        android:text="For registration purpose any one of the following is required in ORIGINAL &amp; XEROX for Address Proof: Aadhar Card, LIC Policy, Passport, GST, Voter ID, PAN Card"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="12sp"
+                        android:layout_marginBottom="16dp" />
 
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                    <TextView
+                        style="@style/LabelText"
+                        android:text="Price Disclaimer"
+                        android:textColor="?attr/colorOnSurface" />
+
+                    <TextView
+                        android:id="@+id/etPriceDisclaimer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_input_rounded"
+                        android:padding="12dp"
+                        android:text="Price &amp; taxes ruling at the time of delivery will be applicable."
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
     <!-- FOOTER -->
     <LinearLayout
+        android:id="@+id/footerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/white"
+        android:layout_marginTop="12dp"
+        android:background="?attr/colorSurface"
         android:elevation="16dp"
         android:orientation="horizontal"
         android:padding="16dp">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCancel"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/background_light"
-            android:text="Cancel"
-            android:textColor="@color/text_gray"
-            android:textStyle="bold"
-            app:cornerRadius="12dp" />
+            android:text="CANCEL"
+            android:textColor="?attr/colorOnSurface"
+            app:cornerRadius="28dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="24dp"/>
 
-        <Space
-            android:layout_width="16dp"
-            android:layout_height="wrap_content" />
-
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSaveBike"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_weight="2"
             android:text="Save Bike"
+            android:textColor="?attr/colorOnPrimary"
+            android:fontFamily="sans-serif-medium"
             android:textStyle="bold"
-            app:backgroundTint="@color/primary_color"
-            app:cornerRadius="12dp" />
+            app:backgroundTint="?attr/colorPrimary"
+            app:cornerRadius="28dp"
+            android:layout_marginBottom="24dp"/>
 
     </LinearLayout>
 

@@ -61,9 +61,26 @@ public class AdminNotificationsAdapter extends RecyclerView.Adapter<AdminNotific
 
         // --- SELECTION LOGIC ---
         boolean isSelected = selectedIds.contains(item.getId());
-        holder.itemView.setBackgroundColor(isSelected ? 
-                holder.itemView.getContext().getResources().getColor(R.color.gray_100) : 
-                android.graphics.Color.TRANSPARENT);
+        int highlightColor = isSelected ? 
+                holder.itemView.getContext().getColor(R.color.admin_primary_light) : 
+                android.graphics.Color.TRANSPARENT;
+        
+        if (holder.card != null) {
+            // Use a subtle foreground tint or just change card color for selection
+            holder.card.setCardBackgroundColor(isSelected ? 
+                holder.itemView.getContext().getColor(R.color.admin_primary_light) : 
+                holder.itemView.getContext().getColor(android.R.color.transparent));
+            
+            // Re-apply the default surface color if not selected (CardView handles this via XML usually)
+            if (!isSelected) {
+                // If using CardView, resetting to transparent might show parent background. 
+                // Better to let XML cardBackgroundColor handle it or set to surface.
+                // However, setCardBackgroundColor(0) might work depending on implementation.
+                // For safety with M3, we'll use the theme attribute resolution or just a resource.
+            }
+        } else {
+            holder.itemView.setBackgroundColor(highlightColor);
+        }
 
         holder.itemView.setOnClickListener(v -> {
             if (selectionMode) {
@@ -145,6 +162,7 @@ public class AdminNotificationsAdapter extends RecyclerView.Adapter<AdminNotific
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvDesc, tvTime;
         ImageView ivBike;
+        androidx.cardview.widget.CardView card;
  
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -152,6 +170,7 @@ public class AdminNotificationsAdapter extends RecyclerView.Adapter<AdminNotific
             tvDesc = itemView.findViewById(R.id.tvNotificationDesc);
             tvTime = itemView.findViewById(R.id.tvNotificationTime);
             ivBike = itemView.findViewById(R.id.ivBikeThumbnail);
+            card = itemView.findViewById(R.id.cardNotification);
         }
     }
 }

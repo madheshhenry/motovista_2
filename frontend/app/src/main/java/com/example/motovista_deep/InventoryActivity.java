@@ -82,8 +82,22 @@ public class InventoryActivity extends AppCompatActivity {
         );
 
         rvInventory.setLayoutManager(new GridLayoutManager(this, 2));
+
+        // Apply System UI Insets for Notch/Status Bar
+        View rootLayout = findViewById(R.id.rootLayout);
+        View headerLayout = findViewById(R.id.header);
+        if (rootLayout != null && headerLayout != null) {
+            com.example.motovista_deep.utils.SystemUIHelper.setupEdgeToEdgeWithScroll(
+                this,
+                rootLayout,
+                headerLayout,
+                rvInventory,
+                null
+            );
+        }
         
         adapter = new InventoryBrandAdapter(this, brandList, this::showAddBrandDialog, this::showBrandOptionsDialog);
+
         rvInventory.setAdapter(adapter);
 
         btnBack.setOnClickListener(v -> finish());
@@ -158,54 +172,11 @@ public class InventoryActivity extends AppCompatActivity {
     }
 
     private void setActiveTab(android.widget.LinearLayout activeTab) {
-        resetAllTabs();
-        int primaryColor = androidx.core.content.ContextCompat.getColor(this, R.color.primary_color);
-
-        if (activeTab == tabDashboard) {
-            ivDashboard.setColorFilter(primaryColor);
-            tvDashboard.setTextColor(primaryColor);
-            tvDashboard.setTypeface(tvDashboard.getTypeface(), android.graphics.Typeface.BOLD);
-        } else if (activeTab == tabInventory) {
-            ivInventory.setColorFilter(primaryColor);
-            tvInventory.setTextColor(primaryColor);
-            tvInventory.setTypeface(tvInventory.getTypeface(), android.graphics.Typeface.BOLD);
-        } else if (activeTab == tabBikes) {
-            ivBikes.setColorFilter(primaryColor);
-            tvBikes.setTextColor(primaryColor);
-            tvBikes.setTypeface(tvBikes.getTypeface(), android.graphics.Typeface.BOLD);
-        } else if (activeTab == tabCustomers) {
-            ivCustomers.setColorFilter(primaryColor);
-            tvCustomers.setTextColor(primaryColor);
-            tvCustomers.setTypeface(tvCustomers.getTypeface(), android.graphics.Typeface.BOLD);
-        } else if (activeTab == tabSettings) {
-            ivSettings.setColorFilter(primaryColor);
-            tvSettings.setTextColor(primaryColor);
-            tvSettings.setTypeface(tvSettings.getTypeface(), android.graphics.Typeface.BOLD);
-        }
+        // Handled via XML and theme attributes for each activity
     }
 
     private void resetAllTabs() {
-        int grayColor = androidx.core.content.ContextCompat.getColor(this, R.color.gray_400);
-
-        ivDashboard.setColorFilter(grayColor);
-        tvDashboard.setTextColor(grayColor);
-        tvDashboard.setTypeface(null, android.graphics.Typeface.NORMAL);
-
-        ivInventory.setColorFilter(grayColor);
-        tvInventory.setTextColor(grayColor);
-        tvInventory.setTypeface(null, android.graphics.Typeface.NORMAL);
-
-        ivBikes.setColorFilter(grayColor);
-        tvBikes.setTextColor(grayColor);
-        tvBikes.setTypeface(null, android.graphics.Typeface.NORMAL);
-
-        ivCustomers.setColorFilter(grayColor);
-        tvCustomers.setTextColor(grayColor);
-        tvCustomers.setTypeface(null, android.graphics.Typeface.NORMAL);
-
-        ivSettings.setColorFilter(grayColor);
-        tvSettings.setTextColor(grayColor);
-        tvSettings.setTypeface(null, android.graphics.Typeface.NORMAL);
+        // Handled via XML and theme attributes for each activity
     }
 
     private void showAddBrandDialog() {

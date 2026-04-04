@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+import com.example.motovista_deep.utils.SystemUIHelper;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +25,7 @@ public class NotificationsActivity extends AppCompatActivity implements AdminNot
     private RecyclerView rvNotifications;
     private ImageView btnBack, btnDelete;
     private android.widget.TextView tvHeaderTitle;
+    private android.view.View rootNotifications, header;
     private AdminNotificationsAdapter adapter;
 
     @Override
@@ -35,6 +37,15 @@ public class NotificationsActivity extends AppCompatActivity implements AdminNot
         btnBack = findViewById(R.id.btnBack);
         btnDelete = findViewById(R.id.btnDelete);
         tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        rootNotifications = findViewById(R.id.rootLayout);
+        header = findViewById(R.id.header);
+
+        // Enable edge-to-edge display and dynamic insets
+        SystemUIHelper.setupEdgeToEdgeWithScroll(this, 
+            rootNotifications, 
+            header, 
+            rvNotifications, 
+            null);
 
         rvNotifications.setLayoutManager(new LinearLayoutManager(this));
         btnBack.setOnClickListener(v -> {
@@ -49,6 +60,18 @@ public class NotificationsActivity extends AppCompatActivity implements AdminNot
 
         fetchNotifications();
         setupSwipeToDelete();
+
+        // Apply System UI Insets for Notch/Status Bar
+        View headerView = findViewById(R.id.header);
+        if (headerView != null) {
+            com.example.motovista_deep.utils.SystemUIHelper.setupEdgeToEdgeWithScroll(
+                this,
+                findViewById(R.id.rootLayout),
+                headerView,
+                rvNotifications,
+                null
+            );
+        }
     }
 
     private void setupSwipeToDelete() {

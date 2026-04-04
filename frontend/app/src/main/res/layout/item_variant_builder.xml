@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/MaterialCardViewStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
-    android:layout_marginBottom="16dp"
-    app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp">
+    android:layout_marginBottom="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +16,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#0D13A4EC"
+            android:background="?attr/colorSurfaceVariant"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:padding="16dp">
@@ -29,10 +27,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:hint="Enter Variant Name (e.g. DUAL CHANNEL ABS)"
+                android:hint="Enter Variant Name"
                 android:inputType="textCapCharacters"
-                android:textColor="@color/primary_color"
-                android:textColorHint="#6613A4EC"
+                android:textColor="?attr/colorPrimary"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -42,14 +40,14 @@
                 android:layout_height="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_delete"
-                app:tint="@color/text_gray" />
+                app:tint="?attr/colorPrimary" />
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#1A13A4EC" />
+            android:background="?attr/colorOutlineVariant" />
 
         <!-- BODY CONTENT -->
         <LinearLayout
@@ -60,13 +58,10 @@
 
             <!-- 1. Pricing Details -->
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                style="@style/LabelText"
                 android:text="PRICING DETAILS"
-                android:textColor="@color/text_gray"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface" />
 
             <!-- Price Grid -->
             <LinearLayout
@@ -83,12 +78,11 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <!-- Ex Showroom -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ex-Showroom"
-                        android:textColor="@color/text_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textStyle="bold" />
 
@@ -102,12 +96,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="8dp" />
 
-                    <!-- Registration -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Registration"
-                        android:textColor="@color/text_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textStyle="bold" />
 
@@ -126,12 +119,11 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <!-- Insurance -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Insurance"
-                        android:textColor="@color/text_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textStyle="bold" />
 
@@ -145,12 +137,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="8dp" />
 
-                    <!-- LTRT -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="LTRT / Misc"
-                        android:textColor="@color/text_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textStyle="bold" />
 
@@ -165,13 +156,9 @@
 
             <!-- Total Price Box -->
             <LinearLayout
+                style="@style/PriceBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="#1A13A4EC"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="12dp">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -183,7 +170,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="TOTAL ON-ROAD PRICE"
-                        android:textColor="@color/primary_color"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="10sp"
                         android:textStyle="bold" />
 
@@ -191,7 +178,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Calculated automatically"
-                        android:textColor="#B313A4EC"
+                        android:textColor="?attr/colorOnSecondaryContainer"
                         android:textSize="12sp" />
                 </LinearLayout>
 
@@ -200,7 +187,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="₹ 0"
-                    android:textColor="@color/primary_color"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -212,17 +199,14 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@color/background_light" />
+                android:background="?attr/colorOutlineVariant" />
 
             <!-- 2. Brakes & Wheels -->
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                style="@style/LabelText"
                 android:text="BRAKES &amp; WHEELS"
-                android:textColor="@color/text_gray"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -242,7 +226,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Front Brake"
-                        android:textColor="@color/text_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textStyle="bold" />
 
@@ -258,7 +242,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Braking System"
-                        android:textColor="@color/text_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textStyle="bold" />
 
@@ -279,7 +263,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Rear Brake"
-                        android:textColor="@color/text_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textStyle="bold" />
 
@@ -295,7 +279,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Wheel Type"
-                        android:textColor="@color/text_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textStyle="bold" />
 
@@ -311,7 +295,7 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@color/background_light" />
+                android:background="?attr/colorOutlineVariant" />
 
             <!-- 3. Dynamic Sections -->
             <LinearLayout
@@ -322,15 +306,18 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAddSection"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_marginTop="8dp"
                 android:text="Add Section"
-                android:textColor="@color/text_gray"
+                android:textColor="?attr/colorOnSurface"
                 app:icon="@drawable/ic_add"
-                app:iconTint="@color/text_gray"
-                app:strokeColor="@color/border_color" />
+                app:iconTint="?attr/colorPrimary"
+                app:backgroundTint="?attr/colorSurfaceVariant"
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:strokeWidth="1dp"
+                app:cornerRadius="12dp" />
 
             <!-- Divider -->
             <View
@@ -338,7 +325,7 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@color/background_light" />
+                android:background="?attr/colorOutlineVariant" />
 
             <!-- 4. Colors & Images -->
             <LinearLayout
@@ -348,13 +335,12 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    style="@style/LabelText"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="COLORS &amp; MEDIA"
-                    android:textColor="@color/text_gray"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:text="COLORS &amp; MEDIA" />
 
                 <TextView
                     android:id="@+id/btnAddColor"
@@ -362,7 +348,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="+ Add Color"
-                    android:textColor="@color/primary_color"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="12sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -375,4 +361,4 @@
 
         </LinearLayout>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

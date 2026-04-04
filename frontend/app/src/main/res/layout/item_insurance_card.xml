@@ -1,12 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardInsurance"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:layout_marginHorizontal="16dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
-    app:cardUseCompatPadding="true"
-    android:layout_marginBottom="8dp">
+    app:cardElevation="1dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="?attr/colorOutlineVariant"
+    app:cardBackgroundColor="?attr/colorSurface"
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +30,7 @@
                 android:layout_height="48dp"
                 android:src="@drawable/default_profile"
                 app:civ_border_width="1dp"
-                app:civ_border_color="#f3f4f6" />
+                app:civ_border_color="?attr/colorOutlineVariant" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -40,7 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Customer Name"
-                    android:textColor="#111827"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -49,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bike Model"
-                    android:textColor="#6b7280"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="14sp"
                     android:layout_marginTop="2dp" />
 
@@ -58,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Policy #PENDING"
-                    android:textColor="#9ca3af"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp"
                     android:layout_marginTop="4dp" />
             </LinearLayout>
@@ -67,13 +71,13 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_chevron_right"
-                app:tint="#d1d5db" />
+                app:tint="?attr/colorOnSurfaceVariant" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#f3f4f6"
+            android:background="?attr/colorOutlineVariant"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp" />
 
@@ -92,7 +96,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="FULL INS EXP"
-                    android:textColor="#9ca3af"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="10sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.05" />
@@ -102,7 +106,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Date"
-                    android:textColor="#111827"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:layout_marginTop="2dp" />
@@ -118,7 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="3RD PARTY EXP"
-                    android:textColor="#9ca3af"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="10sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.05" />
@@ -128,7 +132,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Date"
-                    android:textColor="#111827"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:layout_marginTop="2dp" />
@@ -148,4 +152,4 @@
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

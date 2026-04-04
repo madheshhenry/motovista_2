@@ -1,11 +1,16 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardCustomer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginHorizontal="16dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="1dp"
-    app:cardBackgroundColor="@color/white">
+    app:strokeWidth="1dp"
+    app:strokeColor="?attr/colorOutlineVariant"
+    app:cardBackgroundColor="?attr/colorSurface"
+    android:foreground="?attr/selectableItemBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -47,7 +52,7 @@
                         android:text="Customer Name"
                         android:textSize="17sp"
                         android:textStyle="bold"
-                        android:textColor="#111418" />
+                        android:textColor="?attr/colorOnSurface" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -60,7 +65,7 @@
                             android:layout_width="14dp"
                             android:layout_height="14dp"
                             android:src="@drawable/ic_call"
-                            app:tint="#6b7280" />
+                            app:tint="?attr/colorOnSurfaceVariant" />
 
                         <TextView
                             android:id="@+id/tvPhoneNumber"
@@ -69,7 +74,7 @@
                             android:layout_marginStart="4dp"
                             android:text="+91 98765 43210"
                             android:textSize="13sp"
-                            android:textColor="#6b7280"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:fontFamily="sans-serif-medium" />
                     </LinearLayout>
                 </LinearLayout>
@@ -88,7 +93,7 @@
                 android:layout_marginTop="12dp"
                 android:text="Honda Shine 125 • Black"
                 android:textSize="14sp"
-                android:textColor="#1f2937"
+                android:textColor="?attr/colorOnSurface"
                 android:fontFamily="sans-serif-medium" />
 
             <LinearLayout
@@ -103,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:text="ENGINE NO:"
                     android:textSize="10sp"
-                    android:textColor="#6b7280"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:letterSpacing="0.05" />
 
                 <TextView
@@ -111,12 +116,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
-                    android:background="#f3f4f6"
+                    android:background="?attr/colorSurfaceVariant"
                     android:paddingHorizontal="6dp"
                     android:paddingVertical="2dp"
                     android:text="ENG88292910"
                     android:textSize="10sp"
-                    android:textColor="#374151"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:fontFamily="monospace" />
                 
                 <TextView
@@ -126,13 +131,13 @@
                     android:layout_marginStart="12dp"
                     android:text="2023-10-24"
                     android:textSize="10sp"
-                    android:textColor="#9ca3af" />
+                    android:textColor="?attr/colorOnSurfaceVariant" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#f3f4f6"
+                android:background="?attr/colorOutlineVariant"
                 android:layout_marginTop="16dp" />
 
             <!-- Status Grid -->
@@ -167,7 +172,7 @@
                         android:layout_marginTop="4dp"
                         android:text="Insured"
                         android:textSize="10sp"
-                        android:textColor="#6b7280"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:fontFamily="sans-serif-medium" />
                 </LinearLayout>
 
@@ -195,7 +200,7 @@
                         android:layout_marginTop="4dp"
                         android:text="RC Book"
                         android:textSize="10sp"
-                        android:textColor="#6b7280"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:fontFamily="sans-serif-medium" />
                 </LinearLayout>
 
@@ -252,11 +257,10 @@
                         android:layout_marginTop="4dp"
                         android:text="Verified"
                         android:textSize="10sp"
-                        android:textColor="#6b7280"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:fontFamily="sans-serif-medium" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

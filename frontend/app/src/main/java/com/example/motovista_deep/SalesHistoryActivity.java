@@ -59,6 +59,18 @@ public class SalesHistoryActivity extends AppCompatActivity {
 
         // Fetch Data
         fetchSalesHistory();
+
+        // Apply System UI Insets for Notch/Status Bar
+        View headerView = findViewById(R.id.header);
+        if (headerView != null) {
+            com.example.motovista_deep.utils.SystemUIHelper.setupEdgeToEdgeWithScroll(
+                this,
+                findViewById(R.id.rootLayout),
+                headerView,
+                recyclerSalesHistory,
+                null
+            );
+        }
     }
 
     private void initializeViews() {
@@ -172,6 +184,8 @@ public class SalesHistoryActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SaleDetailsActivity.class);
         intent.putExtra("BIKE_NAME", item.getBrand() + " " + item.getModel());
         intent.putExtra("BIKE_COLOR", item.getBikeColorName());
+        intent.putExtra("BIKE_COLOR_HEX", item.getBikeColorHex());
+        intent.putExtra("BIKE_IMAGE", item.getBikeImage());
         intent.putExtra("ENGINE_NUMBER", item.getEngineNumber());
         intent.putExtra("CHASSIS_NUMBER", item.getChassisNumber());
         intent.putExtra("CUSTOMER_NAME", item.getCustomerName());

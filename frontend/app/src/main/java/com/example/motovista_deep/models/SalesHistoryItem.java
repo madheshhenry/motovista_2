@@ -37,6 +37,10 @@ public class SalesHistoryItem {
     private String formattedDate;
     @SerializedName("bike_color_name")
     private String bikeColorName;
+    @SerializedName("bike_image")
+    private String bikeImage;
+    @SerializedName("bike_color_hex")
+    private String bikeColorHex;
 
     public int getBikeId() { return bikeId; }
     public String getBrand() { return brand; }
@@ -55,4 +59,6 @@ public class SalesHistoryItem {
     public String getPaymentType() { return paymentType; }
     public String getFormattedDate() { return formattedDate; }
     public String getBikeColorName() { return bikeColorName; }
+    public String getBikeImage() { return bikeImage; }
+    public String getBikeColorHex() { return bikeColorHex; }
 }

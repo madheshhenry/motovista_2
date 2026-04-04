@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:checked="true"
         android:enabled="false"
-        android:buttonTint="@color/primary_color"
+        android:buttonTint="?attr/colorPrimary"
         android:minHeight="0dp"
         android:minWidth="0dp"
         android:layout_marginEnd="8dp"/>
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Fitting Name"
-        android:textColor="@color/text_dark"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="14sp"
         android:fontFamily="sans-serif-medium" />
 
@@ -34,12 +34,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="FREE"
-        android:textColor="@color/icon_green"
+        android:textColor="?attr/colorOnTertiaryContainer"
         android:textStyle="bold"
-        android:textSize="12sp"
-        android:paddingHorizontal="8dp"
+        android:textSize="10sp"
+        android:paddingHorizontal="6dp"
         android:paddingVertical="2dp"
-        android:background="#E8F5E9"
+        android:background="@drawable/bg_rounded_gray_50"
+        android:backgroundTint="?attr/colorTertiaryContainer"
         android:visibility="gone"/>
 
 </LinearLayout>

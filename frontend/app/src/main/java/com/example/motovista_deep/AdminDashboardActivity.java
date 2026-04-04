@@ -322,63 +322,14 @@ public class AdminDashboardActivity extends AppCompatActivity {
     }
 
     private void setActiveTab(LinearLayout activeTab) {
-        // Reset all tabs to inactive state
-        resetAllTabs();
-
-        // Set the active tab
-        if (activeTab == tabDashboard) {
-            ivDashboard.setColorFilter(ContextCompat.getColor(this, R.color.primary_color));
-            tvDashboard.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
-            tvDashboard.setTypeface(tvDashboard.getTypeface(), android.graphics.Typeface.BOLD);
-        }
-        else if (activeTab == tabInventory) {
-            ivInventory.setColorFilter(ContextCompat.getColor(this, R.color.primary_color));
-            tvInventory.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
-            tvInventory.setTypeface(tvInventory.getTypeface(), android.graphics.Typeface.BOLD);
-        }
-        else if (activeTab == tabBikes) {
-            ivBikes.setColorFilter(ContextCompat.getColor(this, R.color.primary_color));
-            tvBikes.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
-            tvBikes.setTypeface(tvBikes.getTypeface(), android.graphics.Typeface.BOLD);
-        }
-        else if (activeTab == tabCustomers) {
-            ivCustomers.setColorFilter(ContextCompat.getColor(this, R.color.primary_color));
-            tvCustomers.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
-            tvCustomers.setTypeface(tvCustomers.getTypeface(), android.graphics.Typeface.BOLD);
-        }
-        else if (activeTab == tabSettings) {
-            ivSettings.setColorFilter(ContextCompat.getColor(this, R.color.primary_color));
-            tvSettings.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
-            tvSettings.setTypeface(tvSettings.getTypeface(), android.graphics.Typeface.BOLD);
-        }
+        // Handled via XML and theme attributes for each activity
     }
 
     private void resetAllTabs() {
-        // Reset Dashboard tab
-        ivDashboard.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        tvDashboard.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
-        tvDashboard.setTypeface(null, android.graphics.Typeface.NORMAL);
-
-        // Reset Inventory tab
-        ivInventory.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        tvInventory.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
-        tvInventory.setTypeface(null, android.graphics.Typeface.NORMAL);
-
-        // Reset Bikes tab
-        ivBikes.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        tvBikes.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
-        tvBikes.setTypeface(null, android.graphics.Typeface.NORMAL);
-
-        // Reset Customers tab
-        ivCustomers.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        tvCustomers.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
-        tvCustomers.setTypeface(null, android.graphics.Typeface.NORMAL);
-
-        // Reset Settings tab
-        ivSettings.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        tvSettings.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
-        tvSettings.setTypeface(null, android.graphics.Typeface.NORMAL);
+        // Handled via XML and theme attributes for each activity
     }
+
+
 
 
     @Override

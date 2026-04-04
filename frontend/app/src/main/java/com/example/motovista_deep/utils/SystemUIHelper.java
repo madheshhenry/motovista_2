@@ -120,4 +120,14 @@ public class SystemUIHelper {
             return windowInsets;
         });
     }
+
+    /**
+     * Simplified version for scrollable screens without a separate footer.
+     */
+    public static void setupEdgeToEdgeWithScroll(AppCompatActivity activity,
+                                                  View rootView,
+                                                  View headerView,
+                                                  View scrollView) {
+        setupEdgeToEdgeWithScroll(activity, rootView, headerView, scrollView, null);
+    }
 }

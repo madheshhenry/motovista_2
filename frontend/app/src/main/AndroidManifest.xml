@@ -217,6 +217,11 @@
             android:theme="@style/Theme.MotovistaDeep" />
 
         <activity
+            android:name=".AdminCustomerPurchasesActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MotovistaDeep" />
+
+        <activity
             android:name=".OrderSummaryActivity"
             android:theme="@style/Theme.MotovistaDeep"
             android:exported="false" />

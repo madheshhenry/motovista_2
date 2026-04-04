@@ -49,6 +49,18 @@ public class RegistrationLedgerActivity extends AppCompatActivity {
 
         setupSearchAndFilters();
         fetchLedgerData();
+
+        // Apply System UI Insets for Notch/Status Bar
+        View header = findViewById(R.id.headerLayout);
+        if (header != null) {
+            com.example.motovista_deep.utils.SystemUIHelper.setupEdgeToEdgeWithScroll(
+                this,
+                findViewById(R.id.rootLayout),
+                header,
+                rvLedger,
+                null
+            );
+        }
     }
 
     private void setupSearchAndFilters() {
@@ -77,15 +89,23 @@ public class RegistrationLedgerActivity extends AppCompatActivity {
         resetFilterChip(filterCompleted);
         resetFilterChip(filterVerification);
 
+        android.util.TypedValue typedValue = new android.util.TypedValue();
+        getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true);
+        int colorOnPrimary = typedValue.data;
+
         android.widget.TextView selected = findViewById(selectedId);
         selected.setBackgroundResource(R.drawable.pill_blue);
-        selected.setTextColor(android.graphics.Color.WHITE);
+        selected.setTextColor(colorOnPrimary);
         currentStatusFilter = selected.getText().toString();
     }
 
     private void resetFilterChip(android.widget.TextView textView) {
+        android.util.TypedValue typedValue = new android.util.TypedValue();
+        getTheme().resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceVariant, typedValue, true);
+        int colorOnSurfaceVariant = typedValue.data;
+        
         textView.setBackgroundResource(R.drawable.pill_inactive);
-        textView.setTextColor(android.graphics.Color.parseColor("#4b5563"));
+        textView.setTextColor(colorOnSurfaceVariant);
     }
 
     private void fetchLedgerData() {

@@ -1,15 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardApplication"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
-    android:layout_marginStart="4dp"
-    android:layout_marginEnd="4dp"
-    app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="12dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginHorizontal="16dp"
+    app:cardBackgroundColor="?attr/colorSurface"
+    app:cardCornerRadius="16dp"
     app:cardElevation="2dp"
-    app:cardPreventCornerOverlap="true">
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,9 +33,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
-                android:textStyle="bold"
+                    android:textStyle="bold"
                     android:text="Sarah Jenkins"
-                    android:textColor="#111718"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="16sp" />
 
                 <TextView
@@ -46,7 +45,7 @@
                     android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif-medium"
                     android:text="Today, 09:41 AM"
-                    android:textColor="#6b7280"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -57,10 +56,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/pill_blue_light"
                 android:gravity="center_vertical"
-                android:paddingStart="10dp"
-                android:paddingTop="4dp"
-                android:paddingEnd="10dp"
-                android:paddingBottom="4dp">
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp">
 
                 <View
                     android:id="@+id/statusDot"
@@ -74,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:fontFamily="sans-serif-medium"
-                android:textStyle="bold"
+                    android:textStyle="bold"
                     android:text="NEW"
                     android:textColor="#1d4ed8"
                     android:textSize="10sp"
@@ -86,7 +83,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#f3f4f6" />
+            android:background="?attr/colorOutlineVariant" />
 
         <!-- Body: Bike Details -->
         <LinearLayout
@@ -101,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
                 android:text="Royal Enfield Classic 350"
-                android:textColor="#111718"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="14sp" />
 
             <TextView
@@ -111,7 +108,7 @@
                 android:layout_marginTop="4dp"
                 android:text="Halcyon Series • Dual Channel"
                 android:fontFamily="sans-serif"
-                android:textColor="#6b7280"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="12sp" />
 
             <!-- Color Badge -->
@@ -127,10 +124,8 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/pill_gray_outline"
                     android:gravity="center_vertical"
-                    android:paddingStart="8dp"
-                    android:paddingTop="4dp"
-                    android:paddingEnd="8dp"
-                    android:paddingBottom="4dp">
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp">
 
                     <View
                          android:id="@+id/ivColorDot"
@@ -145,7 +140,7 @@
                         android:layout_marginStart="6dp"
                         android:fontFamily="sans-serif-medium"
                         android:text="Halcyon Green"
-                        android:textColor="#374151"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -156,21 +151,19 @@
             android:id="@+id/btnViewDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#f9fafb"
+            android:background="?attr/colorSurfaceVariant"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            android:paddingStart="16dp"
-            android:paddingTop="12dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="12dp">
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
                 android:text="View Details"
-                android:textColor="#4b5563"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="14sp" />
 
             <ImageView
@@ -178,7 +171,7 @@
                 android:layout_height="18dp"
                 android:layout_marginStart="4dp"
                 android:src="@drawable/ic_chevron_right"
-                app:tint="#4b5563" />
+                app:tint="?attr/colorOnSurfaceVariant" />
         </LinearLayout>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

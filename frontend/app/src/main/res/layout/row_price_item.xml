@@ -13,7 +13,7 @@
         android:layout_weight="1"
         android:text="Label"
         android:textSize="14sp"
-        android:textColor="#4B5563"/>
+        android:textColor="?attr/colorOnSurfaceVariant"/>
         
     <TextView
         android:id="@+id/tvValue"
@@ -22,5 +22,5 @@
         android:text="₹ 0"
         android:textSize="14sp"
         android:textStyle="bold"
-        android:textColor="#111827"/>
+        android:textColor="?attr/colorOnSurface"/>
 </LinearLayout>

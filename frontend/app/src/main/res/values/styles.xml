@@ -5,24 +5,24 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/text_gray</item>
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
         <item name="android:textSize">12sp</item>
-        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
     </style>
 
     <style name="InputContainer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/bg_rounded_gray_50</item>
+        <item name="android:background">@drawable/bg_input_rounded</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:padding">8dp</item>
+        <item name="android:padding">12dp</item>
     </style>
 
     <style name="InputIcon">
         <item name="android:layout_width">20dp</item>
         <item name="android:layout_height">20dp</item>
         <item name="android:layout_marginEnd">8dp</item>
-        <item name="tint">@color/primary_color</item>
+        <item name="tint">?attr/colorPrimary</item>
     </style>
 
     <style name="InputEditText">
@@ -30,7 +30,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:background">@android:color/transparent</item>
-        <item name="android:textColor">@color/text_dark</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textColorHint">?attr/colorOnSurfaceVariant</item>
         <item name="android:textSize">14sp</item>
         <item name="android:inputType">textCapWords</item>
     </style>
@@ -38,9 +39,10 @@
     <style name="SimpleInput">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@drawable/bg_rounded_gray_50</item>
+        <item name="android:background">@drawable/bg_input_rounded</item>
         <item name="android:padding">12dp</item>
-        <item name="android:textColor">@color/text_dark</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textColorHint">?attr/colorOnSurfaceVariant</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -51,39 +53,33 @@
 
     <style name="SimpleSpinner">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">40dp</item>
-        <item name="android:background">@drawable/bg_rounded_gray_50</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:background">@drawable/bg_input_rounded</item>
     </style>
 
-    <!-- Custom Typography -->
-    <style name="TextAppearance.Motovista.Body.Large" parent="TextAppearance.Material3.BodyLarge">
-        <item name="android:textColor">@color/vista_text_primary</item>
-        <item name="android:textSize">16sp</item>
+    <style name="PriceBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:background">?attr/colorSecondaryContainer</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">12dp</item>
     </style>
 
-    <style name="TextAppearance.Motovista.Caption" parent="TextAppearance.Material3.LabelSmall">
-        <item name="android:textColor">@color/vista_text_secondary</item>
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="TextAppearance.Motovista.Headline.Small" parent="TextAppearance.Material3.HeadlineSmall">
-        <item name="android:textColor">@color/primary</item>
-    </style>
-
-    <style name="TextAppearance.Motovista.Body.Small" parent="TextAppearance.Material3.BodySmall">
-        <item name="android:textColor">@color/on_surface_variant</item>
-    </style>
-
-    <style name="TextAppearance.Motovista.Body.Medium" parent="TextAppearance.Material3.BodyMedium">
-        <item name="android:textColor">@color/on_surface_variant</item>
-    </style>
-
-    <style name="Widget.Motovista.Card" parent="Widget.Material3.CardView.Elevated">
-        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
-        <item name="cardElevation">@dimen/card_elevation</item>
+    <style name="MaterialCardViewStyle" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">1dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">?attr/colorOutlineVariant</item>
         <item name="cardBackgroundColor">?attr/colorSurface</item>
     </style>
 
+    <!-- LEGACY MOTOVISTA STYLES (Restored for Compatibility) -->
+    <style name="TextAppearance.Motovista.Headline.Small" parent="TextAppearance.Material3.HeadlineSmall"/>
+    <style name="TextAppearance.Motovista.Body.Large" parent="TextAppearance.Material3.BodyLarge"/>
+    <style name="TextAppearance.Motovista.Body.Medium" parent="TextAppearance.Material3.BodyMedium"/>
+    <style name="TextAppearance.Motovista.Body.Small" parent="TextAppearance.Material3.BodySmall"/>
+    <style name="TextAppearance.Motovista.Caption" parent="TextAppearance.Material3.LabelSmall"/>
+    <style name="Widget.Motovista.Card" parent="Widget.Material3.CardView.Elevated"/>
+
 </resources>
-
-

@@ -56,8 +56,20 @@ public class BrandBikesActivity extends AppCompatActivity implements InventoryBi
 
         if (mBrandName != null) {
             tvBrandTitle.setText(mBrandName + " Ledger");
-            // Fetch called in onResume for Auto Refresh, so removed here to avoid double fetch
         }
+
+        // Apply System UI Insets for Notch/Status Bar
+        View rootLayout = findViewById(R.id.rootLayout);
+        View headerLayout = findViewById(R.id.headerLayout);
+        if (rootLayout != null && headerLayout != null) {
+            com.example.motovista_deep.utils.SystemUIHelper.setupEdgeToEdgeWithScroll(
+                this,
+                rootLayout,
+                headerLayout,
+                rvBikes
+            );
+        }
+
 
         btnBack.setOnClickListener(v -> finish());
         

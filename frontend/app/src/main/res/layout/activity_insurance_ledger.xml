@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
-    android:fitsSystemWindows="true">
+    android:background="?attr/colorBackground">
 
     <!-- Header Section -->
     <LinearLayout
@@ -14,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/white"
+        android:background="?attr/colorSurface"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +24,7 @@
             android:layout_height="56dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:paddingHorizontal="@dimen/padding_medium">
+            android:paddingHorizontal="16dp">
 
             <!-- Back Button -->
             <androidx.appcompat.widget.AppCompatImageButton
@@ -35,7 +33,7 @@
                 android:layout_height="48dp"
                 android:background="?selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_arrow_back"
-                android:tint="@color/text_primary_light"
+                app:tint="?attr/colorOnSurface"
                 android:contentDescription="Back" />
 
             <!-- Title -->
@@ -45,12 +43,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Insurance Ledger"
-                android:textColor="@color/text_primary_light"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:fontFamily="sans-serif-medium"
-                android:layout_marginEnd="@dimen/padding_medium" />
+                android:layout_marginEnd="16dp" />
 
             <!-- Empty space for alignment -->
             <View
@@ -59,13 +57,15 @@
 
         </LinearLayout>
 
-        <!-- Filter Chips Horizontal ScrollView -->
+        <!-- Filter Chips -->
         <HorizontalScrollView
+            android:id="@+id/filterChipsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/padding_medium"
-            android:paddingBottom="@dimen/padding_medium"
-            android:scrollbars="none">
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+            android:scrollbars="none"
+            android:clipToPadding="false">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -73,92 +73,112 @@
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
-                <!-- Active Filter: All -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/chipAll"
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    app:cardCornerRadius="18dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="@color/primary_color"
-                    android:layout_marginEnd="@dimen/padding_small">
-
+                    android:layout_height="40dp"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="0dp"
+                    app:strokeWidth="2dp"
+                    app:strokeColor="@color/filter_stroke_color"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:background="@android:color/transparent"
+                    android:backgroundTint="@null"
+                    app:backgroundTint="@null"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:gravity="center"
                         android:paddingHorizontal="16dp"
                         android:text="All"
-                        android:textColor="@color/white"
+                        android:textColor="@color/filter_text_color"
                         android:textSize="14sp"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center" />
+                        android:fontFamily="sans-serif-medium" />
+                </com.google.android.material.card.MaterialCardView>
 
-                </androidx.cardview.widget.CardView>
-
-                <!-- Inactive Filter: Active -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/chipActive"
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    app:cardCornerRadius="18dp"
+                    android:layout_height="40dp"
+                    app:cardCornerRadius="24dp"
                     app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/gray_200"
-                    android:layout_marginEnd="@dimen/padding_small">
-
+                    app:strokeWidth="2dp"
+                    app:strokeColor="@color/filter_stroke_color"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:background="@android:color/transparent"
+                    android:backgroundTint="@null"
+                    app:backgroundTint="@null"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:gravity="center"
                         android:paddingHorizontal="16dp"
                         android:text="Active"
-                        android:textColor="@color/text_primary_light"
+                        android:textColor="@color/filter_text_color"
                         android:textSize="14sp"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center" />
+                        android:fontFamily="sans-serif-medium" />
+                </com.google.android.material.card.MaterialCardView>
 
-                </androidx.cardview.widget.CardView>
-
-                <!-- Inactive Filter: Expiring Soon -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/chipExpiringSoon"
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    app:cardCornerRadius="18dp"
+                    android:layout_height="40dp"
+                    app:cardCornerRadius="24dp"
                     app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/gray_200"
-                    android:layout_marginEnd="@dimen/padding_small">
-
+                    app:strokeWidth="2dp"
+                    app:strokeColor="@color/filter_stroke_color"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:background="@android:color/transparent"
+                    android:backgroundTint="@null"
+                    app:backgroundTint="@null"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:gravity="center"
                         android:paddingHorizontal="16dp"
                         android:text="Expiring Soon"
-                        android:textColor="@color/text_primary_light"
+                        android:textColor="@color/filter_text_color"
                         android:textSize="14sp"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center" />
+                        android:fontFamily="sans-serif-medium" />
+                </com.google.android.material.card.MaterialCardView>
 
-                </androidx.cardview.widget.CardView>
-
-                <!-- Inactive Filter: Expired -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/chipExpired"
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    app:cardCornerRadius="18dp"
+                    android:layout_height="40dp"
+                    app:cardCornerRadius="24dp"
                     app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/gray_200">
-
+                    app:strokeWidth="2dp"
+                    app:strokeColor="@color/filter_stroke_color"
+                    app:cardBackgroundColor="@android:color/transparent"
+                    android:background="@android:color/transparent"
+                    android:backgroundTint="@null"
+                    app:backgroundTint="@null"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:gravity="center"
                         android:paddingHorizontal="16dp"
                         android:text="Expired"
-                        android:textColor="@color/text_primary_light"
+                        android:textColor="@color/filter_text_color"
                         android:textSize="14sp"
-                        android:fontFamily="sans-serif-medium"
-                        android:gravity="center" />
-
-                </androidx.cardview.widget.CardView>
+                        android:fontFamily="sans-serif-medium" />
+                </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
         </HorizontalScrollView>
@@ -171,18 +191,19 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        android:paddingTop="@dimen/padding_medium"
-        android:paddingBottom="@dimen/padding_large"
+        android:paddingTop="16dp"
+        android:paddingBottom="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:clipToPadding="false"
         app:layout_constraintTop_toBottomOf="@+id/headerLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="@dimen/padding_medium">
+            android:paddingHorizontal="16dp">
 
             <!-- Summary Stats -->
             <LinearLayout
@@ -190,30 +211,32 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="2"
-                android:layout_marginBottom="@dimen/padding_medium">
+                android:layout_marginBottom="16dp">
 
                 <!-- Total Policies Card -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardTotalPolicies"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="@dimen/padding_small"
-                    app:cardCornerRadius="@dimen/card_corner_radius"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorOutlineVariant"
+                    app:cardBackgroundColor="?attr/colorSurface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="@dimen/padding_medium">
+                        android:padding="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="TOTAL POLICIES"
-                            android:textColor="@color/text_light_gray"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="10sp"
                             android:textStyle="normal"
                             android:fontFamily="sans-serif-medium"
@@ -226,37 +249,39 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:textColor="@color/text_primary_light"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="24sp"
                             android:textStyle="bold"
                             android:fontFamily="sans-serif" />
 
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- Action Needed Card -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardActionNeeded"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="@dimen/padding_small"
-                    app:cardCornerRadius="@dimen/card_corner_radius"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
+                    android:layout_marginStart="8dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="1dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorOutlineVariant"
+                    app:cardBackgroundColor="?attr/colorSurface">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="@dimen/padding_medium">
+                        android:padding="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="ACTION NEEDED"
-                            android:textColor="@color/icon_yellow"
+                            android:textColor="#ea580c"
                             android:textSize="10sp"
                             android:textStyle="normal"
                             android:fontFamily="sans-serif-medium"
@@ -269,14 +294,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0"
-                            android:textColor="@color/icon_yellow"
+                            android:textColor="#ea580c"
                             android:textSize="24sp"
                             android:textStyle="bold"
                             android:fontFamily="sans-serif" />
 
                     </LinearLayout>
 
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
 

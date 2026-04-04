@@ -196,30 +196,11 @@ public class CustomersActivity extends AppCompatActivity {
     }
 
     private void setActiveTab(LinearLayout activeTab) {
-        resetAllTabs();
-        ivCustomers.setColorFilter(ContextCompat.getColor(this, R.color.primary_color));
-        tvCustomers.setTextColor(ContextCompat.getColor(this, R.color.primary_color));
-        tvCustomers.setTypeface(tvCustomers.getTypeface(), android.graphics.Typeface.BOLD);
+        // Handled via XML and theme attributes
     }
 
     private void resetAllTabs() {
-        ivDashboard.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        ivInventory.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        ivBikes.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        ivCustomers.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-        ivSettings.setColorFilter(ContextCompat.getColor(this, R.color.gray_400));
-
-        tvDashboard.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
-        tvInventory.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
-        tvBikes.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
-        tvCustomers.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
-        tvSettings.setTextColor(ContextCompat.getColor(this, R.color.gray_400));
-
-        tvDashboard.setTypeface(null, android.graphics.Typeface.NORMAL);
-        tvInventory.setTypeface(null, android.graphics.Typeface.NORMAL);
-        tvBikes.setTypeface(null, android.graphics.Typeface.NORMAL);
-        tvCustomers.setTypeface(null, android.graphics.Typeface.NORMAL);
-        tvSettings.setTypeface(null, android.graphics.Typeface.NORMAL);
+        // Handled via XML and theme attributes
     }
 
     @Override

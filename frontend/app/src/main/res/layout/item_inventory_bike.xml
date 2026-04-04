@@ -1,51 +1,62 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
+    app:cardElevation="1dp"
     android:layout_marginBottom="16dp"
-    app:cardBackgroundColor="@color/white">
+    app:cardBackgroundColor="?attr/colorSurface"
+    app:strokeColor="?attr/colorOutlineVariant"
+    app:strokeWidth="1dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="16dp">
 
         <!-- Header: Model & Status -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="start|top"
+            android:gravity="center_vertical"
             android:layout_marginBottom="16dp">
 
-            <!-- Bike Image -->
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/ivBikeImage"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginEnd="12dp"
-                android:scaleType="fitCenter"
-                android:padding="4dp"
-                android:src="@drawable/placeholder_bike"
-                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
-                android:background="#F1F5F9"/>
+            <!-- Bike Image Container -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant">
+                
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/ivBikeImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/placeholder_bike"
+                    android:padding="8dp"/>
+            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginEnd="8dp">
 
                 <TextView
                     android:id="@+id/tvBikeModel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="R15 V4"
-                    android:textColor="#0f172a"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -54,23 +65,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Dark Knight"
-                    android:textColor="#64748b"
-                    android:textSize="13sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="12sp"
                     android:layout_marginTop="2dp"/>
             </LinearLayout>
 
-            <!-- Status Badge -->
+            <!-- Status Badge (Chip Style) -->
             <TextView
                 android:id="@+id/tvStatusBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DELIVERED"
-                android:textSize="10sp"
+                android:text="STOCK"
+                android:textSize="11sp"
                 android:textStyle="bold"
-                android:textColor="#15803d"
-                android:background="@drawable/badge_green_bg"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="4dp"
+                android:textColor="?attr/colorOnPrimaryContainer"
+                android:background="@drawable/bg_status_chip"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
                 android:letterSpacing="0.05"/>
         </LinearLayout>
 
@@ -80,7 +91,9 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingVertical="16dp"
-            android:background="@drawable/border_y_gray">
+            android:background="@drawable/bg_input_rounded"
+            android:backgroundTint="?attr/colorSurfaceVariant"
+            android:paddingHorizontal="12dp">
 
             <!-- Row 1 -->
             <LinearLayout
@@ -101,11 +114,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="COLOR"
-                        android:textColor="#94a3b8"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="4dp"
-                        android:letterSpacing="0.1"/>
+                        android:letterSpacing="0.1"
+                        android:alpha="0.8"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -124,7 +138,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Metallic Black"
-                            android:textColor="#334155"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp"
                             android:textStyle="bold"/>
                     </LinearLayout>
@@ -141,18 +155,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="INWARD DATE"
-                        android:textColor="#94a3b8"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="4dp"
-                        android:letterSpacing="0.1"/>
+                        android:letterSpacing="0.1"
+                        android:alpha="0.8"/>
 
                     <TextView
                         android:id="@+id/tvInwardDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="12 Oct 2023"
-                        android:textColor="#334155"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="14sp"
                         android:textStyle="bold"/>
                 </LinearLayout>
@@ -176,18 +191,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="CHASSIS NO"
-                        android:textColor="#94a3b8"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="4dp"
-                        android:letterSpacing="0.1"/>
+                        android:letterSpacing="0.1"
+                        android:alpha="0.8"/>
 
                     <TextView
                         android:id="@+id/tvChassisNo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ME10203JKA93"
-                        android:textColor="#475569"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="12sp"
                         android:fontFamily="monospace"
                         android:textStyle="bold"/>
@@ -204,18 +220,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ENGINE NO"
-                        android:textColor="#94a3b8"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="10sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="4dp"
-                        android:letterSpacing="0.1"/>
+                        android:letterSpacing="0.1"
+                        android:alpha="0.8"/>
 
                     <TextView
                         android:id="@+id/tvEngineNo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="G3J8E-092837"
-                        android:textColor="#475569"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="12sp"
                         android:fontFamily="monospace"
                         android:textStyle="bold"/>
@@ -231,11 +248,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingTop="16dp"
-            android:background="#00F8FAFC" 
             android:paddingHorizontal="4dp"
             android:paddingBottom="4dp">
-            <!-- Used transparent bg hack or margin neg logic from HTML not exactly replicable without complex view/drawable hierarchy -->
-            <!-- Simplified: Just standard layout below -->
             
             <LinearLayout
                 android:layout_width="0dp"
@@ -247,18 +261,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="CUSTOMER"
-                    android:textColor="#94a3b8"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="10sp"
                     android:textStyle="bold"
-                    android:letterSpacing="0.1"/>
+                    android:letterSpacing="0.1"
+                    android:alpha="0.8"/>
 
                 <TextView
                     android:id="@+id/tvCustomerName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rajesh Kumar"
-                    android:textColor="#1e293b"
-                    android:textSize="14sp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="15sp"
                     android:textStyle="bold"/>
             </LinearLayout>
 
@@ -273,22 +288,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="DELIVERED ON"
-                    android:textColor="#94a3b8"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="10sp"
                     android:textStyle="bold"
-                    android:letterSpacing="0.1"/>
+                    android:letterSpacing="0.1"
+                    android:alpha="0.8"/>
 
                 <TextView
                     android:id="@+id/tvDeliveryDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="15 Oct 2023"
-                    android:textColor="#1e293b"
-                    android:textSize="14sp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="15sp"
                     android:textStyle="bold"/>
             </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

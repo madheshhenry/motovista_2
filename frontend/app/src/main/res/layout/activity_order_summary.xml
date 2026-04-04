@@ -1,70 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f6f8f8"
+    android:background="?attr/colorBackground"
+    android:fitsSystemWindows="true"
     tools:context=".OrderSummaryActivity">
 
     <!-- Header -->
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:elevation="4dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="16dp">
+        android:background="?attr/colorSurface"
+        app:layout_constraintTop_toTopOf="parent"
+        app:elevation="0dp">
 
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="8dp"
-            android:src="@drawable/ic_arrow_back"
-            app:tint="#111718" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            app:contentInsetStart="0dp">
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="sans-serif-medium"
-            android:textStyle="bold"
-            android:text="Application Details"
-            android:textColor="#111718"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:layout_marginEnd="40dp" /> <!-- Balance the back button -->
-    </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp">
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_centerVertical="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_arrow_back"
+                    app:tint="?attr/colorOnSurface"
+                    android:contentDescription="Back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Application Details"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:fontFamily="sans-serif-medium" />
+            </RelativeLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Scrollable Content -->
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/headerLayout"
-        android:layout_above="@id/bottomBar"
+        android:layout_height="0dp"
         android:clipToPadding="false"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:paddingBottom="24dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="20dp">
+            android:orientation="vertical">
 
             <!-- Out of Stock Warning -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardOutOfStock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="#FEF2F2"
-                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="?attr/colorErrorContainer"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:strokeColor="#EF4444"
+                app:strokeColor="?attr/colorError"
                 app:strokeWidth="1dp"
                 android:visibility="gone">
 
@@ -73,15 +88,13 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="12dp">
+                    android:padding="16dp">
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:background="@drawable/circle_red_light"
-                        android:padding="4dp"
                         android:src="@drawable/ic_warning"
-                        app:tint="#DC2626"
+                        app:tint="?attr/colorError"
                         android:layout_marginEnd="12dp"/>
 
                     <LinearLayout
@@ -94,35 +107,39 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Out of Stock"
-                            android:textColor="#991B1B"
+                            android:textColor="?attr/colorError"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:fontFamily="sans-serif-medium" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="This bike configuration is not available in inventory."
-                            android:textColor="#B91C1C"
-                            android:textSize="12sp" />
+                            android:textColor="?attr/colorError"
+                            android:textSize="12sp"
+                            android:fontFamily="sans-serif"
+                            android:alpha="0.8" />
                     </LinearLayout>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Card 1: Status & Date -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="1dp">
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorOutlineVariant">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="16dp"
-                    android:orientation="horizontal"
-                    android:baselineAligned="false">
+                    android:orientation="horizontal">
 
                     <!-- Status -->
                     <LinearLayout
@@ -135,17 +152,18 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="STATUS"
-                            android:textColor="#618389"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="10sp"
                             android:fontFamily="sans-serif-medium"
                             android:letterSpacing="0.05"
-                            android:layout_marginBottom="6dp"/>
+                            android:layout_marginBottom="8dp"/>
 
                         <LinearLayout
                             android:id="@+id/statusBadgeContainer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/pill_blue_light"
+                            android:background="@drawable/pill_inactive"
+                            android:backgroundTint="?attr/colorSurfaceVariant"
                             android:paddingHorizontal="12dp"
                             android:paddingVertical="4dp">
 
@@ -154,7 +172,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="NEW REQUEST"
-                                android:textColor="#111718"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="12sp"
                                 android:fontFamily="sans-serif-medium"
                                 android:textStyle="bold"
@@ -173,7 +191,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="RECEIVED ON"
-                            android:textColor="#618389"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="10sp"
                             android:fontFamily="sans-serif-medium"
                             android:letterSpacing="0.05"
@@ -184,22 +202,24 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Oct 24, 2023"
-                            android:textColor="#111718"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="14sp"
                             android:fontFamily="sans-serif-medium"
                             android:textStyle="bold"/>
                     </LinearLayout>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Card 2: Customer Info -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="1dp">
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorOutlineVariant">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -210,34 +230,41 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Customer Information"
-                        android:textColor="#111718"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:fontFamily="sans-serif-medium"
                         android:textStyle="bold"
                         android:padding="16dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant"
+                        android:layout_marginHorizontal="16dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:paddingHorizontal="16dp"
-                        android:paddingBottom="16dp">
+                        android:padding="16dp">
 
                         <!-- Profile Pic -->
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            app:cardCornerRadius="24dp"
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            app:cardCornerRadius="28dp"
                             app:cardElevation="0dp"
-                            android:layout_marginEnd="12dp">
+                            app:strokeWidth="1dp"
+                            app:strokeColor="?attr/colorOutlineVariant"
+                            android:layout_marginEnd="16dp">
                              <ImageView
                                  android:id="@+id/ivCustomerProfile"
                                  android:layout_width="match_parent"
                                  android:layout_height="match_parent"
                                  android:src="@drawable/sample_profile"
                                  android:scaleType="centerCrop"/>
-                        </androidx.cardview.widget.CardView>
+                        </com.google.android.material.card.MaterialCardView>
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -250,7 +277,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="John Doe"
-                                android:textColor="#111718"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="16sp"
                                 android:fontFamily="sans-serif-medium"
                                 android:textStyle="bold"/>
@@ -260,9 +287,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="+91 9876543210"
-                                android:textColor="#618389"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="13sp"
-                                android:fontFamily="sans-serif"/>
+                                android:fontFamily="sans-serif"
+                                android:layout_marginTop="2dp"/>
                         </LinearLayout>
 
                         <!-- Actions -->
@@ -271,37 +299,44 @@
                              android:layout_height="wrap_content"
                              android:orientation="horizontal">
                              
-                             <ImageView
+                             <androidx.appcompat.widget.AppCompatImageButton
                                  android:id="@+id/btnCallCustomer"
-                                 android:layout_width="40dp"
-                                 android:layout_height="40dp"
-                                 android:background="@drawable/circle_blue_light" 
+                                 android:layout_width="44dp"
+                                 android:layout_height="44dp"
+                                 android:background="@drawable/bg_input_rounded"
+                                 android:backgroundTint="?attr/colorSurfaceVariant"
                                  android:padding="10dp"
                                  android:src="@drawable/ic_call"
-                                 app:tint="#13c8ec"
-                                 android:layout_marginEnd="8dp"/>
+                                 app:tint="?attr/colorPrimary"
+                                 android:layout_marginEnd="12dp"
+                                 android:contentDescription="Call" />
 
-                             <ImageView
+                             <androidx.appcompat.widget.AppCompatImageButton
                                  android:id="@+id/btnChatCustomer"
-                                 android:layout_width="40dp"
-                                 android:layout_height="40dp"
-                                 android:background="@drawable/circle_green_light"
+                                 android:layout_width="44dp"
+                                 android:layout_height="44dp"
+                                 android:background="@drawable/bg_input_rounded"
+                                 android:backgroundTint="?attr/colorSurfaceVariant"
                                  android:padding="10dp"
                                  android:src="@drawable/ic_chat"
-                                 app:tint="#16a34a"/>
+                                 app:tint="?attr/colorPrimary"
+                                 android:contentDescription="Chat" />
 
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Card 3: Bike Details -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="1dp">
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="1dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorOutlineVariant">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -312,12 +347,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Requested Bike Details"
-                        android:textColor="#111718"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:fontFamily="sans-serif-medium"
                         android:textStyle="bold"
-                        android:padding="16dp"
-                        android:background="@drawable/border_bottom_gray"/> 
+                        android:padding="16dp" /> 
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant"
+                        android:layout_marginHorizontal="16dp"/>
 
                     <LinearLayout
                          android:layout_width="match_parent"
@@ -326,20 +366,22 @@
                          android:padding="16dp">
                          
                          <!-- Image -->
-                         <androidx.cardview.widget.CardView
+                         <com.google.android.material.card.MaterialCardView
                              android:layout_width="match_parent"
                              android:layout_height="200dp"
                              app:cardCornerRadius="12dp"
                              app:cardElevation="0dp"
-                             app:cardBackgroundColor="#f9fafb"
-                             android:layout_marginBottom="24dp">
+                             app:strokeWidth="1dp"
+                             app:strokeColor="?attr/colorOutlineVariant"
+                             app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                             android:layout_marginBottom="20dp">
                              <ImageView
                                  android:id="@+id/ivBikeImage"
                                  android:layout_width="match_parent"
                                  android:layout_height="match_parent"
                                  android:scaleType="centerCrop"
                                  android:src="@drawable/featured_bike_1"/>
-                         </androidx.cardview.widget.CardView>
+                         </com.google.android.material.card.MaterialCardView>
 
                         <!-- Grid Info -->
                          <GridLayout
@@ -354,21 +396,22 @@
                                  android:layout_height="wrap_content"
                                  android:layout_columnWeight="1"
                                  android:orientation="vertical"
-                                 android:layout_marginBottom="24dp">
+                                 android:layout_marginBottom="20dp">
                                  <TextView
                                      android:layout_width="wrap_content"
                                      android:layout_height="wrap_content"
                                      android:text="BRAND"
-                                     android:textColor="#618389"
+                                     android:textColor="?attr/colorOnSurfaceVariant"
                                      android:textSize="10sp"
                                      android:fontFamily="sans-serif-medium"
-                                     android:letterSpacing="0.05"/>
+                                     android:letterSpacing="0.05"
+                                     android:layout_marginBottom="4dp"/>
                                  <TextView
                                      android:id="@+id/tvBrand"
                                      android:layout_width="wrap_content"
                                      android:layout_height="wrap_content"
                                      android:text="Yamaha"
-                                     android:textColor="#111718" 
+                                     android:textColor="?attr/colorOnSurface" 
                                      android:textSize="14sp"
                                      android:fontFamily="sans-serif-medium"
                                      android:textStyle="bold"/>
@@ -380,21 +423,22 @@
                                  android:layout_height="wrap_content"
                                  android:layout_columnWeight="1"
                                  android:orientation="vertical"
-                                 android:layout_marginBottom="24dp">
+                                 android:layout_marginBottom="20dp">
                                  <TextView
                                      android:layout_width="wrap_content"
                                      android:layout_height="wrap_content"
                                      android:text="MODEL"
-                                     android:textColor="#618389"
+                                     android:textColor="?attr/colorOnSurfaceVariant"
                                      android:textSize="10sp"
                                      android:fontFamily="sans-serif-medium"
-                                     android:letterSpacing="0.05"/>
+                                     android:letterSpacing="0.05"
+                                     android:layout_marginBottom="4dp"/>
                                  <TextView
                                      android:id="@+id/tvBikeName"
                                      android:layout_width="wrap_content"
                                      android:layout_height="wrap_content"
                                      android:text="MT-15"
-                                     android:textColor="#111718" 
+                                     android:textColor="?attr/colorOnSurface" 
                                      android:textSize="14sp"
                                      android:fontFamily="sans-serif-medium"
                                      android:textStyle="bold"/>
@@ -410,16 +454,17 @@
                                      android:layout_width="wrap_content"
                                      android:layout_height="wrap_content"
                                      android:text="VARIANT"
-                                     android:textColor="#618389"
+                                     android:textColor="?attr/colorOnSurfaceVariant"
                                      android:textSize="10sp"
                                      android:fontFamily="sans-serif-medium"
-                                     android:letterSpacing="0.05"/>
+                                     android:letterSpacing="0.05"
+                                     android:layout_marginBottom="4dp"/>
                                  <TextView
                                      android:id="@+id/tvEdition"
                                      android:layout_width="wrap_content"
                                      android:layout_height="wrap_content"
                                      android:text="Version 2.0 (ABS)"
-                                     android:textColor="#111718" 
+                                     android:textColor="?attr/colorOnSurface" 
                                      android:textSize="14sp"
                                      android:fontFamily="sans-serif-medium"
                                      android:textStyle="bold"/>
@@ -435,22 +480,23 @@
                                      android:layout_width="wrap_content"
                                      android:layout_height="wrap_content"
                                      android:text="COLOR CHOICE"
-                                     android:textColor="#618389"
+                                     android:textColor="?attr/colorOnSurfaceVariant"
                                      android:textSize="10sp"
                                      android:fontFamily="sans-serif-medium"
                                      android:letterSpacing="0.05"
-                                     android:layout_marginBottom="4dp"/>
+                                     android:layout_marginBottom="6dp"/>
                                  
                                      <TextView
                                          android:id="@+id/tvBikeColorName"
                                          android:layout_width="wrap_content"
                                          android:layout_height="wrap_content"
                                          android:text="Metallic Black"
-                                         android:textColor="#FFFFFF" 
+                                         android:textColor="?attr/colorOnSurface" 
                                          android:textSize="12sp"
                                          android:fontFamily="sans-serif-medium"
                                          android:textStyle="bold"
-                                         android:background="#111718"
+                                         android:background="@drawable/pill_inactive"
+                                         android:backgroundTint="?attr/colorSurfaceVariant"
                                          android:paddingHorizontal="12dp"
                                          android:paddingVertical="4dp"/>
                              </LinearLayout>
@@ -458,17 +504,19 @@
                          </GridLayout>
                     </LinearLayout>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Card 4: Selected Fittings -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardFittings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardCornerRadius="12dp"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="1dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorOutlineVariant"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -481,11 +529,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Selected Fittings"
-                        android:textColor="#111718"
-                        android:textSize="14sp"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="16sp"
                         android:fontFamily="sans-serif-medium"
                         android:textStyle="bold"
-                        android:layout_marginBottom="12dp"/>
+                        android:layout_marginBottom="16dp"/>
 
                     <LinearLayout
                         android:id="@+id/llFittingsContainer"
@@ -493,82 +541,95 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical" />
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Bar -->
-    <LinearLayout
+    <!-- Bottom Bar Container -->
+    <androidx.cardview.widget.CardView
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#ccffffff"
-        android:padding="16dp"
-        android:orientation="vertical"
-        android:elevation="8dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:cardElevation="16dp"
+        app:cardCornerRadius="0dp">
 
-        <!-- Action Buttons Layout -->
         <LinearLayout
-            android:id="@+id/layoutActionButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:padding="20dp">
 
-            <Button
-                android:id="@+id/btnAccept"
+            <!-- Action Buttons Layout -->
+            <LinearLayout
+                android:id="@+id/layoutActionButtons"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="Accept Application"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium"
-                android:backgroundTint="#2563eb"
-                app:cornerRadius="12dp"
-                android:layout_marginBottom="12dp"
-                android:drawableStart="@drawable/ic_check_circle"
-                android:drawableTint="#FFFFFF"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible">
 
-            <Button
-                android:id="@+id/btnReject"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="Reject Application"
-                android:textColor="#dc2626"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:fontFamily="sans-serif-medium"
-                app:cornerRadius="12dp"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                app:strokeColor="#dc2626"
-                app:strokeWidth="2dp"
-                android:drawableStart="@drawable/ic_cancel"
-                android:drawableTint="#dc2626"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp"/>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAccept"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="Accept Application"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:backgroundTint="?attr/colorPrimary"
+                    app:cornerRadius="28dp"
+                    android:layout_marginBottom="16dp"
+                    android:textAllCaps="false"
+                    app:elevation="0dp"
+                    app:icon="@drawable/ic_check_circle"
+                    app:iconGravity="textStart"
+                    app:iconSize="20dp"
+                    app:iconPadding="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnReject"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:text="Reject Application"
+                    android:textColor="?attr/colorError"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    app:cornerRadius="28dp"
+                    app:strokeColor="?attr/colorError"
+                    app:strokeWidth="2dp"
+                    android:textAllCaps="false"
+                    app:icon="@drawable/ic_cancel"
+                    app:iconGravity="textStart"
+                    app:iconSize="20dp"
+                    app:iconPadding="8dp" />
+            </LinearLayout>
+
+            <!-- Next Button (Initially Gone) -->
+            <com.google.android.material.button.MaterialButton
+                 android:id="@+id/btnNext"
+                 android:layout_width="match_parent"
+                 android:layout_height="56dp"
+                 android:text="Proceed to Payment"
+                 android:textColor="?attr/colorOnPrimary"
+                 android:textSize="16sp"
+                 android:textStyle="bold"
+                 android:fontFamily="sans-serif-medium"
+                 android:backgroundTint="?attr/colorPrimary"
+                 app:cornerRadius="28dp"
+                 app:icon="@drawable/ic_arrow_forward"
+                 app:iconGravity="textEnd"
+                 app:iconSize="20dp"
+                 app:iconPadding="8dp"
+                 android:textAllCaps="false"
+                 app:elevation="0dp"
+                 android:visibility="gone"/>
+
         </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-        <!-- Next Button (Initially Gone) -->
-        <Button
-             android:id="@+id/btnNext"
-             android:layout_width="match_parent"
-             android:layout_height="56dp"
-             android:text="Proceed to Payment"
-             android:textColor="#FFFFFF"
-             android:textSize="16sp"
-             android:textStyle="bold"
-             android:fontFamily="sans-serif-medium"
-             android:backgroundTint="#2563eb"
-             app:cornerRadius="12dp"
-             android:drawableEnd="@drawable/ic_arrow_forward"
-             android:drawableTint="#FFFFFF"
-             android:visibility="gone"/>
-
-    </LinearLayout>
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

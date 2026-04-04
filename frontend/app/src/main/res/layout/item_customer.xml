@@ -1,17 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardCustomer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="2dp"
-    app:cardUseCompatPadding="true"
-    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="1dp"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="8dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="?attr/colorOutlineVariant"
+    app:cardBackgroundColor="?attr/colorSurface"
     android:foreground="?attr/selectableItemBackground"
     android:clickable="true"
-    android:focusable="true"
-    android:background="@drawable/rounded_card_light">
+    android:focusable="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Customer Name"
-                android:textColor="@color/text_dark"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:fontFamily="sans-serif-medium" />
@@ -42,8 +43,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="+91 00000 00000"
-                android:textColor="@color/gray_500"
-                android:textSize="14sp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="13sp"
                 android:layout_marginTop="4dp"
                 android:fontFamily="sans-serif" />
 
@@ -55,9 +56,9 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_chevron_right"
-            app:tint="@color/gray_400"
+            app:tint="?attr/colorOnSurfaceVariant"
             android:contentDescription="View Details" />
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

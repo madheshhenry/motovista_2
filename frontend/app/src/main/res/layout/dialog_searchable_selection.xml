@@ -2,62 +2,68 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@android:color/white"
-    android:padding="16dp">
+    android:background="?attr/colorSurface"
+    android:padding="20dp"
+    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Large">
 
     <!-- Header -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:id="@+id/tvDialogTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Select Item"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/text_dark"/>
+            android:textColor="?attr/colorOnSurface"/>
 
         <ImageView
             android:id="@+id/btnCloseDialog"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:src="@drawable/ic_close"
-            app:tint="@color/gray_500"
+            android:padding="8dp"
+            app:tint="?attr/colorOnSurfaceVariant"
             android:layout_alignParentEnd="true"
-            android:background="?attr/selectableItemBackgroundBorderless"/>
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"/>
     </RelativeLayout>
 
-    <!-- Search Bar -->
+    <!-- Search Bar (Premium Style) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_input_rounded"
-        android:backgroundTint="@color/background_light"
+        android:backgroundTint="?attr/colorSurfaceVariant"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingHorizontal="12dp"
-        android:layout_marginBottom="16dp">
+        android:paddingHorizontal="16dp"
+        android:layout_marginBottom="20dp"
+        android:elevation="0dp">
 
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/ic_search"
-            app:tint="@color/gray_400"/>
+            app:tint="?attr/colorOnSurfaceVariant"/>
 
         <EditText
             android:id="@+id/etSearch"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@null"
-            android:hint="Search..."
-            android:textColor="@color/text_dark"
-            android:textSize="14sp"
-            android:paddingStart="8dp"
+            android:hint="Search here..."
+            android:textColor="?attr/colorOnSurface"
+            android:textColorHint="?attr/colorOnSurfaceVariant"
+            android:textSize="15sp"
+            android:paddingStart="12dp"
             android:maxLines="1"
             android:singleLine="true"
             android:imeOptions="actionDone"/>
@@ -67,7 +73,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSelectionList"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="400dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp"/>
 
 </LinearLayout>
+

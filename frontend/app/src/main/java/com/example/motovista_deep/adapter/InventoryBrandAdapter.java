@@ -98,7 +98,14 @@ public class InventoryBrandAdapter extends RecyclerView.Adapter<InventoryBrandAd
         holder.ivBrandLogo.setVisibility(View.GONE);
         holder.ivAddIcon.setVisibility(View.VISIBLE);
         holder.tvBrandName.setText("Add Brand");
-        holder.tvBrandName.setTextColor(Color.parseColor("#13c8ec"));
+        
+        // Use primary color for "Add Brand" text and icon
+        android.util.TypedValue typedValue = new android.util.TypedValue();
+        boolean resolved = context.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        int color = resolved ? typedValue.data : android.graphics.Color.parseColor("#13c8ec");
+        
+        holder.tvBrandName.setTextColor(color);
+        holder.ivAddIcon.setImageTintList(android.content.res.ColorStateList.valueOf(color));
         
         holder.itemView.setOnClickListener(v -> {
             if (addListener != null) {
@@ -111,7 +118,7 @@ public class InventoryBrandAdapter extends RecyclerView.Adapter<InventoryBrandAd
         holder.ivBrandLogo.setVisibility(View.VISIBLE);
         holder.ivAddIcon.setVisibility(View.GONE);
         holder.tvBrandName.setText(brand.getBrand());
-        holder.tvBrandName.setTextColor(Color.parseColor("#0f172a"));
+        // Removed hardcoded text color to allow XML theme attributes to take effect
 
         // Use centralized ImageUtils for backend logo URL
         String logoUrl = ImageUtils.getFullImageUrl(brand.getLogo(), ImageUtils.PATH_BRANDS);

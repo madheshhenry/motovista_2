@@ -1,5 +1,7 @@
 package com.example.motovista_deep;
 
+import com.example.motovista_deep.utils.SystemUIHelper;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -73,6 +75,15 @@ public class AddSecondHandBikeActivity extends AppCompatActivity {
         initializeViews();
         setupSpinners();
         setupClickListeners();
+
+        // Task 1: Integrate notch + edge-to-edge support
+        SystemUIHelper.setupEdgeToEdgeWithScroll(
+                this,
+                findViewById(R.id.rootLayout),
+                findViewById(R.id.headerLayout),
+                findViewById(R.id.scrollView),
+                null
+        );
 
         if (isEditMode && bikeId > 0) {
             loadBikeData();
