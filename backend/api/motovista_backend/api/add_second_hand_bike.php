@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 require_once '../config/db_connect.php';
 require_once '../config/jwt_helper.php';
 
-// Disable error displays
+// Disable error displaysss
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
