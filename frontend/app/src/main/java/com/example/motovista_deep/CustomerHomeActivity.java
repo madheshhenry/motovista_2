@@ -37,6 +37,7 @@ import com.example.motovista_deep.models.GetShuffledBikesResponse;
 import com.example.motovista_deep.utils.ImageUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -68,7 +69,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
 
     // Top header
     private ImageView btnNotifications, ivUserProfile;
-    private TextView tvWelcome;
+    private TextView tvWelcome, tvGreeting;
 
     private ApiService apiService;
     private SharedPrefManager sharedPrefManager;
@@ -96,6 +97,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
         apiService = RetrofitClient.getApiService();
 
         initializeViews();
+        updateGreeting();
         setupRecyclerViews();
         setupClickListeners();
         setActiveTab(tabHome);
@@ -113,8 +115,8 @@ public class CustomerHomeActivity extends AppCompatActivity {
         View premiumHeader = findViewById(R.id.premiumHeader);
         if (premiumHeader == null) return;
 
-        // Baseline padding from XML (20dp) + extra safety spacing (8dp)
-        final int baselinePadding = (int) (28 * getResources().getDisplayMetrics().density);
+        // Increased baseline padding for absolute notch safety (Standard 16dp + 36dp design margin)
+        final int baselinePadding = (int) (52 * getResources().getDisplayMetrics().density);
 
         ViewCompat.setOnApplyWindowInsetsListener(premiumHeader, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.statusBars());
@@ -161,6 +163,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
         // Top header
         btnNotifications = findViewById(R.id.btnNotifications);
         tvWelcome = findViewById(R.id.tvWelcome);
+        tvGreeting = findViewById(R.id.tvGreeting);
         ivUserProfile = findViewById(R.id.ivUserProfile);
 
         // RecyclerViews and containers
@@ -369,34 +372,38 @@ public class CustomerHomeActivity extends AppCompatActivity {
     private void setActiveTab(LinearLayout activeTab) {
         resetAllTabs();
 
+        // Use standard primary color from theme
         int activeColor = ContextCompat.getColor(this, R.color.primary_color);
+        Typeface boldTypeface = Typeface.create("sans-serif-bold", Typeface.NORMAL);
 
         if (activeTab == tabHome) {
             ivHome.setImageResource(R.drawable.ic_home_filled);
             ivHome.setColorFilter(activeColor);
             tvHome.setTextColor(activeColor);
-            tvHome.setTypeface(tvHome.getTypeface(), Typeface.BOLD);
+            tvHome.setTypeface(boldTypeface);
         } else if (activeTab == tabBikes) {
+            ivBikes.setImageResource(R.drawable.ic_two_wheeler); // Ensure filled if available
             ivBikes.setColorFilter(activeColor);
             tvBikes.setTextColor(activeColor);
-            tvBikes.setTypeface(tvBikes.getTypeface(), Typeface.BOLD);
+            tvBikes.setTypeface(boldTypeface);
         } else if (activeTab == tabEmiCalculator) {
+            ivEmiCalculator.setImageResource(R.drawable.ic_calculate); // Ensure consistency
             ivEmiCalculator.setColorFilter(activeColor);
             tvEmiCalculator.setTextColor(activeColor);
-            tvEmiCalculator.setTypeface(tvEmiCalculator.getTypeface(), Typeface.BOLD);
+            tvEmiCalculator.setTypeface(boldTypeface);
         } else if (activeTab == tabOrders) {
             ivOrders.setImageResource(R.drawable.ic_receipt_long_filled);
             ivOrders.setColorFilter(activeColor);
             tvOrders.setTextColor(activeColor);
-            tvOrders.setTypeface(tvOrders.getTypeface(), Typeface.BOLD);
+            tvOrders.setTypeface(boldTypeface);
         } else if (activeTab == tabProfile) {
             ivProfile.setImageResource(R.drawable.ic_person_filled);
             ivProfile.setColorFilter(activeColor);
             tvProfile.setTextColor(activeColor);
-            tvProfile.setTypeface(tvProfile.getTypeface(), Typeface.BOLD);
+            tvProfile.setTypeface(boldTypeface);
         }
 
-        // Show dot for active tab
+        // Show pill indicator for active tab
         showActiveDot(activeTab);
     }
 
@@ -423,35 +430,39 @@ public class CustomerHomeActivity extends AppCompatActivity {
     }
 
     private void resetAllTabs() {
-        int inactiveColor = ContextCompat.getColor(this, R.color.gray_400);
+        // Use colorOutline from theme for consistent inactive state
+        int inactiveColor = ContextCompat.getColor(this, R.color.gray_400); 
+        Typeface mediumTypeface = Typeface.create("sans-serif-medium", Typeface.NORMAL);
 
         // Reset Home
-        ivHome.setImageResource(R.drawable.ic_home);
+        ivHome.setImageResource(R.drawable.ic_home_filled);
         ivHome.setColorFilter(inactiveColor);
         tvHome.setTextColor(inactiveColor);
-        tvHome.setTypeface(null, Typeface.NORMAL);
+        tvHome.setTypeface(mediumTypeface);
 
         // Reset Bikes
+        ivBikes.setImageResource(R.drawable.ic_two_wheeler);
         ivBikes.setColorFilter(inactiveColor);
         tvBikes.setTextColor(inactiveColor);
-        tvBikes.setTypeface(null, Typeface.NORMAL);
+        tvBikes.setTypeface(mediumTypeface);
 
         // Reset EMI Calculator
+        ivEmiCalculator.setImageResource(R.drawable.ic_calculate);
         ivEmiCalculator.setColorFilter(inactiveColor);
         tvEmiCalculator.setTextColor(inactiveColor);
-        tvEmiCalculator.setTypeface(null, Typeface.NORMAL);
+        tvEmiCalculator.setTypeface(mediumTypeface);
 
         // Reset Orders
         ivOrders.setImageResource(R.drawable.ic_receipt_long);
         ivOrders.setColorFilter(inactiveColor);
         tvOrders.setTextColor(inactiveColor);
-        tvOrders.setTypeface(null, Typeface.NORMAL);
+        tvOrders.setTypeface(mediumTypeface);
 
         // Reset Profile
         ivProfile.setImageResource(R.drawable.ic_person);
         ivProfile.setColorFilter(inactiveColor);
         tvProfile.setTextColor(inactiveColor);
-        tvProfile.setTypeface(null, Typeface.NORMAL);
+        tvProfile.setTypeface(mediumTypeface);
     }
 
     private void loadUserProfile() {
@@ -479,13 +490,17 @@ public class CustomerHomeActivity extends AppCompatActivity {
                     // Load profile image
                     if (user.profile_image != null && !user.profile_image.isEmpty()) {
                         String imageUrl = ImageUtils.getFullImageUrl(user.profile_image, ImageUtils.PATH_PROFILE_PICS);
-
+                        ivUserProfile.setColorFilter(null); // Remove tint for actual photo
                         Glide.with(CustomerHomeActivity.this)
                                 .load(imageUrl)
                                 .placeholder(R.drawable.ic_profile_placeholder)
                                 .error(R.drawable.ic_profile_placeholder)
                                 .transform(new CircleCrop())
                                 .into(ivUserProfile);
+                    } else {
+                        // No logic needed, default ic_person with tint from XML is handled or we can set it here
+                        ivUserProfile.setImageResource(R.drawable.ic_person);
+                        ivUserProfile.setColorFilter(ContextCompat.getColor(CustomerHomeActivity.this, R.color.primary_color));
                     }
                 } else {
                     Log.d("API_DEBUG", "Profile Load Error: " + response.code() + " - " + response.message());
@@ -521,6 +536,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
         // Refresh profile when returning to home
         loadUserProfile();
         loadShuffledBikes();
+        updateGreeting();
     }
 
     private void requestNotificationPermission() {
@@ -530,6 +546,26 @@ public class CustomerHomeActivity extends AppCompatActivity {
                 androidx.core.app.ActivityCompat.requestPermissions(this, 
                     new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 101);
             }
+        }
+    }
+
+    private void updateGreeting() {
+        Calendar c = Calendar.getInstance();
+        int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
+
+        String greeting;
+        if (timeOfDay >= 5 && timeOfDay < 12) {
+            greeting = "Good Morning,";
+        } else if (timeOfDay >= 12 && timeOfDay < 17) {
+            greeting = "Good Afternoon,";
+        } else if (timeOfDay >= 17 && timeOfDay < 21) {
+            greeting = "Good Evening,";
+        } else {
+            greeting = "Good Night,";
+        }
+
+        if (tvGreeting != null) {
+            tvGreeting.setText(greeting);
         }
     }
 

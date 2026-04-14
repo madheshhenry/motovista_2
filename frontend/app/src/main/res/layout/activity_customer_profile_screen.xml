@@ -545,41 +545,6 @@
                                 app:tint="?attr/colorOutline" />
                         </LinearLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="?attr/colorOutlineVariant"
-                            android:layout_marginStart="56dp" />
-
-                        <!-- FAQ -->
-                        <LinearLayout
-                            android:id="@+id/btnFAQ"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="16dp"
-                            android:background="?attr/selectableItemBackground">
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_quiz"
-                                app:tint="?attr/colorPrimary"
-                                android:layout_marginEnd="16dp" />
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="FAQ"
-                                android:textColor="?attr/colorOnSurface"
-                                android:textSize="16sp"
-                                android:fontFamily="sans-serif-medium" />
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/ic_chevron_right"
-                                app:tint="?attr/colorOutline" />
-                        </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 

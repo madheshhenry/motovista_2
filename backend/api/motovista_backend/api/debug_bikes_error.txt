@@ -41,3 +41,7 @@ Headers: {"Authorization":"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX
 Headers: {"Authorization":"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6Imxha3NobWFuYW5sYXRoYTEyMzQ1NkBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3Njk2Mjc4NTcsImV4cCI6MTc3MDIzMjY1N30.keX_HSzlg44UE9ACCisOyZoxWblW0rttQzzqWurYjt8","Host":"192.168.0.103","Connection":"Keep-Alive","Accept-Encoding":"gzip","User-Agent":"okhttp\/4.11.0"}
 [2026-03-30 21:52:35] get_new_bikes.php: Authorization token missing
 Headers: {"User-Agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; en-IN) WindowsPowerShell\/5.1.26100.7920","Host":"localhost","Connection":"Keep-Alive"}
+[2026-04-14 09:33:49] get_bikes.php: Unauthorized access
+Headers: {"Authorization":"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6Im1tYWRoZXNoMjI1QGdtYWlsLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc3NTQ0NTI2OCwiZXhwIjoxNzc2MDUwMDY4fQ.nA9McIbaVTZPCnCq3bSb8ttSr2nt0OYWH8eOFEvf29Y","Host":"192.168.0.102","Connection":"Keep-Alive","Accept-Encoding":"gzip","User-Agent":"okhttp\/4.11.0"}
+[2026-04-14 09:33:53] get_bikes.php: Unauthorized access
+Headers: {"Authorization":"Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJlbWFpbCI6Im1tYWRoZXNoMjI1QGdtYWlsLmNvbSIsInJvbGUiOiJjdXN0b21lciIsImlhdCI6MTc3NTQ0NTI2OCwiZXhwIjoxNzc2MDUwMDY4fQ.nA9McIbaVTZPCnCq3bSb8ttSr2nt0OYWH8eOFEvf29Y","Host":"192.168.0.102","Connection":"Keep-Alive","Accept-Encoding":"gzip","User-Agent":"okhttp\/4.11.0"}

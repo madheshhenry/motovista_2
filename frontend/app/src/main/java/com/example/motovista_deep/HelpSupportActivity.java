@@ -1,8 +1,5 @@
 package com.example.motovista_deep;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,29 +11,45 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.card.MaterialCardView;
+
 public class HelpSupportActivity extends AppCompatActivity {
 
     // Header
     private ImageView btnBack;
 
     // Contact Us Section
-    private CardView cardCallSupport, cardEmailSupport, cardChatSupport;
+    private MaterialCardView cardCallSupport, cardEmailSupport, cardChatSupport;
 
     // FAQ Section
     private EditText etSearchFAQ;
     private ImageView clearSearch;
-    private LinearLayout faqItem1, faqItem2, faqItem3, faqItem4;
-
-    // Common Queries Section
-    private LinearLayout queryBilling, queryService;
+    private LinearLayout faqItem1, faqItem2, faqItem3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Support modern edge-to-edge experience (Notch support)
+        EdgeToEdge.enable(this);
+
         setContentView(R.layout.activity_help_support);
 
         // Initialize views
         initializeViews();
+
+        // Setup window insets to handle notch area dynamically
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.header), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(v.getPaddingLeft(), systemBars.top, v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
 
         // Setup click listeners
         setupClickListeners();
@@ -49,7 +62,7 @@ public class HelpSupportActivity extends AppCompatActivity {
         // Header
         btnBack = findViewById(R.id.btnBack);
 
-        // Contact Us Section
+        // Contact Us Section (Updated to MaterialCardView)
         cardCallSupport = findViewById(R.id.cardCallSupport);
         cardEmailSupport = findViewById(R.id.cardEmailSupport);
         cardChatSupport = findViewById(R.id.cardChatSupport);
@@ -60,142 +73,44 @@ public class HelpSupportActivity extends AppCompatActivity {
         faqItem1 = findViewById(R.id.faqItem1);
         faqItem2 = findViewById(R.id.faqItem2);
         faqItem3 = findViewById(R.id.faqItem3);
-        faqItem4 = findViewById(R.id.faqItem4);
-
-        // Common Queries Section
-        queryBilling = findViewById(R.id.queryBilling);
-        queryService = findViewById(R.id.queryService);
     }
 
     private void setupClickListeners() {
         // Back Button
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        btnBack.setOnClickListener(v -> finish());
 
         // Contact Us Section
-        cardCallSupport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                makePhoneCall();
-            }
-        });
-
-        cardEmailSupport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendEmail();
-            }
-        });
-
-        cardChatSupport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startChatSupport();
-            }
-        });
+        cardCallSupport.setOnClickListener(v -> makePhoneCall());
+        cardEmailSupport.setOnClickListener(v -> sendEmail());
+        cardChatSupport.setOnClickListener(v -> startChatSupport());
 
         // FAQ Items
-        faqItem1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFAQDetail("How to book a service?",
-                        "1. Open the app and go to 'Services' section\n" +
-                                "2. Select your bike model\n" +
-                                "3. Choose the type of service needed\n" +
-                                "4. Select preferred date and time\n" +
-                                "5. Confirm booking and make payment\n" +
-                                "6. You'll receive a confirmation notification");
-            }
-        });
+        faqItem1.setOnClickListener(v -> showFAQDetail("How to book a bike?",
+                "1. Explore our bike catalog from the 'Bikes' tab.\n" +
+                        "2. Select your preferred bike model and color.\n" +
+                        "3. Review the specifications and pricing.\n" +
+                        "4. Click on 'Book Now' to proceed with your booking.\n" +
+                        "5. Fill in your details and complete the initial payment.\n" +
+                        "6. You'll receive a confirmation with your order ID."));
 
-        faqItem2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFAQDetail("What are the payment options?",
-                        "We accept multiple payment methods:\n\n" +
-                                "• Credit/Debit Cards (Visa, MasterCard, RuPay)\n" +
-                                "• UPI (Google Pay, PhonePe, Paytm)\n" +
-                                "• Net Banking\n" +
-                                "• Cash on Delivery (for some services)\n" +
-                                "• EMI options available (3-12 months)");
-            }
-        });
+        faqItem2.setOnClickListener(v -> showFAQDetail("What are the payment options?",
+                "We accept multiple payment methods for bookings and services:\n\n" +
+                        "• Credit/Debit Cards (Visa, MasterCard, RuPay)\n" +
+                        "• UPI (Google Pay, PhonePe, Paytm)\n" +
+                        "• Net Banking\n" +
+                        "• EMI options available (3-12 months)\n\n" +
+                        "Note: Down payment amounts vary by bike model."));
 
-        faqItem3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFAQDetail("How can I track my bike service?",
-                        "Track your service in real-time:\n\n" +
-                                "1. Go to 'Orders' section in the app\n" +
-                                "2. Select your ongoing service\n" +
-                                "3. View current status:\n" +
-                                "   - Picked up\n" +
-                                "   - Under inspection\n" +
-                                "   - Service in progress\n" +
-                                "   - Quality check\n" +
-                                "   - Ready for delivery\n" +
-                                "4. You'll receive SMS/notification updates");
-            }
-        });
-
-        faqItem4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFAQDetail("Can I reschedule my appointment?",
-                        "Yes, you can reschedule your appointment:\n\n" +
-                                "• Reschedule up to 2 hours before appointment\n" +
-                                "• Go to 'My Appointments' section\n" +
-                                "• Select the appointment to reschedule\n" +
-                                "• Choose new date and time\n" +
-                                "• Confirm the changes\n\n" +
-                                "Note: Free rescheduling up to 2 times. Additional charges may apply thereafter.");
-            }
-        });
-
-        // Common Queries
-        queryBilling.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFAQDetail("Billing & Payments",
-                        "Billing Information:\n\n" +
-                                "• All bills are generated digitally\n" +
-                                "• Download invoice from 'My Orders' section\n" +
-                                "• Payment receipts sent to registered email\n" +
-                                "• GST invoice available on request\n" +
-                                "• For billing issues, contact support@motovista.com\n\n" +
-                                "Refund Policy:\n" +
-                                "• 100% refund if cancelled before service pickup\n" +
-                                "• 50% refund if cancelled after pickup\n" +
-                                "• No refund after service completion");
-            }
-        });
-
-        queryService.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFAQDetail("Service & Maintenance",
-                        "Our Services:\n\n" +
-                                "1. Regular Maintenance:\n" +
-                                "   • Oil change\n" +
-                                "   • Brake servicing\n" +
-                                "   • Chain lubrication\n" +
-                                "   • Battery check\n\n" +
-                                "2. Major Services:\n" +
-                                "   • Engine overhaul\n" +
-                                "   • Electrical repairs\n" +
-                                "   • Suspension work\n" +
-                                "   • Transmission service\n\n" +
-                                "3. Emergency Services:\n" +
-                                "   • On-road assistance\n" +
-                                "   • Towing service\n" +
-                                "   • Flat tire repair\n\n" +
-                                "Service Warranty: 30 days on all services");
-            }
-        });
+        faqItem3.setOnClickListener(v -> showFAQDetail("How can I track my ordered bike?",
+                "Once your booking is confirmed, you can track it easily:\n\n" +
+                        "1. Go to the 'Orders' or 'My Bookings' section.\n" +
+                        "2. Select your recent bike order.\n" +
+                        "3. View real-time status updates including:\n" +
+                        "   - Payment Confirmed\n" +
+                        "   - Processing at Showroom\n" +
+                        "   - Ready for PDI (Pre-Delivery Inspection)\n" +
+                        "   - Out for Delivery / Ready for Pickup\n" +
+                        "4. You'll receive push notifications for major milestones."));
     }
 
     private void setupSearchFunctionality() {
@@ -212,9 +127,6 @@ public class HelpSupportActivity extends AppCompatActivity {
                 } else {
                     clearSearch.setVisibility(View.GONE);
                 }
-
-                // TODO: Implement FAQ search functionality
-                // You can filter FAQ items based on search text
             }
 
             @Override
@@ -222,18 +134,13 @@ public class HelpSupportActivity extends AppCompatActivity {
             }
         });
 
-        clearSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etSearchFAQ.setText("");
-            }
-        });
+        clearSearch.setOnClickListener(v -> etSearchFAQ.setText(""));
     }
 
     private void makePhoneCall() {
         try {
             Intent intent = new Intent(Intent.ACTION_DIAL);
-            intent.setData(Uri.parse("tel:" + "18001234567")); // Replace with your support number
+            intent.setData(Uri.parse("tel:18001234567")); // Replace with your support number
             startActivity(intent);
         } catch (Exception e) {
             Toast.makeText(this, "Unable to make call", Toast.LENGTH_SHORT).show();
@@ -253,17 +160,15 @@ public class HelpSupportActivity extends AppCompatActivity {
 
     private void startChatSupport() {
         Toast.makeText(this, "Chat support coming soon!", Toast.LENGTH_SHORT).show();
-        // TODO: Implement chat support integration
     }
 
     private void showFAQDetail(String title, String content) {
-        // For now, show a toast with FAQ title
-        // You can create a detailed FAQ dialog or activity later
-        Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
-
-        // TODO: Create FAQ detail dialog or activity
-        // Example: FAQDetailDialog dialog = new FAQDetailDialog(this, title, content);
-        // dialog.show();
+        // Show a standard Material dialog for FAQ details
+        new com.google.android.material.dialog.MaterialAlertDialogBuilder(this)
+                .setTitle(title)
+                .setMessage(content)
+                .setPositiveButton("Close", null)
+                .show();
     }
 
     @Override

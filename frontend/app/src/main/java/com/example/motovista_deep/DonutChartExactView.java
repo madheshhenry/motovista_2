@@ -92,9 +92,9 @@ public class DonutChartExactView extends View {
         float principalAngle = (principalPercentage / 100) * 360;
         float startAngle = -90; 
 
-        // Draw background circle (thin gray line for full circle)
+        // Draw background circle (neutral guide line)
         Paint bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        bgPaint.setColor(Color.parseColor("#F1F5F9"));
+        bgPaint.setColor(Color.parseColor("#33808080")); // 20% opacity gray
         bgPaint.setStyle(Paint.Style.STROKE);
         bgPaint.setStrokeWidth(strokeWidth);
         canvas.drawCircle(size / 2f, size / 2f, (size - strokeWidth) / 2f, bgPaint);

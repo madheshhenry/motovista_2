@@ -3,6 +3,7 @@ package com.example.motovista_deep;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import com.google.android.material.card.MaterialCardView;
 
 import com.example.motovista_deep.utils.SystemUIHelper;
 
@@ -33,6 +34,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.google.android.material.color.MaterialColors;
+import android.content.res.ColorStateList;
+
 public class OrderStatusActivity extends AppCompatActivity {
 
     // Header
@@ -53,7 +57,7 @@ public class OrderStatusActivity extends AppCompatActivity {
     private TextView tvTrackOrderId;
     private TextView tvTrackOrderDate;
     private ImageView ivTrackBikeImage;
-    private LinearLayout btnSupport;
+    private MaterialCardView btnSupport;
 
 
     // Order Details Views (Inside Status Views)
@@ -426,25 +430,32 @@ public class OrderStatusActivity extends AppCompatActivity {
         
         if (status == null) status = "locked";
         
-        int colorGreen = ContextCompat.getColor(this, R.color.emi_success_green);
-        int colorGray = ContextCompat.getColor(this, R.color.gray_400);
-        int colorDark = ContextCompat.getColor(this, R.color.text_dark);
-        int colorAmber = 0xFFF59E0B; // Amber/Orange for pending
+        // Theme Colors
+        int colorPrimary = getThemeColor(R.attr.colorPrimary, 0xFF13a4ec);
+        int colorOnSurface = getThemeColor(com.google.android.material.R.attr.colorOnSurface, 0xFF000000);
+        int colorOnSurfaceVariant = getThemeColor(com.google.android.material.R.attr.colorOnSurfaceVariant, 0xFF888888);
+        int colorOutline = getThemeColor(com.google.android.material.R.attr.colorOutlineVariant, 0xFFE0E0E0);
+        int colorSuccess = ContextCompat.getColor(this, R.color.emi_success_green);
+        int colorError = ContextCompat.getColor(this, R.color.red_600);
+        int colorAmber = 0xFFF59E0B;
         
         if ("completed".equalsIgnoreCase(status) || (stepNum == 1 && parentAccepted)) {
             if (tvStatus != null) {
                 tvStatus.setText("Completed");
-                tvStatus.setTextColor(colorGreen);
+                tvStatus.setTextColor(colorSuccess);
             }
             if (ivIcon != null) {
                 ivIcon.setImageResource(R.drawable.ic_check_circle);
-                ivIcon.setColorFilter(colorGreen);
+                ivIcon.setColorFilter(colorSuccess);
                 ivIcon.clearAnimation();
             }
             if (viewLine != null) {
-                viewLine.setBackgroundColor(colorGreen);
+                viewLine.setBackgroundColor(colorSuccess);
             }
-            if (tvTitle != null) tvTitle.setTextColor(colorDark);
+            if (tvTitle != null) {
+                tvTitle.setTextColor(colorOnSurface);
+                tvTitle.setAlpha(1.0f);
+            }
             
         } else if ("pending".equalsIgnoreCase(status)) {
             if (tvStatus != null) {
@@ -457,33 +468,47 @@ public class OrderStatusActivity extends AppCompatActivity {
                 startBlinkingAnimation(ivIcon);
             }
             if (viewLine != null) {
-                viewLine.setBackgroundColor(colorGray);
+                viewLine.setBackgroundColor(colorOutline);
             }
-            if (tvTitle != null) tvTitle.setTextColor(colorDark);
+            if (tvTitle != null) {
+                tvTitle.setTextColor(colorOnSurface);
+                tvTitle.setAlpha(1.0f);
+            }
             
         } else { // Locked/Default
             if (tvStatus != null) {
                 tvStatus.setText(stepNum == 1 ? "Pending Approval" : "Locked");
-                tvStatus.setTextColor(colorGray);
+                tvStatus.setTextColor(colorOnSurfaceVariant);
+                tvStatus.setAlpha(0.6f);
             }
             if (ivIcon != null) {
                 ivIcon.setImageResource(R.drawable.ic_circle_outline);
-                ivIcon.setColorFilter(colorGray);
+                ivIcon.setColorFilter(colorOnSurfaceVariant);
+                ivIcon.setAlpha(0.6f);
                 ivIcon.clearAnimation();
             }
             if (viewLine != null) {
-                viewLine.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_300));
+                viewLine.setBackgroundColor(colorOutline);
+                viewLine.setAlpha(0.4f);
             }
-            if (tvTitle != null) tvTitle.setTextColor(ContextCompat.getColor(this, R.color.gray_500));
+            if (tvTitle != null) {
+                tvTitle.setTextColor(colorOnSurfaceVariant);
+                tvTitle.setAlpha(0.5f);
+            }
         }
-    }
-
-    private void updateStatusUI(String status, int requestId) {
+    }    private void updateStatusUI(String status, int requestId) {
         if (status == null) status = "Pending";
         status = status.toLowerCase();
         
         boolean isAccepted = status.contains("accept") || status.contains("approve") || status.contains("complet");
         
+        // Theme Colors
+        int colorPrimary = getThemeColor(androidx.appcompat.R.attr.colorPrimary, 0xFF13a4ec);
+        int colorOnSurface = getThemeColor(com.google.android.material.R.attr.colorOnSurface, 0xFF000000);
+        int colorSuccess = ContextCompat.getColor(this, R.color.emi_success_green);
+        int colorError = ContextCompat.getColor(this, R.color.red_600);
+
+
         // Default: Show Status View
         layoutStatus.setVisibility(View.VISIBLE);
         layoutTracking.setVisibility(View.GONE);
@@ -498,29 +523,29 @@ public class OrderStatusActivity extends AppCompatActivity {
                 layoutStatus.setVisibility(View.GONE);
                 layoutTracking.setVisibility(View.VISIBLE);
             } else {
-                // First time: Show "Processing" state (Blue) briefly then switch to "Accepted" (Green)
+                // First time: Show "Processing" state (Primary Color) briefly then switch to "Accepted" (Green)
                 
-                // 1. Start with Processing state (Blue)
+                // 1. Start with Processing state
                 tvStatusTitle.setText("Processing Order");
-                tvStatusTitle.setTextColor(ContextCompat.getColor(this, R.color.primary));
+                tvStatusTitle.setTextColor(colorPrimary);
                 tvStatusMessage.setText("We have received your request and it's under review.");
                 
                 ivStatusIcon.setImageResource(R.drawable.ic_check_white); 
-                cardStatusIcon.setCardBackgroundColor(ContextCompat.getColor(this, R.color.primary));
-                outerRing.setBackgroundTintList(android.content.res.ColorStateList.valueOf(ContextCompat.getColor(this, R.color.primary)));
+                cardStatusIcon.setCardBackgroundColor(ColorStateList.valueOf(colorPrimary));
+                outerRing.setBackgroundTintList(ColorStateList.valueOf(colorPrimary));
                 outerRing.setAlpha(0.3f);
 
                 // 2. Transition to "Accepted" (Green) after 1.5 seconds
                 new Handler().postDelayed(() -> {
                     try {
                         tvStatusTitle.setText("Order Accepted");
-                        tvStatusTitle.setTextColor(ContextCompat.getColor(this, R.color.emi_success_green));
+                        tvStatusTitle.setTextColor(colorSuccess);
                         tvStatusMessage.setText("Your order has been accepted! Showroom visit required.");
                         
                         ivStatusIcon.setImageResource(R.drawable.ic_check_white); 
-                        cardStatusIcon.setCardBackgroundColor(ContextCompat.getColor(this, R.color.emi_success_green));
+                        cardStatusIcon.setCardBackgroundColor(ColorStateList.valueOf(colorSuccess));
                         outerRing.setBackgroundResource(R.drawable.bg_pulsing_ring);
-                        outerRing.setBackgroundTintList(android.content.res.ColorStateList.valueOf(ContextCompat.getColor(this, R.color.emi_success_green)));
+                        outerRing.setBackgroundTintList(ColorStateList.valueOf(colorSuccess));
                         outerRing.setAlpha(0.8f);
 
                         // 3. Finally reveal Tracking after 2 more seconds
@@ -538,23 +563,23 @@ public class OrderStatusActivity extends AppCompatActivity {
             }
 
         } else if (status.contains("reject")) {
-            // Rejected (Red)
+            // Rejected (Red/Error)
             tvStatusTitle.setText("Order Rejected");
-            tvStatusTitle.setTextColor(ContextCompat.getColor(this, R.color.red_500));
+            tvStatusTitle.setTextColor(colorError);
             tvStatusMessage.setText("We're sorry, your order could not be processed at this time.");
             
             ivStatusIcon.setImageResource(R.drawable.ic_close); 
-            cardStatusIcon.setCardBackgroundColor(ContextCompat.getColor(this, R.color.red_500));
-            outerRing.setBackgroundTintList(android.content.res.ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red_500)));
+            cardStatusIcon.setCardBackgroundColor(ColorStateList.valueOf(colorError));
+            outerRing.setBackgroundTintList(ColorStateList.valueOf(colorError));
 
         } else {
-            // Pending (Default/Primary)
+            // Pending (Primary)
             tvStatusTitle.setText("Processing Order");
-            tvStatusTitle.setTextColor(ContextCompat.getColor(this, R.color.text_dark));
+            tvStatusTitle.setTextColor(colorOnSurface);
             tvStatusMessage.setText("We are reviewing your request. Please wait for admin approval.");
             
             ivStatusIcon.setImageResource(R.drawable.ic_check_white); 
-            cardStatusIcon.setCardBackgroundColor(ContextCompat.getColor(this, R.color.primary));
+            cardStatusIcon.setCardBackgroundColor(ColorStateList.valueOf(colorPrimary));
             outerRing.setBackgroundTintList(null); 
         }
     }
@@ -580,6 +605,14 @@ public class OrderStatusActivity extends AppCompatActivity {
         scaleAnimator.start();
         scaleAnimatorY.start();
         alphaAnimator.start();
+    }
+
+    private int getThemeColor(int attrResId, int defaultColor) {
+        android.util.TypedValue typedValue = new android.util.TypedValue();
+        if (getTheme().resolveAttribute(attrResId, typedValue, true)) {
+            return typedValue.data;
+        }
+        return defaultColor;
     }
 
 }

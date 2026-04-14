@@ -214,16 +214,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Exact Same Bottom Navigation Mapping as Home -->
+    <View
+        android:id="@+id/topBorder"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/colorOutlineVariant"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigation" />
+
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="76dp"
         android:background="?attr/colorSurface"
         android:orientation="horizontal"
         android:elevation="8dp"
         android:paddingTop="12dp"
-        android:paddingBottom="16dp"
+        android:paddingBottom="12dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
@@ -232,29 +238,27 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:foreground="?attr/selectableItemBackgroundBorderless">
             <ImageView
                 android:id="@+id/ivHome"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_home_filled"
-                app:tint="?attr/colorOnSurfaceVariant" />
+                app:tint="?attr/colorOutline" />
             <TextView
                 android:id="@+id/tvHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Home"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="12sp"
+                android:textColor="?attr/colorOutline"
+                android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="3dp" />
             <View
                 android:id="@+id/dotHome"
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:background="@drawable/bg_active_dot"
-                android:backgroundTint="?attr/colorPrimary"
-                android:layout_marginTop="4dp"
+                android:layout_width="16dp"
+                android:layout_height="4dp"
                 android:visibility="invisible" />
         </LinearLayout>
 
@@ -264,7 +268,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:foreground="?attr/selectableItemBackgroundBorderless">
             <ImageView
                 android:id="@+id/ivBikes"
                 android:layout_width="24dp"
@@ -277,16 +282,15 @@
                 android:layout_height="wrap_content"
                 android:text="Bikes"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:fontFamily="sans-serif-bold"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="3dp" />
             <View
                 android:id="@+id/dotBikes"
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:background="@drawable/bg_active_dot"
-                android:backgroundTint="?attr/colorPrimary"
-                android:layout_marginTop="4dp" />
+                android:layout_width="16dp"
+                android:layout_height="4dp"
+                android:background="@drawable/bg_active_pill"
+                android:layout_marginTop="3dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -295,29 +299,27 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:foreground="?attr/selectableItemBackgroundBorderless">
             <ImageView
                 android:id="@+id/ivEmiCalculator"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_calculate"
-                app:tint="?attr/colorOnSurfaceVariant" />
+                app:tint="?attr/colorOutline" />
             <TextView
                 android:id="@+id/tvEmiCalculator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="EMI"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="12sp"
+                android:textColor="?attr/colorOutline"
+                android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="3dp" />
             <View
                 android:id="@+id/dotEmiCalculator"
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:background="@drawable/bg_active_dot"
-                android:backgroundTint="?attr/colorPrimary"
-                android:layout_marginTop="4dp"
+                android:layout_width="16dp"
+                android:layout_height="4dp"
                 android:visibility="invisible" />
         </LinearLayout>
 
@@ -327,29 +329,27 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:foreground="?attr/selectableItemBackgroundBorderless">
             <ImageView
                 android:id="@+id/ivOrders"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_receipt_long"
-                app:tint="?attr/colorOnSurfaceVariant" />
+                app:tint="?attr/colorOutline" />
             <TextView
                 android:id="@+id/tvOrders"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Orders"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="12sp"
+                android:textColor="?attr/colorOutline"
+                android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="3dp" />
             <View
                 android:id="@+id/dotOrders"
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:background="@drawable/bg_active_dot"
-                android:backgroundTint="?attr/colorPrimary"
-                android:layout_marginTop="4dp"
+                android:layout_width="16dp"
+                android:layout_height="4dp"
                 android:visibility="invisible" />
         </LinearLayout>
 
@@ -359,29 +359,27 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:foreground="?attr/selectableItemBackgroundBorderless">
             <ImageView
                 android:id="@+id/ivProfile"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_person"
-                app:tint="?attr/colorOnSurfaceVariant" />
+                app:tint="?attr/colorOutline" />
             <TextView
                 android:id="@+id/tvProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Profile"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="12sp"
+                android:textColor="?attr/colorOutline"
+                android:textSize="11sp"
                 android:fontFamily="sans-serif-medium"
-                android:layout_marginTop="4dp" />
+                android:layout_marginTop="3dp" />
             <View
                 android:id="@+id/dotProfile"
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:background="@drawable/bg_active_dot"
-                android:backgroundTint="?attr/colorPrimary"
-                android:layout_marginTop="4dp"
+                android:layout_width="16dp"
+                android:layout_height="4dp"
                 android:visibility="invisible" />
         </LinearLayout>
 

@@ -39,6 +39,8 @@ public class CustomerOrdersActivity extends AppCompatActivity {
     private LinearLayout tabHome, tabBikes, tabEmiCalculator, tabOrders, tabProfile;
     private ImageView ivHome, ivBikes, ivEmiCalculator, ivOrders, ivProfile;
     private TextView tvHome, tvBikes, tvEmiCalculator, tvOrders, tvProfile;
+    private View dotHome, dotBikes, dotEmiCalculator, dotOrders, dotProfile;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +87,14 @@ public class CustomerOrdersActivity extends AppCompatActivity {
         tvEmiCalculator = findViewById(R.id.tvEmiCalculator);
         tvOrders = findViewById(R.id.tvOrders);
         tvProfile = findViewById(R.id.tvProfile);
+
+        // Dots
+        dotHome = findViewById(R.id.dotHome);
+        dotBikes = findViewById(R.id.dotBikes);
+        dotEmiCalculator = findViewById(R.id.dotEmiCalculator);
+        dotOrders = findViewById(R.id.dotOrders);
+        dotProfile = findViewById(R.id.dotProfile);
+
     }
 
     private void setupClickListeners() {
@@ -164,64 +174,94 @@ public class CustomerOrdersActivity extends AppCompatActivity {
         resetAllTabs();
 
         int activeColor = ContextCompat.getColor(this, R.color.primary_color);
+        Typeface boldTypeface = Typeface.create("sans-serif-bold", Typeface.NORMAL);
 
         if (activeTab == tabHome) {
             ivHome.setImageResource(R.drawable.ic_home_filled);
             ivHome.setColorFilter(activeColor);
             tvHome.setTextColor(activeColor);
-            tvHome.setTypeface(tvHome.getTypeface(), Typeface.BOLD);
+            tvHome.setTypeface(boldTypeface);
         } else if (activeTab == tabBikes) {
+            ivBikes.setImageResource(R.drawable.ic_two_wheeler);
             ivBikes.setColorFilter(activeColor);
             tvBikes.setTextColor(activeColor);
-            tvBikes.setTypeface(tvBikes.getTypeface(), Typeface.BOLD);
+            tvBikes.setTypeface(boldTypeface);
         } else if (activeTab == tabEmiCalculator) {
+            ivEmiCalculator.setImageResource(R.drawable.ic_calculate);
             ivEmiCalculator.setColorFilter(activeColor);
             tvEmiCalculator.setTextColor(activeColor);
-            tvEmiCalculator.setTypeface(tvEmiCalculator.getTypeface(), Typeface.BOLD);
+            tvEmiCalculator.setTypeface(boldTypeface);
         } else if (activeTab == tabOrders) {
             ivOrders.setImageResource(R.drawable.ic_receipt_long_filled);
             ivOrders.setColorFilter(activeColor);
             tvOrders.setTextColor(activeColor);
-            tvOrders.setTypeface(tvOrders.getTypeface(), Typeface.BOLD);
+            tvOrders.setTypeface(boldTypeface);
         } else if (activeTab == tabProfile) {
             ivProfile.setImageResource(R.drawable.ic_person_filled);
             ivProfile.setColorFilter(activeColor);
             tvProfile.setTextColor(activeColor);
-            tvProfile.setTypeface(tvProfile.getTypeface(), Typeface.BOLD);
+            tvProfile.setTypeface(boldTypeface);
+        }
+
+        showActiveDot(activeTab);
+    }
+
+    private void showActiveDot(LinearLayout activeTab) {
+        dotHome.setVisibility(activeTab == tabHome ? View.VISIBLE : View.INVISIBLE);
+        dotBikes.setVisibility(activeTab == tabBikes ? View.VISIBLE : View.INVISIBLE);
+        dotEmiCalculator.setVisibility(activeTab == tabEmiCalculator ? View.VISIBLE : View.INVISIBLE);
+        dotOrders.setVisibility(activeTab == tabOrders ? View.VISIBLE : View.INVISIBLE);
+        dotProfile.setVisibility(activeTab == tabProfile ? View.VISIBLE : View.INVISIBLE);
+
+        View activeDot = null;
+        if (activeTab == tabHome) activeDot = dotHome;
+        else if (activeTab == tabBikes) activeDot = dotBikes;
+        else if (activeTab == tabEmiCalculator) activeDot = dotEmiCalculator;
+        else if (activeTab == tabOrders) activeDot = dotOrders;
+        else if (activeTab == tabProfile) activeDot = dotProfile;
+
+        if (activeDot != null) {
+            activeDot.setScaleX(0);
+            activeDot.setScaleY(0);
+            activeDot.animate().scaleX(1).scaleY(1).setDuration(200).start();
         }
     }
 
     private void resetAllTabs() {
         int inactiveColor = ContextCompat.getColor(this, R.color.gray_400);
+        Typeface mediumTypeface = Typeface.create("sans-serif-medium", Typeface.NORMAL);
 
         // Reset Home
-        ivHome.setImageResource(R.drawable.ic_home);
+        ivHome.setImageResource(R.drawable.ic_home_filled);
         ivHome.setColorFilter(inactiveColor);
         tvHome.setTextColor(inactiveColor);
-        tvHome.setTypeface(null, Typeface.NORMAL);
+        tvHome.setTypeface(mediumTypeface);
 
         // Reset Bikes
+        ivBikes.setImageResource(R.drawable.ic_two_wheeler);
         ivBikes.setColorFilter(inactiveColor);
         tvBikes.setTextColor(inactiveColor);
-        tvBikes.setTypeface(null, Typeface.NORMAL);
+        tvBikes.setTypeface(mediumTypeface);
 
         // Reset EMI Calculator
+        ivEmiCalculator.setImageResource(R.drawable.ic_calculate);
         ivEmiCalculator.setColorFilter(inactiveColor);
         tvEmiCalculator.setTextColor(inactiveColor);
-        tvEmiCalculator.setTypeface(null, Typeface.NORMAL);
+        tvEmiCalculator.setTypeface(mediumTypeface);
 
         // Reset Orders
         ivOrders.setImageResource(R.drawable.ic_receipt_long);
         ivOrders.setColorFilter(inactiveColor);
         tvOrders.setTextColor(inactiveColor);
-        tvOrders.setTypeface(null, Typeface.NORMAL);
+        tvOrders.setTypeface(mediumTypeface);
 
         // Reset Profile
         ivProfile.setImageResource(R.drawable.ic_person);
         ivProfile.setColorFilter(inactiveColor);
         tvProfile.setTextColor(inactiveColor);
-        tvProfile.setTypeface(null, Typeface.NORMAL);
+        tvProfile.setTypeface(mediumTypeface);
     }
+
     private void showDeleteConfirmationDialog(CustomerRequest order) {
         String status = order.getStatus();
         if (status != null && (status.equalsIgnoreCase("completed") || status.equalsIgnoreCase("delivered"))) {

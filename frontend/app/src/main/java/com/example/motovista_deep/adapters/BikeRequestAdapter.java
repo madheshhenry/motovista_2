@@ -98,6 +98,7 @@ public class BikeRequestAdapter extends RecyclerView.Adapter<BikeRequestAdapter.
         holder.tvBikeModel.setText(request.getBrand() + " " + request.getModel());
         
         if (request.getFeatures() != null && !request.getFeatures().isEmpty()) {
+            // Note: The layout handles capitalization/prefixing if we want, but we keep it consistent here
             holder.tvFeatures.setText("Note: " + request.getFeatures());
             holder.tvFeatures.setVisibility(View.VISIBLE);
         } else {
@@ -111,14 +112,16 @@ public class BikeRequestAdapter extends RecyclerView.Adapter<BikeRequestAdapter.
         holder.tvStatus.setText(status.toUpperCase());
         
         if (status.equals("accepted") || status.equals("approved")) {
-            holder.tvStatus.setTextColor(Color.parseColor("#047857")); // Green Text
-            holder.tvStatus.setBackgroundResource(R.drawable.pill_blue_light); 
+            holder.tvStatus.setTextColor(Color.parseColor("#15803d")); // Green 700
+            holder.tvStatus.setBackgroundResource(R.drawable.badge_bg_green); 
             holder.layoutActions.setVisibility(View.GONE); 
         } else if (status.equals("rejected")) {
-            holder.tvStatus.setTextColor(Color.parseColor("#b91c1c")); // Red Text
+            holder.tvStatus.setTextColor(Color.parseColor("#b91c1c")); // Red 700
+            holder.tvStatus.setBackgroundResource(R.drawable.badge_bg_red);
             holder.layoutActions.setVisibility(View.GONE);
         } else {
-            holder.tvStatus.setTextColor(Color.parseColor("#d97706")); // Amber/Orange
+            holder.tvStatus.setTextColor(Color.parseColor("#d97706")); // Amber 600
+            holder.tvStatus.setBackgroundResource(R.drawable.badge_bg_gray);
             // Only show actions if Admin AND status is pending
             if (isAdmin) {
                 holder.layoutActions.setVisibility(View.VISIBLE);

@@ -7,7 +7,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,8 +20,11 @@ import com.example.motovista_deep.api.ApiService;
 import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.helpers.SharedPrefManager;
 import com.example.motovista_deep.models.BikeRequest;
+import com.example.motovista_deep.models.DeleteRequestRequest;
+import com.example.motovista_deep.models.GenericResponse;
 import com.example.motovista_deep.models.GetBikeRequestsResponse;
 import com.example.motovista_deep.models.GetMyRequestsRequest;
+import com.example.motovista_deep.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,16 +39,28 @@ public class MyRequestedBikesActivity extends AppCompatActivity {
     private RecyclerView rvRequests;
     private ProgressBar progressBar;
     private TextView tvEmpty;
+    private View emptyStateContainer;
     private BikeRequestAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Use modern EdgeToEdge to match Profile screen's status bar/notch behavior
+        EdgeToEdge.enable(this);
+
         setContentView(R.layout.activity_my_requested_bikes);
 
         initializeViews();
         setupRecyclerView();
         
+        // Properly handle system bars insets for the header (notch area)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.header), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(v.getPaddingLeft(), systemBars.top, v.getPaddingRight(), v.getPaddingBottom());
+            return insets;
+        });
+
         btnBack.setOnClickListener(v -> finish());
         
         fetchMyRequests();
@@ -52,6 +71,7 @@ public class MyRequestedBikesActivity extends AppCompatActivity {
         rvRequests = findViewById(R.id.rvRequests);
         progressBar = findViewById(R.id.progressBar);
         tvEmpty = findViewById(R.id.tvEmpty);
+        emptyStateContainer = findViewById(R.id.emptyStateContainer);
     }
 
     private void setupRecyclerView() {
@@ -70,14 +90,17 @@ public class MyRequestedBikesActivity extends AppCompatActivity {
         
         if (mobileNumber == null || mobileNumber.isEmpty()) {
             Toast.makeText(this, "User phone number not found.", Toast.LENGTH_SHORT).show();
-            tvEmpty.setText("Profile incomplete. Please add phone number.");
-            tvEmpty.setVisibility(View.VISIBLE);
+            if (emptyStateContainer != null) {
+                emptyStateContainer.setVisibility(View.VISIBLE);
+                tvEmpty.setText("Profile incomplete. Please add phone number.");
+            }
             return;
         }
 
         progressBar.setVisibility(View.VISIBLE);
+        if (emptyStateContainer != null) emptyStateContainer.setVisibility(View.GONE);
         
-        com.example.motovista_deep.models.User user = SharedPrefManager.getInstance(this).getUser();
+        User user = SharedPrefManager.getInstance(this).getUser();
         Integer userId = (user != null) ? user.getId() : null;
         
         GetMyRequestsRequest request = new GetMyRequestsRequest(mobileNumber, userId);
@@ -91,15 +114,18 @@ public class MyRequestedBikesActivity extends AppCompatActivity {
                     List<BikeRequest> requests = response.body().getData();
                     if (requests == null || requests.isEmpty()) {
                         rvRequests.setVisibility(View.GONE);
-                        tvEmpty.setVisibility(View.VISIBLE);
+                        if (emptyStateContainer != null) emptyStateContainer.setVisibility(View.VISIBLE);
                     } else {
                         rvRequests.setVisibility(View.VISIBLE);
-                        tvEmpty.setVisibility(View.GONE);
+                        if (emptyStateContainer != null) emptyStateContainer.setVisibility(View.GONE);
                         adapter.updateList(requests);
                     }
                 } else {
                     Toast.makeText(MyRequestedBikesActivity.this, "Failed to load requests", Toast.LENGTH_SHORT).show();
-                    tvEmpty.setVisibility(View.VISIBLE);
+                    if (emptyStateContainer != null) {
+                        emptyStateContainer.setVisibility(View.VISIBLE);
+                        tvEmpty.setText("Failed to load requests. Please try again.");
+                    }
                 }
             }
 
@@ -107,7 +133,7 @@ public class MyRequestedBikesActivity extends AppCompatActivity {
             public void onFailure(Call<GetBikeRequestsResponse> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(MyRequestedBikesActivity.this, "Network Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                tvEmpty.setVisibility(View.VISIBLE);
+                if (emptyStateContainer != null) emptyStateContainer.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -123,11 +149,11 @@ public class MyRequestedBikesActivity extends AppCompatActivity {
 
     private void deleteRequest(BikeRequest request) {
         progressBar.setVisibility(View.VISIBLE);
-        com.example.motovista_deep.models.DeleteRequestRequest delReq = new com.example.motovista_deep.models.DeleteRequestRequest(request.getId());
+        DeleteRequestRequest delReq = new DeleteRequestRequest(request.getId());
         
-        RetrofitClient.getApiService().deleteBikeRequest(delReq).enqueue(new Callback<com.example.motovista_deep.models.GenericResponse>() {
+        RetrofitClient.getApiService().deleteBikeRequest(delReq).enqueue(new Callback<GenericResponse>() {
             @Override
-            public void onResponse(Call<com.example.motovista_deep.models.GenericResponse> call, Response<com.example.motovista_deep.models.GenericResponse> response) {
+            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
                 progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
                     Toast.makeText(MyRequestedBikesActivity.this, "Request Deleted", Toast.LENGTH_SHORT).show();
@@ -138,7 +164,7 @@ public class MyRequestedBikesActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<com.example.motovista_deep.models.GenericResponse> call, Throwable t) {
+            public void onFailure(Call<GenericResponse> call, Throwable t) {
                 progressBar.setVisibility(View.GONE);
                 Toast.makeText(MyRequestedBikesActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }

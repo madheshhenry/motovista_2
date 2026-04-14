@@ -1,48 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F8F9FA">
+    android:background="?attr/colorBackground">
 
-    <!-- Header -->
-    <LinearLayout
+    <!-- Premium Header -->
+    <RelativeLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:background="@color/white"
-        android:elevation="2dp"
-        android:gravity="center_vertical">
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/btnBack"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_arrow_back"
-            app:tint="#111718" />
+            android:padding="8dp"
+            app:tint="?attr/colorOnSurface"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="My Requested Bikes"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#111718"
-            android:layout_marginStart="16dp"/>
-    </LinearLayout>
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-bold"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
 
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRequests"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="12dp"
+            android:padding="16dp"
             android:clipToPadding="false"
             tools:listitem="@layout/item_bike_request"/>
 
@@ -51,17 +59,49 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:indeterminateTint="?attr/colorPrimary"/>
 
-        <TextView
-            android:id="@+id/tvEmpty"
-            android:layout_width="wrap_content"
+        <!-- Improved Empty State -->
+        <LinearLayout
+            android:id="@+id/emptyStateContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="You haven't requested any bikes yet."
-            android:textColor="#999"
+            android:orientation="vertical"
+            android:gravity="center"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:src="@drawable/ic_empty_cart"
+                app:tint="?attr/colorOutline"
+                android:alpha="0.5"/>
+
+            <TextView
+                android:id="@+id/tvEmptyTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No Requests Found"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="18sp"
+                android:fontFamily="sans-serif-bold"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:id="@+id/tvEmpty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="You haven't requested any bikes yet. Explore bikes to get started."
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
 
     </FrameLayout>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,561 +5,350 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light"
-    android:fitsSystemWindows="true">
+    android:background="?attr/colorBackground">
 
-    <!-- Header -->
-    <LinearLayout
+    <!-- Premium Header Pattern -->
+    <RelativeLayout
         android:id="@+id/header"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingHorizontal="@dimen/padding_medium"
-        android:paddingVertical="16dp"
-        android:background="@color/white"
-        android:elevation="2dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Back Button -->
         <ImageView
             android:id="@+id/btnBack"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_arrow_back"
-            android:tint="@color/text_dark"
-            android:contentDescription="Back"
             android:padding="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+            app:tint="?attr/colorOnSurface"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
 
-        <!-- Title -->
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Help &amp; Support"
-            android:textColor="@color/text_dark"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-medium"
-            android:gravity="center" />
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-bold"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
 
-        <!-- Spacer to balance the layout -->
-        <View
-            android:layout_width="40dp"
-            android:layout_height="40dp" />
-
-    </LinearLayout>
-
-    <!-- Main Scroll Content -->
+    <!-- Main Content -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
-        android:padding="@dimen/padding_medium"
-        app:layout_constraintTop_toBottomOf="@+id/header"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="20dp"
             android:paddingBottom="100dp">
 
             <!-- Contact Us Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact Us"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="17sp"
+                android:fontFamily="sans-serif-bold"
+                android:layout_marginBottom="16dp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="@dimen/padding_large">
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:layout_marginBottom="24dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- Call Support -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardCallSupport"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Contact Us"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="@dimen/padding_medium" />
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardCornerRadius="16dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorOutlineVariant"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_call"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Call"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="12sp"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="sans-serif-medium" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Email Support -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardEmailSupport"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="4dp"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardCornerRadius="16dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorOutlineVariant"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_email"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Email"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="12sp"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="sans-serif-medium" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Chat Support -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardChatSupport"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    app:cardBackgroundColor="?attr/colorSurface"
+                    app:cardCornerRadius="16dp"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorOutlineVariant"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/ic_chat"
+                            app:tint="?attr/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chat"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="12sp"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="sans-serif-medium" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <!-- FAQ Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Frequently Asked Questions"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="17sp"
+                android:fontFamily="sans-serif-bold"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Pill Search Bar -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="30dp"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                app:strokeWidth="0dp"
+                android:layout_marginBottom="16dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:paddingHorizontal="20dp">
+
+                    <ImageView
+                        android:id="@+id/ic_search"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="?attr/colorOnSurfaceVariant"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true" />
+
+                    <EditText
+                        android:id="@+id/etSearchFAQ"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toEndOf="@id/ic_search"
+                        android:layout_toStartOf="@id/clear_search"
+                        android:hint="Search for questions..."
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:textSize="15sp"
+                        android:background="@null"
+                        android:paddingHorizontal="12dp"
+                        android:singleLine="true"
+                        android:imeOptions="actionSearch" />
+
+                    <ImageView
+                        android:id="@+id/clear_search"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_close"
+                        app:tint="?attr/colorOnSurfaceVariant"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentEnd="true"
+                        android:visibility="gone" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- FAQ List Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="?attr/colorSurface"
+                app:cardCornerRadius="20dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center"
-                    android:layout_marginBottom="@dimen/padding_medium">
+                    android:orientation="vertical">
 
-                    <!-- Call Support -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardCallSupport"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:id="@+id/faqItem1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="@dimen/padding_small"
-                        app:cardCornerRadius="@dimen/card_corner_radius"
-                        app:cardElevation="2dp"
-                        app:cardUseCompatPadding="true"
-                        android:background="@color/white">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="20dp"
+                        android:background="?attr/selectableItemBackground">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:gravity="center"
-                            android:padding="@dimen/padding_medium"
-                            android:background="?attr/selectableItemBackground">
+                            android:layout_weight="1"
+                            android:text="How to book a bike?"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="15sp"
+                            android:fontFamily="sans-serif-medium" />
 
-                            <ImageView
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:src="@drawable/ic_call"
-                                android:tint="@color/primary_color"
-                                android:contentDescription="Call"
-                                android:layout_marginBottom="@dimen/padding_small" />
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_chevron_right"
+                            app:tint="?attr/colorOnSurfaceVariant" />
+                    </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Call Support"
-                                android:textColor="@color/text_dark"
-                                android:textSize="12sp"
-                                android:textStyle="bold"
-                                android:fontFamily="sans-serif-medium" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant"
+                        android:layout_marginHorizontal="20dp" />
 
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Email Support -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardEmailSupport"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:id="@+id/faqItem2"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="@dimen/padding_small"
-                        app:cardCornerRadius="@dimen/card_corner_radius"
-                        app:cardElevation="2dp"
-                        app:cardUseCompatPadding="true"
-                        android:background="@color/white">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="20dp"
+                        android:background="?attr/selectableItemBackground">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:gravity="center"
-                            android:padding="@dimen/padding_medium"
-                            android:background="?attr/selectableItemBackground">
+                            android:layout_weight="1"
+                            android:text="What are the payment options?"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="15sp"
+                            android:fontFamily="sans-serif-medium" />
 
-                            <ImageView
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:src="@drawable/ic_email"
-                                android:tint="@color/primary_color"
-                                android:contentDescription="Email"
-                                android:layout_marginBottom="@dimen/padding_small" />
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_chevron_right"
+                            app:tint="?attr/colorOnSurfaceVariant" />
+                    </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Email Support"
-                                android:textColor="@color/text_dark"
-                                android:textSize="12sp"
-                                android:textStyle="bold"
-                                android:fontFamily="sans-serif-medium" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?attr/colorOutlineVariant"
+                        android:layout_marginHorizontal="20dp" />
 
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <!-- Chat Support -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardChatSupport"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:id="@+id/faqItem3"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:cardCornerRadius="@dimen/card_corner_radius"
-                        app:cardElevation="2dp"
-                        app:cardUseCompatPadding="true"
-                        android:background="@color/white">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:padding="20dp"
+                        android:background="?attr/selectableItemBackground">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:gravity="center"
-                            android:padding="@dimen/padding_medium"
-                            android:background="?attr/selectableItemBackground">
+                            android:layout_weight="1"
+                            android:text="How can I track my ordered bike?"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textSize="15sp"
+                            android:fontFamily="sans-serif-medium" />
 
-                            <ImageView
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:src="@drawable/ic_chat"
-                                android:tint="@color/primary_color"
-                                android:contentDescription="Chat"
-                                android:layout_marginBottom="@dimen/padding_small" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Chat with Us"
-                                android:textColor="@color/text_dark"
-                                android:textSize="12sp"
-                                android:textStyle="bold"
-                                android:fontFamily="sans-serif-medium" />
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_chevron_right"
+                            app:tint="?attr/colorOnSurfaceVariant" />
+                    </LinearLayout>
                 </LinearLayout>
-
-            </LinearLayout>
-
-            <!-- Frequently Asked Questions Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="@dimen/padding_large">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Frequently Asked Questions"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="@dimen/padding_medium" />
-
-                <!-- Search Bar -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/padding_medium"
-                    app:cardCornerRadius="28dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true"
-                    android:background="@color/white">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="@dimen/padding_small"
-                        android:paddingHorizontal="@dimen/padding_medium">
-
-                        <ImageView
-                            android:id="@+id/ic_search"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_search"
-                            android:tint="@color/gray_400"
-                            android:contentDescription="Search"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentStart="true" />
-
-                        <EditText
-                            android:id="@+id/etSearchFAQ"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_toEndOf="@id/ic_search"
-                            android:layout_toStartOf="@id/clear_search"
-                            android:layout_centerVertical="true"
-                            android:hint="Search for questions..."
-                            android:textColor="@color/text_dark"
-                            android:textSize="14sp"
-                            android:background="@null"
-                            android:paddingStart="@dimen/padding_medium"
-                            android:paddingEnd="@dimen/padding_medium"
-                            android:singleLine="true"
-                            android:imeOptions="actionSearch" />
-
-                        <ImageView
-                            android:id="@+id/clear_search"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_close"
-                            android:tint="@color/gray_400"
-                            android:contentDescription="Clear"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentEnd="true"
-                            android:visibility="gone" />
-
-                    </RelativeLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- FAQ List -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="@dimen/card_corner_radius"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true"
-                    android:background="@color/white">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <!-- FAQ Item 1 -->
-                        <LinearLayout
-                            android:id="@+id/faqItem1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="@dimen/padding_medium"
-                            android:background="?attr/selectableItemBackground">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="How to book a service?"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
-                                android:fontFamily="sans-serif-medium" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/ic_chevron_right"
-                                android:tint="@color/gray_400"
-                                android:contentDescription="Arrow" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/border_color"
-                            android:layout_marginStart="@dimen/padding_medium" />
-
-                        <!-- FAQ Item 2 -->
-                        <LinearLayout
-                            android:id="@+id/faqItem2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="@dimen/padding_medium"
-                            android:background="?attr/selectableItemBackground">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="What are the payment options?"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
-                                android:fontFamily="sans-serif-medium" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/ic_chevron_right"
-                                android:tint="@color/gray_400"
-                                android:contentDescription="Arrow" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/border_color"
-                            android:layout_marginStart="@dimen/padding_medium" />
-
-                        <!-- FAQ Item 3 -->
-                        <LinearLayout
-                            android:id="@+id/faqItem3"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="@dimen/padding_medium"
-                            android:background="?attr/selectableItemBackground">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="How can I track my bike service?"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
-                                android:fontFamily="sans-serif-medium" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/ic_chevron_right"
-                                android:tint="@color/gray_400"
-                                android:contentDescription="Arrow" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/border_color"
-                            android:layout_marginStart="@dimen/padding_medium" />
-
-                        <!-- FAQ Item 4 -->
-                        <LinearLayout
-                            android:id="@+id/faqItem4"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="@dimen/padding_medium"
-                            android:background="?attr/selectableItemBackground">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Can I reschedule my appointment?"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
-                                android:fontFamily="sans-serif-medium" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/ic_chevron_right"
-                                android:tint="@color/gray_400"
-                                android:contentDescription="Arrow" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
-
-            <!-- Common Queries Section -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Common Queries"
-                    android:textColor="@color/text_dark"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="sans-serif-medium"
-                    android:layout_marginBottom="@dimen/padding_medium" />
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="@dimen/card_corner_radius"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true"
-                    android:background="@color/white">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <!-- Billing & Payments -->
-                        <LinearLayout
-                            android:id="@+id/queryBilling"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="@dimen/padding_medium"
-                            android:background="?attr/selectableItemBackground">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_receipt"
-                                android:tint="@color/primary_color"
-                                android:contentDescription="Billing"
-                                android:layout_marginEnd="@dimen/padding_medium" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Billing &amp; Payments"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
-                                android:fontFamily="sans-serif-medium" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/ic_chevron_right"
-                                android:tint="@color/gray_400"
-                                android:contentDescription="Arrow" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/border_color"
-                            android:layout_marginStart="@dimen/padding_medium" />
-
-                        <!-- Service & Maintenance -->
-                        <LinearLayout
-                            android:id="@+id/queryService"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical"
-                            android:padding="@dimen/padding_medium"
-                            android:background="?attr/selectableItemBackground">
-
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:src="@drawable/ic_build"
-                                android:tint="@color/primary_color"
-                                android:contentDescription="Service"
-                                android:layout_marginEnd="@dimen/padding_medium" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="Service &amp; Maintenance"
-                                android:textColor="@color/text_dark"
-                                android:textSize="14sp"
-                                android:fontFamily="sans-serif-medium" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/ic_chevron_right"
-                                android:tint="@color/gray_400"
-                                android:contentDescription="Arrow" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
