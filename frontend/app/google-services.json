@@ -12,7 +12,20 @@
           "package_name": "com.example.motovista_deep"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "11624205114-37o7cchdvas2qju5etqrfqkvt8m1ei3u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.motovista_deep",
+            "certificate_hash": "7bf3d5545bf7542daa26340c2d5fe6a04b1c0d8e"
+          }
+        },
+        {
+          "client_id": "11624205114-4qtbdbv7oo5k81kmjc5tn3ig7du6iu7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDBBnizfbngKCeNdsE_Iv7dt49CiLCVDm8"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "11624205114-4qtbdbv7oo5k81kmjc5tn3ig7du6iu7r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

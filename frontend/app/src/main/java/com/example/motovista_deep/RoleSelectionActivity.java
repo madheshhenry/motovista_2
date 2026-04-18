@@ -1,9 +1,11 @@
 package com.example.motovista_deep;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -11,6 +13,7 @@ import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -19,8 +22,24 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
+import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.helpers.SharedPrefManager;
+import com.example.motovista_deep.models.LoginResponse;
 import com.example.motovista_deep.models.User;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.button.MaterialButton;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RoleSelectionActivity extends AppCompatActivity {
 
@@ -30,6 +49,13 @@ public class RoleSelectionActivity extends AppCompatActivity {
     private String selectedRole = "";
     private ConstraintLayout rootLayout;
 
+    // Google Sign-In
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleSignInClient mGoogleSignInClient;
+    private LinearLayout googleSection;
+    private MaterialButton btnGoogleContinue;
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +64,15 @@ public class RoleSelectionActivity extends AppCompatActivity {
         makeFullScreen();
 
         setContentView(R.layout.activity_role_selection);
+
+        // Configure Google Sign-In
+        // IMPORTANT: Web Client ID is required for backend verification.
+        // Replace "YOUR_WEB_CLIENT_ID.apps.googleusercontent.com" with the real one from Firebase Console.
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestIdToken("11624205114-4qtbdbv7oo5k81kmjc5tn3ig7du6iu7r.apps.googleusercontent.com")
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // STEP 2: INITIALIZE VIEWS
         initViews();
@@ -50,63 +85,40 @@ public class RoleSelectionActivity extends AppCompatActivity {
     }
 
     private void makeFullScreen() {
-        // Remove title bar
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        // Make activity full screen
-        getWindow().setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
-
-        // For Android 10+ (API 29+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            // Extend display cutout (notch) area
             WindowManager.LayoutParams params = getWindow().getAttributes();
-            params.layoutInDisplayCutoutMode =
-                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+            params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
             getWindow().setAttributes(params);
         }
 
-        // Hide navigation bar
         hideNavigationBar();
-
-        // Make status bar transparent
         getWindow().setStatusBarColor(Color.TRANSPARENT);
-
-        // Make navigation bar transparent
         getWindow().setNavigationBarColor(Color.TRANSPARENT);
 
-        // For Android 11+ - Use WindowInsetsController
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(
-                    getWindow(),
-                    getWindow().getDecorView()
-            );
+            WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
             controller.hide(WindowInsetsCompat.Type.systemBars());
-            controller.setSystemBarsBehavior(
-                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            );
+            controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         }
     }
 
     private void hideNavigationBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-            );
-        }
+        getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        );
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Hide navigation bar again when activity resumes
         hideNavigationBar();
     }
 
@@ -125,6 +137,14 @@ public class RoleSelectionActivity extends AppCompatActivity {
         ivAdminSelected = findViewById(R.id.iv_admin_selected);
         btnContinue = findViewById(R.id.btn_continue);
         rootLayout = findViewById(R.id.root_layout);
+        
+        // Google Section
+        googleSection = findViewById(R.id.google_login_section);
+        btnGoogleContinue = findViewById(R.id.btn_google_continue);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Signing in with Google...");
+        progressDialog.setCancelable(false);
 
         // Set button initially disabled with lower opacity
         btnContinue.setEnabled(false);
@@ -132,15 +152,11 @@ public class RoleSelectionActivity extends AppCompatActivity {
     }
 
     private void adjustForSystemBars() {
-        // Listen for layout completion
         rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(
                 new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
                     public void onGlobalLayout() {
-                        // Remove listener to avoid multiple calls
                         rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                        // Apply padding for system bars
                         applySystemBarPadding();
                     }
                 }
@@ -151,94 +167,153 @@ public class RoleSelectionActivity extends AppCompatActivity {
         int statusBarHeight = 0;
         int navigationBarHeight = 0;
 
-        // Get status bar height
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-        }
+        if (resourceId > 0) statusBarHeight = getResources().getDimensionPixelSize(resourceId);
 
-        // Get navigation bar height
         resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            navigationBarHeight = getResources().getDimensionPixelSize(resourceId);
-        }
+        if (resourceId > 0) navigationBarHeight = getResources().getDimensionPixelSize(resourceId);
 
-        // Apply padding to root layout
-        rootLayout.setPadding(
-                rootLayout.getPaddingLeft(),
-                statusBarHeight, // Top padding for status bar
-                rootLayout.getPaddingRight(),
-                navigationBarHeight // Bottom padding for navigation bar
-        );
+        rootLayout.setPadding(rootLayout.getPaddingLeft(), statusBarHeight, rootLayout.getPaddingRight(), navigationBarHeight);
     }
 
     private void setupClickListeners() {
-        // Customer card click
-        cardCustomer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectRole("customer");
+        cardCustomer.setOnClickListener(v -> selectRole("customer"));
+        cardAdmin.setOnClickListener(v -> selectRole("admin"));
+
+        btnContinue.setOnClickListener(v -> {
+            if (!selectedRole.isEmpty()) {
+                navigateToNextScreen();
             }
         });
 
-        // Admin card click
-        cardAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectRole("admin");
-            }
-        });
+        btnGoogleContinue.setOnClickListener(v -> signInWithGoogle());
+    }
 
-        // Continue button click
-        btnContinue.setOnClickListener(new View.OnClickListener() {
+    private void signInWithGoogle() {
+        // 🚀 Force Account Selection (Clear previous cache)
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> {
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleGoogleSignInResult(task);
+        }
+    }
+
+    private void handleGoogleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            String idToken = account.getIdToken();
+            if (idToken != null) {
+                performGoogleLogin(idToken);
+            } else {
+                Toast.makeText(this, "Failed to get Google ID token.", Toast.LENGTH_LONG).show();
+            }
+        } catch (ApiException e) {
+            Log.e("GOOGLE_AUTH", "signInResult:failed code=" + e.getStatusCode());
+            Toast.makeText(this, "Google Sign-In failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void performGoogleLogin(String idToken) {
+        progressDialog.show();
+        Map<String, String> body = new HashMap<>();
+        body.put("id_token", idToken);
+
+        RetrofitClient.getApiService().googleLogin(body).enqueue(new Callback<LoginResponse>() {
             @Override
-            public void onClick(View v) {
-                if (!selectedRole.isEmpty()) {
-                    navigateToNextScreen();
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                progressDialog.dismiss();
+                if (response.isSuccessful() && response.body() != null) {
+                    LoginResponse loginResponse = response.body();
+                    
+                    if (loginResponse.isSuccess()) {
+                        LoginResponse.LoginData data = loginResponse.getData();
+                        
+                        // 🚀 Step 1: Handle OTP Verification requirement
+                        if (data != null && data.isRequires_verification()) {
+                            Intent intent = new Intent(RoleSelectionActivity.this, VerifyOtpActivity.class);
+                            intent.putExtra("email", data.getEmail());
+                            intent.putExtra("flow", "google_login");
+                            startActivity(intent);
+                            return;
+                        }
+
+                        // 🚀 Step 2: Normal Login Flow (after verification)
+                        if (data != null && data.getCustomer() != null && data.getToken() != null) {
+                            User user = data.getCustomer();
+                            String token = data.getToken();
+
+                            SharedPrefManager.getInstance(RoleSelectionActivity.this).saveCustomerLogin(user, token);
+                            Toast.makeText(RoleSelectionActivity.this, "Welcome, " + user.getFull_name(), Toast.LENGTH_SHORT).show();
+
+                            Intent intent;
+                            if (!user.isIs_profile_completed()) {
+                                intent = new Intent(RoleSelectionActivity.this, CustomerProfileActivity.class);
+                            } else {
+                                intent = new Intent(RoleSelectionActivity.this, CustomerHomeActivity.class);
+                            }
+                            startActivity(intent);
+                            finish();
+                        }
+                    } else {
+                        Toast.makeText(RoleSelectionActivity.this, loginResponse.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    String errorMsg = "Google Login Failed: Server Error";
+                    try {
+                        if (response.errorBody() != null) {
+                            errorMsg = "Server Error: " + response.errorBody().string();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(RoleSelectionActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                 }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(RoleSelectionActivity.this, "Network error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void selectRole(String role) {
-        // Reset all selections
         resetSelections();
-
-        // Set selected role
         selectedRole = role;
 
-        // Update UI based on selection
         if (role.equals("customer")) {
-            // Highlight customer card
             cardCustomer.setCardBackgroundColor(getResources().getColor(R.color.primary_light));
             cardCustomer.setCardElevation(12f);
             ivCustomerSelected.setVisibility(View.VISIBLE);
+            googleSection.setVisibility(View.VISIBLE);
 
-            // Check if user is already logged in as customer
-            if (SharedPrefManager.getInstance(this).isLoggedIn() &&
-                    "customer".equals(SharedPrefManager.getInstance(this).getRole())) {
-                // Auto-enable continue button for logged-in customers
+            if (SharedPrefManager.getInstance(this).isLoggedIn() && "customer".equals(SharedPrefManager.getInstance(this).getRole())) {
                 btnContinue.setEnabled(true);
                 btnContinue.setAlpha(1f);
                 btnContinue.setText("Continue as Customer");
             }
         } else if (role.equals("admin")) {
-            // Highlight admin card
             cardAdmin.setCardBackgroundColor(getResources().getColor(R.color.primary_light));
             cardAdmin.setCardElevation(12f);
             ivAdminSelected.setVisibility(View.VISIBLE);
+            googleSection.setVisibility(View.GONE);
 
-            // Check if user is already logged in as admin
-            if (SharedPrefManager.getInstance(this).isLoggedIn() &&
-                    "admin".equals(SharedPrefManager.getInstance(this).getRole())) {
-                // Auto-enable continue button for logged-in admins
+            if (SharedPrefManager.getInstance(this).isLoggedIn() && "admin".equals(SharedPrefManager.getInstance(this).getRole())) {
                 btnContinue.setEnabled(true);
                 btnContinue.setAlpha(1f);
                 btnContinue.setText("Continue as Admin");
             }
         }
 
-        // Enable continue button if not already enabled
         if (!btnContinue.isEnabled()) {
             btnContinue.setEnabled(true);
             btnContinue.setAlpha(1f);
@@ -246,12 +321,10 @@ public class RoleSelectionActivity extends AppCompatActivity {
     }
 
     private void resetSelections() {
-        // Reset customer card
         cardCustomer.setCardBackgroundColor(getResources().getColor(android.R.color.white));
         cardCustomer.setCardElevation(6f);
         ivCustomerSelected.setVisibility(View.GONE);
 
-        // Reset admin card
         cardAdmin.setCardBackgroundColor(getResources().getColor(android.R.color.white));
         cardAdmin.setCardElevation(6f);
         ivAdminSelected.setVisibility(View.GONE);
@@ -259,29 +332,20 @@ public class RoleSelectionActivity extends AppCompatActivity {
 
     private void navigateToNextScreen() {
         Intent intent;
+        SharedPrefManager prefManager = SharedPrefManager.getInstance(this);
 
         if (selectedRole.equals("customer")) {
-            SharedPrefManager prefManager = SharedPrefManager.getInstance(this);
-
-            // ✅ 1. Check if the user is already logged in as a Customer
             if (prefManager.isLoggedIn() && "customer".equals(prefManager.getRole())) {
-
-                // ✅ 2. Check if the profile is already completed (Old User)
                 if (prefManager.isProfileCompleted()) {
-                    // OLD USER -> Go to Home Screen
                     intent = new Intent(this, CustomerHomeActivity.class);
                 } else {
-                    // NEW USER -> Go to Profile Setup Screen
                     intent = new Intent(this, CustomerProfileActivity.class);
                 }
             } else {
-                // ✅ 3. NOT LOGGED IN -> Go to Login Screen
                 intent = new Intent(this, CustomerLoginActivity.class);
             }
         } else {
-            // Admin Logic
-            if (SharedPrefManager.getInstance(this).isLoggedIn() &&
-                    "admin".equals(SharedPrefManager.getInstance(this).getRole())) {
+            if (prefManager.isLoggedIn() && "admin".equals(prefManager.getRole())) {
                 intent = new Intent(this, AdminDashboardActivity.class);
             } else {
                 intent = new Intent(this, AdminLoginActivity.class);
@@ -296,7 +360,6 @@ public class RoleSelectionActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Exit app or go to previous screen
         finishAffinity();
     }
 }

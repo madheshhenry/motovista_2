@@ -225,6 +225,12 @@ public interface ApiService {
     @POST("register.php")
     Call<RegisterResponse> register(@Body RegisterRequest request);
 
+    @POST("google_login.php")
+    Call<LoginResponse> googleLogin(@Body java.util.Map<String, String> body);
+
+    @POST("google_verify_otp.php")
+    Call<LoginResponse> googleVerifyOtp(@Body OtpRequest request);
+
     @POST("customer_forgot_password.php")
     Call<GenericResponse> customerForgotPassword(@Body ForgotPasswordRequest request);
 

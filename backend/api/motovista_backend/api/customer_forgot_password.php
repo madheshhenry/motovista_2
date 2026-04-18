@@ -37,21 +37,8 @@ try {
     $updateStmt->execute([$otp, $customer['id']]);
 
     // 4. Send Email
-    $mail = new PHPMailer(true);
-    $mail->isSMTP();
-    $mail->Host = SMTP_HOST;
-    $mail->SMTPAuth = true;
-    $mail->Username = SMTP_USERNAME;
-    $mail->Password = SMTP_PASSWORD;
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = SMTP_PORT;
-
-    $mail->setFrom(SMTP_USERNAME, 'MotoVista Support');
-    $mail->addAddress($email);
-
-    $mail->isHTML(true);
-    $mail->Subject = 'Password Reset OTP - MotoVista';
-    $mail->Body = "
+    $subject = 'Password Reset OTP - MotoVista';
+    $email_body = "
         <div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee;'>
             <h2 style='color: #2563eb;'>Password Reset Request</h2>
             <p>Hello,</p>
@@ -64,9 +51,66 @@ try {
         </div>
     ";
 
-    $mail->send();
+    $email_sent = false;
 
-    echo json_encode(["success" => true, "message" => "Verification code sent to your email"]);
+    // --- OPTION A: WEB BRIDGE (Bypass blocked ports) ---
+    if (defined('USE_MAIL_BRIDGE') && USE_MAIL_BRIDGE) {
+        try {
+            $ch = curl_init(MAIL_BRIDGE_URL);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+                'to' => $email,
+                'subject' => $subject,
+                'body' => $email_body
+            ]));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+            
+            $bridge_res = curl_exec($ch);
+            $res_data = json_decode($bridge_res, true);
+            curl_close($ch);
+            
+            if ($res_data && isset($res_data['success']) && $res_data['success']) {
+                $email_sent = true;
+            }
+        } catch (Exception $e) { /* Fallback to SMTP */ }
+    }
+
+    // --- OPTION B: STANDARD SMTP (PHPMailer) ---
+    if (!$email_sent) {
+        try {
+            $mail = new PHPMailer(true);
+            $mail->isSMTP();
+            $mail->Host = SMTP_HOST;
+            $mail->SMTPAuth = true;
+            $mail->Username = SMTP_USERNAME;
+            $mail->Password = SMTP_PASSWORD;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->Port = SMTP_PORT;
+            $mail->SMTPOptions = array('ssl'=>array('verify_peer'=>false, 'verify_peer_name'=>false, 'allow_self_signed'=>true));
+
+            $mail->setFrom(SMTP_USERNAME, 'MotoVista Support');
+            $mail->addAddress($email);
+            $mail->isHTML(true);
+            $mail->Subject = $subject;
+            $mail->Body = $email_body;
+
+            if ($mail->send()) {
+                $email_sent = true;
+            }
+        } catch (Exception $e) { /* Fallback to File Log */ }
+    }
+
+    if ($email_sent) {
+        echo json_encode(["success" => true, "message" => "Verification code sent to your email"]);
+    } else {
+        // --- OPTION C: FILE LOG FALLBACK ---
+        $log_entry = date('Y-m-d H:i:s') . " - Forgot Pass OTP for $email: $otp\n";
+        file_put_contents('mail_log.txt', $log_entry, FILE_APPEND);
+        echo json_encode(["success" => true, "message" => "Verification code generated! [Dev Mode: Check mail_log.txt]"]);
+    }
 
 } catch (Exception $e) {
     echo json_encode(["success" => false, "message" => $e->getMessage()]);

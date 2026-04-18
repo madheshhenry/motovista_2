@@ -24,6 +24,7 @@ public class LoginResponse {
         private String token;
         private User customer;
         private boolean requires_verification;
+        private String email;
 
         public String getToken() { return token; }
         public void setToken(String token) { this.token = token; }
@@ -35,5 +36,8 @@ public class LoginResponse {
         public void setRequires_verification(boolean requires_verification) {
             this.requires_verification = requires_verification;
         }
+
+        public String getEmail() { return email; }
+        public void setEmail(String email) { this.email = email; }
     }
 }

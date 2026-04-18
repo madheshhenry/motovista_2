@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.FrameLayout;
+import androidx.cardview.widget.CardView;
 
 import com.example.motovista_deep.api.ApiService;
 import com.example.motovista_deep.api.RetrofitClient;
@@ -26,6 +28,7 @@ import com.example.motovista_deep.models.GenericResponse;
 import com.example.motovista_deep.models.ProfileUpdateRequest;
 import com.example.motovista_deep.models.ProfileUpdateResponse;
 import com.example.motovista_deep.models.User;
+import com.example.motovista_deep.utils.SystemUIHelper;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -41,8 +44,10 @@ import retrofit2.Response;
 
 public class CustomerProfileActivity extends AppCompatActivity {
 
-    private ImageView btnBack, btnAddPhoto;
-    private LinearLayout profileImageContainer, btnAadharFront, btnAadharBack;
+    private ImageView btnBack;
+    private CardView btnAddPhoto;
+    private FrameLayout profileImageContainer;
+    private LinearLayout btnAadharFront, btnAadharBack;
     private TextView btnAddPhotoText, btnSkip;
     private EditText etDOB, etHouseNo, etStreet, etCity, etState, etPincode, etPAN;
     private Button btnCompleteSetup;
@@ -65,6 +70,12 @@ public class CustomerProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customer_profile);
 
         initViews();
+        // ✅ Enable Premium Edge-to-Edge UI
+        SystemUIHelper.setupEdgeToEdgeWithScroll(this, 
+                findViewById(R.id.root_layout), 
+                btnBack, 
+                findViewById(R.id.main_scroll));
+
         initPreviewImageViews();   // ✅ VERY IMPORTANT
         setClickListeners();
     }
@@ -97,9 +108,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
     private void initPreviewImageViews() {
 
         profilePreview = new ImageView(this);
-        profilePreview.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT
+        profilePreview.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
         ));
         profilePreview.setScaleType(ImageView.ScaleType.CENTER_CROP);
         profileImageContainer.addView(profilePreview);

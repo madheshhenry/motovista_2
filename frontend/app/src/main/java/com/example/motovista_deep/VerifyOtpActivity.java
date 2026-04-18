@@ -19,6 +19,9 @@ import com.example.motovista_deep.api.RetrofitClient;
 import com.example.motovista_deep.models.ForgotPasswordRequest;
 import com.example.motovista_deep.models.GenericResponse;
 import com.example.motovista_deep.models.OtpRequest;
+import com.example.motovista_deep.models.LoginResponse;
+import com.example.motovista_deep.models.User;
+import com.example.motovista_deep.helpers.SharedPrefManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +35,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
     private ImageView btnBack;
     private ProgressBar loadingProgress;
     private String email;
+    private String flow; // "google_login" or null
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,7 @@ public class VerifyOtpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_verify_otp);
 
         email = getIntent().getStringExtra("email");
+        flow = getIntent().getStringExtra("flow");
         
         initializeViews();
         setupOtpInputs();
@@ -97,30 +102,75 @@ public class VerifyOtpActivity extends AppCompatActivity {
     private void verifyOtp(String otp) {
         setLoading(true);
         ApiService apiService = RetrofitClient.getApiService();
-        apiService.customerVerifyOtp(new OtpRequest(email, otp)).enqueue(new Callback<GenericResponse>() {
-            @Override
-            public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
-                setLoading(false);
-                if (response.isSuccessful() && response.body() != null) {
-                    if (response.body().isSuccess()) {
-                        Intent intent = new Intent(VerifyOtpActivity.this, ResetPasswordActivity.class);
-                        intent.putExtra("email", email);
-                        intent.putExtra("otp", otp);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(VerifyOtpActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(VerifyOtpActivity.this, "Verification failed", Toast.LENGTH_SHORT).show();
-                }
-            }
+        OtpRequest request = new OtpRequest(email, otp);
 
-            @Override
-            public void onFailure(Call<GenericResponse> call, Throwable t) {
-                setLoading(false);
-                Toast.makeText(VerifyOtpActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        if ("google_login".equals(flow)) {
+            // 🚀 Special flow for Google Login
+            apiService.googleVerifyOtp(request).enqueue(new Callback<LoginResponse>() {
+                @Override
+                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                    setLoading(false);
+                    if (response.isSuccessful() && response.body() != null) {
+                        LoginResponse loginResp = response.body();
+                        if (loginResp.isSuccess() && loginResp.getData() != null) {
+                            User user = loginResp.getData().getCustomer();
+                            String token = loginResp.getData().getToken();
+
+                            // Save Login
+                            SharedPrefManager.getInstance(VerifyOtpActivity.this).saveCustomerLogin(user, token);
+                            Toast.makeText(VerifyOtpActivity.this, "Verified! Welcome back.", Toast.LENGTH_SHORT).show();
+
+                            // Navigate
+                            Intent intent;
+                            if (!user.isIs_profile_completed()) {
+                                intent = new Intent(VerifyOtpActivity.this, CustomerProfileActivity.class);
+                            } else {
+                                intent = new Intent(VerifyOtpActivity.this, CustomerHomeActivity.class);
+                            }
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast.makeText(VerifyOtpActivity.this, loginResp.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(VerifyOtpActivity.this, "Google verification failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<LoginResponse> call, Throwable t) {
+                    setLoading(false);
+                    Toast.makeText(VerifyOtpActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            // Standard Flow (Forgot Password)
+            apiService.customerVerifyOtp(request).enqueue(new Callback<GenericResponse>() {
+                @Override
+                public void onResponse(Call<GenericResponse> call, Response<GenericResponse> response) {
+                    setLoading(false);
+                    if (response.isSuccessful() && response.body() != null) {
+                        if (response.body().isSuccess()) {
+                            Intent intent = new Intent(VerifyOtpActivity.this, ResetPasswordActivity.class);
+                            intent.putExtra("email", email);
+                            intent.putExtra("otp", otp);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(VerifyOtpActivity.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(VerifyOtpActivity.this, "Verification failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<GenericResponse> call, Throwable t) {
+                    setLoading(false);
+                    Toast.makeText(VerifyOtpActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void resendOtp() {
