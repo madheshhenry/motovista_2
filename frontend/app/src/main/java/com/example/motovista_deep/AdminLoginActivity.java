@@ -87,6 +87,7 @@ public class AdminLoginActivity extends AppCompatActivity {
         ivPasswordToggle.setOnClickListener(v -> togglePasswordVisibility());
         btnLogin.setOnClickListener(v -> handleLoginButton());
         tvForgotPassword.setOnClickListener(v -> startActivity(new Intent(AdminLoginActivity.this, AdminForgotPasswordActivity.class)));
+        findViewById(R.id.tv_register).setOnClickListener(v -> startActivity(new Intent(AdminLoginActivity.this, AdminRegisterActivity.class)));
     }
 
     private void togglePasswordVisibility() {

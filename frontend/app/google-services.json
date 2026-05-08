@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "11624205114-5be40v7s9658gv30mg7nfleugprbe2li.apps.googleusercontent.com",
+          "client_id": "11624205114-37o7cchdvas2qju5etqrfqkvt8m1ei3u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.motovista_deep",
-            "certificate_hash": "7e87cd04a40603f73dac095f932ab55428daf556"
+            "certificate_hash": "7bf3d5545bf7542daa26340c2d5fe6a04b1c0d8e"
           }
         },
         {

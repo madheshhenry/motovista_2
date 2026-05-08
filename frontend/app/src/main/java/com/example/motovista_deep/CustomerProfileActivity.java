@@ -135,8 +135,8 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
         etDOB.setOnClickListener(v -> showDatePicker());
 
-        btnAadharFront.setOnClickListener(v -> pickImage(PICK_AADHAR_FRONT));
-        btnAadharBack.setOnClickListener(v -> pickImage(PICK_PAN_CARD));
+        btnAadharFront.setOnClickListener(v -> pickDocument(PICK_AADHAR_FRONT));
+        btnAadharBack.setOnClickListener(v -> pickDocument(PICK_PAN_CARD));
 
         btnCompleteSetup.setOnClickListener(v -> {
             if (validateInputs()) uploadProfile();
@@ -151,6 +151,14 @@ public class CustomerProfileActivity extends AppCompatActivity {
 
     private void pickImage(int code) {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, code);
+    }
+
+    private void pickDocument(int code) {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        String[] mimeTypes = {"image/*", "application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
         startActivityForResult(intent, code);
     }
 
@@ -258,7 +266,9 @@ public class CustomerProfileActivity extends AppCompatActivity {
     private MultipartBody.Part filePart(String key, Uri uri) {
         if (uri == null) return null;
         File file = new File(FileUtil.getPath(this, uri));
-        RequestBody rb = RequestBody.create(file, MediaType.parse("image/*"));
+        String mimeType = getContentResolver().getType(uri);
+        if (mimeType == null) mimeType = "application/octet-stream";
+        RequestBody rb = RequestBody.create(file, MediaType.parse(mimeType));
         return MultipartBody.Part.createFormData(key, file.getName(), rb);
     }
 
@@ -275,15 +285,32 @@ public class CustomerProfileActivity extends AppCompatActivity {
         super.onActivityResult(code, result, data);
         if (result == RESULT_OK && data != null) {
             Uri uri = data.getData();
+            if (uri == null) return;
+            
+            String mimeType = getContentResolver().getType(uri);
+            boolean isImage = mimeType != null && mimeType.startsWith("image");
+
             if (code == PICK_PROFILE_IMAGE) {
                 profileImageUri = uri;
                 profilePreview.setImageURI(uri);
             } else if (code == PICK_AADHAR_FRONT) {
                 aadharFrontUri = uri;
-                aadharFrontPreview.setImageURI(uri);
+                if (isImage) {
+                    aadharFrontPreview.setImageURI(uri);
+                    aadharFrontPreview.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                } else {
+                    aadharFrontPreview.setImageResource(android.R.drawable.ic_menu_agenda);
+                    aadharFrontPreview.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                }
             } else if (code == PICK_PAN_CARD) {
                 panCardUri = uri;
-                panCardPreview.setImageURI(uri);
+                if (isImage) {
+                    panCardPreview.setImageURI(uri);
+                    panCardPreview.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                } else {
+                    panCardPreview.setImageResource(android.R.drawable.ic_menu_agenda);
+                    panCardPreview.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                }
             }
         }
     }

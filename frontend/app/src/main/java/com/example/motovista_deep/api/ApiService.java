@@ -106,6 +106,9 @@ public interface ApiService {
     @POST("admin_register.php")
     Call<GenericResponse> registerAdmin(@Body java.util.Map<String, String> body);
 
+    @POST("admin_register_verify.php")
+    Call<GenericResponse> adminRegisterVerify(@Body OtpRequest request);
+
     @POST("admin_verify_reset_otp.php")
     Call<GenericResponse> adminVerifyResetOtp(@Body OtpRequest request);
 

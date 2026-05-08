@@ -1,0 +1,3 @@
+ALTER TABLE admins ADD COLUMN last_session_id VARCHAR(255) DEFAULT NULL;
+ALTER TABLE admins ADD COLUMN workflow_stage VARCHAR(50) DEFAULT 'dashboard';
+ALTER TABLE admins ADD COLUMN active_order_id INT DEFAULT NULL;
