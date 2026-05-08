@@ -187,6 +187,16 @@ public class RoleSelectionActivity extends AppCompatActivity {
         });
 
         btnGoogleContinue.setOnClickListener(v -> signInWithGoogle());
+
+        // 🕵️‍♂️ SECRET ADMIN DOOR: Long press logo to open Admin Login
+        ImageView ivLogo = findViewById(R.id.iv_logo);
+        ivLogo.setOnLongClickListener(v -> {
+            Intent intent = new Intent(this, AdminLoginActivity.class);
+            intent.putExtra("SELECTED_ROLE", "admin");
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            return true;
+        });
     }
 
     private void signInWithGoogle() {

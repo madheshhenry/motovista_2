@@ -1,6 +1,8 @@
 <?php
+error_reporting(0);
+ini_set('display_errors', 0);
 $host = "127.0.0.1";
-$db_name = "android_app_db";
+$db_name = "motovista_db";
 $username = "root";
 $password = "";
 

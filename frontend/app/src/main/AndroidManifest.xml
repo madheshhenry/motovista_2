@@ -55,6 +55,7 @@
             android:exported="false" />
 
         <!-- RoleSelectionActivity -->
+        <activity android:name=".AdminRegisterActivity" android:exported="false" />
         <activity
             android:name=".CustomerHomeActivity"
             android:exported="false"

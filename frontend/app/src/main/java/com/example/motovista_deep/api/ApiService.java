@@ -103,6 +103,9 @@ public interface ApiService {
     @POST("admin_forgot_password.php")
     Call<GenericResponse> adminForgotPassword(@Body ForgotPasswordRequest request);
 
+    @POST("admin_register.php")
+    Call<GenericResponse> registerAdmin(@Body java.util.Map<String, String> body);
+
     @POST("admin_verify_reset_otp.php")
     Call<GenericResponse> adminVerifyResetOtp(@Body OtpRequest request);
 
@@ -480,4 +483,7 @@ public interface ApiService {
 
     @POST("save_fcm_token.php")
     Call<GenericResponse> saveFcmToken(@Body com.example.motovista_deep.models.SaveFcmTokenRequest request);
+
+    @POST("admin_logout.php")
+    Call<GenericResponse> adminLogout(@Header("Authorization") String token);
 }

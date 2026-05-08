@@ -3,16 +3,22 @@ class JWT_HELPER
 {
     private $secret_key = "Motovista_Secret_Key_2024@Deep";
 
-    public function generateToken($user_id, $email, $role = 'customer')
+    public function generateToken($user_id, $email, $role = 'customer', $session_id = null)
     {
         $header = json_encode(['typ' => 'JWT', 'alg' => 'HS256']);
-        $payload = json_encode([
+        $payloadData = [
             'user_id' => $user_id,
             'email' => $email,
             'role' => $role,
             'iat' => time(),
             'exp' => time() + (60 * 60 * 24 * 7) // 7 days
-        ]);
+        ];
+        
+        if ($session_id) {
+            $payloadData['session_id'] = $session_id;
+        }
+
+        $payload = json_encode($payloadData);
 
         $base64UrlHeader = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
         $base64UrlPayload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload));

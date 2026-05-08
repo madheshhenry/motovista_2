@@ -49,20 +49,20 @@ public class CustomerProfileActivity extends AppCompatActivity {
     private FrameLayout profileImageContainer;
     private LinearLayout btnAadharFront, btnAadharBack;
     private TextView btnAddPhotoText, btnSkip;
-    private EditText etDOB, etHouseNo, etStreet, etCity, etState, etPincode, etPAN;
+    private EditText etDOB, etHouseNo, etStreet, etCity, etState, etPincode;
     private Button btnCompleteSetup;
 
-    // 🔥 PREVIEW IMAGE VIEWS (created dynamically)
+    // Preview views
     private ImageView profilePreview;
     private ImageView aadharFrontPreview;
-    private ImageView aadharBackPreview;
+    private ImageView panCardPreview;
 
-    private Uri profileImageUri, aadharFrontUri, aadharBackUri;
+    private Uri profileImageUri, aadharFrontUri, panCardUri;
     private final Calendar calendar = Calendar.getInstance();
 
     private static final int PICK_PROFILE_IMAGE = 100;
     private static final int PICK_AADHAR_FRONT = 101;
-    private static final int PICK_AADHAR_BACK = 102;
+    private static final int PICK_PAN_CARD = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +70,12 @@ public class CustomerProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customer_profile);
 
         initViews();
-        // ✅ Enable Premium Edge-to-Edge UI
         SystemUIHelper.setupEdgeToEdgeWithScroll(this, 
                 findViewById(R.id.root_layout), 
                 btnBack, 
                 findViewById(R.id.main_scroll));
 
-        initPreviewImageViews();   // ✅ VERY IMPORTANT
+        initPreviewImageViews();
         setClickListeners();
     }
 
@@ -92,21 +91,15 @@ public class CustomerProfileActivity extends AppCompatActivity {
         etCity = findViewById(R.id.etCity);
         etState = findViewById(R.id.etState);
         etPincode = findViewById(R.id.etPincode);
-        etPAN = findViewById(R.id.etPAN);
 
         btnAadharFront = findViewById(R.id.btnAadharFront);
-        btnAadharBack = findViewById(R.id.btnAadharBack);
+        btnAadharBack = findViewById(R.id.btnAadharBack); // Used for PAN Card upload
 
         btnCompleteSetup = findViewById(R.id.btnCompleteSetup);
         btnSkip = findViewById(R.id.btnSkip);
     }
 
-    /**
-     * 🔥 Create preview ImageViews programmatically
-     * XML is untouched
-     */
     private void initPreviewImageViews() {
-
         profilePreview = new ImageView(this);
         profilePreview.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
@@ -123,17 +116,16 @@ public class CustomerProfileActivity extends AppCompatActivity {
         aadharFrontPreview.setScaleType(ImageView.ScaleType.CENTER_CROP);
         btnAadharFront.addView(aadharFrontPreview);
 
-        aadharBackPreview = new ImageView(this);
-        aadharBackPreview.setLayoutParams(new LinearLayout.LayoutParams(
+        panCardPreview = new ImageView(this);
+        panCardPreview.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
         ));
-        aadharBackPreview.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        btnAadharBack.addView(aadharBackPreview);
+        panCardPreview.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        btnAadharBack.addView(panCardPreview);
     }
 
     private void setClickListeners() {
-
         btnBack.setOnClickListener(v -> onBackPressed());
 
         View.OnClickListener pickProfile = v -> pickImage(PICK_PROFILE_IMAGE);
@@ -144,7 +136,7 @@ public class CustomerProfileActivity extends AppCompatActivity {
         etDOB.setOnClickListener(v -> showDatePicker());
 
         btnAadharFront.setOnClickListener(v -> pickImage(PICK_AADHAR_FRONT));
-        btnAadharBack.setOnClickListener(v -> pickImage(PICK_AADHAR_BACK));
+        btnAadharBack.setOnClickListener(v -> pickImage(PICK_PAN_CARD));
 
         btnCompleteSetup.setOnClickListener(v -> {
             if (validateInputs()) uploadProfile();
@@ -179,22 +171,14 @@ public class CustomerProfileActivity extends AppCompatActivity {
     }
 
     private boolean validateInputs() {
-
         if (TextUtils.isEmpty(etDOB.getText())) {
             toast("Select DOB");
             return false;
         }
-
-        if (!TextUtils.isEmpty(etPAN.getText()) && etPAN.getText().length() != 10) {
-            toast("PAN must be 10 characters");
+        if (profileImageUri == null) {
+            toast("Please upload profile photo");
             return false;
         }
-
-        if (!TextUtils.isEmpty(etPincode.getText()) && etPincode.getText().length() != 6) {
-            toast("Pincode must be 6 digits");
-            return false;
-        }
-
         return true;
     }
 
@@ -205,14 +189,12 @@ public class CustomerProfileActivity extends AppCompatActivity {
             return;
         }
 
-        // 1. Show loading state
         btnCompleteSetup.setText("Saving...");
         btnCompleteSetup.setEnabled(false);
 
-        // 2. Prepare Multipart Parts
         MultipartBody.Part profileBody = filePart("profile_image", profileImageUri);
         MultipartBody.Part frontBody = filePart("aadhar_front", aadharFrontUri);
-        MultipartBody.Part backBody = filePart("aadhar_back", aadharBackUri);
+        MultipartBody.Part panBody = filePart("aadhar_back", panCardUri); // Sending PAN card in aadhar_back field
 
         RequestBody dob = text(etDOB);
         RequestBody house_no = text(etHouseNo);
@@ -220,57 +202,39 @@ public class CustomerProfileActivity extends AppCompatActivity {
         RequestBody city = text(etCity);
         RequestBody state = text(etState);
         RequestBody pincode = text(etPincode);
-        RequestBody pan = text(etPAN);
 
         ApiService api = RetrofitClient.getApiService();
 
-        // 3. Call Multipart Endpoint
         Call<ProfileUpdateResponse> call = api.updateProfile(
                 "Bearer " + token,
                 profileBody,
                 frontBody,
-                backBody,
-                null, // full_name (not updating here)
-                null, // email
-                null, // phone
+                panBody,
+                null, 
+                null, 
+                null, 
                 dob,
                 house_no,
                 street,
                 city,
                 state,
                 pincode,
-                pan
+                null // No PAN text number
         );
 
-        // 4. Execute
         call.enqueue(new Callback<ProfileUpdateResponse>() {
             @Override
             public void onResponse(Call<ProfileUpdateResponse> call, Response<ProfileUpdateResponse> response) {
-                btnCompleteSetup.setText("Complete Setup");
+                btnCompleteSetup.setText("Finish Setup");
                 btnCompleteSetup.setEnabled(true);
 
                 if (response.isSuccessful() && response.body() != null) {
                     ProfileUpdateResponse updateResponse = response.body();
-
                     if (updateResponse.isSuccess()) {
-                        // Update local user object
-                        User currentUser = SharedPrefManager.getInstance(CustomerProfileActivity.this).getUser();
-                        if (currentUser != null) {
-                            currentUser.setIs_profile_completed(true);
-                            currentUser.setDob(etDOB.getText().toString().trim());
-                            // Update other fields if needed, but the server response 'user' object is best
-                            // Actually, let's use the user from response if available
-                            if (updateResponse.getUser() != null) {
-                                SharedPrefManager.getInstance(CustomerProfileActivity.this)
-                                        .saveCustomerLogin(updateResponse.getUser(), token);
-                            } else {
-                                // Fallback update local fields
-                                currentUser.setCity(etCity.getText().toString().trim());
-                                SharedPrefManager.getInstance(CustomerProfileActivity.this)
-                                        .saveCustomerLogin(currentUser, token);
-                            }
+                        User user = updateResponse.getUser();
+                        if (user != null) {
+                            SharedPrefManager.getInstance(CustomerProfileActivity.this).saveCustomerLogin(user, token);
                         }
-
                         toast("Profile completed successfully!");
                         startActivity(new Intent(CustomerProfileActivity.this, CustomerHomeActivity.class));
                         finish();
@@ -278,13 +242,13 @@ public class CustomerProfileActivity extends AppCompatActivity {
                         toast(updateResponse.getMessage());
                     }
                 } else {
-                    toast("Update failed: " + response.code());
+                    toast("Update failed");
                 }
             }
 
             @Override
             public void onFailure(Call<ProfileUpdateResponse> call, Throwable t) {
-                btnCompleteSetup.setText("Complete Setup");
+                btnCompleteSetup.setText("Finish Setup");
                 btnCompleteSetup.setEnabled(true);
                 toast("Network error: " + t.getMessage());
             }
@@ -309,21 +273,17 @@ public class CustomerProfileActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int code, int result, @Nullable Intent data) {
         super.onActivityResult(code, result, data);
-
         if (result == RESULT_OK && data != null) {
             Uri uri = data.getData();
-
             if (code == PICK_PROFILE_IMAGE) {
                 profileImageUri = uri;
                 profilePreview.setImageURI(uri);
-            }
-            else if (code == PICK_AADHAR_FRONT) {
+            } else if (code == PICK_AADHAR_FRONT) {
                 aadharFrontUri = uri;
                 aadharFrontPreview.setImageURI(uri);
-            }
-            else if (code == PICK_AADHAR_BACK) {
-                aadharBackUri = uri;
-                aadharBackPreview.setImageURI(uri);
+            } else if (code == PICK_PAN_CARD) {
+                panCardUri = uri;
+                panCardPreview.setImageURI(uri);
             }
         }
     }

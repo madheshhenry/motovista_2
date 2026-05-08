@@ -14,7 +14,7 @@ app = Flask(__name__)
 # --------------------------------
 # LOAD AI ENGINE (Data Layer)
 # ---------------------------------
-print("⏳ Loading AI Models...")
+print("Loading AI Models...")
 
 # Load Embeddings
 with open("embeddings/bike_embeddings.pkl", "rb") as f:
@@ -34,7 +34,7 @@ index.add(embeddings)
 # Transformer Model
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
-print("✅ AI Engine Ready & Loaded")
+print("AI Engine Ready & Loaded")
 
 # --------------------------------
 # REASONING LOGIC (Score & Rank)
@@ -299,7 +299,7 @@ def chat():
                  "id": match.get("bike_id", 0),
                  "name": match["text"].split(" is ")[0], # Crude name extraction
                  "description": generate_reasoning(match, query_data), # DYNAMIC REASONING
-                 "image": f"http://192.168.0.103:5000/images/{match.get('image', 'placeholder_bike.png').split('/')[-1]}", 
+                 "image": f"http://192.168.0.101:5000/images/{match.get('image', 'placeholder_bike.png').split('/')[-1]}", 
                  "price": match.get("price", "Check Showroom")
              })
              

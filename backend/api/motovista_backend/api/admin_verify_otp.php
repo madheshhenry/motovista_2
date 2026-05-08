@@ -7,6 +7,9 @@ require_once '../config/jwt_helper.php';
 error_reporting(E_ALL);
 ini_set('display_errors', 0);
 
+$MASTER_EMAIL = "mmadhesh225@gmail.com";
+require_once '../config/email_config.php';
+
 try {
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
@@ -27,6 +30,11 @@ try {
         throw new Exception("Admin not found");
     }
 
+    // 🛡️ CHECK APPROVAL
+    if ($admin['is_approved'] != 1) {
+        throw new Exception("Your account is pending approval from Master Admin.");
+    }
+
     if ($admin['otp'] !== $otp) {
         throw new Exception("Invalid OTP");
     }
@@ -35,25 +43,30 @@ try {
         throw new Exception("OTP Expired");
     }
 
-    // 2. Clear OTP (Single use)
-    $clearStmt = $conn->prepare("UPDATE admins SET otp = NULL, otp_expiry = NULL WHERE id = ?");
-    $clearStmt->execute([$admin['id']]);
+    // 🗝️ GENERATE NEW SESSION ID (for Single Session)
+    $newSessionId = bin2hex(random_bytes(16));
 
-    // 3. Generate Token
-    // We reuse the Customer structure or create a specific Admin payload
-    // Let's stick to the existing structure if possible, but role = 'admin'
+    // 2. Update session and Clear OTP
+    $clearStmt = $conn->prepare("UPDATE admins SET otp = NULL, otp_expiry = NULL, last_session_id = ? WHERE id = ?");
+    $clearStmt->execute([$newSessionId, $admin['id']]);
 
-    // Existing users logic might rely on 'id' and 'email'.
-    // NOTE: Android app expects:
-    /*
-        "data": {
-            "token": "...",
-            "customer": { ... }
-        }
-    */
+    // 📧 LOGIN NOTIFICATION TO MASTER (Via Mail Bridge)
+    if (defined('USE_MAIL_BRIDGE') && USE_MAIL_BRIDGE) {
+        $bridgeData = [
+            'to' => $MASTER_EMAIL,
+            'subject' => "Admin Login Alert: " . $admin['username'],
+            'message' => "Admin " . $admin['username'] . " has logged in from a new device at " . date('Y-m-d H:i:s')
+        ];
+        $ch = curl_init(MAIL_BRIDGE_URL);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $bridgeData);
+        curl_exec($ch);
+        curl_close($ch);
+    }
 
+    // 3. Generate Token with Session ID
     $jwtHelper = new JWT_HELPER();
-    $jwt = $jwtHelper->generateToken($admin['id'], $admin['email'], 'admin');
+    $jwt = $jwtHelper->generateToken($admin['id'], $admin['email'], 'admin', $newSessionId);
 
     // 4. Return Response
     echo json_encode([

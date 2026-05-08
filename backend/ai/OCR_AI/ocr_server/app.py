@@ -16,8 +16,11 @@ app = Flask(__name__)
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 MODEL_PATH = "ocr_final.pth"
-PENDING_DIR = r"d:\OCR_AI\ocr_server\uploads\pending"
-REAL_DATA_DIR = r"d:\OCR_AI\ocr_server\real_data"
+# Base directory of the OCR server
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+PENDING_DIR = os.path.join(BASE_DIR, "uploads", "pending")
+REAL_DATA_DIR = os.path.join(BASE_DIR, "real_data")
 REAL_IMAGES_DIR = os.path.join(REAL_DATA_DIR, "images")
 REAL_LABELS_CSV = os.path.join(REAL_DATA_DIR, "labels.csv")
 
@@ -33,7 +36,7 @@ model_mtime = 0
 def load_model():
     global model, model_mtime
     if os.path.exists(MODEL_PATH):
-        print(f"🔄 Loading model from {MODEL_PATH}")
+        print(f"Loading model from {MODEL_PATH}")
         mtime = os.path.getmtime(MODEL_PATH)
         new_model = CRNN(num_classes=num_classes, in_h=IMG_H, in_w=IMG_W).to(DEVICE)
         new_model.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
@@ -41,7 +44,7 @@ def load_model():
         model = new_model
         model_mtime = mtime
     else:
-        print("⚠️ Model file not found, initializing empty model")
+        print("Model file not found, initializing empty model")
         model = CRNN(num_classes=num_classes, in_h=IMG_H, in_w=IMG_W).to(DEVICE)
         model.eval()
 
@@ -52,7 +55,7 @@ def check_model_reload():
     if os.path.exists(MODEL_PATH):
         mtime = os.path.getmtime(MODEL_PATH)
         if mtime > model_mtime:
-            print("🔔 New model detected, reloading...")
+            print("New model detected, reloading...")
             load_model()
 
 def preprocess_image(img_bgr):
@@ -121,7 +124,7 @@ def get_tta_variations(img):
 
 @app.route("/", methods=["GET"])
 def home():
-    return jsonify({"status": "OCR Server Running ✅"})
+    return jsonify({"status": "OCR Server Running"})
 
 @app.route("/ocr/engine-chassis", methods=["POST"])
 def ocr_engine_chassis():

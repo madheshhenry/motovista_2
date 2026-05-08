@@ -28,8 +28,8 @@ try {
     $password = trim($data['password']);
 
     // 1. Validate Admin Credentials
-    $stmt = $conn->prepare("SELECT id, password FROM admins WHERE email = ?");
-    $stmt->execute([$email]);
+    $stmt = $conn->prepare("SELECT id, password FROM admins WHERE email = ? OR username = ?");
+    $stmt->execute([$email, $email]); // Using same input for both since it's Email/Username
     $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$admin || !password_verify($password, $admin['password'])) {
@@ -44,7 +44,27 @@ try {
     $updateStmt = $conn->prepare("UPDATE admins SET otp = ?, otp_expiry = ? WHERE id = ?");
     $updateStmt->execute([$otp, $expiry, $admin['id']]);
 
-    // 4. Send Email
+    // 4. Send Email (Check for Mail Bridge first)
+    if (defined('USE_MAIL_BRIDGE') && USE_MAIL_BRIDGE) {
+        $bridgeData = json_encode([
+            'to' => $email,
+            'subject' => 'Admin Login OTP - MotoVista',
+            'body' => "Admin Login Verification. Your OTP is: $otp. This OTP is valid for 10 minutes."
+        ]);
+        
+        $ch = curl_init(MAIL_BRIDGE_URL);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $bridgeData);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_exec($ch);
+        curl_close($ch);
+        
+        echo json_encode(["success" => true, "message" => "OTP sent successfully via Mail Bridge"]);
+        exit;
+    }
+
+    // Fallback to PHPMailer if bridge is off
     $mail = new PHPMailer(true);
 
     // Server settings
